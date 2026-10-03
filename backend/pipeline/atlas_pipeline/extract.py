@@ -3,8 +3,9 @@
 Input : data/interim/pubmed_abstracts.jsonl (from `ingest pubmed`)
 Output: data/interim/claims.jsonl  (names only; `reconcile` maps them to ids and emits edges with
         status 'literature', or 'hypothesis' when stance == 'speculative', method 'llm:<model>')
-Guardrail: a claim whose quote is not an exact (whitespace-normalised, case-insensitive) substring of
-        the title+abstract is DROPPED and counted.
+Guardrail: a claim is DROPPED (and counted) unless its quote is an exact (whitespace-normalised,
+        case-insensitive) substring of the title or of the abstract, has >= 4 words / 20 chars and names
+        the claim's subject or object; the stored quote is the source's own text for that span.
 Cache : per PMID + prompt version (llm.py). `--batch` uses the OpenAI Batch API instead of live calls
         (submit, then re-run `extract --batch` until it reports done; results land in the same cache).
 """
@@ -73,17 +74,36 @@ def _prompt(rec: dict) -> str:
     return f"PMID: {rec['pmid']}\nTITLE: {rec['title']}\nABSTRACT: {rec['abstract']}"
 
 
+MIN_QUOTE_WORDS, MIN_QUOTE_CHARS = 4, 20
+
+
+def _find(quote: str, text: str) -> str | None:
+    """The span of `text` that equals `quote` up to case and whitespace, copied from the source."""
+    words = quote.split()
+    if not words:
+        return None
+    m = re.search(r"\s+".join(map(re.escape, words)), text, re.IGNORECASE)
+    return m.group(0) if m else None
+
+
 def check_quotes(rec: dict, out: Claims | None) -> tuple[list[dict], int]:
-    """Keep claims whose quote is verbatim in title+abstract; return (rows, n_dropped)."""
+    """Keep claims whose quote is verbatim (case/whitespace-insensitive) inside the title or inside the
+    abstract, is at least MIN_QUOTE_WORDS words / MIN_QUOTE_CHARS chars, and names the subject or the
+    object. The stored quote is the matching span of the source text, not the LLM's copy.
+    Returns (rows, n_dropped)."""
     if out is None:
         return [], 0
-    hay = _norm(rec["title"] + " " + rec["abstract"])
     rows, dropped = [], 0
     for c in out.claims:
-        if not c.quote.strip() or _norm(c.quote) not in hay:
+        q = _norm(c.quote)
+        span = None
+        if len(q) >= MIN_QUOTE_CHARS and len(q.split()) >= MIN_QUOTE_WORDS \
+                and (_norm(c.subject) in q or _norm(c.object) in q):
+            span = _find(c.quote, rec.get("abstract") or "") or _find(c.quote, rec.get("title") or "")
+        if span is None:
             dropped += 1
             continue
-        rows.append({**c.model_dump(), "pmid": rec["pmid"], "year": rec.get("year"),
+        rows.append({**c.model_dump(), "quote": span, "pmid": rec["pmid"], "year": rec.get("year"),
                      "query_diseases": rec.get("query_diseases", []), "model": llm.model_name()})
     return rows, dropped
 

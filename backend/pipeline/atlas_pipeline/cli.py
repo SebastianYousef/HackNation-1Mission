@@ -29,10 +29,12 @@ def ingest(sources: Optional[list[str]] = typer.Argument(None, help="subset of s
 
 @app.command()
 def extract(limit: int = typer.Option(0, help="max abstracts (0 = all)"),
-            concurrency: int = typer.Option(4)) -> None:
+            concurrency: int = typer.Option(4),
+            batch: bool = typer.Option(False, "--batch",
+                                       help="use the OpenAI Batch API; re-run until it reports done")) -> None:
     """LLM claim extraction over PubMed abstracts (OpenAI Structured Outputs)."""
     from . import extract as ex
-    ex.run(limit=limit or None, concurrency=concurrency)
+    ex.run(limit=limit or None, concurrency=concurrency, batch=batch)
 
 
 @app.command()
@@ -73,7 +75,8 @@ def export_fixtures(api_base: Optional[str] = typer.Option(None, envvar="ATLAS_A
 
 
 @app.command("all")
-def all_(skip: list[str] = typer.Option([], "--skip")) -> None:
+def all_(skip: list[str] = typer.Option([], "--skip"),
+         database_url: Optional[str] = typer.Option(None, envvar="DATABASE_URL")) -> None:
     """ingest -> extract -> reconcile -> analytics -> views -> load"""
     from . import ingest as ing, extract as ex, reconcile as rc, views as v, load as ld
     from .analytics import run as an
@@ -82,7 +85,7 @@ def all_(skip: list[str] = typer.Option([], "--skip")) -> None:
     rc.run()
     an()
     v.run()
-    ld.run(None)
+    ld.run(database_url)
 
 
 if __name__ == "__main__":

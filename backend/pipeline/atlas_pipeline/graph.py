@@ -4,7 +4,8 @@ Rules:
  * nodes merge by id; first stage in STAGE_ORDER wins for label/type; synonyms/xrefs union; attrs fill.
  * edges merge by id; status = strongest; attrs fill; evidence = union (dedup by evidence id).
  * edge confidence is recomputed here from status + evidence (confidence.py).
- * edges whose endpoints are missing are dropped (counted in `dropped`).
+ * edges whose endpoints are missing are dropped (counted in `dropped`), and so are edges without
+   evidence and literature/hypothesis edges with no 'supports' row (their text evidence argues against them).
 """
 from __future__ import annotations
 
@@ -94,10 +95,12 @@ def load_graph(exclude: set[str] | None = None) -> Graph:
                 continue
             seen.add(v["id"])
             g.evidence[v["edge_id"]].append(v)
-    # drop dangling edges and edges without evidence
+    # drop dangling edges, edges without evidence, and text-derived edges nothing supports
     for eid in list(g.edges):
         e = g.edges[eid]
-        if e["src"] not in g.nodes or e["dst"] not in g.nodes or not g.evidence.get(eid):
+        ev = g.evidence.get(eid)
+        unsupported = e["status"] in ("literature", "hypothesis") and not any(v["stance"] == "supports" for v in ev or [])
+        if e["src"] not in g.nodes or e["dst"] not in g.nodes or not ev or unsupported:
             del g.edges[eid]
             g.dropped += 1
     for eid in list(g.evidence):

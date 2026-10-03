@@ -1,5 +1,5 @@
 # Rare Disease Atlas — data pipeline. Run from backend/pipeline.  `make help`
-PY      ?= /home/linuxbrew/.linuxbrew/bin/python3.13
+PY      ?= $(shell command -v python3.13 2>/dev/null || command -v python3)
 VENV    := .venv
 CLI     := $(VENV)/bin/atlas-pipeline
 
@@ -9,7 +9,8 @@ help: ## list targets
 
 venv: $(VENV)/.installed ## create .venv with deps (incl. igraph + leidenalg)
 $(VENV)/.installed: pyproject.toml
-	$(PY) -m venv $(VENV) && $(VENV)/bin/pip install -q -e '.[graph]' && touch $@
+	test -x $(VENV)/bin/python || $(PY) -m venv $(VENV)
+	$(VENV)/bin/pip install -q -e '.[graph]' && touch $@
 
 ingest: venv ## download + parse all sources (cached in data/raw)
 	$(CLI) ingest

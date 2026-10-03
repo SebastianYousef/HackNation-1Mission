@@ -11,7 +11,9 @@ Tiers (first hit wins; method + confidence recorded in data/interim/reconcile_ma
                  ask llm.structured to pick one or "none")                                   conf <= 0.6
 Unresolved mechanism names become new curated-vocabulary nodes ATLAS:mech-<slug> (method new_node).
 
-The `reconcile` stage also turns extracted claims (claims.jsonl) into literature/hypothesis edges.
+The `reconcile` stage also turns extracted claims (claims.jsonl) into literature/hypothesis edges
+(stance 'speculative' -> status 'hypothesis'). A 'contradicts' claim never creates an edge: it is attached
+as a contradicting evidence row to the same edge only if an earlier stage or a supporting claim made it.
 """
 from __future__ import annotations
 
@@ -22,7 +24,7 @@ from typing import Iterable
 import pandas as pd
 
 from .config import INTERIM
-from .ids import mech_id, intervention_id, norm_name, person_id
+from .ids import edge_id, mech_id, intervention_id, norm_name, person_id
 from .store import GraphWriter, read_json, read_jsonl, write_parquet
 
 log = logging.getLogger(__name__)
@@ -96,17 +98,59 @@ def _mapping_row(name: str, type_: str, hit, pmid: str | None) -> dict:
             "confidence": hit[2] if hit else 0.0, "pmid": pmid}
 
 
+# extract.Relation -> (reconcile kind, field for the subject, field for the object)
+RELATIONS = {
+    "gene_associated_with_disease": ("gene_disease", "gene", "disease"),
+    "variant_effect": ("variant_effect", "gene", "mechanism"),
+    "disease_involves_mechanism": ("mechanism", "disease", "mechanism"),
+    "gene_in_mechanism": ("mechanism", "gene", "mechanism"),
+    "disease_has_phenotype": ("phenotype", "disease", "phenotype"),
+    "intervention_treats_disease": ("intervention", "intervention", "disease"),
+}
+
+
+def normalise_claim(c: dict) -> dict | None:
+    """extract's {subject, relation, object, stance} row -> {kind, gene/disease/..., speculative, stance}.
+    Rows that already carry `kind` pass through. stance 'speculative' becomes speculative=True with
+    evidence stance 'supports' (the edge is then status 'hypothesis'). Unknown relations -> None."""
+    if "kind" not in c:
+        m = RELATIONS.get(c.get("relation"))
+        if m is None:
+            return None
+        kind, s_key, o_key = m
+        c = {**c, "kind": kind, s_key: c.get("subject"), o_key: c.get("object")}
+    if c.get("stance") == "speculative":
+        c = {**c, "speculative": True, "stance": "supports"}
+    return c
+
+
+def _prior_edge_ids() -> set[str]:
+    """Edge ids written by the stages that run before reconcile (contradicting claims attach only to these)."""
+    from .graph import STAGE_ORDER
+    before = STAGE_ORDER[:STAGE_ORDER.index("reconcile")]
+    return {e["id"] for st in before for e in read_jsonl(f"{st}.edges.jsonl")}
+
+
 def run() -> None:
     idx = NameIndex.from_stage_files()
     claims = list(read_jsonl("claims.jsonl"))
     g = GraphWriter("reconcile")
     mapping: list[dict] = []
-    for c in claims:
+    contra: list[tuple[str, str, str, dict]] = []  # deferred (type, src, dst, evidence)
+    n_skipped = 0
+    for raw in claims:
+        c = normalise_claim(raw)
+        if c is None:
+            n_skipped += 1
+            continue
         pid = f"PMID:{c['pmid']}"
         url = f"https://pubmed.ncbi.nlm.nih.gov/{c['pmid']}/"
         status = "hypothesis" if c.get("speculative") else "literature"
+        stance = c.get("stance") or "supports"
+        contradicts = stance == "contradicts"
+        yr = c.get("year")
         ev = dict(source_type="publication", source_name="PubMed", source_ref=pid, url=url, quote=c["quote"],
-                  method=f"llm:{c.get('model')}", stance=c.get("stance", "supports"), published_at=c.get("year"))
+                  method=f"llm:{c.get('model')}", stance=stance, published_at=str(yr) if yr else None)
 
         def res(name, types, t):
             if not name:
@@ -115,47 +159,79 @@ def run() -> None:
             mapping.append(_mapping_row(name, t, hit, c["pmid"]))
             return hit[0] if hit else None
 
-        disease = res(c.get("disease"), {"disease"}, "disease")
-        if disease is None and len(c.get("query_diseases") or []) == 1:
+        def edge(type_, src, dst, **kw):
+            # a contradicting claim never creates an edge; it is attached later to an existing one
+            if contradicts:
+                contra.append((type_, src, dst, ev))
+            else:
+                g.edge(type_, src, dst, status=status, evidence=ev, **kw)
+
+        kind = c["kind"]
+        dname = c.get("disease")
+        disease = res(dname, {"disease"}, "disease")
+        # the abstract's query disease stands in only when a disease slot was left blank, never for a
+        # disease name that failed to resolve (that claim is about some other disease)
+        if disease is None and "disease" in c and not (dname or "").strip() \
+                and len(c.get("query_diseases") or []) == 1:
             disease = c["query_diseases"][0]
         gene = res(c.get("gene"), {"gene"}, "gene")
-        kind = c["kind"]
+        variant = None
+        if gene is None and kind == "variant_effect" and c.get("gene"):
+            # "CLN5 p.Arg112His" -> gene CLN5, variant kept as an attribute
+            head = c["gene"].split()[0]
+            if head != c["gene"].strip():
+                gene = res(head, {"gene"}, "gene")
+                variant = c["gene"].strip() if gene else None
         mech = None
-        if c.get("mechanism"):
+        if c.get("mechanism") and (gene or (disease and kind == "mechanism")):
             mech = res(c["mechanism"], {"mechanism"}, "mechanism")
             if mech is None:
+                # a contradiction still gets the deterministic id (so it can attach to a node an earlier
+                # claim created), but only a supporting claim creates the node
                 mech = mech_id(c["mechanism"])
-                g.node(id=mech, type="mechanism", label=c["mechanism"].strip()[:120],
-                       subtype="variant_effect" if kind == "variant_effect" else "biological_process",
-                       attrs={"source": "llm_extraction"})
-                mapping[-1].update(id=mech, method="new_node", confidence=0.5)
+                if not contradicts:
+                    g.node(id=mech, type="mechanism", label=c["mechanism"].strip()[:120],
+                           subtype="variant_effect" if kind == "variant_effect" else "biological_process",
+                           attrs={"source": "llm_extraction"})
+                    mapping[-1].update(id=mech, method="new_node", confidence=0.5)
+        variant = variant or c.get("variant")
         if kind == "gene_disease" and gene and disease:
-            g.edge("gene_associated_with_disease", gene, disease, status=status, label="associated with", evidence=ev)
+            edge("gene_associated_with_disease", gene, disease, label="associated with")
         elif kind in ("mechanism", "variant_effect") and mech:
             if disease and kind == "mechanism":
-                g.edge("disease_involves_mechanism", disease, mech, status=status, label="involves", evidence=ev)
+                edge("disease_involves_mechanism", disease, mech, label="involves")
             if gene:
-                g.edge("gene_in_mechanism", gene, mech, status=status, label="acts in",
-                       attrs={"variant": c.get("variant")} if c.get("variant") else None, evidence=ev)
+                edge("gene_in_mechanism", gene, mech, label="acts in",
+                     attrs={"variant": variant} if variant else None)
         elif kind == "phenotype" and disease:
             ph = res(c.get("phenotype"), {"phenotype"}, "phenotype")
             if ph:
-                g.edge("disease_has_phenotype", disease, ph, status=status, label="has symptom", evidence=ev)
-        elif kind == "investigator" and disease and c.get("investigator"):
+                edge("disease_has_phenotype", disease, ph, label="has symptom")
+        elif kind == "investigator" and disease and c.get("investigator") and not contradicts:
             parts = c["investigator"].replace(",", " ").split()
             if len(parts) >= 2:
                 p = person_id(parts[-1], parts[0])
                 g.node(id=p, type="person", subtype="researcher", label=" ".join(parts), attrs={"roles": ["researcher"]})
-                g.edge("person_studies", p, disease, status=status, label="studies", evidence=ev)
+                edge("person_studies", p, disease, label="studies")
         elif kind == "intervention" and disease and c.get("intervention"):
             hit = res(c["intervention"], {"intervention"}, "intervention")
+            # same id clinicaltrials builds, so a contradiction can attach to a trial edge
             iid = hit or intervention_id(c["intervention"])
-            if not hit:
+            if not hit and not contradicts:
                 g.node(id=iid, type="intervention", subtype="other", label=c["intervention"].strip()[:120])
-            g.edge("intervention_treats_disease", iid, disease, status=status, label="is being tested for",
-                   attrs={"approval": "investigational"}, evidence=ev)
+            edge("intervention_treats_disease", iid, disease, label="is being tested for",
+                 attrs={"approval": "investigational"})
+    n_contra = 0
+    if contra:
+        existing = _prior_edge_ids() | set(g.edges)
+        for type_, src, dst, ev in contra:
+            if edge_id(type_, src, dst) in existing:
+                # status "hypothesis" is the weakest, so it never upgrades the edge's merged status
+                g.edge(type_, src, dst, status="hypothesis", evidence=ev)
+                n_contra += 1
     g.close()
     df = pd.DataFrame(mapping, columns=["name", "type", "id", "method", "confidence", "pmid"])
     write_parquet("reconcile_mapping", df)
-    log.info("reconcile: %d claims, %d names (%s)", len(claims), len(df),
+    log.info("reconcile: %d claims (%d unknown relation), %d contradictions attached of %d, %d names (%s)",
+             len(claims), n_skipped, n_contra, len(contra), len(df),
              df["method"].value_counts().to_dict() if len(df) else {})

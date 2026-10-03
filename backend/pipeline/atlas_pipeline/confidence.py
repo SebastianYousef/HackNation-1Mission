@@ -3,7 +3,8 @@
 curated    : 0.9 flat (asserted by a curated database: MONDO, HPO, Orphanet, ClinVar, registries).
              Each contradiction subtracts 0.15.
 literature : 0.5 + 0.1 per *independent* supporting source_ref (distinct PMID/NCT/URL) beyond the
-             first, capped at 0.85; minus 0.15 per contradicting evidence row.
+             first, capped at 0.85; minus 0.15 per contradicting evidence row. Computed rows
+             (source_type 'computed', e.g. mechanism propagation) are not independent sources.
 inferred   : the calibrated analytics score (see `calibrate`), never above 0.8.
 hypothesis : min(0.4, literature rule) — speculative claims are capped at 0.4.
 Result is clamped to [0.05, 1].
@@ -29,7 +30,8 @@ def calibrate(score: float) -> float:
 
 def edge_confidence(status: str, evidence: Iterable[Mapping], score: float | None = None) -> float:
     ev = list(evidence)
-    sup = {(e.get("source_ref") or e.get("url") or e.get("id")) for e in ev if e.get("stance") == "supports"}
+    sup = {(e.get("source_ref") or e.get("url") or e.get("id")) for e in ev
+           if e.get("stance") == "supports" and e.get("source_type") != "computed"}
     n_contra = sum(1 for e in ev if e.get("stance") == "contradicts")
     if status == "curated":
         c = CURATED
