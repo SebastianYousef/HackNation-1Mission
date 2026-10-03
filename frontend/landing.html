@@ -75,7 +75,7 @@ p{margin:0}
 .nav .wrap{display:flex;align-items:center;gap:28px;height:60px}
 .wordmark{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-mono);font-weight:500;font-size:13px;letter-spacing:.24em;text-decoration:none;white-space:nowrap}
 .wordmark svg{flex:none}
-.nav-links{display:flex;gap:22px;margin-left:auto;font-size:14px}
+.nav-links{display:flex;gap:20px;margin-left:auto;font-size:14px}
 .nav-links a{text-decoration:none;color:var(--night-ink-2);transition:color .15s}
 .nav-links a:hover{color:var(--night-ink)}
 .nav .btn{padding:8px 16px;font-size:14px}
@@ -319,6 +319,18 @@ table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-s
 @media (max-width:860px){.validate{grid-template-columns:1fr;gap:28px}}
 @media (max-width:520px){.vlist li{grid-template-columns:28px minmax(0,1fr)}.vlist li .st{grid-column:2;justify-self:start}}
 
+/* COMMUNITIES */
+.comm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
+@media (max-width:860px){.comm-grid{grid-template-columns:1fr;gap:36px}}
+.comm-col h3{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--ink)}
+.comm-col h3 span{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.comm{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;width:100%;padding:16px 0;border:0;border-bottom:1px solid var(--rule);background:none;text-align:left}
+.comm:hover .cname{text-decoration:underline;text-underline-offset:3px}
+.comm .cname{font-weight:600;font-size:16px;min-width:0}
+.comm .ckind{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.comm .cdesc{grid-column:1/-1;font-size:14px;color:var(--ink-2)}
+.comm .cwhy{grid-column:1/-1;font-size:13px;color:var(--ink-3)}
+
 /* TRUST */
 .trust-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start}
 @media (max-width:900px){.trust-grid{grid-template-columns:1fr;gap:36px}}
@@ -402,6 +414,7 @@ footer p{max-width:70ch}
     <nav class="nav-links" id="navLinks" aria-label="Main">
       <a href="#atlas">Atlas</a>
       <a href="#journey">Journey</a>
+      <a href="#communities">Communities</a>
       <a href="#atlas" data-mode="reader">For Readers</a>
       <a href="#atlas" data-mode="researcher">For Researchers</a>
       <a href="#evidence">Evidence</a>
@@ -560,6 +573,19 @@ footer p{max-width:70ch}
       </div>
       <ol class="vlist" id="vlist"></ol>
     </div>
+  </div>
+</section>
+
+<!-- COMMUNITIES -->
+<section class="band" id="communities" aria-labelledby="commTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Communities · sample data</div>
+      <h2 id="commTitle">The people already on the path.</h2>
+      <p class="lede">Patient organizations and family communities hold knowledge no database has: lived experience, registries, samples and the trust to bring families into research. One Mission shows which communities connect to a disease, and why, including related communities that share a gene or mechanism.</p>
+    </div>
+    <div class="comm-grid" id="commGrid"></div>
+    <p style="margin-top:28px;font-size:13px;color:var(--ink-3);max-width:70ch">All organizations shown are placeholders marked "(sample)". Select one to see why it is connected and how strong the evidence is.</p>
   </div>
 </section>
 
@@ -1238,6 +1264,13 @@ function renderRoute(){
 $('#routeForm').addEventListener('submit',e=>e.preventDefault());
 $$('[data-pair]').forEach(b=>b.addEventListener('click',()=>{const [a,c]=b.dataset.pair.split('|');$('#rFrom').value=a;$('#rTo').value=c;$('#rHyp').checked=false;renderRoute()}));
 $('#routeOut').addEventListener('click',e=>{const b=e.target.closest('.elink'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+
+/* ---------- COMMUNITIES ---------- */
+$('#commGrid').innerHTML=Object.values(DATA).map(ds=>{
+  const orgs=ds.nodes.filter(n=>n.t==='org').sort((a,b)=>(a.cat==='org'?0:1)-(b.cat==='org'?0:1));
+  return `<div class="comm-col"><h3>${esc(ds.name)}<span>${orgs.length} communities</span></h3>${orgs.map(n=>{const e=rootEdge(ds,n.id);
+    return `<button class="comm" data-k="${ds.key}" data-i="${e.i}"><span class="cname">${esc(n.label.replace(' (sample)',''))}</span>${stPill(e.status)}<span class="ckind">${n.cat==='org'?'Patient organization':'Related community'} · sample</span><span class="cdesc">${esc(n.plain)}</span><span class="cwhy">${esc(e.plain)}</span></button>`}).join('')}</div>`}).join('');
+$('#commGrid').addEventListener('click',e=>{const b=e.target.closest('.comm'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
 
 /* ---------- SOURCES ---------- */
 const SOURCES=[
