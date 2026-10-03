@@ -12,11 +12,11 @@ cleanup() { for p in "${pids[@]}"; do kill "$p" 2>/dev/null || true; done; wait 
 
 for i in 1 2 3; do
   (cd "$root/backend/api" && INSTANCE_ID="api-$i" DATA_MODE="${DATA_MODE:-fixtures}" SHUTDOWN_GRACE_SECONDS=3 \
-     exec "$py" -m uvicorn atlas_api.main:app --host 127.0.0.1 --port "800$i" --log-level warning \
+     exec "$py" -m uvicorn atlas_api.main:app --host 127.0.0.1 --port "800$i" --log-level warning --no-proxy-headers \
      >"$logs/api-$i.log" 2>&1) &
   pids+=($!)
 done
-haproxy -f "$root/infra/haproxy/local-native.cfg" >"$logs/haproxy.log" 2>&1 &
+"${HAPROXY:-haproxy}" -f "$root/infra/haproxy/local-native.cfg" >"$logs/haproxy.log" 2>&1 &
 pids+=($!)
 
 lb=http://127.0.0.1:8088

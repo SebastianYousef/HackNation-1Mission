@@ -23,6 +23,8 @@ USER atlas
 EXPOSE 8000
 HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=3 \
   CMD python -c "import urllib.request,os;urllib.request.urlopen(f'http://127.0.0.1:{os.environ[\"PORT\"]}/healthz',timeout=2)"
-# --proxy-headers: trust X-Forwarded-For/Proto from the L7 LB (client IP for logs + rate limits).
+# --no-proxy-headers: request.client stays the real socket peer (the L7). The app takes the
+# client IP from the rightmost X-Forwarded-For entry (TRUSTED_PROXY_HOPS), which the L7
+# overwrites with the PROXY-protocol source, so clients can't pick their rate-limit bucket.
 # On SIGTERM: /readyz -> 503 for SHUTDOWN_GRACE_SECONDS (LB drains), then graceful stop.
-CMD ["sh", "-c", "exec uvicorn atlas_api.main:app --host 0.0.0.0 --port ${PORT} --workers ${WEB_CONCURRENCY} --proxy-headers --forwarded-allow-ips '*' --timeout-graceful-shutdown 20 --no-server-header"]
+CMD ["sh", "-c", "exec uvicorn atlas_api.main:app --host 0.0.0.0 --port ${PORT} --workers ${WEB_CONCURRENCY} --no-proxy-headers --timeout-graceful-shutdown 20 --no-server-header"]

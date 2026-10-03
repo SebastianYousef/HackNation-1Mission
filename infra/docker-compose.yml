@@ -10,6 +10,11 @@
 #
 # Secrets/overrides come from ../backend/.env (optional). Set DATABASE_URL there
 # to use Supabase instead of the local `db` service (then the db container is idle).
+# The ${VAR:-default} values below are interpolated by compose, which reads only the
+# shell and --env-file: `make up` passes --env-file ../backend/.env for you; plain
+# `docker compose` from infra/ needs `--env-file ../backend/.env` too, or those
+# keys silently fall back to the defaults. (A localhost DATABASE_URL won't work
+# from inside a container.)
 name: atlas
 
 x-api-env: &api-env
@@ -73,6 +78,11 @@ services:
       - path: ../backend/.env
         required: false
     environment: *api-env
+    healthcheck:
+      disable: true            # the image's HTTP /healthz check doesn't apply (no server here)
+    # SIGTERM stops new jobs; a running gap search gets time to finish instead
+    # of being SIGKILLed and left 'running' in Redis.
+    stop_grace_period: 60s
     depends_on: [api, redis]
     restart: unless-stopped
 

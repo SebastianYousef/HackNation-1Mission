@@ -1,10 +1,11 @@
 # Backend + infra targets. `make help` lists them.
 SHELL       := /bin/bash
 API_DIR     := backend/api
-PY          ?= /home/linuxbrew/.linuxbrew/bin/python3.13
+PY          ?= $(shell command -v python3.13 || command -v python3)
 VENV        := $(API_DIR)/.venv
 VPY         := $(VENV)/bin/python
-COMPOSE     := docker compose -f infra/docker-compose.yml
+# --env-file: compose interpolates ${VAR:-default} from it (env_file: alone doesn't).
+COMPOSE     := docker compose $(if $(wildcard backend/.env),--env-file backend/.env) -f infra/docker-compose.yml
 BASE_URL    ?= http://localhost:8000
 LB_URL      ?= https://localhost
 N           ?= 3
@@ -24,7 +25,7 @@ venv: $(VENV)/.installed ## create backend/api/.venv with deps
 
 api-dev: venv ## API on :8000, fixtures mode, hot reload (override DATA_MODE=db DATABASE_URL=...)
 	cd $(API_DIR) && DATA_MODE=$${DATA_MODE:-fixtures} INSTANCE_ID=$${INSTANCE_ID:-dev} \
-	  .venv/bin/uvicorn atlas_api.main:app --reload --port 8000
+	  .venv/bin/uvicorn atlas_api.main:app --reload --port 8000 --no-proxy-headers
 
 api-test: venv ## pytest for the API (fixtures mode)
 	cd $(API_DIR) && .venv/bin/python -m pytest -q
