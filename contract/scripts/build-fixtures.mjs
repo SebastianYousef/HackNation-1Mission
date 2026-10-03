@@ -513,11 +513,14 @@ function mkPath(id, kind, title, score, from, edgeIds, attrs = {}) {
     node_ids.push(other(e, cur));
   }
   const es = edgeIds.map(E);
+  // mirrors analytics/paths.py path_strength: the weakest edge, lowered (never raised) by attrs.status_cap / confidence_cap
+  const statuses = [...es.map((e) => e.status), ...(attrs.status_cap ? [attrs.status_cap] : [])];
+  const confs = [...es.map((e) => e.confidence), ...(attrs.confidence_cap != null ? [attrs.confidence_cap] : [])];
   return {
     id, kind, title, score, from, to: node_ids.at(-1), node_ids, edge_ids: [...edgeIds],
     nodes: node_ids.map(brief), edges: es,
-    weakest_status: es.map((e) => e.status).sort((a, b) => RANK.indexOf(b) - RANK.indexOf(a))[0],
-    min_confidence: Math.min(...es.map((e) => e.confidence)), attrs,
+    weakest_status: statuses.sort((a, b) => RANK.indexOf(b) - RANK.indexOf(a))[0],
+    min_confidence: Math.min(...confs), attrs,
   };
 }
 
@@ -590,7 +593,14 @@ const PATHS = [
   mkPath("path-mock-cln5-cerliponase", "intervention", "HYPOTHESIS: could enzyme replacement (approved for CLN2) apply to CLN5?", 0.35, D.CLN5,
     ["e-dm-cln5-sol", "e-itm-cerl-sol"], { caution: CAUTION_CLN2 }),
 ];
-put(`paths/${safeId(D.CLN5)}.json`, [...PATHS].sort((a, b) => b.score - a.score || a.id.localeCompare(b.id)));
+// /paths only (not in the action view's connections): a route that hinges on one shared symptom carries honesty
+// caps (status_cap "inferred", confidence_cap 0.25), so the path is weaker than its two curated edges.
+const CAPPED_PATHS = [
+  mkPath("path-mock-cln5-cln3-vision", "related_disease", "CLN5 disease and CLN3 disease share vision loss", 0.3, D.CLN5,
+    ["e-dp-cln5-vis", "e-dp-cln3-vis"], { status_cap: "inferred", confidence_cap: 0.25,
+      caution: "This route hinges on one shared symptom; a shared symptom alone does not mean a shared cause or treatment." }),
+];
+put(`paths/${safeId(D.CLN5)}.json`, [...PATHS, ...CAPPED_PATHS].sort((a, b) => b.score - a.score || a.id.localeCompare(b.id)));
 
 // ---- clusters --------------------------------------------------------------
 put("clusters.json", clusters.map(clusterBrief).sort((a, b) => b.size - a.size || a.id.localeCompare(b.id)));

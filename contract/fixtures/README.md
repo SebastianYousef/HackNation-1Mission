@@ -32,7 +32,7 @@ is a `hypothesis` with a contradicting evidence row. Devon's honest-gap case is 
 | `neighborhood/<safe-id>.json` | `GET /nodes/{id}/neighborhood` (depth 1) | `NeighborhoodResponse` — CLN5 disease, lysosomal degradation |
 | `edges/<safe-id>.json` | `GET /edges/{id}` | `EdgeResponse` — one per edge (94) |
 | `similar/<safe-id>.json` | `GET /diseases/{id}/similar` | `SimilarResponse` — CLN5 disease |
-| `paths/<safe-id>.json` | `GET /paths?from={id}` | `PathsResponse` — from CLN5 disease (5 kinds) |
+| `paths/<safe-id>.json` | `GET /paths?from={id}` | `PathsResponse` — from CLN5 disease (5 kinds, plus one capped path whose `attrs.status_cap`/`confidence_cap` make it weaker than its edges) |
 | `clusters.json` / `clusters/<safe-id>.json` | `GET /clusters` / `GET /clusters/{id}` | `ClustersResponse` / `ClusterResponse` |
 | `action-view/<safe-id>.json` | `GET /diseases/{id}/action-view` | `ActionView` — CLN5 (rich) and subtype X (`MONDO:MOCK0099`, honest gap) |
 | `mechanism-view/<safe-id>.json` | `GET /mechanisms/{id}/view` | `MechanismView` — `ATLAS:mech-lysosomal-degradation` |

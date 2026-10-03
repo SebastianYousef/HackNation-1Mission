@@ -421,5 +421,92 @@
     "attrs": {
       "caution": "CLN2 disease has an approved enzyme replacement therapy (cerliponase alfa) because TPP1 is a soluble lysosomal enzyme that can be supplied from outside the cell. That success does not automatically transfer to CLN5 disease: whether CLN5 can be replaced the same way is unproven."
     }
+  },
+  {
+    "id": "path-mock-cln5-cln3-vision",
+    "kind": "related_disease",
+    "title": "CLN5 disease and CLN3 disease share vision loss",
+    "score": 0.3,
+    "from": "MONDO:MOCK0005",
+    "to": "MONDO:MOCK0003",
+    "node_ids": [
+      "MONDO:MOCK0005",
+      "HP:MOCK0002",
+      "MONDO:MOCK0003"
+    ],
+    "edge_ids": [
+      "E:94d7e8dbd203d130",
+      "E:7f4fd3c364aad1f9"
+    ],
+    "nodes": [
+      {
+        "id": "MONDO:MOCK0005",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN5 disease",
+        "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+      },
+      {
+        "id": "HP:MOCK0002",
+        "type": "phenotype",
+        "subtype": null,
+        "label": "Visual loss",
+        "summary": "Gradual loss of eyesight."
+      },
+      {
+        "id": "MONDO:MOCK0003",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN3 disease",
+        "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+      }
+    ],
+    "edges": [
+      {
+        "id": "E:94d7e8dbd203d130",
+        "src": "MONDO:MOCK0005",
+        "dst": "HP:MOCK0002",
+        "type": "disease_has_phenotype",
+        "label": "has symptom",
+        "status": "curated",
+        "confidence": 0.95,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "HPO"
+        ],
+        "attrs": {
+          "frequency": "very frequent",
+          "onset": "childhood"
+        }
+      },
+      {
+        "id": "E:7f4fd3c364aad1f9",
+        "src": "MONDO:MOCK0003",
+        "dst": "HP:MOCK0002",
+        "type": "disease_has_phenotype",
+        "label": "has symptom",
+        "status": "curated",
+        "confidence": 0.95,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "HPO"
+        ],
+        "attrs": {
+          "frequency": "very frequent",
+          "onset": "juvenile"
+        }
+      }
+    ],
+    "weakest_status": "inferred",
+    "min_confidence": 0.25,
+    "attrs": {
+      "status_cap": "inferred",
+      "confidence_cap": 0.25,
+      "caution": "This route hinges on one shared symptom; a shared symptom alone does not mean a shared cause or treatment."
+    }
   }
 ]
