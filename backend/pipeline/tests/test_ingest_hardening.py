@@ -57,6 +57,43 @@ def test_efetch_error_body_is_not_cached(monkeypatch):
     assert not http._cache_path("test", key, "txt").exists()
 
 
+@pytest.mark.parametrize("body", ["<html>503 Service Temporarily Unavailable</html>",
+                                  '{"error":"API rate limit exceeded"}',
+                                  '{"esearchresult":{"ERROR":"Empty term and query_key - nothing todo"}}'])
+def test_esearch_non_json_or_error_body_is_not_cached(monkeypatch, body):
+    calls = []
+
+    def handler(req):
+        calls.append(req)
+        return httpx.Response(200, text=body if len(calls) == 1 else '{"esearchresult":{"idlist":["1"],"count":"1"}}')
+    monkeypatch.setattr(http, "_client", lambda: httpx.Client(transport=httpx.MockTransport(handler)))
+    url, params = f"https://example.org/esearch-{abs(hash(body))}.fcgi", {"term": "x"}
+    with pytest.raises(ValueError):
+        http.get_json(url, params, ns="test", validate=pubmed._check_esearch)
+    key = url + "?" + http.json.dumps(params, sort_keys=True)
+    assert not http._cache_path("test", key, "txt").exists()
+    # the next run fetches again and caches the good answer
+    assert http.get_json(url, params, ns="test", validate=pubmed._check_esearch)["esearchresult"]["idlist"] == ["1"]
+    assert http.get_json(url, params, ns="test", validate=pubmed._check_esearch)["esearchresult"]["count"] == "1"
+    assert len(calls) == 2
+
+
+def test_esearch_warning_body_is_cached():
+    pubmed._check_esearch({"esearchresult": {"idlist": [], "count": "0",
+                                             "errorlist": {"phrasesnotfound": ["xyz"]}, "warninglist": {}}})
+
+
+def test_invalid_cached_body_is_refetched(monkeypatch):
+    url, params = "https://example.org/poisoned.fcgi", {"term": "y"}
+    p = http._cache_path("test", url + "?" + http.json.dumps(params, sort_keys=True), "txt")
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text("<html>Bad Gateway</html>")  # cached by a version without the check
+    transport = httpx.MockTransport(lambda req: httpx.Response(200, json={"ok": True}))
+    monkeypatch.setattr(http, "_client", lambda: httpx.Client(transport=transport))
+    assert http.get_json(url, params, ns="test") == {"ok": True}
+    assert http.json.loads(p.read_text()) == {"ok": True}
+
+
 def test_ctgov_condition_statuses():
     idx = NameIndex()
     idx.add({"id": "MONDO:0019262", "type": "disease", "label": "juvenile neuronal ceroid lipofuscinosis",
