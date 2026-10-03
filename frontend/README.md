@@ -1,10 +1,14 @@
 # Frontend: setup and Lovable playbook
 
-The frontend lives in **its own repo created by Lovable** (e.g. `HackNation-1Mission-web`). Lovable's GitHub integration creates and owns a repo of its own. That separation is exactly what we want: the two teams share only `contract/`.
+The frontend lives in **its own repo created by Lovable**. Lovable's GitHub integration creates and owns a repo of its own. That separation is exactly what we want: the two teams share only `contract/`.
+
+**The team's actual app** is the fork `yahorbusiness-dev/Lovable.PR`, branch `Lovable.front-end` (root `CLAUDE.md`, rule 6). To work on it, clone that fork and branch and run `./scripts/sync-contract.sh <path-to-the-clone>`. The setup below describes starting a fresh Lovable project; `HackNation-1Mission-web` there is only an example name.
 
 This folder holds the frontend's half of the bridge:
 - `LOVABLE.md` is pasted into Lovable's project Knowledge and copied to the web repo root.
 - `CLAUDE.md` is for Claude Code sessions inside the web repo.
+- `PROTOTYPE_PROMPT.md` is a one-message prompt that ports `landing-2.html` into the app on live data.
+- `landing.html` is the public landing page served at `/`; `landing-2.html` is currently an identical copy. Neither is synced into the web repo.
 - This README covers setup and the prompt sequence.
 
 ## Setup (hour 0, ~20 min, one frontend person)
