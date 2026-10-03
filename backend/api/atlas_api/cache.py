@@ -24,6 +24,10 @@ BREAKER_FAILURES = 2
 BREAKER_COOLDOWN_SECONDS = 5.0
 
 
+class StoreUnavailable(Exception):
+    """Redis failed, or is being skipped, on a strict op (job status: the caller must know)."""
+
+
 class Store:
     def __init__(self, redis: Redis | None):
         self.redis = redis
@@ -35,40 +39,47 @@ class Store:
     def from_url(cls, url: str | None, timeout: float = REDIS_TIMEOUT_SECONDS) -> "Store":
         return cls(Redis.from_url(url, socket_timeout=timeout, socket_connect_timeout=timeout) if url else None)
 
-    async def _redis(self, op: Callable[[], Awaitable[Any]], default: Any) -> Any:
-        """Run one Redis op through the breaker; `default` when Redis fails or is skipped."""
+    async def _redis(self, op: Callable[[], Awaitable[Any]], default: Any, strict: bool = False) -> Any:
+        """Run one Redis op through the breaker; `default` when Redis fails or is skipped,
+        or StoreUnavailable when `strict`."""
         now = time.monotonic()
         if now < self._open_until:
+            if strict:
+                raise StoreUnavailable("redis unavailable (skipped after repeated failures)")
             return default
         try:
             result = await op()
-        except Exception as exc:  # the store must never break a request
+        except Exception as exc:  # the store must never break a request (unless strict)
             self._failures += 1
             if self._failures >= BREAKER_FAILURES:
                 if self._failures == BREAKER_FAILURES:
                     log.warning("redis unavailable (%s: %s); skipping it for %.0fs at a time",
                                 type(exc).__name__, exc, BREAKER_COOLDOWN_SECONDS)
                 self._open_until = time.monotonic() + BREAKER_COOLDOWN_SECONDS
+            if strict:
+                raise StoreUnavailable(f"redis error: {type(exc).__name__}") from exc
             return default
         if self._failures >= BREAKER_FAILURES:
             log.info("redis available again")
         self._failures = 0
         return result
 
-    async def get(self, key: str) -> bytes | None:
+    async def get(self, key: str, *, strict: bool = False) -> bytes | None:
+        """Value or None. A Redis failure is a miss, or StoreUnavailable when `strict`."""
         if self.redis is not None:
             redis = self.redis
-            return await self._redis(lambda: redis.get(key), None)
+            return await self._redis(lambda: redis.get(key), None, strict)
         hit = self._mem.get(key)
         if hit is None or hit[0] < time.monotonic():
             self._mem.pop(key, None)
             return None
         return hit[1]
 
-    async def set(self, key: str, value: bytes, ttl: int) -> None:
+    async def set(self, key: str, value: bytes, ttl: int, *, strict: bool = False) -> None:
+        """A Redis failure is ignored, or raises StoreUnavailable when `strict`."""
         if self.redis is not None:
             redis = self.redis
-            await self._redis(lambda: redis.set(key, value, ex=ttl), None)
+            await self._redis(lambda: redis.set(key, value, ex=ttl), None, strict)
             return
         if len(self._mem) > 5000:  # crude bound for dev
             now = time.monotonic()

@@ -567,3 +567,46 @@ def test_store_circuit_breaker_on_hanging_redis(monkeypatch):
         await store.redis.aclose()
         return spent
     assert asyncio.run(run()) < 1.0  # 60 ops; without the breaker 60 x 0.2 s = 12 s
+
+
+def test_job_status_redis_error_is_503_not_404(fixtures_dir):
+    dead = "redis://127.0.0.1:1/0"
+    with _app(fixtures_dir, redis_url=dead, db_endpoints="gap_search") as c:
+        assert_error(c.get(f"{V1}/jobs/job_abc"), 503, "upstream_unavailable")
+    with _app(fixtures_dir, redis_url=dead) as c:  # fixtures mode still serves the canned job
+        assert c.get(f"{V1}/jobs/job_abc").json()["state"] == "done"
+
+
+def test_job_store_is_strict_and_final_status_is_retried(monkeypatch):
+    import asyncio
+
+    from atlas_api import cache, jobs
+    from atlas_api.config import Settings
+    s = Settings(_env_file=None, brightdata_api_key="k")
+
+    async def dead_store():
+        store = cache.Store.from_url("redis://127.0.0.1:1/0", timeout=0.2)
+        with pytest.raises(cache.StoreUnavailable):
+            await jobs.load(store, "job_x")
+        assert await store.get("k") is None  # the cache path still fails open
+        with pytest.raises(cache.StoreUnavailable):  # breaker open: strict ops fail fast
+            await jobs.save(store, s, jobs.status("job_x", "queued"))
+        await store.close()
+    asyncio.run(dead_store())
+
+    class Flaky(cache.Store):  # Redis blips for the first two writes of the final status
+        fails = 0
+
+        async def set(self, key, value, ttl, *, strict=False):
+            if b'"done"' in value and self.fails < 2:
+                self.fails += 1
+                raise cache.StoreUnavailable("blip")
+            await super().set(key, value, ttl, strict=strict)
+
+    async def serp(settings, query, client):
+        return [{"title": "CLN5 Foundation", "url": "https://x.org", "snippet": ""}]
+    monkeypatch.setattr(jobs, "brightdata_serp", serp)
+    monkeypatch.setattr(jobs, "SAVE_RETRY_DELAYS", (0, 0, 0))
+    store = Flaky(None)
+    asyncio.run(jobs.run_gap_search(s, store, "job_r", "MONDO:1", "CLN5 disease"))
+    assert asyncio.run(jobs.load(store, "job_r"))["state"] == "done" and store.fails == 2
