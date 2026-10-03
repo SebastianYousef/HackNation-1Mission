@@ -526,3 +526,16 @@ def test_trailing_slash_is_404_not_absolute_redirect(client):
     r = client.get(f"{V1}/meta/", headers={"X-Forwarded-Proto": "https"}, follow_redirects=False)
     assert r.status_code == 404 and "location" not in r.headers
     assert r.json()["error"]["code"] == "not_found"
+
+
+def test_worker_accepts_lowercase_log_level(monkeypatch):
+    import asyncio
+    import logging
+
+    from atlas_api import config, worker
+    monkeypatch.setattr(logging.root, "handlers", [])  # let basicConfig run (pytest installs handlers)
+    monkeypatch.setattr(logging.root, "level", logging.root.level)
+    monkeypatch.setattr(worker, "get_settings", lambda: config.Settings(_env_file=None, log_level="info",
+                                                                        redis_url=None))
+    with pytest.raises(SystemExit, match="REDIS_URL"):  # got past logging setup (was ValueError)
+        asyncio.run(worker.main())
