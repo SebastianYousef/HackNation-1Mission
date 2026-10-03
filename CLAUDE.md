@@ -118,8 +118,9 @@ That is the exact command that produced the current dataset. It deliberately pas
 To change the landing page, edit `frontend/landing.html` here, push, and redeploy.
 
 ### Current state (2026-10-03)
-- Real dataset loaded with the hardened pipeline (dataset `2026-10-04a+20261003.210940`): 3,090 nodes, 10,086 edges (7,339 curated, 1,186 literature, 1,503 inferred, 58 hypothesis), 11,451 evidence rows, 745 paths, 58 views.
-- `check_contract.py` reports 56 violations: `action-view.connections[].weakest_status/min_confidence` don't equal the edge minimum. This is intentional. `views.path_json` applies honesty caps (`attrs.status_cap`/`confidence_cap`), so a path is shown *weaker* than its edges, never stronger. The stricter checker (0c06aa0) and `/paths` (SQL, no caps) don't know about the caps yet. **To do (pipeline/contract owner):** decide on one rule, then fix the checker or the views.
+- Real dataset loaded with the hardened pipeline (dataset `2026-10-04a+20261003.213735`): 3,108 nodes, 10,142 edges (7,339 curated, 1,221 literature, 1,524 inferred, 58 hypothesis), 11,512 evidence rows, 979 paths, 61 views (39 action + 22 mechanism).
+- `check_contract.py` passes (OK, 0 violations). Path strength has one rule: `analytics/paths.py` (`path_strength`) takes the weakest edge, lowered by `attrs.status_cap`/`confidence_cap`, and stores it in `paths.weakest_status/min_confidence` (migration 0004). `/paths` and the views serve that value. The checker accepts the edge minimum, or the cap when one is set, and never anything stronger.
+- `curated.yaml` now has 11 assets (DEM-CHILD registry, natural history studies, CLN5/CLN3/CLN6 animal and cell models), 3 mechanisms (`ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes`, `-subunit-c-storage`, `-lysosomal-bmp-synthesis`) and the Gray Foundation (CLN6). All 43 quotes pass `--verify`. PubMed quotes use NCBI efetch URLs, because pubmed.ncbi.nlm.nih.gov shows scripts a cookie wall.
 - Frontend prototype prompt with verified real demo ids: `frontend/PROTOTYPE_PROMPT.md`.
 - `.env` has only the Bright Data **Scraping Browser** credentials:
   - `/explain` and `/outreach-draft` use template fallbacks (no `OPENAI_API_KEY`).

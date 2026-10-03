@@ -69,12 +69,13 @@ f) /plan = landing-2 "Plan your first step": "Your disease" (search-as-you-type,
 
 ## 5. Real-data facts to design for (verified against the live API)
 - Labels are lower-case MONDO names ("neuronal ceroid lipofuscinosis 5"); show them as given (sentence case at most).
-- Many nodes have summary: null and several lists are empty; assets is currently empty for every disease. Every section needs a graceful Unknown/empty state; never render "null"/"undefined".
+- Many nodes have summary: null and several lists are empty. assets is now filled for the NCLs: CLN5 has 6 (all `direct`: sheep/dog/mouse/iPSC models, DEM-CHILD registry, Neurogene natural history), CLN3/CLN2/CLN6 have 6 each (mix of `direct` and `adaptable` with what_differs), the NCL umbrella 2; most other diseases still have none. Every section needs a graceful Unknown/empty state; never render "null"/"undefined".
 - "batten" → juvenile NCL (MONDO:0019262), BDFA, BDSRA, the Batten Disease Clinical Research Consortium grant.
 - Hero CLN5 (MONDO:0009745): no approved treatment, no exact patient group, 6 related communities with 4 groups, 8 connections, 8 trials, 8 researchers, 4 next steps, 3 gaps, a caution.
 - CLN3 (MONDO:0008767): 1 exact group (Beyond Batten Disease Foundation) + the CLN2 counterexample caution. CLN2 (MONDO:0008769): approved treatment exists. NCL umbrella (MONDO:0016295): 3 groups (BDFA, BDSRA, NCL-Stiftung).
 - Kufs type (MONDO:0008768): coverage.has_supported_route === false (the honest "Unknown" state).
-- Mechanism views exist only for a few mechanisms; always handle 404.
+- Mechanism views exist only for some mechanisms; always handle 404. Curated ones that return 200: ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes (CLN6/CLN8), ATLAS:mech-subunit-c-storage (CLN5/CLN2/juvenile NCL), ATLAS:mech-lysosomal-bmp-synthesis (CLN5/CLN3).
+- CLN6 (MONDO:0011144) now has an exact patient group: Charlotte & Gwenyth Gray Foundation.
 
 ## 6. Build and deploy constraints (our server builds this automatically)
 - `npm ci && npm run build` must succeed from a clean checkout and output to dist/. No .env needed: production is same-origin (API_BASE "").
