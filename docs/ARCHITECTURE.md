@@ -10,7 +10,7 @@
                                    │  MONDO HPO HGNC Orphanet ClinVar Reactome PubMed CT.gov RePORTER Bright Data      │  │
                                    └───────────────────────────────────────────────────────────────────────────────────┼──┘
                                                                                                                         ▼
- Browser ──DNS──► 203.0.113.10 ──► [L4 LB] ──TCP+PROXY v2──► [L7 LB ×2] ──HTTP──► [API ×N] ──SQL──► Postgres (Supabase)
+ Browser ──DNS──► 203.0.113.10 ──► [L4 LB] ──TCP+PROXY v2──► [L7 LB ×2] ──HTTP──► [API ×N] ──SQL──► Postgres
   (React SPA,       public IP       TCP:443      10.0.0.0/24       TLS end,  /api/* ─► 10.0.1.x:8000  │      api_* functions
    from Lovable)                    src-IP hash                    routing   /*     ─► [web] nginx     ├──► Redis (cache, rate
                                                                    health    (static dist/)            │     limits, job queue)
@@ -26,7 +26,7 @@
 | API replicas | Backend (B2) | FastAPI + uvicorn, psycopg3 pool | **none: stateless** |
 | Worker(s) | Backend (B2) | Python, consumes Redis queue | none |
 | Cache / queue | Backend (B2) | Redis | ephemeral |
-| Database | Backend (B1+B2) | Postgres 16+ with pg_trgm and pgvector (Supabase free tier) | **all durable state** |
+| Database | Backend (B1+B2) | Postgres 16+ with pg_trgm and pgvector (self-hosted; the Supabase free tier was the original plan and is not used) | **all durable state** |
 | Pipeline | Backend (B1) | Python 3.13: pandas, networkx/igraph+leidenalg, openai | files in `data/` |
 
 ## 2. The request path, layer by layer
@@ -52,7 +52,7 @@ What happens when a user opens `https://atlas.example/d/MONDO:0016295`:
    - Takes the client IP for rate limits and logs from the `X-Forwarded-For` entry `TRUSTED_PROXY_HOPS` hops from the right (1 behind our L7). Uvicorn runs with `--no-proxy-headers`, so no header can rewrite the peer address or scheme. The app builds no absolute URLs (`redirect_slashes=False`, relative `Location`), so it doesn't need `X-Forwarded-Proto`. Details: `infra/README.md`, "Client IP and forwarded headers".
    - Validates params, checks the Redis cache (`dataset_version + URL`), and on a miss calls one SQL function (`select api_action_view($1)`).
    - Returns JSON with `ETag`, `Cache-Control`, `X-Request-Id` and **`X-Served-By: api-2`**, which makes the load balancing visible in the UI's debug footer.
-6. **Postgres.** Reached through the Supabase **transaction pooler** (port 6543), so many replicas share a bounded number of DB connections.
+6. **Postgres.** Reached directly, or through a **transaction pooler** (PgBouncer, Supavisor) so many replicas share a bounded number of DB connections. The API disables server-side prepared statements, so either works.
 
 ## 3. Horizontal scaling and why sessions are not sticky
 
@@ -71,7 +71,7 @@ What happens when a user opens `https://atlas.example/d/MONDO:0016295`:
 
 | Resource | Budget |
 |---|---|
-| DB connections | replicas × pool_size ≤ pooler limit (Supabase free tier pooler handles ~200 clients; use pool_size = 5) |
+| DB connections | replicas × WEB_CONCURRENCY × pool_size ≤ Postgres `max_connections`, or the pooler's client limit if one is in front (use pool_size = 5) |
 | OpenAI | per-IP and global rate limits in Redis; explanations cached forever per (audience, edge_ids) |
 | Bright Data | only in the worker tier; scale workers independently of API replicas |
 
@@ -170,17 +170,17 @@ The free-tier cloud options below are the fallback, and the reference for a mult
 | L4 LB | Oracle Cloud Always Free **Network Load Balancer** | (none) |
 | L7 LB | Oracle Cloud Always Free **Flexible Load Balancer** (10 Mbps), or HAProxy on a VM | Render / Cloud Run built-in L7 |
 | API + worker + web + Redis | Oracle Always Free VMs (Ampere A1) in a **private subnet**, running `infra/docker-compose.yml` | Render free web service / Cloud Run |
-| Postgres | Supabase free tier (via pooler) | same |
+| Postgres | Managed Postgres free tier with pg_trgm + pgvector (via its pooler), or the compose `db` service | same |
 | Public URL during the hackathon | `cloudflared tunnel --url http://localhost:80` (free, instant HTTPS) | Lovable publish (`*.lovable.app`) + public API |
 
-Verify the current Always Free limits when signing up; Oracle sign-up needs a card, so start that at hour 0. Supabase free projects pause after a week of inactivity, so keep the project active through judging. The brief also accepts "easy to run locally": `make up` starts the whole stack (L4 → L7 ×2 → API ×3 → Redis/Postgres → web) with Docker Compose.
+Verify the current Always Free limits when signing up; Oracle sign-up needs a card, so start that at hour 0. Managed free-tier Postgres projects (e.g. Supabase) may pause after a week of inactivity, so keep one active through judging if you use it. The brief also accepts "easy to run locally": `make up` starts the whole stack (L4 → L7 ×2 → API ×3 → Redis/Postgres → web) with Docker Compose.
 
 Network layout (prod):
 ```
 VCN 10.0.0.0/16
  ├─ public subnet  10.0.0.0/24   NLB (203.0.113.10)  ─►  L7 LB nodes 10.0.0.21, 10.0.0.22
  └─ private subnet 10.0.1.0/24   app VMs 10.0.1.11, 10.0.1.12  (api ×N, worker, web, redis)
-     security list: ingress 8000/8080 only from 10.0.0.0/24; egress 443 (Supabase, OpenAI, Bright Data)
+     security list: ingress 8000/8080 only from 10.0.0.0/24; egress 443 (OpenAI, Bright Data, managed Postgres if used)
 ```
 
 ## 9. Key decisions and why
@@ -188,7 +188,7 @@ VCN 10.0.0.0/16
 | Decision | Why |
 |---|---|
 | Precompute the graph, paths and composite views offline | The demo must be fast and deterministic; LLM and scrape failures cannot break it |
-| Postgres instead of a graph DB | One store for graph + search + vectors + cache tables; small slice; the SQL functions are the data-access layer; Supabase free tier |
+| Postgres instead of a graph DB | One store for graph + search + vectors + cache tables; small slice; the SQL functions are the data-access layer |
 | REST contract, not direct DB access from the browser | Total decoupling; enables the LB/scaling story; secrets stay server-side; fixtures make the frontend independent |
 | Stateless API + Redis | Horizontal scaling without sticky sessions; jobs survive replica death |
 | Status on every edge + contradicting evidence in the API | Directly targets the "Evidence integrity" and "Graph quality" judging criteria |

@@ -30,7 +30,7 @@ node contract/scripts/validate-fixtures.mjs           # after touching contract/
 ```
 
 ## Gotchas
-- **Supabase:** connect through the transaction pooler (port 6543) and keep `prepare_threshold=None` (psycopg). Budget replicas × pool size ≤ the pooler limit.
+- **Postgres connections:** no deployment uses Supabase. Keep `prepare_threshold=None` (psycopg) so a transaction pooler (PgBouncer, Supavisor) stays usable. Budget replicas × pool size ≤ `max_connections`, or the pooler limit if one is in front.
 - **Containers can't run on this dev machine** (user namespaces blocked). Use `make lb-native` for the load-balancer demo. `docker compose` works on the team's other machines and the cloud VMs.
 - **OpenAI:** all calls go through `pipeline/atlas_pipeline/llm.py` or `api/atlas_api/ai.py`. Never add a call elsewhere. Cache everything. A missing key must degrade to templates (pipeline) or a 503 `upstream_unavailable` (API), never crash.
 - **Bright Data:** request code is isolated in `pipeline/.../ingest/brightdata_orgs.py` and `api/atlas_api/jobs.py` (`brightdata_serp`). Both are marked `TODO(verify)`; check the format against your zone before relying on it.

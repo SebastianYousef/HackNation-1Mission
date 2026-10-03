@@ -26,8 +26,8 @@ The stack is two tiers of load balancers in front of N stateless API replicas. S
          ▼               ▼
   ┌──────────────┐  ┌──────────────────────────┐      ┌──────────────────────────┐
   │ Postgres     │  │ Redis 10.0.1.30:6379     │◄─────│ worker ×M (gap-search →  │
-  │ Supabase     │  │ cache · rate counters ·  │ BRPOP│ Bright Data SERP API)    │
-  │ pooler :6543 │  │ job queue + job status   │      └──────────────────────────┘
+  │ 16 + pgvector│  │ cache · rate counters ·  │ BRPOP│ Bright Data SERP API)    │
+  │ :5432        │  │ job queue + job status   │      └──────────────────────────┘
   └──────────────┘  └──────────────────────────┘
 ```
 
@@ -114,7 +114,7 @@ Each uvicorn worker process has its own psycopg pool:
 connections = api_replicas × WEB_CONCURRENCY × DB_POOL_SIZE  (+ worker processes × 1, + pipeline)
             = 3 × 2 × 5 = 30
 ```
-Keep that number below the limit of the Supabase **transaction pooler** (Supavisor, port 6543; its client limit depends on the compute size, so check *Database → Settings*). Keep it far below Postgres `max_connections` if you connect directly. The transaction pooler multiplexes many client connections onto a few server connections, which is why the API disables server-side prepared statements (`prepare_threshold=None`). When scaling to N replicas, lower `DB_POOL_SIZE` so that N × 2 × pool stays inside the budget. Most GETs are Redis cache hits anyway.
+Keep that number far below Postgres `max_connections` when you connect directly (no deployment uses Supabase). If you put a **transaction pooler** in front (PgBouncer, or Supavisor on a managed Postgres), keep it below the pooler's client limit instead. A transaction pooler multiplexes many client connections onto a few server connections, which is why the API disables server-side prepared statements (`prepare_threshold=None`). When scaling to N replicas, lower `DB_POOL_SIZE` so that N × 2 × pool stays inside the budget. Most GETs are Redis cache hits anyway.
 
 ## Files
 | File | Purpose |
@@ -143,8 +143,8 @@ Verify the current Always Free limits before relying on them. As of writing they
 | `l4` | **Network Load Balancer** (L3/L4, public IP 203.0.113.10). Listeners TCP 80/443 → backend set = the Flexible LB's private IP, or the VMs directly if you skip L7. Enable *preserve source IP* or PROXY v2, whichever is available. |
 | `l7` | **Flexible Load Balancer** (HTTP/HTTPS) in a public subnet. TLS certificate on the HTTPS listener. Path route rules `/api/*` → `api` backend set (ports 8000 on each VM), default → `web` backend set (8080). Health check HTTP `GET /readyz`, expect 200. Session persistence: disabled. |
 | `api`, `worker`, `web` | 2 Ampere A1 VMs (e.g. 2 OCPU / 12 GB each) in **private subnet 10.0.1.0/24**. Each runs `docker compose up -d api worker web redis` without the l4, l7 and db services, with `-p 8000:8000 -p 8080:8080` published on the VM. Put Redis on one VM, or use a managed Redis free tier (e.g. Upstash), and point both VMs' `REDIS_URL` at it. |
-| Postgres | Supabase (transaction pooler URI in `DATABASE_URL`) |
-| Firewall | **Security list / NSG:** the private subnet allows ingress only from the LB subnet on 8000/8080, plus SSH from a bastion or your IP. There is no public IP on the VMs. Egress goes through a NAT gateway (OpenAI, Bright Data, Supabase). |
+| Postgres | A managed Postgres 16+ with pg_trgm and pgvector (transaction pooler URI in `DATABASE_URL`), or the compose `db` service on one VM |
+| Firewall | **Security list / NSG:** the private subnet allows ingress only from the LB subnet on 8000/8080, plus SSH from a bastion or your IP. There is no public IP on the VMs. Egress goes through a NAT gateway (OpenAI, Bright Data, a managed Postgres if used). |
 
 Scaling there: add a VM, then add it to both backend sets. Each VM can also run `--scale api=2` on two published ports.
 
