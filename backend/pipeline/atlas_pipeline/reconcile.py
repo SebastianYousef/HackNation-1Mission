@@ -23,7 +23,6 @@ from typing import Iterable
 
 import pandas as pd
 
-from .config import INTERIM
 from .ids import edge_id, mech_id, intervention_id, norm_name, person_id
 from .store import GraphWriter, read_json, read_jsonl, write_parquet
 

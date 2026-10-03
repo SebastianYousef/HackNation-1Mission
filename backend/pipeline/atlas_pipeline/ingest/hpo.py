@@ -26,7 +26,7 @@ import pandas as pd
 from ..config import RAW
 from ..http import download as dl, retrieved_at
 from ..obo import parse_obo
-from ..store import GraphWriter, read_json, read_parquet, write_node_patches, write_parquet
+from ..store import GraphWriter, read_json, write_node_patches, write_parquet
 from . import hgnc
 
 log = logging.getLogger(__name__)
