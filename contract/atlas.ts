@@ -218,7 +218,7 @@ export interface Path {
   edge_ids: string[];
   nodes: NodeBrief[];             // same order as node_ids
   edges: Edge[];                  // same order as edge_ids
-  weakest_status: EdgeStatus;     // a path is only as strong as its weakest edge
+  weakest_status: EdgeStatus;     // a path is only as strong as its weakest edge (attrs.status_cap may lower it further)
   min_confidence: number;
   attrs: Record<string, unknown>;
 }
