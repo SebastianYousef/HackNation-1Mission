@@ -18,6 +18,7 @@ Schema mini-language (mirrors atlas.ts by hand — keep in sync):
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import ssl
 import sys
@@ -248,6 +249,9 @@ def check_edge(er: dict, path: str) -> list[str]:
 
 
 # ---------------------------------------------------------------------------- runner
+MAX_CONN_ERRORS = 5  # consecutive connection failures before the remaining requests are not sent
+
+
 class Checker:
     def __init__(self, base: str, insecure: bool, verbose: bool, allow_missing: bool = False):
         self.base, self.verbose, self.allow_missing = base.rstrip("/"), verbose, allow_missing
@@ -256,18 +260,32 @@ class Checker:
         self.errors: list[str] = []
         self.calls = 0
         self.served_by: dict[str, int] = {}
+        self.consecutive_conn_errors = 0
+        self.not_sent = 0
 
     def request(self, method: str, path: str, body: Any = None) -> tuple[int, Any]:
         url = self.base + path
         data = json.dumps(body).encode() if body is not None else None
         req = urllib.request.Request(url, data=data, method=method, headers={"Content-Type": "application/json",
                                                                               "Accept": "application/json"})
+        if self.consecutive_conn_errors >= MAX_CONN_ERRORS:
+            self.not_sent += 1  # the API is unreachable: stop waiting on timeouts, report once in the summary
+            return 0, None
         self.calls += 1
         try:
-            with urllib.request.urlopen(req, context=self.ctx, timeout=60) as r:
-                status, raw, headers = r.status, r.read(), r.headers
-        except urllib.error.HTTPError as e:
-            status, raw, headers = e.code, e.read(), e.headers
+            try:
+                with urllib.request.urlopen(req, context=self.ctx, timeout=60) as r:
+                    status, raw, headers = r.status, r.read(), r.headers
+            except urllib.error.HTTPError as e:
+                status, raw, headers = e.code, e.read(), e.headers
+        except (urllib.error.URLError, OSError, http.client.HTTPException) as e:
+            # connection refused / reset / timeout / TLS: a collected failure, not a traceback that loses the report
+            self.consecutive_conn_errors += 1
+            self.errors.append(f"{method} {path}: request failed ({type(e).__name__}: {getattr(e, 'reason', e)})")
+            if self.verbose:
+                print(f"  ERR {method} {path}")
+            return 0, None
+        self.consecutive_conn_errors = 0
         for h in ("X-Request-Id", "X-Served-By"):
             if not headers.get(h):
                 self.errors.append(f"{method} {path}: missing header {h}")
@@ -283,6 +301,8 @@ class Checker:
 
     def get(self, path: str, schema: Any, expect: int = 200) -> Any:
         status, body = self.request("GET", path)
+        if status == 0:
+            return None  # connection error, already recorded
         if status == 404 and expect == 200 and self.allow_missing:
             self.skipped += 1  # partial fixture set: a 404 is fine as long as it has the ApiError shape
             self.errors += [f"GET {path} (404): {e}" for e in validate(body, API_ERROR)]
@@ -402,14 +422,14 @@ def main() -> int:
             bad = [] if errs else [s["edge_id"] for s in body["steps"] if s["edge_id"] not in path_edges]
             if bad:
                 c.errors.append(f"POST /explain cites edges not in the request: {bad}")
-        else:
+        elif st:  # st == 0: connection error, already recorded
             c.errors.append(f"POST /explain: status {st} {body}")
         st, body = c.request("POST", "/api/v1/gap-search", {"disease_id": node_ids[0]})
         if st == 202 and isinstance(body, dict) and isinstance(body.get("job_id"), str):
             job = c.get(f"/api/v1/jobs/{enc(body['job_id'])}", JOB_STATUS)
             if job and job["job_id"] != body["job_id"]:
                 c.errors.append("GET /jobs: job_id mismatch")
-        else:
+        elif st:
             c.errors.append(f"POST /gap-search: status {st}")
 
     # coverage: an OK that checked nothing is not an OK (broken search/clusters, node_names not loaded, ...)
@@ -423,6 +443,8 @@ def main() -> int:
         if counts["clusters"] and not clusters:
             c.errors.append(f"/clusters returned [] but meta reports {counts['clusters']} clusters")
 
+    if c.not_sent:
+        c.errors.append(f"{c.not_sent} request(s) not sent after {MAX_CONN_ERRORS} consecutive connection errors")
     print(f"{c.calls} requests, {len(seen_nodes)} node ids discovered, {len(set(edge_ids))} edges, "
           f"{c.skipped} skipped (404), served by {c.served_by}")
     print("checked: " + ", ".join(f"{k}={v}" for k, v in hits.items()))
