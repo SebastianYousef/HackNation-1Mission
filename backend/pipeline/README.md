@@ -14,7 +14,7 @@ make all                       # or stage by stage: make ingest | extract | reco
 ATLAS_API_BASE=http://localhost:8000 make snapshot   # real responses -> data/snapshot (offline demo fallback)
 ```
 
-Everything under `data/` (raw downloads, interim jsonl/parquet, LLM cache, snapshot) is gitignored and reproducible. The slice is defined in `config/slice.yaml`; hand-curated facts with source URLs (patient groups, approved therapies) are in `config/curated.yaml`.
+Everything under `data/` (raw downloads, interim jsonl/parquet, LLM cache, snapshot) is gitignored and reproducible. The slice is defined in `config/slice.yaml`; hand-curated facts with source URLs and verbatim quotes (patient groups, mechanisms, assets, therapies) are in `config/curated.yaml`.
 
 ## Stages
 
@@ -37,6 +37,12 @@ Everything under `data/` (raw downloads, interim jsonl/parquet, LLM cache, snaps
 - `clusters`: Leiden communities.
 - `overlap`: people bridging clusters.
 - `paths`: Dijkstra over −ln(confidence). Single-symptom bridges and hub symptoms are penalised, and routes never pass *through* a group, person, trial or asset.
+
+**Curated facts** (`ingest/curated.py`, `config/curated.yaml`; the YAML schema is at the top of that file):
+- Sections: `organizations` (→ `organization_serves_disease`), `mechanisms` (`ATLAS:mech-*` → `gene_in_mechanism`, `disease_involves_mechanism`), `assets` (`ASSET:*`, attrs `asset_kind/access/owner_id` → `organization_maintains_asset`, `asset_covers_disease`, `asset_targets_gene`), `interventions` (→ `intervention_treats_disease` with `attrs.approval`, `intervention_targets_mechanism`).
+- Every edge carries an `evidence` list (`quote`, `source_type`, `source_name`, `source_ref`, `url`, `published_at`, `retrieved_at`). Diseases may be MONDO ids or OMIM/ORPHA xrefs. Genes may be HGNC ids or symbols.
+- Status: an edge with a verbatim quote is `literature`. Without one it is loaded as `hypothesis` (capped at 0.4, with a warning). Nothing from this file is `curated`. Entries without evidence, or with diseases outside the slice, are skipped and logged.
+- `python -m atlas_pipeline.ingest.curated --verify` fetches every evidence url and checks that each quote appears on the page (tags stripped, whitespace collapsed). Run it after adding facts. It needs network, so it is not part of `make ingest`.
 
 ## Status (first real run, 2026-10-03)
 Real data for the lysosomal slice:

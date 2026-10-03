@@ -1,41 +1,174 @@
 # Hand-curated facts that no open database exposes in machine-readable form.
-# Disease references may use any xref (OMIM:/ORPHA:) or MONDO id — `reconcile` maps them.
-# Quotes are null because we do not hold verbatim text; each entry carries a URL to check.
+# Loaded by atlas_pipeline/ingest/curated.py (stage "curated"). Read the schema before adding facts.
+#
+# ── Status rule (CLAUDE.md rule 2) ──────────────────────────────────────────────────────────────
+#   * An edge is `literature` when at least one of its supporting evidence entries carries a verbatim
+#     `quote` copied from the source page (publication, regulator, organisation website, …).
+#   * An edge without any quote is loaded as `hypothesis` (confidence capped at 0.4, hidden from the
+#     mechanism views) and logged as a warning. We keep it visible rather than drop it, but the UI
+#     labels it as unconfirmed. Add a quote to promote it.
+#   * Nothing in this file is ever `curated`: that status is reserved for curated databases
+#     (MONDO, HPO, Orphanet, ClinVar, Reactome …) ingested by their own stages.
+#   * An edge entry without an `evidence` list is skipped (every edge needs >= 1 evidence row).
+#
+# ── Quotes ─────────────────────────────────────────────────────────────────────────────────────
+#   A quote must be an exact substring of the page text at `url` after stripping HTML tags and
+#   collapsing whitespace (curly quotes, dashes and accents kept as on the page). Keep it short
+#   (one or two sentences) and make sure it actually states the edge. Never paraphrase, never
+#   translate (a German page gets a German quote). If the live page is gone, quote an archived copy
+#   (web.archive.org) and put the archive link in `url`, the original link in `source_ref`.
+#   `python -m atlas_pipeline.ingest.curated --verify` re-fetches every url and checks every quote.
+#
+# ── Evidence entry (the `evidence:` list under every edge) ─────────────────────────────────────
+#   - quote:        "verbatim sentence"            # or null (-> edge is `hypothesis`)
+#     source_type:  publication | patient_org_site | web | database | trial_registry | grant_database
+#                   (contract SourceType; `computed` is not allowed here). A regulator press release
+#                   or org news page is `web`, the org's own site is `patient_org_site`, a paper is
+#                   `publication`, a drug-label database page (DailyMed) is `database`.
+#     source_name:  "FDA" | "PubMed" | "BDSRA" | …  (required; shown in the edge drawer)
+#     source_ref:   "PMID:28976277" | "NCT01234567" | original URL   (default: url)
+#     url:          https://…   (a link a human can open and find the quote on)
+#     published_at: 2017-04-27 | 2017-04 | 2017 | null
+#     retrieved_at: 2026-10-03   (when the quote was checked against the page)
+#     stance:       supports (default) | contradicts | context
+#     method:       manual (default) | any short provenance tag, e.g. "research:verified-quote"
+#
+# ── References ─────────────────────────────────────────────────────────────────────────────────
+#   disease: MONDO id, or any xref MONDO maps (OMIM:/ORPHA:/…). Must be in the slice, else skipped.
+#   gene:    HGNC id (HGNC:2073) or approved symbol (TPP1), mapped through the HGNC table.
+#            Genes outside the slice get a gene node from HGNC (logged).
+#   mechanism (under interventions.targets): an ATLAS:mech-* id defined below, or a REACT:* id.
+#   organization (under assets.owner): an ORG:* id, normally defined below.
+#
+# ── Sections ───────────────────────────────────────────────────────────────────────────────────
+# organizations:                      -> node type organization
+#   - id: ORG:<slug>                  # optional, default ORG:<slug(label)>
+#     label, subtype                  # subtype: patient_group|foundation|company|funder|investor|academic|hospital
+#     website, country, contact_url, has_registry (true|false|null), description
+#     serves:                         -> organization_serves_disease
+#       - disease: <ref>
+#         evidence: [<evidence entry>, …]
+#
+# mechanisms:                         -> node type mechanism
+#   - id: ATLAS:mech-<slug>           # optional, default ATLAS:mech-<slug(label)>
+#     label, description
+#     subtype: biological_process | pathway
+#     genes:                          -> gene_in_mechanism
+#       - gene: <ref>
+#         evidence: [...]
+#     diseases:                       -> disease_involves_mechanism
+#       - disease: <ref>
+#         evidence: [...]
+#
+# assets:                             -> node type asset  (attrs: asset_kind = subtype, access, owner_id)
+#   - id: ASSET:<slug>                # optional, default ASSET:<slug(label)>
+#     label, description, url
+#     subtype: registry | natural_history_study | animal_model | cell_model | biomarker | biobank
+#     access: open | on_request | restricted | null
+#     owner:                          -> organization_maintains_asset (owner.id becomes attrs.owner_id)
+#       id: ORG:<slug>
+#       evidence: [...]
+#     covers:                         -> asset_covers_disease
+#       - disease: <ref>
+#         evidence: [...]
+#     targets:                        -> asset_targets_gene
+#       - gene: <ref>
+#         evidence: [...]
+#
+# interventions:                      -> node type intervention
+#   - id: ATLAS:int-<slug>            # optional, default ATLAS:int-<slug(label)>
+#     label, description, synonyms: [...]
+#     subtype: small_molecule | enzyme_replacement | gene_therapy | antisense_oligonucleotide | other
+#     treats:                         -> intervention_treats_disease (attrs.approval)
+#       - disease: <ref>
+#         approval: approved | investigational
+#         evidence: [...]
+#     targets:                        -> intervention_targets_mechanism
+#       - mechanism: <ATLAS:mech-* | REACT:*>
+#         evidence: [...]
+
 organizations:
   - id: ORG:bdsra
     label: Batten Disease Support and Research Association (BDSRA)
     subtype: patient_group
-    website: https://bdsra.org
+    website: https://bdsrafoundation.org     # bdsra.org redirects here
     country: US
     has_registry: null
-    serves: [MONDO:0016295]
+    serves:
+      - disease: MONDO:0016295               # neuronal ceroid lipofuscinosis (Batten disease)
+        evidence:
+          - quote: "Founded in 1987, by parents seeking to build a network for those diagnosed with Batten disease, BDSRA is now the largest support and research organization dedicated to Batten disease in North America."
+            source_type: patient_org_site
+            source_name: BDSRA
+            url: https://bdsrafoundation.org/
+            retrieved_at: 2026-10-03
   - id: ORG:bdfa-uk
     label: Batten Disease Family Association (BDFA)
     subtype: patient_group
     website: https://www.bdfa-uk.org.uk
     country: GB
     has_registry: null
-    serves: [MONDO:0016295]
+    serves:
+      - disease: MONDO:0016295
+        evidence:
+          - quote: "We are the only registered charity providing professional support to individuals and families affected by Batten Disease in the UK."
+            source_type: patient_org_site
+            source_name: BDFA
+            url: https://www.bdfa-uk.org.uk/
+            retrieved_at: 2026-10-03
   - id: ORG:ncl-stiftung
     label: NCL-Stiftung
     subtype: foundation
     website: https://www.ncl-stiftung.de
     country: DE
     has_registry: null
-    serves: [MONDO:0016295]
+    serves:
+      - disease: MONDO:0016295
+        evidence:
+          - quote: "we are committed to national and international research funding in order to give children affected by NCL a prospect of previously missing therapeutic and curative approaches."
+            source_type: patient_org_site
+            source_name: NCL-Stiftung
+            url: https://www.ncl-stiftung.de/english/
+            retrieved_at: 2026-10-03
   - id: ORG:beyond-batten
     label: Beyond Batten Disease Foundation
     subtype: foundation
     website: https://beyondbatten.org
     country: US
     has_registry: null
-    serves: [OMIM:204200]     # CLN3 disease (juvenile NCL)
+    serves:
+      - disease: OMIM:204200                 # CLN3 disease (juvenile NCL)
+        evidence:
+          - quote: "One of the most important steps taken by Beyond Batten Disease Foundation in our quest to cure juvenile Batten (CLN3) disease is to document the experimental history of the CLN3 gene and its corresponding protein."
+            source_type: patient_org_site
+            source_name: Beyond Batten Disease Foundation
+            url: https://beyondbatten.org/research/cln3-gene/
+            retrieved_at: 2026-10-03
+
+mechanisms: []
+
+assets: []
 
 interventions:
   - id: ATLAS:int-cerliponase-alfa
     label: cerliponase alfa (Brineura)
     subtype: enzyme_replacement
+    synonyms: [Brineura]
     treats:
-      - disease: OMIM:204500  # CLN2 disease
+      - disease: OMIM:204500                 # CLN2 disease
         approval: approved
-        url: https://www.fda.gov/news-events/press-announcements/fda-approves-first-treatment-form-batten-disease
+        evidence:
+          - quote: "Brineura is the first FDA-approved treatment to slow loss of walking ability (ambulation) in symptomatic pediatric patients 3 years of age and older with late infantile neuronal ceroid lipofuscinosis type 2 (CLN2), also known as tripeptidyl peptidase-1 (TPP1) deficiency."
+            source_type: web
+            source_name: FDA
+            # the live press release now 404s; the quote is checked against the archived copy
+            source_ref: https://www.fda.gov/news-events/press-announcements/fda-approves-first-treatment-form-batten-disease
+            url: https://web.archive.org/web/20240118204124/https://www.fda.gov/news-events/press-announcements/fda-approves-first-treatment-form-batten-disease
+            published_at: 2017-04-27
+            retrieved_at: 2026-10-03
+          - quote: "BRINEURA is indicated to slow the loss of ambulation in pediatric patients with neuronal ceroid lipofuscinosis type 2 (CLN2 disease), also known as tripeptidyl peptidase 1 (TPP1) deficiency."
+            source_type: database
+            source_name: DailyMed (FDA label)
+            url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=485ab3c5-0359-4878-872f-2fe1e7df4047
+            published_at: 2024-07
+            retrieved_at: 2026-10-03
