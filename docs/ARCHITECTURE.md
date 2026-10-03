@@ -88,10 +88,10 @@ Property graph in relational tables:
 
 | status | produced by | default confidence | UI |
 |---|---|---|---|
-| `curated` | curated DBs: HPO, Orphanet, MONDO, ClinVar, ClinicalTrials.gov, RePORTER | 0.9 | solid slate |
-| `literature` | OpenAI extraction from abstracts, with the verbatim quote | 0.5 + 0.1 per independent PMID, max 0.85, −0.15 per contradiction | solid blue |
+| `curated` | curated DBs: HPO, Orphanet, MONDO, ClinVar, Reactome; registry facts from ClinicalTrials.gov and NIH RePORTER (trial tests intervention, grant funds PI, PI affiliation) | 0.9 | solid slate |
+| `literature` | text with a verbatim quote: OpenAI extraction from abstracts, PubMed, `curated.yaml` facts, and our string match of a CT.gov condition or a RePORTER grant to a slice disease | 0.5 + 0.1 per independent PMID, max 0.85, −0.15 per contradiction | solid blue |
 | `inferred` | our analytics (similarity, clustering) | calibrated score | dashed violet |
-| `hypothesis` | atlas-proposed links and speculative claims | ≤ 0.4 | dotted amber |
+| `hypothesis` | atlas-proposed links and speculative claims; weaker CT.gov matches (synonym or title only) and Bright Data leads | ≤ 0.4 | dotted amber |
 
 A path is only as strong as its weakest edge (`weakest_status`, `min_confidence` in `/paths`).
 
