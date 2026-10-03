@@ -1,12 +1,16 @@
 """PubMed via NCBI E-utilities (esearch + efetch). NCBI_API_KEY optional (10 req/s vs 3 req/s).
 
 esearch: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi
-         db=pubmed term=("<name>"[tiab] OR …) AND hasabstract  retmax=literature.pubmed_per_disease sort=relevance
+         db=pubmed term=("<name>"[tiab] OR ("<ABBR>"[tiab] AND ("<label word>"[tiab] OR …)) OR …) AND hasabstract
+         retmax=literature.pubmed_per_disease sort=relevance. Acronyms (INCL, CLN3) only count next to a
+         distinctive label word, because PubMed matches them case-insensitively ('incl.', yeast 'Cln3').
 efetch : https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi  db=pubmed retmode=xml id=<≤200 ids>
 Fields : PMID -> PMID:<n> publication node (attrs pmid/year/journal/title), ArticleTitle -> label + quote,
          Abstract/AbstractText -> data/interim/pubmed_abstracts.jsonl (input to `extract`),
          AuthorList (first 2 + last author) -> person nodes PERSON:<last>-<first> (attrs.affiliation),
          MeshHeadingList -> attrs.mesh.
+Filter : an article is kept only if a query name occurs in its title/abstract as a whole phrase
+         (acronyms case-sensitively); otherwise it gets no node, edge or abstract record.
 Edges  : publication_about (pub -> queried disease; literature; quote = title)
          person_authored  (person -> pub; curated bibliographic fact)
          person_studies   (person -> disease; literature; one evidence row per PMID, so confidence
@@ -17,11 +21,13 @@ from __future__ import annotations
 import logging
 import xml.etree.ElementTree as ET
 
+import httpx
+
 from ..config import env, slice_config
 from ..http import get_json, get_text
 from ..ids import person_id
 from ..store import GraphWriter, write_jsonl
-from ._common import Coverage, query_diseases, search_names
+from ._common import Coverage, context_terms, is_abbrev, mentions, query_diseases, search_names
 
 log = logging.getLogger(__name__)
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
@@ -47,11 +53,37 @@ def efetch(pmids: list[str]) -> list[dict]:
     out = []
     for i in range(0, len(pmids), 200):
         batch = sorted(pmids[i:i + 200])
-        xml = get_text(f"{EUTILS}/efetch.fcgi", _params(db="pubmed", retmode="xml", id=",".join(batch)), ns="pubmed")
+        xml = get_text(f"{EUTILS}/efetch.fcgi", _params(db="pubmed", retmode="xml", id=",".join(batch)), ns="pubmed",
+                       validate=_check_efetch)
         root = ET.fromstring(xml)
         for art in root.iter("PubmedArticle"):
             out.append(parse_article(art))
     return out
+
+
+def _check_efetch(xml: str) -> None:
+    """Raise on truncated XML or an NCBI <ERROR> body (served with HTTP 200), so it is never cached."""
+    root = ET.fromstring(xml)
+    if root.find("ERROR") is not None:
+        raise ValueError(f"efetch error: {(root.findtext('ERROR') or '')[:200]}")
+
+
+def _why(e: Exception) -> str:
+    """Failure reason safe to log: never str(e) of an HTTP error (its URL can carry api_key)."""
+    if isinstance(e, httpx.HTTPStatusError):
+        return f"HTTP {e.response.status_code}"
+    return type(e).__name__
+
+
+def build_term(d: dict, names: list[str]) -> str:
+    ctx = " OR ".join(f'"{w}"[tiab]' for w in context_terms(d))
+    parts = []
+    for n in names:
+        if not is_abbrev(n):
+            parts.append(f'"{n}"[tiab]')
+        elif ctx:
+            parts.append(f'("{n}"[tiab] AND ({ctx}))')
+    return "(" + " OR ".join(parts) + ") AND hasabstract"
 
 
 def _text(el) -> str:
@@ -88,17 +120,18 @@ def emit() -> None:
     abstracts: dict[str, dict] = {}
     for d in query_diseases():
         names = search_names(d)
-        term = "(" + " OR ".join(f'"{n}"[tiab]' for n in names) + ") AND hasabstract"
+        term = build_term(d, names)
         try:
             ids, count = esearch(term, n_per)
+            arts = efetch(ids) if ids else []
         except Exception as e:  # keep going; coverage records the failure
-            log.warning("pubmed esearch failed for %s: %s", d["id"], e)
+            log.warning("pubmed search failed for %s: %s", d["id"], _why(e))
             cov.add(d["id"], term, None)
             continue
         cov.add(d["id"], term, count)
-        if not ids:
-            continue
-        for art in efetch(ids):
+        for art in arts:
+            if not mentions(f"{art['title']} {art['abstract']}", names):
+                continue  # PubMed hit on a different sense of the term (e.g. 'INCL' in 'IncL/M plasmids')
             pmid = art["pmid"]
             pid = f"PMID:{pmid}"
             url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"

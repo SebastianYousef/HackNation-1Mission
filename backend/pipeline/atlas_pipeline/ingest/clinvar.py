@@ -73,7 +73,7 @@ def emit() -> None:
                   retrieved_at=ra)
         g.edge("variant_of_gene", vid, gid, status="curated", label="is a variant of", evidence=ev)
         for x in re.split(r"[,|;]", r.PhenotypeIDS):
-            x = normalize_curie(x.strip())
+            x = normalize_curie(re.sub(r"^MONDO:(?=MONDO:)", "", x.strip(), flags=re.I))  # 'MONDO:MONDO:0008769'
             m = x if x and x.startswith("MONDO:") else x2m.get(x or "")
             if m in diseases:
                 g.edge("variant_associated_with_disease", vid, m, status="curated", label="causes",

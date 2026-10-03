@@ -5,6 +5,8 @@ Source : https://reactome.org/download/current/NCBI2Reactome_All_Levels.txt
          https://reactome.org/download/current/ReactomePathways.txt (id, name, species) — names
 Mapping: NCBIGene -> HGNC (hgnc table); pathway -> mechanism node REACT:<stId> subtype 'pathway',
          attrs.n_genes (human genes in the pathway, all levels). Only Homo sapiens rows.
+         Edges only from TAS rows (manually curated); IEA rows (electronically inferred) count toward
+         n_genes but never become curated gene -> pathway edges.
 Emits  : gene_in_mechanism (curated, source Reactome) for slice genes, for pathways with
          n_genes <= 4 * analytics.max_pathway_genes (top-level pathways like "Metabolism" are dropped).
          disease_involves_mechanism is derived later (analytics.mechanisms).
@@ -34,8 +36,9 @@ def emit() -> None:
     path = RAW / "reactome" / "NCBI2Reactome_All_Levels.txt"
     df = pd.read_csv(path, sep="\t", header=None, dtype=str,
                      names=["gene", "pathway", "url", "name", "evidence", "species"])
-    df = df[df["species"] == "Homo sapiens"].drop_duplicates(["gene", "pathway"])
+    df = df[df["species"] == "Homo sapiens"]
     size = df.groupby("pathway")["gene"].nunique()
+    df = df[df["evidence"] == "TAS"].drop_duplicates(["gene", "pathway"])
     sl = read_json("slice")
     entrez = {}
     for hid in sl["genes"]:

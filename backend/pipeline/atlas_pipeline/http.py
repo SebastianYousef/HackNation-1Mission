@@ -9,10 +9,11 @@ import hashlib
 import json
 import logging
 import os
+import re
 import threading
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from urllib.parse import urlparse
 
 import httpx
@@ -46,6 +47,18 @@ def _throttle(url: str) -> None:
         _last[host] = time.monotonic()
 
 
+_SECRET_RE = re.compile(r"((?:api_key|apikey|access_token|token|key|email)=)[^&\s'\"]+", re.I)
+
+
+def redact(text: object) -> str:
+    """Mask secret query parameters (api_key=…, email=…) in a URL or exception message before logging."""
+    return _SECRET_RE.sub(r"\1***", str(text))
+
+
+def _safe_url(url: httpx.URL | str) -> str:
+    return str(httpx.URL(str(url)).copy_with(query=None))
+
+
 def _client() -> httpx.Client:
     return httpx.Client(follow_redirects=True, timeout=httpx.Timeout(60, read=300),
                         headers={"User-Agent": UA})
@@ -64,13 +77,16 @@ def request(method: str, url: str, *, retries: int = 5, **kw: Any) -> httpx.Resp
             return r
         except (httpx.TransportError, httpx.HTTPStatusError) as e:
             resp = getattr(e, "response", None)
-            if resp is not None and resp.status_code not in (429, 500, 502, 503, 504):
-                raise
+            if resp is not None and (resp.status_code not in (429, 500, 502, 503, 504) or attempt == retries - 1):
+                # httpx's message embeds the full URL incl. the query string (NCBI api_key): rebuild it
+                # without the query; `from None` keeps the original message out of tracebacks too
+                raise httpx.HTTPStatusError(f"HTTP {resp.status_code} for {method} {_safe_url(resp.request.url)}",
+                                            request=resp.request, response=resp) from None
             if attempt == retries - 1:
                 raise
             ra = resp.headers.get("Retry-After") if resp is not None else None
             sleep = float(ra) if ra and ra.isdigit() else delay
-            log.warning("%s %s failed (%s); retry in %.0fs", method, url, e, sleep)
+            log.warning("%s %s failed (%s); retry in %.0fs", method, _safe_url(url), redact(e), sleep)
             time.sleep(sleep)
             delay *= 2
     raise RuntimeError("unreachable")
@@ -97,7 +113,7 @@ def download(url: str, dest: Path | str, refresh: bool = False) -> Path:
         except (httpx.TransportError, httpx.HTTPStatusError) as e:
             if attempt == 3:
                 raise
-            log.warning("download failed (%s), retrying", e)
+            log.warning("download failed (%s), retrying", redact(e))
             time.sleep(5 * (attempt + 1))
     tmp.replace(dest)
     meta = dest.with_suffix(dest.suffix + ".meta.json")
@@ -117,12 +133,15 @@ def _cache_path(ns: str, key: str, ext: str = "json") -> Path:
 
 
 def get_text(url: str, params: dict | None = None, ns: str = "misc", headers: dict | None = None,
-             refresh: bool = False) -> str:
+             refresh: bool = False, validate: Callable[[str], object] | None = None) -> str:
+    """validate(body) runs before the body is cached; if it raises, nothing is cached (and it propagates)."""
     key = url + "?" + json.dumps(params or {}, sort_keys=True)
     p = _cache_path(ns, key, "txt")
     if p.exists() and not (refresh or REFRESH):
         return p.read_text()
     r = request("GET", url, params=params, headers=headers)
+    if validate is not None:
+        validate(r.text)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(r.text)
     return r.text

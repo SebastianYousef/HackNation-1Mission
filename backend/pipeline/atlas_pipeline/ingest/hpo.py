@@ -6,7 +6,10 @@ Sources:
       database_id (OMIM:/ORPHA:/DECIPHER:) -> MONDO via MONDO equivalentTo xrefs
       qualifier NOT -> skipped (negative annotation), hpo_id -> dst, reference -> evidence.source_ref,
       evidence (IEA/PCS/TAS) -> attrs.hpo_evidence, onset -> attrs.onset, frequency -> attrs.frequency
-      (+ attrs.frequency_value numeric), aspect P = phenotype, I = inheritance, C = onset (-> disease attrs)
+      (+ attrs.frequency_value numeric), aspect P = phenotype, I = inheritance, C = clinical course
+      (-> disease attrs: descendants of HP:0003674 Onset -> attrs.onset, other course terms such as
+      'Death in infancy' or 'Progressive' -> attrs.clinical_course).
+      Frequency 0/N, 0% or HP:0040285 (Excluded) = observed absent -> skipped like NOT.
   http://purl.obolibrary.org/obo/hp/hpoa/genes_to_disease.txt
       ncbi_gene_id -> HGNC via hgnc table, disease_id -> MONDO, association_type -> attrs.association_type
       (MENDELIAN -> label "causes"), source -> evidence.url
@@ -32,6 +35,7 @@ FILES = {"hp.obo": "http://purl.obolibrary.org/obo/hp.obo",
          "phenotype.hpoa": f"{BASE}/hpoa/phenotype.hpoa",
          "genes_to_disease.txt": f"{BASE}/hpoa/genes_to_disease.txt"}
 PHENOTYPIC_ABNORMALITY = "HP:0000118"
+ONSET = "HP:0003674"
 
 FREQ_TERMS = {  # HPO frequency subontology -> (label, representative value)
     "HP:0040280": ("Obligate (100%)", 1.0), "HP:0040281": ("Very frequent (80-99%)", 0.9),
@@ -82,8 +86,24 @@ def parse_g2d() -> pd.DataFrame:
     return df
 
 
+def descendants(terms: pd.DataFrame, root: str) -> set[str]:
+    """root and every term below it (is_a), from the `parents` column."""
+    children: dict[str, list[str]] = {}
+    for tid, parents in terms["parents"].items():
+        for p in parents:
+            children.setdefault(p, []).append(tid)
+    out, todo = {root}, [root]
+    while todo:
+        for c in children.get(todo.pop(), []):
+            if c not in out:
+                out.add(c)
+                todo.append(c)
+    return out
+
+
 def emit() -> None:
     terms = parse_terms().set_index("id")
+    onset_terms = descendants(terms, ONSET)
     hpoa = parse_hpoa()
     g2d = parse_g2d()
     sl = read_json("slice")
@@ -99,7 +119,7 @@ def emit() -> None:
         if r.qualifier == "NOT":
             continue
         if r.aspect in ("I", "C"):
-            key = "inheritance" if r.aspect == "I" else "onset"
+            key = "inheritance" if r.aspect == "I" else "onset" if r.hpo_id in onset_terms else "clinical_course"
             label = terms.loc[r.hpo_id]["name"] if r.hpo_id in terms.index else r.hpo_id
             lst = patches.setdefault(r.mondo, {}).setdefault(key, [])
             if label not in lst:
@@ -107,10 +127,12 @@ def emit() -> None:
             continue
         if r.aspect != "P" or r.hpo_id not in terms.index:
             continue
+        flabel, fval = freq_value(r.frequency)
+        if fval == 0.0:  # 0/N, 0% or Excluded: the feature was looked for and absent (same as NOT)
+            continue
         t = terms.loc[r.hpo_id]
         g.node(id=r.hpo_id, type="phenotype", label=t["name"], description=t["def"],
                synonyms=sorted(set(t["synonyms"])), url=f"https://hpo.jax.org/browse/term/{r.hpo_id}")
-        flabel, fval = freq_value(r.frequency)
         onset = terms.loc[r.onset]["name"] if r.onset and r.onset in terms.index else None
         attrs = {k: v for k, v in {"frequency": flabel, "frequency_value": fval, "onset": onset,
                                    "hpo_evidence": r.evidence}.items() if v is not None}

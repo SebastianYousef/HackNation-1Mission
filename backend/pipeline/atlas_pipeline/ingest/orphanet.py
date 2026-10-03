@@ -7,6 +7,9 @@ Implemented:
     DisorderGeneAssociationType/Name -> attrs.orphanet_association ("Disease-causing germline mutation(s) in")
     DisorderGeneAssociationStatus/Name -> attrs.orphanet_status ("Assessed")
     SourceOfValidation "12345[PMID]_..." -> evidence rows with source_ref PMID:12345
+    Status: "Assessed" -> curated; "Not yet assessed" -> literature if Orphanet cites PMIDs, else hypothesis
+            (evidence method algorithm:orphanet_not_yet_assessed instead of curated).
+    "Candidate gene tested in" / "Biomarker tested in" rows assert no association and are skipped.
 Not needed / stubbed:
   https://www.orphadata.com/data/xml/en_product4.xml   HPO phenotypes per disorder — already contained in
       phenotype.hpoa (ORPHA:* rows), so we do not parse it twice.
@@ -58,6 +61,8 @@ def emit() -> None:
                 gid = hgnc.gene_node(g, rec)
                 atype = a.findtext("DisorderGeneAssociationType/Name") or ""
                 status = a.findtext("DisorderGeneAssociationStatus/Name") or ""
+                if atype.lower().startswith(("candidate gene tested in", "biomarker tested in")):
+                    continue
                 pmids = re.findall(r"(\d+)\[PMID\]", a.findtext("SourceOfValidation") or "")
                 quote = f"{dname} (ORPHA:{code}) — {atype} {sym} [{status}]"
                 evs = [dict(source_type="database", source_name="Orphanet", source_ref=f"ORPHA:{code}",
@@ -65,7 +70,11 @@ def emit() -> None:
                 evs += [dict(source_type="database", source_name="Orphanet", source_ref=f"PMID:{p}",
                              url=f"https://pubmed.ncbi.nlm.nih.gov/{p}/", quote=quote, retrieved_at=ra) for p in pmids[:3]]
                 causal = "causing" in atype.lower()
-                g.edge("gene_associated_with_disease", gid, mondo, status="curated",
+                edge_status = ("curated" if status.lower() != "not yet assessed"
+                               else "literature" if pmids else "hypothesis")
+                if edge_status != "curated":  # the quote is Orphanet's line, not a reviewed assertion
+                    evs = [dict(e, method="algorithm:orphanet_not_yet_assessed") for e in evs]
+                g.edge("gene_associated_with_disease", gid, mondo, status=edge_status,
                        label="causes" if causal else "associated with",
                        attrs={"orphanet_association": atype, "orphanet_status": status}, evidence=evs)
         el.clear()
