@@ -14,7 +14,7 @@ This repo is the **frontend only** of the Rare Disease Atlas. It is generated an
 ## Commands
 ```bash
 npm i
-npm run dev                     # http://localhost:8080 (Lovable's Vite default) — uses VITE_API_BASE or mock
+npm run dev                     # http://localhost:8080 (Lovable's Vite default) — uses VITE_API_BASE (unset = same origin, not mock)
 VITE_DATA_MODE=mock npm run dev # force mock data
 npm run build && npm run preview
 npx tsc --noEmit                # type-check against the contract

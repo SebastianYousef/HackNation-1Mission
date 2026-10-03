@@ -36,7 +36,8 @@ export const DATA_MODE: "http" | "mock" =
   new URLSearchParams(location.search).get("mock") === "1" || import.meta.env.VITE_DATA_MODE === "mock" ? "mock" : "http";
 ```
 - Production: the site and the API share one origin. The L7 load balancer routes `/api/*` to the API servers, so `API_BASE = ""`.
-- Development and Lovable preview: `VITE_API_BASE` = the backend team's public dev URL (they will give it to you). If unset, use mock mode.
+- Development and Lovable preview: `VITE_API_BASE` = the backend team's public dev URL (they will give it to you).
+- An unset `VITE_API_BASE` does **not** mean mock mode. It means `API_BASE = ""` (same origin), which is exactly what the production build needs. Mock mode is chosen only by `VITE_DATA_MODE=mock` or `?mock=1`, as in the snippet above. In a dev or preview environment with no backend URL yet, set `VITE_DATA_MODE=mock`.
 - Appending `?mock=1` to any URL forces mock mode. That's useful when the backend is down.
 
 ### API layer (`src/api/`)
