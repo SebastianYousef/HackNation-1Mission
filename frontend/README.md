@@ -33,6 +33,8 @@ This folder holds the frontend's half of the bridge:
 | Hour 20–24 | record the 1-min walkthrough + team video | production build → handed to backend for the `web` service |
 
 ## Prompt sequence for Lovable
+**Fastest path to a working prototype on real data:** paste `frontend/PROTOTYPE_PROMPT.md` (one prompt, live API, verified demo ids) instead of prompts 1–4. Then continue with prompt 5.
+
 Send these in order. Each one is self-contained and refers to the Knowledge.
 
 **Prompt 1: skeleton and API layer**

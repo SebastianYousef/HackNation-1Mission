@@ -118,7 +118,9 @@ That is the exact command that produced the current dataset. It deliberately pas
 To change the landing page, edit `frontend/landing.html` here, push, and redeploy.
 
 ### Current state (2026-10-03)
-- Real dataset loaded: 3,428 nodes, 11,130 edges, 12,575 evidence rows. `check_contract.py` passes.
+- Real dataset loaded with the hardened pipeline (dataset `2026-10-04a+20261003.210940`): 3,090 nodes, 10,086 edges (7,339 curated, 1,186 literature, 1,503 inferred, 58 hypothesis), 11,451 evidence rows, 745 paths, 58 views.
+- `check_contract.py` reports 56 violations: `action-view.connections[].weakest_status/min_confidence` don't equal the edge minimum. This is intentional. `views.path_json` applies honesty caps (`attrs.status_cap`/`confidence_cap`), so a path is shown *weaker* than its edges, never stronger. The stricter checker (0c06aa0) and `/paths` (SQL, no caps) don't know about the caps yet. **To do (pipeline/contract owner):** decide on one rule, then fix the checker or the views.
+- Frontend prototype prompt with verified real demo ids: `frontend/PROTOTYPE_PROMPT.md`.
 - `.env` has only the Bright Data **Scraping Browser** credentials:
   - `/explain` and `/outreach-draft` use template fallbacks (no `OPENAI_API_KEY`).
   - Gap-search jobs fail with "BRIGHTDATA_API_KEY missing" (SERP key).
