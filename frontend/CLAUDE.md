@@ -27,3 +27,10 @@ npx tsc --noEmit                # type-check against the contract
 - Status colors and line styles live in **one** file (`src/lib/encoding.ts`). The graph, chips and stepper all import it.
 - `?mock=1` works on every route. Test every screen in mock mode before wiring live data.
 - The definition of done for a screen: works in mock **and** live, has loading/empty/404/error states, works at 375 px, and has a Family/Expert toggle respected.
+
+## Where the app is deployed (live backend + hosting)
+The backend team hosts the site and API on one origin: a home server behind a Cloudflare tunnel. Details are in the backend repo's root `CLAUDE.md` → "Deployment".
+- **Public URL:** `https://<random>.trycloudflare.com`. It changes when the tunnel restarts, so ask the backend team for the current one. For Lovable preview or local dev, set `VITE_API_BASE` to it (CORS allows `*.lovable.app`, `*.lovableproject.com` and localhost).
+- **Production build:** same origin, so `VITE_API_BASE=""`. All calls go to `/api/v1/*`.
+- **Routes:** `/` is the team landing page (`frontend/landing.html` in the backend repo), **not** this app. Give the app's home the route **`/app`**. All other routes (`/search`, `/d/:id`, `/m/:id`, `/n/:id`, `/c/:id`, `/explore/:id`) are served to this SPA (nginx falls back to `index.html`). Link to `/app` (not `/`) for "home".
+- **Shipping it:** push to your branch (currently `yahorbusiness-dev/Lovable.PR@Lovable.front-end`) and tell the backend team, or run `ssh laqueinux ~/atlas/redeploy.sh` if you have access. The server runs `npm ci && npm run build` in a `node:22` container and serves `dist/`, so the build must work with plain `npm ci && npm run build` and output to `dist/`.

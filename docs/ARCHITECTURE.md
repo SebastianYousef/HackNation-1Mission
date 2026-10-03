@@ -156,7 +156,9 @@ The brief: *"If you want to win the challenge track prizes, you need to leverage
 
 ## 8. Deployment
 
-**Primary: the team's GPU workstation**, on the tailnet at `100.87.219.50`. The whole compose stack runs there, the internet reaches it through Tailscale Funnel (public TLS edge → L4 edge port → L7 → API replicas), and the GPU runs OpenAI's open-weight gpt-oss for bulk extraction. Everything is isolated in `~/atlas-server`. See [`deploy/gpu-server/README.md`](../deploy/gpu-server/README.md).
+> **Live deployment (current):** rootless Docker on the friend's PC (`ssh laqueinux`), public via a Cloudflare quick tunnel, landing page at `/`, API at `/api`. See the root `CLAUDE.md` → "Deployment". The Tailscale-Funnel plan below needed root and was not used.
+
+**Original plan: the team's GPU workstation**, on the tailnet at `100.87.219.50`. The whole compose stack runs there, the internet reaches it through Tailscale Funnel (public TLS edge → L4 edge port → L7 → API replicas), and the GPU runs OpenAI's open-weight gpt-oss for bulk extraction. Everything is isolated in `~/atlas-server`. See [`deploy/gpu-server/README.md`](../deploy/gpu-server/README.md).
 
 The free-tier cloud options below are the fallback, and the reference for a multi-machine production setup.
 
