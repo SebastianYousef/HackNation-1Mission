@@ -1,0 +1,60 @@
+# Overlay for running the whole backend on the team's GPU workstation.
+#   docker compose --env-file ~/atlas-server/.env -p atlas \
+#     -f infra/docker-compose.yml -f deploy/gpu-server/docker-compose.gpu.yml up -d
+# Relative paths resolve against infra/ (the first compose file).
+#
+# Exposure model (nothing listens on the LAN or the internet directly):
+#   127.0.0.1:8081   <- Tailscale Funnel (public HTTPS edge) -> L4 fe_edge -> L7 -> api
+#   $TS_IP:80/443    <- teammates over the tailnet (same L4 -> L7 chain)
+#   $TS_IP:5432      <- pipeline loads from teammates' laptops over the tailnet
+#   $TS_IP:11434     <- Ollama (gpt-oss on the GPU), OpenAI-compatible API, tailnet only
+
+services:
+  l4:
+    ports: !override
+      - "127.0.0.1:8081:8081"
+      - "${TS_IP:?set TS_IP (tailscale ip -4) in .env}:80:8080"
+      - "${TS_IP}:443:8443"
+
+  api:
+    deploy:
+      replicas: ${API_REPLICAS:-4}
+      resources:
+        limits: { cpus: "1.5", memory: 768M }   # keep the owner's machine usable
+    environment:
+      DATA_MODE: db
+
+  worker:
+    deploy:
+      resources:
+        limits: { cpus: "1", memory: 512M }
+
+  db:
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    ports: !override
+      - "${TS_IP}:5432:5432"
+    deploy:
+      resources:
+        limits: { cpus: "2", memory: 2G }
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["gpu"]                     # only started with --profile gpu
+    ports:
+      - "${TS_IP}:11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    environment:
+      OLLAMA_KEEP_ALIVE: "30m"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  ollama:

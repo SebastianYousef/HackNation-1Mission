@@ -154,7 +154,12 @@ The brief: *"If you want to win the challenge track prizes, you need to leverage
 - `backend/scripts/check_contract.py --base-url …` checks a running API against the contract. `contract/scripts/validate-fixtures.mjs` checks the fixtures.
 - Separate repos: the frontend lives in the Lovable-owned repo; this repo holds backend + contract + docs. `scripts/sync-contract.sh` copies the bridge across.
 
-## 8. Deployment (free tier)
+## 8. Deployment
+
+**Primary: the team's GPU workstation**, on the tailnet at `100.87.219.50`. The whole compose stack runs there, the internet reaches it through Tailscale Funnel (public TLS edge → L4 edge port → L7 → API replicas), and the GPU runs OpenAI's open-weight gpt-oss for bulk extraction. Everything is isolated in `~/atlas-server`. See [`deploy/gpu-server/README.md`](../deploy/gpu-server/README.md).
+
+The free-tier cloud options below are the fallback, and the reference for a multi-machine production setup.
+
 
 | Component | Primary (full control, shows the LB layers) | Fallback (simplest) |
 |---|---|---|
