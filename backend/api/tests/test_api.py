@@ -539,3 +539,31 @@ def test_worker_accepts_lowercase_log_level(monkeypatch):
                                                                         redis_url=None))
     with pytest.raises(SystemExit, match="REDIS_URL"):  # got past logging setup (was ValueError)
         asyncio.run(worker.main())
+
+
+def test_store_circuit_breaker_on_hanging_redis(monkeypatch):
+    import asyncio
+    import time
+
+    from atlas_api import cache
+
+    async def run():
+        async def hang(reader, writer):
+            await asyncio.sleep(30)
+        srv = await asyncio.start_server(hang, "127.0.0.1", 0)
+        port = srv.sockets[0].getsockname()[1]
+        store = cache.Store.from_url(f"redis://127.0.0.1:{port}/0", timeout=0.2)
+        t0 = time.monotonic()
+        for _ in range(20):  # GET cache + set + rate limit: all fail open
+            assert await store.get("k") is None
+            await store.set("k", b"v", 10)
+            assert await store.incr_window("rl", 60) == 0
+        spent = time.monotonic() - t0
+        assert not await store.ping()
+        assert store._failures == cache.BREAKER_FAILURES  # only 2 ops waited; the rest skipped Redis
+        store._open_until = 0.0  # cooldown over: the next op probes Redis again and re-opens
+        assert await store.get("k") is None and store._open_until > time.monotonic()
+        srv.close()
+        await store.redis.aclose()
+        return spent
+    assert asyncio.run(run()) < 1.0  # 60 ops; without the breaker 60 x 0.2 s = 12 s

@@ -38,7 +38,7 @@ async def main() -> None:
     logging.basicConfig(level=settings.log_level.upper(), format="%(asctime)s %(levelname)s %(name)s %(message)s")
     if not settings.redis_url:
         raise SystemExit("worker needs REDIS_URL (without Redis the API runs jobs in-process)")
-    store = Store.from_url(settings.redis_url)
+    store = Store.from_url(settings.redis_url, timeout=2)  # > the 1 s BRPOP block below
     assert store.redis is not None
     stop = asyncio.Event()
     loop = asyncio.get_running_loop()
