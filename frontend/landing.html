@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" href="data:,"></head><body>
 <title>One Mission</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,6 +131,85 @@ p{margin:0}
 .tries button{border:1px solid var(--rule);background:none;border-radius:999px;padding:4px 12px;font-size:13px;color:var(--ink-2)}
 .tries button:hover{border-color:var(--ink-3);color:var(--ink)}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 25%,transparent)}
+/* Atlas live data */
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.atlas .muted,.drawer .muted{color:var(--ink-3)}
+.res .muted{color:var(--night-ink-2)}
+.tries-sample{margin-top:8px;font-size:13px}
+.live-line{margin-top:12px;font-size:13px;color:var(--ink-3);min-height:1.55em;max-width:72ch}
+.live-line .live-dot{margin-right:8px}
+.live-line .sample-tag{margin-right:6px}
+.res .live-line{color:var(--night-ink-2);margin-top:4px}
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ev);flex:none;transform:translateY(-1px)}
+.res .live-dot{background:var(--ev-n)}
+.src-note{font-size:13px;color:var(--ink-3);font-weight:500;margin:-28px 0 28px}
+.src-note .live-dot{margin-right:8px}
+.src-note .sample-tag{margin-right:6px}
+.sugg .sl{display:flex;gap:10px;align-items:center;min-width:0}
+.sugg .st2{display:grid;min-width:0}
+.sugg .lb{overflow-wrap:anywhere}
+.sugg .sm{font-size:12.5px;color:var(--ink-3);overflow-wrap:anywhere}
+.sugg .kind{flex:none;text-align:right}
+.sugg .note{padding:10px 12px;font-size:14px;color:var(--ink-3)}
+.res .sugg .sm,.res .sugg .note{color:var(--night-ink-2)}
+.skel{display:grid;gap:12px;max-width:640px}
+.skel i,.skel-h{display:block;height:13px;border-radius:4px;background:linear-gradient(90deg,var(--paper-2) 0%,var(--rule) 50%,var(--paper-2) 100%);background-size:200% 100%;animation:shimmer 1.3s linear infinite}
+.skel-h{height:26px;width:52%;margin:6px 0 18px}
+.res .skel i,.res .skel-h{background:linear-gradient(90deg,var(--night-3) 0%,var(--night-rule) 50%,var(--night-3) 100%);background-size:200% 100%}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+.live-err{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;padding:14px 18px;border:1px solid color-mix(in srgb,var(--hy) 45%,transparent);background:color-mix(in srgb,var(--hy) 7%,transparent);border-radius:var(--r);font-size:15px;max-width:720px}
+.live-err button{border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:999px;padding:6px 14px;font-weight:600;font-size:13px}
+.res .live-err{border-color:color-mix(in srgb,var(--hy-n) 40%,transparent);background:color-mix(in srgb,var(--hy-n) 8%,transparent);color:var(--night-ink)}
+.res .live-err button{background:var(--night);border-color:var(--night-rule);color:var(--night-ink)}
+.chip .ctag{font-size:12px;color:var(--ink-3);font-weight:500;padding-left:8px;border-left:1px solid var(--rule);white-space:nowrap}
+.lnk.pending{opacity:.45}
+.lnk-i{display:inline-block;width:16px;height:2px;vertical-align:middle}
+.more-note{align-self:center;font-size:13px;color:var(--ink-3)}
+.note-line{font-size:14px;color:var(--ink-3);max-width:64ch}
+.disease-card .headline,.ncard .headline{font-size:17px;color:var(--ink);font-weight:500}
+.tx{display:grid;gap:8px;padding:14px 16px;border-left:3px solid var(--un);background:var(--paper-2);border-radius:0 var(--r) var(--r) 0}
+.tx.no{border-left-color:var(--hy)}.tx.yes{border-left-color:var(--ev)}
+.tx p{font-size:15px;color:var(--ink)}
+.why .caution,.drawer .caution{margin:10px 18px 0;padding:10px 12px;border-left:3px solid var(--hy);background:color-mix(in srgb,var(--hy) 8%,transparent);font-size:14px;color:var(--ink);max-width:68ch}
+.drawer .caution{margin:0}
+.kvl{margin:0;padding-left:18px;display:grid;gap:2px}
+q.vq{font-family:var(--f-display);font-size:16px;line-height:1.45}
+.why .kv a,.drawer a,.ncard a.ext{color:var(--accent);font-weight:600}
+.evl{display:grid;gap:0}
+.evi{display:grid;gap:6px;padding:12px 0;border-top:1px solid var(--rule);font-size:14px}
+.evi .evs{font-weight:600}
+.nsteps{list-style:none;margin:0;padding:0;display:grid}
+.nstep{display:grid;gap:6px;padding:16px 0;border-top:1px solid var(--rule)}
+.nstep:first-child{border-top:0;padding-top:4px}
+.nstep .stt{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.nstep .stt b{font-size:17px;font-weight:600}
+.nstep .smeta{font-size:13px;color:var(--ink-3);font-weight:500}
+.nstep p{color:var(--ink-2);font-size:15px;max-width:64ch}
+.nstep .chk{font-size:14px;color:var(--ink-2)}
+.nstep .chk > span{font-size:13px;color:var(--ink-3);font-weight:500}
+.nstep .linkbtn{justify-self:start}
+.gaps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.gaps li{display:grid;gap:3px;font-size:14px;color:var(--ink-2)}
+.gaps li b{color:var(--ink);font-weight:600;font-size:15px}
+.gaps .res-how{color:var(--ink-3)}
+.live-foot{margin-top:40px;display:grid;gap:8px;font-size:13px;color:var(--ink-3);max-width:72ch}
+.live-foot .linkbtn{justify-self:start}
+.ncard{display:grid;gap:14px;max-width:920px;padding-top:0}
+.ncard .tt{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink-3);font-weight:500}
+.ncard .dn{font-family:var(--f-display);font-size:clamp(30px,3.4vw,40px);line-height:1.1}
+.ncard > p{color:var(--ink-2);font-size:17px;max-width:64ch}
+.ncard > p.note-line{font-size:14px;color:var(--ink-3)}
+.ncard-sec{margin-top:12px;padding-top:24px;border-top:1px solid var(--rule)}
+.ncard-sec h3{font-size:clamp(24px,2.6vw,30px);margin-bottom:6px}
+.res .linkbtn{color:#9DB4FF}
+.detail .linkbtn{justify-self:start}
+.graph-wrap.is-loading svg#graph{opacity:.35;transition:opacity .2s}
+.node:hover text,.node:focus-visible text{opacity:1!important}
+.caution-n{display:block;margin-top:6px;color:var(--hy-n)}
+.chip[data-live]{border-radius:18px}
+.chip .cl{min-width:0}
+.chip .ctag{margin-left:8px}
+@media (max-width:640px){.src-note{margin:-20px 0 22px}.chip .ctag{display:block;margin:2px 0 0;border-left:0;padding-left:0;white-space:normal}}
 
 /* Reader */
 .reader-head{display:grid;gap:22px;margin-bottom:56px}
@@ -465,20 +544,23 @@ footer p{max-width:70ch}
 }
 
 /* ONE MISSION GUIDE: floating voice and text guide (og-) */
+html{scroll-padding-bottom:88px}
 #og-root{--og-acc:#9DB4FF;--og-acc-2:#B9C8FF;font-family:var(--f-body)}
-#og-root :focus-visible{outline:2px solid #9DB4FF;outline-offset:2px;border-radius:6px}
+#og-root :focus-visible{outline:2px solid #9DB4FF;outline-offset:2px}
+#og-root .og-form input:focus-visible{outline:none}
 .og-sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .og-orb{position:fixed;z-index:56;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));width:56px;height:56px;padding:0;border:0;border-radius:50%;background:transparent;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
+html:has(#drawerRoot .drawer) .og-orb{z-index:62}
 .og-orb .og-glow{position:absolute;inset:-6px;border-radius:50%;background:radial-gradient(circle,rgba(157,180,255,.55) 0%,rgba(157,180,255,.18) 45%,rgba(157,180,255,0) 70%);opacity:.7;animation:og-breathe 4.8s ease-in-out infinite;pointer-events:none}
 .og-orb .og-core{position:relative;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 34% 30%,#DCE4FF 0%,#B9C8FF 24%,#6D86E6 62%,#2B3E86 100%);box-shadow:0 0 0 1px rgba(185,200,255,.45),0 14px 32px -12px rgba(20,34,90,.75),inset 0 -6px 14px rgba(8,13,19,.28);color:var(--night);transition:transform .25s ease,box-shadow .25s ease}
 .og-orb:hover .og-core{transform:translateY(-1px) scale(1.03)}
-.og-orb.og-voice .og-glow{animation:none;opacity:calc(.55 + var(--og-lvl,0) * .45);transform:scale(calc(1 + var(--og-lvl,0) * .55));transition:transform .08s linear,opacity .08s linear}
+.og-orb.og-voice .og-glow{animation:none;opacity:calc(.55 + var(--og-lvl,0) * .45);transform:scale(calc(1 + var(--og-lvl,0) * .35));transition:transform .08s linear,opacity .08s linear}
 .og-orb.og-voice .og-core{transform:scale(calc(1 + var(--og-lvl,0) * .12));transition:transform .08s linear}
 .og-orb.og-voice.og-speaking .og-core{box-shadow:0 0 0 2px #B9C8FF,0 14px 32px -12px rgba(20,34,90,.75)}
 @keyframes og-breathe{0%,100%{transform:scale(.94);opacity:.5}50%{transform:scale(1.12);opacity:.9}}
 .og-hint{position:fixed;z-index:56;right:calc(max(20px,env(safe-area-inset-right,0px)) + 68px);bottom:calc(max(20px,env(safe-area-inset-bottom,0px)) + 14px);padding:6px 12px;border-radius:999px;background:var(--night-2);color:var(--night-ink);border:1px solid var(--night-rule);font-size:13px;font-weight:500;white-space:nowrap;box-shadow:0 10px 24px -14px rgba(0,0,0,.6);pointer-events:none;opacity:0;transform:translateX(6px);transition:opacity .5s ease,transform .5s ease}
 .og-hint.og-show{opacity:1;transform:none}
-.og-panel{position:fixed;z-index:58;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(max(20px,env(safe-area-inset-bottom,0px)) + 68px);width:min(360px,calc(100vw - 32px));max-height:70vh;display:flex;flex-direction:column;background:var(--night-2);color:var(--night-ink);border:1px solid var(--night-rule);border-radius:14px;box-shadow:0 30px 70px -28px rgba(0,0,0,.7);overflow:hidden;animation:og-in .22s ease}
+.og-panel{position:fixed;z-index:63;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(max(20px,env(safe-area-inset-bottom,0px)) + 68px);width:min(360px,calc(100vw - 32px));max-height:70vh;display:flex;flex-direction:column;background:var(--night-2);color:var(--night-ink);border:1px solid var(--night-rule);border-radius:14px;box-shadow:0 30px 70px -28px rgba(0,0,0,.7);overflow:hidden;animation:og-in .22s ease}
 .og-panel[hidden]{display:none}
 @keyframes og-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .og-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 16px 12px 18px;border-bottom:1px solid var(--night-rule)}
@@ -486,13 +568,17 @@ footer p{max-width:70ch}
 .og-status{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:13px;color:var(--night-ink-2);font-weight:500}
 .og-status i{width:7px;height:7px;border-radius:50%;background:#9DB4FF;flex:none}
 .og-status.og-busy i{animation:og-pulse 1.1s ease-in-out infinite}
+.og-status.og-live i{transform:scale(calc(1 + var(--og-lvl,0) * 1.4));transition:transform .08s linear}
 .og-status.og-tool i{background:var(--ev-n)}
 .og-status.og-err i{background:var(--hy-n)}
 @keyframes og-pulse{0%,100%{opacity:.35}50%{opacity:1}}
 .og-iconbtn{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--night-rule);background:transparent;color:var(--night-ink-2)}
 .og-iconbtn:hover{color:var(--night-ink);border-color:var(--night-ink-2)}
-.og-log{flex:1 1 auto;min-height:120px;overflow-y:auto;overscroll-behavior:contain;padding:16px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--night-rule) transparent}
+.og-log{position:relative;flex:1 1 auto;min-height:120px;overflow-y:auto;overscroll-behavior:contain;padding:16px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--night-rule) transparent}
 .og-msg{max-width:88%;padding:9px 13px;border-radius:14px;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+.og-msg ul{margin:4px 0 4px 18px;padding:0}
+.og-msg li{margin:2px 0;padding-left:2px}
+.og-msg li.og-l2{margin-left:16px;list-style-type:circle}
 .og-msg.og-guide{align-self:flex-start;background:var(--night-3);border-bottom-left-radius:4px;color:var(--night-ink)}
 .og-msg.og-me{align-self:flex-end;background:rgba(157,180,255,.16);border:1px solid rgba(157,180,255,.28);border-bottom-right-radius:4px;color:var(--night-ink)}
 .og-msg.og-streaming::after{content:"";display:inline-block;width:6px;height:6px;margin-left:6px;border-radius:50%;background:#9DB4FF;vertical-align:middle;animation:og-pulse 1s ease-in-out infinite}
@@ -510,14 +596,15 @@ footer p{max-width:70ch}
 .og-foot{display:flex;align-items:center;gap:12px;padding:0 14px 14px}
 .og-talk{flex:none;display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 10px;border-radius:999px;border:1px solid var(--night-rule);background:transparent;color:var(--night-ink);font-size:13px;font-weight:600}
 .og-talk:hover{border-color:var(--night-ink-2)}
-.og-talk[aria-pressed="true"]{background:#B9C8FF;border-color:#B9C8FF;color:var(--night)}
-.og-talk:disabled{opacity:.6;cursor:default}
+.og-talk.og-on{background:#B9C8FF;border-color:#B9C8FF;color:var(--night)}
+.og-talk[aria-disabled="true"]{opacity:.6;cursor:default}
 .og-foot p{font-size:12px;line-height:1.4;color:var(--night-ink-2)}
 .og-layer{position:absolute;top:0;left:0;width:0;height:0;z-index:30}
-.og-xp{position:absolute;display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 9px;border-radius:999px;font-size:12.5px;font-weight:600;line-height:1.5;white-space:nowrap;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);box-shadow:0 6px 16px -10px rgba(0,0,0,.35);transform:translate(-100%,3px);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease,border-color .15s ease,color .15s ease}
+.og-xp{position:absolute;z-index:30;top:0;left:0;display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 9px;border-radius:999px;font-family:var(--f-body);font-size:12.5px;font-weight:600;line-height:1.5;white-space:nowrap;-webkit-user-select:none;user-select:none;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);box-shadow:0 6px 16px -10px rgba(0,0,0,.35);transform:translate(-100%,3px);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease,border-color .15s ease,color .15s ease}
 .og-xp.og-n{border-color:var(--night-rule);background:var(--night-2);color:var(--night-ink)}
 .og-xp:hover{color:var(--ink);border-color:var(--ink-3)}
 .og-xp.og-n:hover{color:#fff;border-color:var(--night-ink-2)}
+.og-xp:focus-visible{outline:2px solid #9DB4FF;outline-offset:2px}
 .og-xp.og-on,.og-xp:focus-visible,.og-touch .og-xp{opacity:1;pointer-events:auto;transform:translate(-100%,0)}
 .og-touch .og-xp{opacity:.92}
 .og-xp[hidden]{display:none}
@@ -527,14 +614,18 @@ footer p{max-width:70ch}
 @media (max-width:560px){
   .og-orb{width:52px;height:52px;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px))}
   .og-orb .og-core{width:52px;height:52px}
-  .og-hint{right:calc(max(16px,env(safe-area-inset-right,0px)) + 62px);bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 12px)}
+  .og-hint{display:none}
   .og-panel{left:0;right:0;bottom:0;width:100%;max-height:78vh;max-height:78dvh;border-radius:16px 16px 0 0;border-left:0;border-right:0;border-bottom:0;padding-bottom:env(safe-area-inset-bottom,0px)}
   .og-panel::before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--night-rule);margin:8px auto 0}
+  .og-iconbtn{width:40px;height:40px}
+  .og-talk{min-height:40px;padding:8px 14px 8px 12px}
+  .og-xp{min-height:32px}
   html.og-open .og-orb,html.og-open .og-hint{display:none}
 }
 @media (prefers-reduced-motion: reduce){
   .og-orb .og-glow{opacity:.7;transform:none}
-  .og-orb.og-voice .og-glow,.og-orb.og-voice .og-core{transform:none}
+  .og-orb.og-voice .og-glow,.og-orb.og-voice .og-core,.og-status.og-live i{transform:none}
+  .og-xp{transition:none}
 }
 </style>
 
@@ -612,12 +703,17 @@ footer p{max-width:70ch}
           <input id="readerSearch" type="search" autocomplete="off" placeholder="Search a disease, gene or symptom..." aria-label="Search a disease, gene or symptom">
           <div class="sugg" hidden></div>
         </div>
-        <div class="tries" id="readerTries">Try:
-          <button data-q="Leigh syndrome">Leigh syndrome</button>
-          <button data-q="SCN1A">SCN1A</button>
-          <button data-q="fever-sensitive seizures">fever-sensitive seizures</button>
-          <button data-q="Alström syndrome">Alström syndrome</button>
+        <div class="tries" id="readerTries"><span>Try the live Atlas:</span>
+          <button data-q="CLN5">CLN5</button>
+          <button data-q="Batten">Batten</button>
+          <button data-q="cerliponase">CLN2 enzyme therapy</button>
+          <button data-q="Borderdale sheep">Borderdale sheep</button>
         </div>
+        <div class="tries tries-sample" id="readerSamples"><span class="sample-tag">Sample data</span><span>Sample examples:</span>
+          <button data-sample="leigh">Leigh syndrome</button>
+          <button data-sample="dravet">Dravet syndrome</button>
+        </div>
+        <p class="live-line" id="readerLine" aria-live="polite"></p>
       </div>
       <div id="readerOut"></div>
     </div>
@@ -632,17 +728,22 @@ footer p{max-width:70ch}
             <input id="resSearch" type="search" autocomplete="off" placeholder="Search disease, gene, mechanism, phenotype, study or researcher..." aria-label="Search disease, gene, mechanism, phenotype, study or researcher">
             <div class="sugg" hidden></div>
           </div>
-          <div class="tries" id="resTries">Try:
-            <button data-q="MT-ATP6">MT-ATP6</button>
-            <button data-q="mTOR signaling">mTOR signaling</button>
-            <button data-q="Dravet syndrome">Dravet syndrome</button>
-            <button data-q="Patient iPSC-derived interneurons">iPSC interneurons</button>
+          <div class="tries" id="resTries"><span>Try the live Atlas:</span>
+            <button data-q="CLN5">CLN5</button>
+            <button data-q="CLN6">CLN6</button>
+            <button data-q="SCMAS">Subunit c storage</button>
+            <button data-q="DEM-CHILD">DEM-CHILD registry</button>
           </div>
+          <div class="tries tries-sample" id="resSamples"><span class="sample-tag">Sample data</span><span>Sample examples:</span>
+            <button data-sample="leigh">Leigh syndrome</button>
+            <button data-sample="dravet">Dravet syndrome</button>
+          </div>
+          <p class="live-line" id="resLine" aria-live="polite"></p>
         </div>
         <div class="graph-shell">
           <div class="graph-wrap">
             <div class="type-filter" id="typeFilter" aria-label="Show node types"></div>
-            <svg id="graph" viewBox="0 0 800 600" role="img" aria-label="Knowledge graph of the selected disease"></svg>
+            <svg id="graph" viewBox="0 0 800 600" role="group" aria-label="Knowledge graph of the selected entry"></svg>
             <div class="graph-legend">
               <span><svg width="28" height="6"><line x1="0" y1="3" x2="28" y2="3" stroke="var(--ev-n)" stroke-width="2"/></svg>Evidence</span>
               <span><svg width="28" height="6"><line x1="0" y1="3" x2="28" y2="3" stroke="var(--hy-n)" stroke-width="2" stroke-dasharray="5 4"/></svg>Hypothesis</span>
@@ -834,7 +935,8 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const TYPES={
   disease:{label:'Disease',c:'#EEF2F7'}, gene:{label:'Gene',c:'#5B8CFF'}, variant:{label:'Variant',c:'#A9BEFF'},
   mechanism:{label:'Mechanism',c:'#A68BFF'}, phenotype:{label:'Phenotype',c:'#3FC1C9'}, publication:{label:'Publication',c:'#97A3B4'},
-  researcher:{label:'Researcher',c:'#F2A65A'}, study:{label:'Study',c:'#EC6F98'}, org:{label:'Patient organization',c:'#7FD18B'}, asset:{label:'Research asset',c:'#E6CF55'}
+  researcher:{label:'Researcher',c:'#F2A65A'}, study:{label:'Study',c:'#EC6F98'}, org:{label:'Patient organization',c:'#7FD18B'}, asset:{label:'Research asset',c:'#E6CF55'},
+  intervention:{label:'Treatment',c:'#FF7B6B'}, grant:{label:'Grant',c:'#B6C2D2'}
 };
 const STATUS={E:'Evidence',H:'Hypothesis',U:'Unknown'};
 const SRC_URL={'OMIM':'https://omim.org','HPO':'https://hpo.jax.org','MONDO':'https://mondo.monarchinitiative.org','ClinVar':'https://www.ncbi.nlm.nih.gov/clinvar/','PubMed':'https://pubmed.ncbi.nlm.nih.gov','PMC':'https://www.ncbi.nlm.nih.gov/pmc/','NIH RePORTER':'https://reporter.nih.gov','ClinicalTrials.gov':'https://clinicaltrials.gov','NORD':'https://rarediseases.org','Global Genes':'https://globalgenes.org','Orphanet':'https://www.orpha.net','EURORDIS':'https://www.eurordis.org'};
@@ -1042,6 +1144,516 @@ function rootEdge(ds,id){return ds.edges.find(e=>(e.s===id&&e.t===ds.root)||(e.t
 function other(e,id){return e.s===id?e.t:e.s}
 function sentence(ds,e){return `${ds.byId[e.s].label} ${e.rel} ${ds.byId[e.t].label}`}
 
+/* ---------- LIVE ATLAS: the Atlas section reads the live database (search, Reader, Researcher, evidence) ---------- */
+const API=((location.hostname==='127.0.0.1'||location.hostname==='localhost')&&location.port!=='8077')?'http://127.0.0.1:8077/api/v1':'/api/v1';
+const enc=encodeURIComponent;
+const LIVE_DEFAULT={id:'MONDO:0009745',type:'disease',label:'neuronal ceroid lipofuscinosis 5'};
+const liveCache=new Map();
+function apiGet(path,o){
+  o=o||{}; const useCache=o.cache!==false, signal=o.signal;
+  if(useCache&&liveCache.has(path)) return liveCache.get(path);
+  const p=(async()=>{
+    const ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),12000);
+    const onAbort=()=>ctl.abort();
+    if(signal){ if(signal.aborted) ctl.abort(); else signal.addEventListener('abort',onAbort,{once:true}); }
+    try{
+      let r;
+      try{ r=await fetch(API+path,{signal:ctl.signal,headers:{Accept:'application/json'}}); }
+      catch(e){ const er=new Error(signal&&signal.aborted?'aborted':'network'); er.status=0; throw er; }
+      if(!r.ok){ const er=new Error(r.status===404?'not_found':'http'); er.status=r.status; throw er; }
+      try{ return await r.json(); }catch(e){ const er=new Error('parse'); er.status=r.status; throw er; }
+    } finally { clearTimeout(timer); if(signal) signal.removeEventListener('abort',onAbort); }
+  })();
+  if(useCache){ liveCache.set(path,p); p.catch(()=>{ if(liveCache.get(path)===p) liveCache.delete(path); }); }
+  return p;
+}
+const nbPath=id=>'/nodes/'+enc(id)+'/neighborhood?depth=1&max_nodes=60';
+const avPath=id=>'/diseases/'+enc(id)+'/action-view';
+const simPath=id=>'/diseases/'+enc(id)+'/similar?limit=20';
+
+/* text helpers */
+const cap=s=>{s=String(s==null?'':s);return s?s.charAt(0).toUpperCase()+s.slice(1):s};
+const arr=v=>Array.isArray(v)?v:[];
+const fmtN=n=>Number(n||0).toLocaleString('en-US');
+const clip=(s,n)=>{s=String(s||'');return s.length>n?s.slice(0,n).replace(/\s+\S*$/,'')+'…':s};
+const safeUrl=u=>/^https?:\/\//i.test(String(u||''))?String(u):'';
+const andList=a=>{a=a.filter(Boolean);return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1]};
+const human=s=>{if(!s) return ''; const t=cap(String(s).toLowerCase().replace(/_/g,' ')); return t.replace(/^Active not recruiting$/,'Active, not recruiting').replace(/^Enrolling by invitation$/,'Enrolling by invitation')};
+const phaseTxt=p=>{if(!p||p==='NA') return ''; p=String(p); if(/EARLY/.test(p)) return 'Early phase 1'; const n=p.split(',').map(x=>x.replace(/\D/g,'')).filter(Boolean); return n.length?'Phase '+n.join('/'):''};
+const pct=v=>v==null?'':Math.round(v*100)+'%';
+const relLabel=e=>e.label||String(e.type||'').replace(/_/g,' ');
+
+/* status and type mapping */
+const LS=s=>(s==='curated'||s==='literature')?'E':(s==='inferred'||s==='hypothesis')?'H':'U';
+const LS_HOW={curated:'Asserted by a curated database',literature:'Stated in a source we quote',inferred:'Computed by the Atlas from shared features',hypothesis:'Proposed by the Atlas and not yet tested'};
+const LT=t=>({organization:'org',person:'researcher',trial:'study',publication:'publication',grant:'grant',intervention:'intervention'})[t]||(TYPES[t]?t:'publication');
+const LIVE_TYPE_LABEL={org:'Organization',researcher:'Person',study:'Clinical study',intervention:'Treatment',phenotype:'Symptom',asset:'Research asset',grant:'Grant'};
+const SUBTYPE_LABEL={patient_group:'Patient organization',foundation:'Foundation',company:'Company',funder:'Funder',investor:'Investor',academic:'Academic group',hospital:'Hospital',registry:'Registry',natural_history_study:'Natural history study',animal_model:'Animal model',cell_model:'Cell model',biomarker:'Biomarker',biobank:'Biobank',trial_design:'Trial design',pathway:'Pathway',biological_process:'Biological process',variant_effect:'Variant effect',small_molecule:'Small molecule',enzyme_replacement:'Enzyme replacement therapy',gene_therapy:'Gene therapy',antisense_oligonucleotide:'Antisense therapy',researcher:'Researcher',clinician:'Clinician',industry:'Industry',observational:'Observational study',interventional:'Interventional study'};
+const BASE_LABEL={disease:'Disease',gene:'Gene',variant:'Variant',phenotype:'Symptom',mechanism:'Mechanism',intervention:'Treatment',organization:'Organization',person:'Person',publication:'Publication',trial:'Clinical study',grant:'Grant',asset:'Research asset'};
+const kindOf=n=>SUBTYPE_LABEL[n.subtype]||BASE_LABEL[n.type]||cap(n.type||'Entry');
+const ldot=n=>dot(LT(n.type));
+const REUSE={direct:'Could be used directly',adaptable:'Could be adapted',reference_only:'Useful as a reference only'};
+const STEP_ST={viable:['E','Supported'],needs_review:['H','Needs review'],unsupported:['U','Not supported yet']};
+const EFFORT={this_week:'This week',this_month:'This month',this_quarter:'This quarter'};
+const STEP_KIND={contact_group:'Contact a group',join_registry:'Join a registry',adapt_study_design:'Reuse a study or model',contact_researcher:'Contact a researcher',validate_experiment:'Test a hypothesis',apply_funding:'Apply for funding',build_missing_group:'Start a group',contribute_evidence:'Add evidence'};
+const RELEVANCE={same_disease:'This study is for this disease.',related_disease:'This study is for a related disease, so it may not include this diagnosis. Check with the study team.',shared_mechanism:'This study targets a mechanism this disease shares.'};
+
+/* loading, errors */
+const skelLines=n=>`<div class="skel" aria-hidden="true">${Array.from({length:n},(_,i)=>`<i style="width:${[92,76,84,58,70][i%5]}%"></i>`).join('')}</div>`;
+function liveError(el,retry,msg){
+  el.innerHTML=`<div class="live-err" role="alert"><span>${esc(msg||'We could not load this from the live Atlas just now. Please try again in a moment.')}</span>${retry?'<button type="button" data-retry>Try again</button>':''}</div>`;
+  const b=el.querySelector('[data-retry]'); if(b) b.addEventListener('click',()=>retry());
+}
+const liveCtx=new Map(); let ctxN=0;
+const ctxPut=o=>{const k='c'+(++ctxN); liveCtx.set(k,o); return k};
+function setChipSt(c,status){ const l=c.querySelector('.lnk'); if(l) l.className='lnk '+LS(status); const v=c.querySelector('.vh'); if(v) v.textContent=', '+STATUS[LS(status)]; c.dataset.st='1'; }
+function hydrateChips(root){
+  const chips=[...root.querySelectorAll('.chip[data-live-edge][data-st="0"]')].slice(0,48); let i=0;
+  const worker=async()=>{ while(i<chips.length){ const c=chips[i++]; if(!c.isConnected) return; try{ const r=await apiGet('/edges/'+enc(c.dataset.liveEdge)); setChipSt(c,r.edge.status); }catch(e){} } };
+  for(let k=0;k<4;k++) worker();
+}
+function lchip(label,o){
+  o=o||{}; const st=o.status||null, s=st?LS(st):'U', ctx=o.ctx?ctxPut(o.ctx):'';
+  return `<button type="button" class="chip" data-live aria-expanded="false"${o.edge?` data-live-edge="${esc(o.edge)}"`:''} data-st="${st?1:0}"${ctx?` data-ctx="${ctx}"`:''}${o.title?` title="${esc(o.title)}"`:''}><span class="lnk ${s}${st?'':' pending'}" aria-hidden="true"></span><span class="cl">${esc(label)}${o.tag?`<span class="ctag">${esc(o.tag)}</span>`:''}</span><span class="vh">, ${st?STATUS[s]:'strength shown when opened'}</span></button>`;
+}
+const groupRow=(label,chips,extra)=>chips?`<div class="group"><div class="gl">${label}</div><div class="chips">${chips}${extra||''}</div></div>`:'';
+const moreNote=(n,shown)=>n>shown?`<span class="more-note">and ${n-shown} more in the Researcher view</span>`:'';
+const ulHtml=a=>{a=arr(a).filter(Boolean);return a.length?`<ul class="kvl">${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''};
+
+/* why panel (inline) and evidence drawer, filled from /edges/{id} */
+function relText(r){return `${r.source.label} ${relLabel(r.edge)} ${r.target.label}`}
+function plainFor(r){ const e=r.edge, ev=arr(r.supporting)[0];
+  if(e.status==='curated') return `A curated database${arr(e.sources).length?' ('+arr(e.sources).join(', ')+')':''} records this link.`;
+  if(e.status==='literature') return `${ev&&ev.source_name?ev.source_name:'A published source'} states this link. The quote is copied word for word from the source.`;
+  if(e.status==='inferred') return 'The Atlas computed this link from shared features. It is a reason to look closer, not proof.';
+  if(e.status==='hypothesis') return 'This is a hypothesis proposed by the Atlas. It needs testing before anyone acts on it.';
+  return 'We do not have enough information to say how strong this link is.';
+}
+const evItem=v=>`<div class="evi"><div class="evs">${esc(v.source_name||'Unnamed source')}${v.source_ref?` <span class="muted">${esc(v.source_ref)}</span>`:''}${v.published_at?` <span class="muted">${esc(String(v.published_at).slice(0,10))}</span>`:''}</div>${v.quote?`<q class="vq">${esc(v.quote)}</q>`:'<span class="muted">No quote recorded.</span>'}${safeUrl(v.url)?`<a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">Open the source ↗</a>`:''}</div>`;
+function liveWhyHtml(r,ctx){
+  ctx=ctx||{}; const e=r.edge, s=LS(e.status), sup=arr(r.supporting), con=arr(r.contradicting), ev=sup[0]||arr(r.context)[0];
+  const caution=ctx.caution||(e.attrs&&e.attrs.caution)||'';
+  const rows=arr(ctx.rows).filter(x=>x&&x[1]!=null&&x[1]!=='');
+  return `<div class="why" data-why>
+    <div class="why-head"><span class="t">Why this connection?</span>${stPill(s)}</div>
+    <p class="why-plain">${esc(ctx.why||plainFor(r))}</p>
+    ${caution?`<p class="caution"><b>Caution.</b> ${esc(caution)}</p>`:''}
+    <div class="kv">
+      <div class="k">Relationship</div><div>${esc(cap(relText(r)))}</div>
+      <div class="k">How we know</div><div>${esc(LS_HOW[e.status]||'Not recorded')}</div>
+      ${rows.map(x=>`<div class="k">${esc(x[0])}</div><div>${x[1]}</div>`).join('')}
+      <div class="k">Source</div><div>${ev?esc(ev.source_name)+(ev.source_ref?` <span class="muted">(${esc(ev.source_ref)})</span>`:''):esc(arr(e.sources).join(', ')||'Not recorded')}</div>
+      <div class="k">Evidence</div><div>${ev&&ev.quote?`<q class="vq">${esc(ev.quote)}</q>`:'<span class="muted">No quote recorded for this link.</span>'}${ev&&safeUrl(ev.url)?`<div style="margin-top:6px"><a href="${esc(safeUrl(ev.url))}" target="_blank" rel="noopener">Open the source ↗</a></div>`:''}</div>
+      <div class="k">Confidence</div><div>${confHtml(+e.confidence||0)}</div>
+      <div class="k">Contradicting evidence</div><div class="${con.length?'':'muted'}">${con.length?con.map(c=>esc(c.source_name)+(c.quote?`: <q class="vq">${esc(c.quote)}</q>`:'')).join('<br>'):'None recorded.'}</div>
+    </div>
+    <div class="why-foot">${sup.length>1?`<span class="muted">${sup.length} supporting sources</span>`:''}<button type="button" data-drawer-edge="${esc(e.id)}">Inspect all evidence</button>${ctx.res?`<button type="button" data-res-node="${esc(ctx.res)}">Explore it in the Researcher view</button>`:''}</div>
+  </div>`;
+}
+function noEdgeWhy(ctx){
+  ctx=ctx||{}; const rows=arr(ctx.rows).filter(x=>x&&x[1]!=null&&x[1]!=='');
+  return `<div class="why" data-why><div class="why-head"><span class="t">Why this connection?</span>${stPill('U')}</div>
+    <p class="why-plain">${esc(ctx.why||'The Atlas lists this item, but no single source record is attached to the link yet.')}</p>
+    ${rows.length?`<div class="kv">${rows.map(x=>`<div class="k">${esc(x[0])}</div><div>${x[1]}</div>`).join('')}</div>`:''}</div>`;
+}
+let drawerTok=0;
+function drawerBody(r){
+  const e=r.edge, s=LS(e.status), a=r.source, b=r.target, sup=arr(r.supporting), con=arr(r.contradicting), cx=arr(r.context);
+  const caution=e.attrs&&e.attrs.caution;
+  return `<div class="dchain"><div class="a">${ldot(a)}${esc(a.label)}</div><div class="r">${esc(relLabel(e))}</div><div class="b">${ldot(b)}${esc(b.label)}</div></div>
+    <div>${stPill(s)}</div>
+    <p class="why-plain">${esc(plainFor(r))}</p>
+    ${caution?`<p class="caution"><b>Caution.</b> ${esc(caution)}</p>`:''}
+    <div class="kv">
+      <div class="k">Relationship</div><div>${esc(cap(relText(r)))}</div>
+      <div class="k">Type</div><div>${STATUS[s]}. ${esc(LS_HOW[e.status]||'Not recorded')}</div>
+      <div class="k">Confidence</div><div>${confHtml(+e.confidence||0)}</div>
+      <div class="k">Sources</div><div>${esc(arr(e.sources).join(', ')||'Not recorded')}</div>
+      <div class="k">Contradicting evidence</div><div class="${con.length?'':'muted'}">${con.length?`${con.length} record${con.length>1?'s':''}, listed below`:'None recorded.'}</div>
+    </div>
+    <div><span class="eyebrow" style="display:block;margin-bottom:8px">Supporting evidence (${sup.length})</span>${sup.length?`<div class="evl">${sup.map(evItem).join('')}</div>`:'<p class="muted" style="font-size:14px">No supporting record is stored for this link.</p>'}</div>
+    ${con.length?`<div><span class="eyebrow" style="display:block;margin-bottom:8px">Contradicting evidence (${con.length})</span><div class="evl">${con.map(evItem).join('')}</div></div>`:''}
+    ${cx.length?`<div><span class="eyebrow" style="display:block;margin-bottom:8px">Context (${cx.length})</span><div class="evl">${cx.map(evItem).join('')}</div></div>`:''}
+    ${s!=='E'?`<p style="font-size:13px;color:var(--ink-3)">This is ${s==='H'?'a hypothesis built from connected evidence':'an open question'}. It is not established clinical evidence.</p>`:''}`;
+}
+function openLiveDrawer(id){
+  lastFocus=document.activeElement; const tok=++drawerTok;
+  $('#drawerRoot').innerHTML=`<div class="scrim" data-close></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <div class="drawer-head"><span class="eyebrow" id="dTitle">Why this connection?</span><button data-close>Close ✕</button></div>
+    <div class="drawer-body" aria-live="polite"></div>
+  </aside>`;
+  $('#drawerRoot .drawer-head button').focus();
+  const load=async()=>{
+    const body=$('#drawerRoot .drawer-body'); if(!body) return;
+    body.innerHTML=`<p class="vh">Loading the evidence</p>${skelLines(6)}`;
+    try{ const r=await apiGet('/edges/'+enc(id)); if(tok!==drawerTok) return; const b=$('#drawerRoot .drawer-body'); if(b) b.innerHTML=drawerBody(r); }
+    catch(e){ if(tok!==drawerTok) return; const b=$('#drawerRoot .drawer-body'); if(b) liveError(b,e.status===404?null:load,e.status===404?'This link is not in the live Atlas any more.':null); }
+  };
+  load();
+}
+
+/* ---------- live search (debounced, stale requests aborted) ---------- */
+const MIN_SCORE=.25;
+const searchCache=new Map();
+async function liveSearch(q,signal){
+  const k=q.toLowerCase(); if(searchCache.has(k)) return searchCache.get(k);
+  const r=await apiGet('/search?q='+enc(q)+'&limit=8',{signal,cache:false});
+  const hits=arr(r).filter(h=>h&&h.id&&h.label&&(h.score==null||h.score>=MIN_SCORE));
+  searchCache.set(k,hits); return hits;
+}
+function sampleItems(q){ return q.trim().length<2?[]:searchIdx(q).slice(0,3).map(it=>({sample:it})) }
+function bestPick(q,hits){
+  const lq=q.trim().toLowerCase(); if(!lq) return null;
+  const exactLive=hits.find(h=>h.label.toLowerCase()===lq||String(h.matched_name||'').toLowerCase()===lq);
+  const sm=searchIdx(q), exactSample=sm.find(it=>it.label.toLowerCase()===lq);
+  if(exactLive&&exactLive.type==='disease') return {live:exactLive};
+  if(exactSample&&!exactLive) return {sample:exactSample};
+  if(hits.length){ const top=hits[0].score||0; return {live:hits.slice(0,4).find(h=>h.type==='disease'&&(h.score||0)>=top-.15)||exactLive||hits[0]}; }
+  if(sm.length) return {sample:sm[0]};
+  return null;
+}
+const MATCH_TXT={synonym:'Matched synonym',abbreviation:'Matched abbreviation',xref:'Matched reference',id:'Matched id'};
+let sgN=0;
+function wireSearch(input,h){
+  const box=input.parentElement.querySelector('.sugg'); const bid='sugg'+(++sgN);
+  let items=[],act=-1,timer=0,ctl=null,seq=0,state='idle';
+  box.id=bid; box.setAttribute('role','listbox'); box.setAttribute('aria-label','Suggestions');
+  input.setAttribute('role','combobox'); input.setAttribute('aria-autocomplete','list'); input.setAttribute('aria-controls',bid); input.setAttribute('aria-expanded','false');
+  const show=on=>{ box.hidden=!on; input.setAttribute('aria-expanded',on?'true':'false'); if(!on) input.removeAttribute('aria-activedescendant'); };
+  const nameOf=it=>it.live?it.live.label:(it.sample.alias?DATA[it.sample.ds].name:it.sample.label);
+  const draw=()=>{
+    const q=input.value.trim();
+    if(!items.length){
+      if(q.length>=2&&state==='loading'){ box.innerHTML='<div class="note" role="status">Searching the live Atlas</div>'; show(true); return; }
+      if(q.length>=2&&state==='error'){ box.innerHTML='<div class="note" role="status">The live Atlas is not answering right now. Press Enter to try again.</div>'; show(true); return; }
+      if(q.length>=2&&state==='done'){ box.innerHTML='<div class="note" role="status">No match in the live Atlas. Press Enter to see what was searched.</div>'; show(true); return; }
+      show(false); return;
+    }
+    box.innerHTML=items.map((it,i)=>{
+      const on=i===act;
+      if(it.live){ const x=it.live, mt=x.match_kind!=='label'&&x.matched_name&&x.matched_name.toLowerCase()!==x.label.toLowerCase()?`<span class="sm">${MATCH_TXT[x.match_kind]||'Matched'}: ${esc(x.matched_name)}</span>`:'';
+        return `<button type="button" role="option" tabindex="-1" id="${bid}-${i}" data-i="${i}" aria-selected="${on}" class="${on?'active':''}"><span class="sl">${ldot(x)}<span class="st2"><span class="lb">${esc(x.label)}</span>${mt}</span></span><span class="kind">${esc(kindOf(x))}</span></button>`; }
+      const s=it.sample;
+      return `<button type="button" role="option" tabindex="-1" id="${bid}-${i}" data-i="${i}" aria-selected="${on}" class="${on?'active':''}"><span class="sl">${dot(s.t)}<span class="st2"><span class="lb">${esc(s.label)}</span>${s.alias?`<span class="sm">${esc(s.kind)}</span>`:''}</span></span><span class="kind">Sample data</span></button>`;
+    }).join('');
+    show(true);
+    if(act>=0){ input.setAttribute('aria-activedescendant',bid+'-'+act); const a=box.querySelector('.active'); if(a&&a.scrollIntoView) a.scrollIntoView({block:'nearest'}); } else input.removeAttribute('aria-activedescendant');
+  };
+  const pick=it=>{ show(false); clearTimeout(timer); if(ctl) ctl.abort(); seq++; input.value=nameOf(it); if(it.live) h.onLive(it.live); else h.onSample(it.sample); };
+  const run=async q=>{
+    const my=++seq; if(ctl) ctl.abort(); ctl=new AbortController();
+    try{ const hits=await liveSearch(q,ctl.signal); if(my!==seq) return; items=[...hits.map(x=>({live:x})),...sampleItems(q)]; state='done'; }
+    catch(e){ if(my!==seq||e.message==='aborted') return; items=sampleItems(q); state='error'; }
+    act=-1; if(document.activeElement===input) draw();
+  };
+  input.addEventListener('input',()=>{
+    const q=input.value.trim(); clearTimeout(timer); if(ctl) ctl.abort(); seq++; act=-1;
+    if(q.length<2){ items=sampleItems(q); state='idle'; draw(); return; }
+    const k=q.toLowerCase();
+    if(searchCache.has(k)){ items=[...searchCache.get(k).map(x=>({live:x})),...sampleItems(q)]; state='done'; draw(); return; }
+    state='loading'; if(!items.length) draw();
+    timer=setTimeout(()=>run(q),200);
+  });
+  input.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'){ if(!items.length) return; act=Math.min(items.length-1,act+1); draw(); e.preventDefault(); }
+    else if(e.key==='ArrowUp'){ if(!items.length) return; act=Math.max(0,act-1); draw(); e.preventDefault(); }
+    else if(e.key==='Enter'){ e.preventDefault(); if(act>=0&&items[act]) pick(items[act]); else { show(false); go(input.value); } }
+    else if(e.key==='Escape'){ show(false); }
+  });
+  box.addEventListener('mousedown',e=>{ const b=e.target.closest('button[data-i]'); if(!b) return; e.preventDefault(); const it=items[+b.dataset.i]; if(it) pick(it); });
+  input.addEventListener('blur',()=>setTimeout(()=>show(false),120));
+  async function go(q){
+    q=String(q||'').trim(); if(!q) return;
+    clearTimeout(timer); if(ctl) ctl.abort(); const my=++seq; show(false); input.value=q;
+    if(q.length<2){ const s=sampleItems(q)[0]; s?h.onSample(s.sample):h.onMiss(q); return; }
+    if(h.onLoading) h.onLoading(q);
+    let hits;
+    try{ hits=await liveSearch(q); }
+    catch(e){ if(my!==seq) return; const s=bestPick(q,[]); if(s&&s.sample){ input.value=nameOf(s); h.onSample(s.sample); return; } h.onError(q,()=>go(q)); return; }
+    if(my!==seq) return;
+    const b=bestPick(q,hits);
+    if(!b){ h.onMiss(q); return; }
+    input.value=nameOf(b); b.live?h.onLive(b.live):h.onSample(b.sample);
+  }
+  return go;
+}
+
+/* ---------- live meta line ---------- */
+function metaTotals(m){ const n=(m&&m.counts&&m.counts.nodes)||{}; return {nodes:Object.values(n).reduce((a,v)=>a+(+v||0),0),n,edges:(m&&m.counts&&m.counts.edges)||0,evidence:(m&&m.counts&&m.counts.evidence)||0}; }
+const sliceText=m=>{const s=m&&m.dataset&&m.dataset.slice; return s?String(s).replace(/\s*\(focus:\s*/i,', with a focus on ').replace(/\s+\/\s+/g,' and ').replace(/\)\s*$/,''):''};
+function liveMetaLine(){
+  apiGet('/meta').then(m=>{ const t=metaTotals(m); const el=$('#readerLine'); if(el) el.innerHTML=`<span class="live-dot" aria-hidden="true"></span>Live Atlas: ${fmtN(t.nodes)} entries and ${fmtN(t.edges)} links, each with its source.${sliceText(m)?' Coverage today: '+esc(sliceText(m))+'.':''}`; }).catch(()=>{ const el=$('#readerLine'); if(el) el.textContent='The live Atlas is not reachable right now. The sample examples still work.'; });
+}
+
+/* ---------- READER (live) ---------- */
+let readerTok=0, whyTok=0;
+function readerSkeleton(label){
+  $('#readerOut').innerHTML=`<div class="rjourney" aria-busy="true"><p class="vh" role="status">Loading ${esc(label||'')} from the live Atlas</p>${[1,2,3].map(n=>`<div class="rstep ${n===1?'lead':''}"><div class="rnum">${n}</div><div class="rbody"><i class="skel-h"></i>${skelLines(n===1?4:3)}</div></div>`).join('')}</div>`;
+}
+function readerSample(key){ readerTok++; renderReader(key); $('#readerSearch').value=DATA[key].name; }
+async function readerOpen(hit,opts){
+  opts=opts||{}; const tok=++readerTok, out=$('#readerOut');
+  readerSkeleton(hit.label);
+  try{
+    if(hit.type==='disease'){
+      let av=null;
+      try{ av=await apiGet(avPath(hit.id)); }catch(e){ if(e.status!==404) throw e; }
+      if(av){
+        const [nb,sim]=await Promise.all([apiGet(nbPath(hit.id)).catch(()=>null),apiGet(simPath(hit.id)).catch(()=>null)]);
+        if(tok!==readerTok) return;
+        renderLiveJourney(av,nb,sim,opts); return;
+      }
+    }
+    const [node,nb]=await Promise.all([apiGet('/nodes/'+enc(hit.id)),apiGet(nbPath(hit.id)).catch(()=>null)]);
+    let mv=null; if(node.has_mechanism_view) mv=await apiGet('/mechanisms/'+enc(hit.id)+'/view').catch(()=>null);
+    if(tok!==readerTok) return;
+    renderNodeCard(node,nb,mv,opts);
+  }catch(e){
+    if(tok!==readerTok) return;
+    if(e.status===404){ readerMissLive(hit.label); return; }
+    liveError(out,()=>readerOpen(hit,opts));
+  }
+}
+function statusMapOf(av,nb,sim){
+  const m=new Map(); arr(nb&&nb.edges).forEach(e=>m.set(e.id,e.status));
+  arr(av&&av.connections).forEach(p=>arr(p.edges).forEach(e=>m.set(e.id,e.status)));
+  arr(sim).forEach(s=>m.set(s.edge_id,s.status)); return m;
+}
+function incident(nb,c){
+  const nm=new Map(arr(nb&&nb.nodes).map(n=>[n.id,n]));
+  return t=>arr(nb&&nb.edges).filter(e=>e.src===c||e.dst===c).map(e=>({e,n:nm.get(e.src===c?e.dst:e.src)})).filter(x=>x.n&&(!t||x.n.type===t)).sort((a,b)=>(b.e.confidence||0)-(a.e.confidence||0));
+}
+const orgRows=g=>[['Serves',g.for_disease?esc(cap(g.for_disease.label)):''],['Country',esc(g.country||'')],['Registry',g.has_registry===true?'Keeps a patient registry':''],['Website',safeUrl(g.website)?`<a href="${esc(safeUrl(g.website))}" target="_blank" rel="noopener">${esc(g.website.replace(/^https?:\/\//,'').replace(/\/$/,''))} ↗</a>`:''],['Contact',safeUrl(g.contact_url)?`<a href="${esc(safeUrl(g.contact_url))}" target="_blank" rel="noopener">Contact page ↗</a>`:'']];
+const ASSET_GROUPS=[['Registries and natural history studies',k=>/registry|natural_history|trial_design/.test(k)],['Research models',k=>/animal_model|cell_model/.test(k)],['Biomarkers and biobanks',k=>/biomarker|biobank/.test(k)]];
+function renderLiveJourney(av,nb,sim,opts){
+  liveCtx.clear();
+  const d=av.disease, c=d.id, sm=statusMapOf(av,nb,sim), inc=incident(nb,c), out=$('#readerOut');
+  const near=new Set(); arr(nb&&nb.edges).concat(...arr(av.connections).map(p=>arr(p.edges))).forEach(e=>{ if(e.src===c||e.dst===c) near.add(e.id); });
+  const pickE=ids=>{ids=arr(ids); return ids.find(i=>near.has(i))||ids[0]};
+  const ts=av.treatment_status||{}, hat=ts.has_approved_treatment;
+  /* treatments: approved vs investigational, from the treats edges */
+  const tx=new Map();
+  inc('intervention').forEach(({e,n})=>{ if(e.type==='intervention_treats_disease') tx.set(e.id,{e,n}); });
+  arr(av.connections).forEach(p=>arr(p.edges).forEach(e=>{ if(e.type==='intervention_treats_disease'&&(e.src===c||e.dst===c)&&!tx.has(e.id)){ const n=arr(p.nodes).find(x=>x.id===(e.src===c?e.dst:e.src)); if(n) tx.set(e.id,{e,n}); } }));
+  const apTxt=a=>a==='approved'?'Approved':a==='investigational'?'Investigational, not approved':'Approval not recorded';
+  let txChips=[...tx.values()].map(({e,n})=>{const ap=e.attrs&&e.attrs.approval; return lchip(n.label,{edge:e.id,status:e.status,tag:ap?apTxt(ap):null,ctx:{rows:[['Approval',esc(apTxt(ap))],['Kind',esc(kindOf(n))]],res:n.id}})}).join('');
+  if(!txChips&&arr(ts.edge_ids)[0]) txChips=lchip('Source for the treatment status',{edge:ts.edge_ids[0],status:sm.get(ts.edge_ids[0])});
+  const a=d.attrs||{}, facts=[['Onset',arr(a.onset).join(', ')||(typeof a.onset==='string'?a.onset:'')],['Inheritance',arr(a.inheritance).join(', ')||(typeof a.inheritance==='string'?a.inheritance:'')],['Prevalence',a.prevalence?String(a.prevalence):'']].filter(f=>f[1]);
+  const ids=Object.entries(d.xrefs||{}).filter(([k])=>/^(OMIM|ORPHA|GARD)$/.test(k)).map(([k,v])=>`${k} ${arr(v).join(', ')}`);
+  const syn=arr(d.synonyms).slice(0,10);
+  /* step 2 */
+  const rcs=arr(av.related_communities);
+  const relChips=rcs.map(rc=>lchip(rc.disease.label,{edge:rc.similarity_edge_id,status:sm.get(rc.similarity_edge_id),tag:rc.caution?'Caution':null,ctx:{why:rc.why,caution:rc.caution,rows:[['What differs',ulHtml(rc.differences)],['Similarity',pct(rc.similarity)]],res:rc.disease.id}})).join('');
+  const nodeChip=({e,n})=>lchip(n.label,{edge:e.id,status:e.status,ctx:{res:n.id}});
+  const mechs=inc('mechanism'), genes=inc('gene');
+  const phen=inc('phenotype').sort((x,y)=>((y.e.attrs&&y.e.attrs.frequency_value)||0)-((x.e.attrs&&x.e.attrs.frequency_value)||0)||(y.e.confidence||0)-(x.e.confidence||0));
+  /* step 3 */
+  const exact=arr(av.exact_groups);
+  const umb=new Map(); rcs.forEach(rc=>arr(rc.groups).forEach(g=>{ if(!umb.has(g.node.id)&&!exact.some(x=>x.node.id===g.node.id)) umb.set(g.node.id,{g,rc}); }));
+  const exactChips=exact.map(g=>lchip(g.node.label,{edge:g.edge_id,status:sm.get(g.edge_id),ctx:{rows:orgRows(g),res:g.node.id}})).join('');
+  const umbChips=[...umb.values()].map(({g,rc})=>lchip(g.node.label,{edge:g.edge_id,status:sm.get(g.edge_id),ctx:{why:rc.why,rows:orgRows(g),res:g.node.id}})).join('');
+  const people=arr(av.researchers).map(p=>lchip(p.node.label,{edge:pickE(p.edge_ids),status:sm.get(pickE(p.edge_ids)),ctx:{rows:[['Affiliation',esc(clip(p.affiliation||'',160))],['Works on',esc(andList(arr(p.works_on).slice(0,4).map(x=>x.label)))],['Recent publications',p.recent_publications?String(p.recent_publications):''],['Active grants',p.active_grants?String(p.active_grants):'']],res:p.node.id}})).join('');
+  /* step 4 */
+  const assets=arr(av.assets), used=new Set();
+  const assetChip=x=>lchip(x.node.label,{edge:pickE(x.edge_ids),status:sm.get(pickE(x.edge_ids)),tag:x.reusability==='direct'?null:REUSE[x.reusability],ctx:{why:REUSE[x.reusability]?REUSE[x.reusability]+' for this disease, according to the Atlas. The owner has to confirm before anyone relies on it.':'',rows:[['Kind',esc(SUBTYPE_LABEL[x.asset_kind]||human(x.asset_kind))],['Reuse',esc(REUSE[x.reusability]||'Not assessed')],['Maintained by',x.owner?esc(x.owner.label):'Not recorded'],['Covers today',esc(andList(arr(x.covers).map(v=>v.label)))],['What differs',ulHtml(x.what_differs)],['Needs expert review',ulHtml(x.needs_review)]],res:x.node.id}});
+  const assetRows=ASSET_GROUPS.map(([gl,f])=>{const xs=assets.filter(x=>!used.has(x)&&f(String(x.asset_kind||'')));xs.forEach(x=>used.add(x));return groupRow(gl,xs.map(assetChip).join(''))}).join('')+groupRow('Other resources',assets.filter(x=>!used.has(x)).map(assetChip).join(''));
+  const trials=arr(av.trials).map(t=>lchip(t.node.label,{edge:pickE(t.edge_ids),status:sm.get(pickE(t.edge_ids)),tag:[phaseTxt(t.phase),human(t.overall_status)].filter(Boolean).join(', ')||null,ctx:{why:RELEVANCE[t.relevance]||'',rows:[['Study',esc(t.nct_id)],['Phase',esc(phaseTxt(t.phase))],['Status',esc(human(t.overall_status))],['Intervention',esc(t.intervention||'')],['Eligibility',esc(t.eligibility_note||'')],['Record',safeUrl(t.url)?`<a href="${esc(safeUrl(t.url))}" target="_blank" rel="noopener">ClinicalTrials.gov ↗</a>`:'']],res:t.node.id}})).join('');
+  /* step 5 */
+  const cov=av.coverage||{}, gaps=arr(cov.gaps);
+  const gapList=gaps.map(g=>`<li><b>${esc(g.question)}</b><span>${esc(g.why_it_matters)}</span><span class="res-how">What would answer it: ${esc(g.what_would_resolve)}</span></li>`).join('');
+  const steps=arr(av.next_steps).map(s=>{const st=STEP_ST[s.status]||STEP_ST.unsupported; const ev=arr(s.edge_ids).slice().sort((x,y)=>near.has(y)-near.has(x));
+    return `<li class="nstep"><div class="stt"><b>${esc(s.title)}</b><span class="st ${st[0]}">${st[1]}</span></div><div class="smeta">${esc(STEP_KIND[s.kind]||human(s.kind))}${EFFORT[s.effort]?', '+EFFORT[s.effort].toLowerCase():''}</div><p>${esc(s.rationale)}</p>${arr(s.validation_needed).length?`<div class="chk"><span>Check before acting:</span>${ulHtml(s.validation_needed)}</div>`:''}${ev.length?`<button type="button" class="linkbtn" data-drawer-edge="${esc(ev[0])}">See the evidence${ev.length>1?` (1 of ${ev.length} links)`:''}</button>`:'<span class="muted" style="font-size:13px">No single source record. This step follows from a gap.</span>'}</li>`}).join('');
+  const step5=cov.has_supported_route===false||!steps
+    ?`<div class="empty"><span class="eyebrow">An honest gap</span><div class="big">No supported lead yet.</div><p style="color:var(--ink-2);max-width:62ch">The sources we checked do not yet support a concrete next step we can stand behind. These are the open questions that would change that.</p>${gapList?`<ul class="gaps">${gapList}</ul>`:''}</div>`
+    :`<div class="next-box"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Suggested next steps</span></div><ol class="nsteps">${steps}</ol>${gapList?`<details class="sci"><summary>Open questions before acting (${gaps.length})</summary><div><ul class="gaps">${gapList}</ul></div></details>`:''}</div>`;
+  const covSrc=arr(cov.sources).filter(s=>s.checked).map(s=>esc(s.name)+(s.result_count!=null?` (${fmtN(s.result_count)} result${s.result_count===1?'':'s'})`:'')).join(', ');
+  const head=opts.example?'An example from the live Atlas. Search above for your own disease, gene or group.':'From the live Atlas';
+  let h=`<p class="src-note"><span class="live-dot" aria-hidden="true"></span>${esc(head)}</p><div class="rjourney">`;
+  const step=(i,body)=>{const st=R_STEPS[i]; return `<div class="rstep ${i===0?'lead':''}"><div class="rnum">${st.n}</div><div class="rbody"><h3>${st.title}</h3>${st.q?`<p class="q">${st.q}</p>`:''}${body}</div></div>`};
+  h+=step(0,`<div class="disease-card"><div class="dn">${esc(cap(d.label))}</div>
+    ${av.headline?`<p class="headline">${esc(av.headline)}</p>`:''}
+    <p>${esc(av.plain_summary||d.summary||d.description||'No plain-language summary is available yet.')}</p>
+    <div class="tx ${hat===true?'yes':hat===false?'no':'unk'}"><span class="eyebrow">Treatment status</span><p>${esc(ts.note||(hat===true?'An approved treatment exists.':hat===false?'No approved treatment found in the sources we checked.':'Treatment status is not known.'))}</p>${txChips?`<div class="chips">${txChips}</div>`:''}</div>
+    ${facts.length?`<div class="facts">${facts.map(f=>`<span><b>${f[0]}</b>${esc(f[1])}</span>`).join('')}</div>`:''}
+    <details class="sci"><summary>Scientific detail</summary><div>${d.description&&d.description!==av.plain_summary?`<p>${esc(d.description)}</p>`:''}${syn.length?`<p style="margin-top:6px"><b>Also known as</b> ${esc(syn.join(', '))}</p>`:''}<p style="margin-top:6px"><b>Identifiers</b> ${esc([d.id].concat(ids).join(', '))}${safeUrl(d.url)?` <a href="${esc(safeUrl(d.url))}" target="_blank" rel="noopener">Open the record ↗</a>`:''}</p></div></details>
+  </div><div class="why-slot"></div>`);
+  h+=step(1,`<div class="groups">${groupRow('Related diseases',relChips)}${groupRow('Mechanisms',mechs.map(nodeChip).join(''))}${groupRow('Genes',genes.map(nodeChip).join(''))}${groupRow('Signs and symptoms',phen.slice(0,10).map(nodeChip).join(''),moreNote(phen.length,10))}</div>${!relChips&&!mechs.length&&!genes.length&&!phen.length?'<p class="note-line">No connections recorded yet.</p>':''}<div class="why-slot"></div>`);
+  h+=step(2,`<div class="groups">${exactChips?groupRow('Groups for this disease',exactChips):`<div class="group"><div class="gl">Groups for this disease</div><p class="note-line">We found no group for exactly this diagnosis yet.${umbChips?' The wider groups below also serve these families.':''}</p></div>`}${groupRow('Wider groups',umbChips)}${groupRow('Researchers',people)}</div><div class="why-slot"></div>`);
+  h+=step(3,assets.length||trials?`<div class="groups">${assetRows}${groupRow('Clinical studies',trials)}</div><div class="why-slot"></div>`:'<p class="note-line">No registries, studies, models or trials recorded yet.</p>');
+  h+=step(4,step5);
+  h+=`</div><div class="live-foot"><p>Line marks show how strong each connection is: <span class="lnk E lnk-i"></span> evidence, <span class="lnk H lnk-i"></span> hypothesis, <span class="lnk U lnk-i"></span> unknown. Select any item to see the source behind it.</p>${covSrc?`<p>What we checked for this disease: ${covSrc}.</p>`:''}<button type="button" class="linkbtn" data-res-node="${esc(c)}">Explore this disease in the Researcher view</button></div>`;
+  out.innerHTML=h;
+  hydrateChips(out);
+  const ml=$('#readerLine'); if(ml&&!ml.querySelector('.live-dot')) liveMetaLine();
+}
+const NODE_GROUPS=[['disease','Diseases'],['gene','Genes'],['mechanism','Mechanisms'],['intervention','Treatments'],['organization','Organizations'],['asset','Research assets'],['trial','Clinical studies'],['person','People'],['publication','Publications'],['phenotype','Signs and symptoms'],['grant','Grants'],['variant','Variants']];
+function nodeFacts(n){
+  const a=n.attrs||{}, f=[], add=(k,v)=>{ if(v==null||v===''||(Array.isArray(v)&&!v.length)) return; f.push([k,Array.isArray(v)?v.join(', '):String(v)]); };
+  if(n.type==='disease'){ add('Onset',a.onset); add('Inheritance',a.inheritance); add('Prevalence',a.prevalence); }
+  if(n.type==='organization'){ add('Country',a.country); if(a.has_registry===true) add('Registry','Keeps a patient registry'); }
+  if(n.type==='person'){ add('Affiliation',a.affiliation&&clip(a.affiliation,120)); add('Roles',arr(a.roles).map(human)); }
+  if(n.type==='trial'){ add('Study',a.nct_id); add('Phase',phaseTxt(a.phase)); add('Status',human(a.overall_status)); add('Enrollment',a.enrollment); }
+  if(n.type==='asset'){ add('Access',{open:'Open',on_request:'On request',restricted:'Restricted'}[a.access]); }
+  if(n.type==='publication'){ add('Journal',a.journal); add('Year',a.year); }
+  if(n.type==='gene'){ add('Symbol',a.symbol); }
+  if(n.type==='grant'){ add('Agency',a.agency); add('Year',a.fiscal_year); }
+  return f;
+}
+function renderNodeCard(nr,nb,mv,opts){
+  liveCtx.clear();
+  const n=nr.node, c=n.id, inc=incident(nb,c), all=inc(), out=$('#readerOut');
+  const facts=nodeFacts(n), link=safeUrl(n.attrs&&n.attrs.website)||safeUrl(n.url);
+  const total=Object.values(nr.degree||{}).reduce((s,v)=>s+(+v||0),0);
+  let groups='';
+  if(mv&&arr(mv.diseases).length){ groups+=groupRow('Diseases that share it',arr(mv.diseases).slice(0,12).map(x=>lchip(x.disease.label,{edge:arr(x.evidence_edge_ids)[0],status:x.status,ctx:{why:x.unmet_need||'',res:x.disease.id}})).join(''),moreNote(arr(mv.diseases).length,12)); }
+  NODE_GROUPS.forEach(([t,gl])=>{ if(mv&&t==='disease'&&arr(mv.diseases).length) return; const xs=all.filter(x=>x.n.type===t); if(!xs.length) return;
+    groups+=groupRow(gl,xs.slice(0,12).map(({e,n:o})=>lchip(o.label,{edge:e.id,status:e.status,ctx:{res:o.id}})).join(''),moreNote(xs.length,12)); });
+  const desc=n.summary||n.description||'';
+  const head=opts&&opts.example?'An example from the live Atlas.':'From the live Atlas';
+  out.innerHTML=`<p class="src-note"><span class="live-dot" aria-hidden="true"></span>${esc(head)}</p>
+  <div class="ncard rbody" data-slot-host>
+    <div class="tt">${ldot(n)}${esc(kindOf(n))}</div>
+    <div class="dn">${esc(cap(n.label))}</div>
+    ${mv&&mv.headline?`<p class="headline">${esc(mv.headline)}</p>`:''}
+    ${mv&&mv.plain_summary?`<p>${esc(mv.plain_summary)}</p>`:desc?`<p>${esc(clip(desc,600))}</p>`:''}
+    ${n.type==='disease'?'<p class="note-line">This disease does not have a full five-step journey in the Atlas yet. Its direct connections are below.</p>':''}
+    ${facts.length?`<div class="facts">${facts.map(f=>`<span><b>${f[0]}</b>${esc(f[1])}</span>`).join('')}</div>`:''}
+    ${link?`<p><a class="ext" href="${esc(link)}" target="_blank" rel="noopener">${n.type==='organization'?'Visit their website':'Open the original record'} ↗</a></p>`:''}
+    ${mv&&arr(mv.genes).length?`<p class="note-line">Appears under the genes ${esc(andList(arr(mv.genes).slice(0,12).map(g=>g.label)))}.</p>`:''}
+    ${arr(n.synonyms).length||Object.keys(n.xrefs||{}).length?`<details class="sci"><summary>More detail</summary><div>${arr(n.synonyms).length?`<p><b>Also known as</b> ${esc(arr(n.synonyms).slice(0,10).join(', '))}</p>`:''}<p style="margin-top:6px"><b>Identifiers</b> ${esc([n.id].concat(Object.entries(n.xrefs||{}).slice(0,6).map(([k,v])=>k+' '+arr(v).join(', '))).join(', '))}</p></div></details>`:''}
+    <div class="ncard-sec"><h3>What it connects to</h3><p class="q">${total?`${fmtN(total)} connection${total===1?'':'s'} in the Atlas.`:'No connections recorded yet.'} Select any item to see the source behind it.</p>
+      ${groups?`<div class="groups">${groups}</div>`:'<p class="note-line">No connections recorded yet.</p>'}<div class="why-slot"></div></div>
+    <div><button type="button" class="linkbtn" data-res-node="${esc(c)}">Explore it in the Researcher view</button></div>
+  </div>`;
+  hydrateChips(out);
+}
+async function readerMissLive(q){
+  const tok=++readerTok, out=$('#readerOut');
+  let m=null; try{ m=await apiGet('/meta'); }catch(e){}
+  if(tok!==readerTok) return;
+  const t=metaTotals(m), n=t.n, sl=sliceText(m);
+  const searched=m?`<li>Names, synonyms, abbreviations and ids of ${fmtN(t.nodes)} entries</li><li>${fmtN(n.disease)} diseases, ${fmtN(n.gene)} genes and ${fmtN(n.mechanism)} mechanisms</li><li>${fmtN(n.organization)} organizations, ${fmtN(n.asset)} research assets and ${fmtN(n.trial)} clinical studies</li><li>${fmtN(t.edges)} links backed by ${fmtN(t.evidence)} evidence records</li>`:'<li>Disease, gene, mechanism, symptom, group and study names in the live Atlas</li>';
+  out.innerHTML=`<div class="empty">
+    <span class="eyebrow">Searched: “${esc(q)}”</span>
+    <div class="big">No supported route found.</div>
+    <p style="color:var(--ink-2);max-width:62ch">We could not find this in the live Atlas. That does not mean no connection exists. It means the sources below do not yet support one we can show you.</p>
+    <div class="empty-grid">
+      <div><h4>What was searched</h4><ul>${searched}</ul></div>
+      <div><h4>What is currently unknown</h4><ul><li>Whether this condition is in the Atlas under another name</li><li>Whether it shares a gene or mechanism with diseases in the Atlas</li>${sl?`<li>Coverage today: ${esc(sl)}</li>`:''}</ul></div>
+      <div><h4>What could change this</h4><ul><li>A confirmed gene or variant</li><li>A publication linking it to a known mechanism</li><li>A patient organization adding its knowledge</li></ul></div>
+    </div>
+    <div class="tries" style="margin-top:0">Try instead: <button data-q="CLN5">CLN5</button><button data-q="Batten">Batten</button><span class="sample-tag">Sample data</span><button data-sample="leigh">Leigh syndrome</button><button data-sample="dravet">Dravet syndrome</button></div>
+  </div>`;
+}
+
+/* ---------- RESEARCHER (live) ---------- */
+let liveRes=null, resTok=0, usingSample=false, resWanted=null;
+const curDs=()=>liveRes?liveRes.ds:DATA[curRes.ds];
+const curSel=()=>liveRes?liveRes.ds.root:curRes.sel;
+function toDs(nb,nr){
+  const c=nb.center||nr.node.id, mk=n=>({id:n.id,t:LT(n.type),label:n.label,plain:n.summary||'',sci:'',raw:n});
+  const nodes=arr(nb.nodes).map(mk); if(!nodes.some(n=>n.id===c)) nodes.unshift(mk(nr.node));
+  const byId=Object.fromEntries(nodes.map(n=>[n.id,n]));
+  const edges=arr(nb.edges).filter(e=>byId[e.src]&&byId[e.dst]).map((e,i)=>({i,s:e.src,t:e.dst,rel:relLabel(e),status:LS(e.status),conf:+e.confidence||0,src:arr(e.sources).join(', '),id:e.id,raw:e}));
+  return {live:true,key:'live',name:nr.node.label,root:c,nodes,byId,edges,truncated:!!nb.truncated};
+}
+function resLine(){
+  const el=$('#resLine'); if(!el) return;
+  if(liveRes){ const total=Object.values(liveRes.node.degree||{}).reduce((s,v)=>s+(+v||0),0), shown=liveRes.ds.nodes.length-1;
+    el.innerHTML=`<span class="live-dot" aria-hidden="true"></span>Live Atlas. ${liveRes.ds.truncated&&total>shown?`Showing the ${fmtN(shown)} closest of ${fmtN(total)} connections`:`Showing ${fmtN(shown)} connection${shown===1?'':'s'}`} around ${esc(cap(liveRes.ds.name))}.`;
+  } else if(usingSample){ el.innerHTML=`<span class="sample-tag">Sample data</span> An illustrative sample dataset for ${esc(DATA[curRes.ds].name)}, not the live Atlas.`; }
+  else el.textContent='';
+}
+function resLoadingState(on,label){
+  const w=$('#researcherView .graph-wrap'); if(w) w.classList.toggle('is-loading',!!on);
+  if(on) $('#detail').innerHTML=`<p class="vh" role="status">Loading ${esc(label||'')} from the live Atlas</p><i class="skel-h"></i>${skelLines(6)}`;
+}
+async function openLiveRes(id,o){
+  o=o||{}; const tok=++resTok; usingSample=false;
+  const prev=liveRes; resLoadingState(true,o.label);
+  try{
+    const [nb,nr]=await Promise.all([apiGet(nbPath(id)),apiGet('/nodes/'+enc(id))]);
+    let av=null,sim=null;
+    if(nr.node.type==='disease'&&nr.has_action_view) [av,sim]=await Promise.all([apiGet(avPath(id)).catch(()=>null),apiGet(simPath(id)).catch(()=>null)]);
+    if(tok!==resTok) return;
+    const hist=prev&&!o.back?prev.hist.slice():(o.hist||[]);
+    if(prev&&!o.back&&prev.id!==id) hist.push({id:prev.id,label:prev.ds.name});
+    liveRes={id,ds:toDs(nb,nr),node:nr,av,sim,hist};
+    resLoadingState(false); renderTypeFilter(); renderGraph(); renderDetail(); renderDash(); resLine();
+    if(o.focus){ const f=$(`#graph .node[data-node="${CSS.escape(id)}"]`); if(f) f.focus(); }
+  }catch(e){
+    if(tok!==resTok) return;
+    resLoadingState(false);
+    liveError($('#detail'),e.status===404?null:()=>openLiveRes(id,o),e.status===404?'This entry is not in the live Atlas.':null);
+  }
+}
+function resSample(key,sel){ resTok++; liveRes=null; usingSample=true; $('#typeFilter').innerHTML=''; $('#dash').innerHTML=''; curRes.ds=null; renderResearcher(key,sel); resLine(); }
+function resShow(){
+  if(usingSample&&!resWanted){ renderResearcher(curRes.ds,curRes.sel); resLine(); return; }
+  const want=resWanted||(liveRes&&liveRes.id)||LIVE_DEFAULT.id; resWanted=null;
+  if(liveRes&&liveRes.id===want){ renderTypeFilter(); renderGraph(); renderDetail(); renderDash(); resLine(); }
+  else openLiveRes(want);
+}
+function goResearcher(id){ resWanted=id; usingSample=false; setMode('researcher',true); }
+function resMiss(q){
+  apiGet('/meta').then(m=>m,()=>null).then(m=>{
+    const t=metaTotals(m);
+    $('#detail').innerHTML=`<div class="tt">Search</div><div class="nm">No supported route found.</div><p>“${esc(q)}” is not in the live Atlas. ${m?`Searched names, synonyms and ids of ${fmtN(t.nodes)} entries with ${fmtN(t.edges)} links.`:'Searched disease, gene, mechanism, symptom, study and researcher names.'} A confirmed gene, publication or study record could change this.</p>`;
+  });
+}
+function renderLiveDetail(){
+  const L=liveRes, ds=L.ds, n=L.node.node, root=ds.root;
+  const es=ds.edges.filter(e=>e.s===root||e.t===root).sort((a,b)=>b.conf-a.conf), shown=es.slice(0,40);
+  const back=L.hist[L.hist.length-1], desc=n.summary||n.description||'';
+  $('#detail').innerHTML=`${back?`<button type="button" class="linkbtn" data-back>Back to ${esc(clip(cap(back.label),40))}</button>`:''}
+    <div class="tt">${ldot(n)}${esc(kindOf(n))}</div><div class="nm">${esc(cap(n.label))}</div>
+    ${L.av&&L.av.headline?`<p>${esc(L.av.headline)}</p>`:desc?`<p>${esc(clip(desc,280))}</p>`:''}
+    ${L.node.has_action_view?`<button type="button" class="linkbtn" data-to-reader="${esc(n.id)}">Open the five-step reader journey</button>`:''}
+    <div class="eyebrow" style="margin-top:6px">Connections (${es.length})</div>
+    <div class="conn-list">${shown.map(e=>{const o=ds.byId[other(e,root)];return `<button class="conn" data-live-edge="${esc(e.id)}"><span class="cn">${dot(o.t)}<span style="min-width:0">${esc(o.label)}</span></span>${stPill(e.status)}<span class="cr">${esc(e.s===root?e.rel+' →':'← '+e.rel)} ${Math.round(e.conf*100)}%, ${esc(e.src)}</span></button>`}).join('')}</div>
+    ${es.length>shown.length?`<p style="font-size:12px">${es.length-shown.length} more in the evidence table below.</p>`:''}`;
+}
+function renderLiveDash(){
+  const L=liveRes, ds=L.ds, av=L.av, c=ds.root, sm=statusMapOf(av,null,L.sim);
+  ds.edges.forEach(e=>sm.set(e.id,e.raw.status));
+  const row=(edge,node,meta)=>`<button class="row" ${edge?`data-live-edge="${esc(edge)}"`:`data-live-node="${esc(node.id)}"`}><span class="rn">${ldot(node)}<span style="min-width:0">${esc(node.label)}</span></span>${edge&&sm.get(edge)?stPill(LS(sm.get(edge))):''}<span class="rm">${meta}</span></button>`;
+  const inc=t=>ds.edges.filter(e=>(e.s===c||e.t===c)&&ds.byId[other(e,c)].raw.type===t).sort((a,b)=>b.conf-a.conf).map(e=>({e,n:ds.byId[other(e,c)].raw}));
+  const none='<p class="sub" style="margin:0">Nothing recorded among the closest connections.</p>';
+  const rows=xs=>xs.length?xs.join(''):none;
+  const simById=new Map(arr(L.sim).map(s=>[s.edge_id,s]));
+  let panels;
+  if(av){
+    const mech=inc('mechanism').map(({e,n})=>row(e.id,n,`${esc(e.rel)}&ensp;${confHtml(e.conf)}`));
+    const overlap=arr(av.related_communities).map(rc=>{const s=simById.get(rc.similarity_edge_id), cp=(s&&s.components)||{};
+      const tags=[['symptoms',cp.phenotype],['mechanism',cp.mechanism],['gene',cp.gene]].map(([t,v])=>`<span class="${v>0?'on':''}">${t}</span>`).join('');
+      return row(rc.similarity_edge_id,rc.disease,`${s?`<span class="share-tags">${tags}</span>`:''}<span style="display:block;margin-top:6px">${esc(rc.why)}</span>${rc.caution?`<span class="caution-n">Caution: ${esc(clip(rc.caution,220))}</span>`:''}`)});
+    const research=arr(av.trials).map(t=>row(arr(t.edge_ids)[0],t.node,esc(['Clinical study',phaseTxt(t.phase),human(t.overall_status),'ClinicalTrials.gov'].filter(Boolean).join(', ')))).concat(inc('publication').slice(0,4).map(({e,n})=>row(e.id,n,esc(['Publication',e.src].filter(Boolean).join(', ')))));
+    const groups=new Map(); arr(av.exact_groups).forEach(g=>groups.set(g.node.id,g)); arr(av.related_communities).forEach(rc=>arr(rc.groups).forEach(g=>{ if(!groups.has(g.node.id)) groups.set(g.node.id,g); }));
+    const people=arr(av.researchers).map(p=>row(arr(p.edge_ids)[0],p.node,esc([kindOf(p.node),p.affiliation?clip(p.affiliation,80):'',p.recent_publications?p.recent_publications+' recent publications':''].filter(Boolean).join(', ')))).concat([...groups.values()].map(g=>row(g.edge_id,g.node,esc(`${kindOf(g.node)}, serves ${g.for_disease?g.for_disease.label:'this disease'}`))));
+    const assets=arr(av.assets).map(x=>row(arr(x.edge_ids)[0],x.node,esc(`${REUSE[x.reusability]||'Reuse not assessed'}. ${SUBTYPE_LABEL[x.asset_kind]||human(x.asset_kind)}${x.owner?', maintained by '+x.owner.label:''}`)));
+    const capRows=(xs,n,what)=>xs.length>n?xs.slice(0,n).concat(`<p class="sub" style="margin:10px 0 0">and ${xs.length-n} more ${what} in the graph and the Reader view</p>`):xs;
+    panels=`<div class="panel p4"><h4>Related mechanisms</h4><p class="sub">Mechanisms connected to ${esc(ds.name)}.</p><div class="rows">${rows(mech)}</div></div>
+      <div class="panel p8"><h4>Mechanistic overlap</h4><p class="sub">Related diseases, what they share and where they differ.</p><div class="rows">${rows(overlap)}</div></div>
+      <div class="panel p6"><h4>Existing research</h4><p class="sub">Clinical studies and publications.</p><div class="rows">${rows(research)}</div></div>
+      <div class="panel p6"><h4>Researchers &amp; collaborators</h4><p class="sub">People and groups working on this disease or its family.</p><div class="rows">${rows(capRows(people,12,'people and groups'))}</div></div>
+      <div class="panel p12"><h4>Reusable assets</h4><p class="sub">Registries, studies and models that may be shared or adapted. Reuse is a hypothesis until the owner confirms.</p><div class="rows" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));column-gap:24px">${rows(assets)}</div></div>`;
+  } else {
+    const r=(ts)=>ts.flatMap(t=>inc(t)).sort((a,b)=>b.e.conf-a.e.conf).slice(0,12).map(({e,n})=>row(e.id,n,`${esc(kindOf(n))}, ${esc(e.rel)}&ensp;${confHtml(e.conf)}`));
+    panels=`<div class="panel p6"><h4>Connected diseases</h4><p class="sub">Diseases linked to ${esc(ds.name)}.</p><div class="rows">${rows(r(['disease']))}</div></div>
+      <div class="panel p6"><h4>Mechanisms, genes and treatments</h4><p class="sub">Biology and interventions linked to it.</p><div class="rows">${rows(r(['mechanism','gene','intervention','phenotype']))}</div></div>
+      <div class="panel p6"><h4>Research and assets</h4><p class="sub">Studies, publications and resources.</p><div class="rows">${rows(r(['trial','publication','asset','grant']))}</div></div>
+      <div class="panel p6"><h4>People and organizations</h4><p class="sub">Who works on it or with it.</p><div class="rows">${rows(r(['person','organization']))}</div></div>`;
+  }
+  const all=[...ds.edges].sort((a,b)=>b.conf-a.conf);
+  const tr=e=>`<tr data-live-edge="${esc(e.id)}" tabindex="0"><td>${esc(ds.byId[e.s].label)} <span style="color:var(--night-ink-2)">→ ${esc(e.rel)} →</span> ${esc(ds.byId[e.t].label)}</td><td>${stPill(e.status)}</td><td>${esc(e.src||'Not recorded')}</td><td class="num">${Math.round(e.conf*100)}%</td><td class="num">${fmtN(e.raw.support_count)}</td><td>${e.raw.contradict_count?fmtN(e.raw.contradict_count):'None recorded'}</td></tr>`;
+  $('#dash').innerHTML=`${panels}
+    <div class="panel p12"><h4>Evidence</h4><p class="sub">Every link shown in the graph with its type, sources, confidence and how many records support or contradict it. Select a row for the quotes.</p>
+      <div class="tbl-wrap"><table class="ev"><thead><tr><th>Relationship</th><th>Type</th><th>Source</th><th>Conf.</th><th>Supporting</th><th>Contradicting</th></tr></thead><tbody id="evBody">${all.slice(0,8).map(tr).join('')}</tbody></table></div>
+      ${all.length>8?`<button class="btn btn-ghost" id="evMore" style="margin-top:14px;padding:8px 16px;font-size:13px">Show all ${all.length} links</button>`:''}</div>`;
+  const more=$('#evMore'); if(more) more.addEventListener('click',()=>{$('#evBody').innerHTML=all.map(tr).join('');more.remove()});
+}
+
 /* ---------- Drawer ---------- */
 let lastFocus=null;
 function openDrawer(ds,e){
@@ -1080,7 +1692,7 @@ function setMode(m,scroll){
   $('#readerView').hidden=m!=='reader'; $('#researcherView').hidden=m!=='researcher';
   $$('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
   $$('.role').forEach(b=>b.setAttribute('aria-pressed',b.dataset.role===m));
-  if(m==='researcher') renderResearcher(curRes.ds, curRes.sel);
+  if(m==='researcher') resShow();
   if(scroll) $('#atlas').scrollIntoView({behavior:reduced?'auto':'smooth'});
 }
 $$('.seg button').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
@@ -1092,23 +1704,6 @@ menuBtn.addEventListener('click',e=>{e.stopPropagation(); const o=$('#navLinks')
 document.addEventListener('click',e=>{ if(!e.target.closest('.nav-actions')) closeMenu(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('#navLinks').hidden){closeMenu();menuBtn.focus();} });
 $$('#navLinks a:not([data-mode])').forEach(a=>a.addEventListener('click',closeMenu));
-
-/* ---------- Search widgets ---------- */
-function wireSearch(input,onPick,onMiss){
-  const box=input.parentElement.querySelector('.sugg'); let items=[],act=-1;
-  const draw=()=>{ if(!items.length){box.hidden=true;return}
-    box.innerHTML=items.map((it,i)=>`<button type="button" data-i="${i}" class="${i===act?'active':''}"><span style="display:flex;gap:10px;align-items:center;min-width:0">${dot(it.t)}<span>${esc(it.label)}</span></span><span class="kind">${esc(it.kind)}</span></button>`).join(''); box.hidden=false; };
-  input.addEventListener('input',()=>{items=searchIdx(input.value);act=-1;draw()});
-  input.addEventListener('keydown',e=>{
-    if(e.key==='ArrowDown'){act=Math.min(items.length-1,act+1);draw();e.preventDefault()}
-    else if(e.key==='ArrowUp'){act=Math.max(0,act-1);draw();e.preventDefault()}
-    else if(e.key==='Enter'){e.preventDefault(); const it=items[act>=0?act:0]; box.hidden=true; if(it){input.value=it.alias?DATA[it.ds].name:it.label; onPick(it)} else if(input.value.trim()) onMiss(input.value.trim())}
-    else if(e.key==='Escape'){box.hidden=true}
-  });
-  box.addEventListener('mousedown',e=>{const b=e.target.closest('button'); if(!b) return; e.preventDefault(); const it=items[+b.dataset.i]; box.hidden=true; input.value=it.alias?DATA[it.ds].name:it.label; onPick(it)});
-  input.addEventListener('blur',()=>setTimeout(()=>box.hidden=true,120));
-  return q=>{input.value=q; const r=searchIdx(q); if(r.length){ const it=r[0]; input.value=it.alias?DATA[it.ds].name:it.label; onPick(it)} else onMiss(q)};
-}
 
 /* ---------- READER ---------- */
 const R_STEPS=[
@@ -1141,7 +1736,7 @@ function renderReader(key){
   readerDs=key; const ds=DATA[key]; const out=$('#readerOut');
   const root=ds.byId[ds.root];
   const used=new Set([ds.root]);
-  let html='<div class="rjourney">';
+  let html='<p class="src-note"><span class="sample-tag">Sample data</span> An illustrative journey built from sample data, not from the live Atlas.</p><div class="rjourney">';
   R_STEPS.forEach((st,si)=>{
     html+=`<div class="rstep ${si===0?'lead':''}"><div class="rnum">${st.n}</div><div class="rbody"><h3>${st.title}</h3>${st.q?`<p class="q">${st.q}</p>`:''}`;
     if(si===0){
@@ -1170,7 +1765,7 @@ function renderReader(key){
 }
 $('#readerOut').addEventListener('click',ev=>{
   const ob=ev.target.closest('[data-open-edge]'); if(ob){openDrawer(DATA[readerDs],DATA[readerDs].edges[+ob.dataset.openEdge]);return}
-  const c=ev.target.closest('.chip'); if(!c) return;
+  const c=ev.target.closest('.chip:not([data-live])'); if(!c) return;
   const body=c.closest('.rbody'), slot=body.querySelector('.why-slot');
   const was=c.getAttribute('aria-expanded')==='true';
   $$('.chip',body).forEach(x=>x.setAttribute('aria-expanded','false'));
@@ -1192,9 +1787,29 @@ function readerMiss(q){
     <div class="tries" style="margin-top:0">Try instead: <button data-q="Leigh syndrome">Leigh syndrome</button><button data-q="Dravet syndrome">Dravet syndrome</button></div>
   </div>`;
 }
-const readerGo=wireSearch($('#readerSearch'),it=>renderReader(it.ds),readerMiss);
+const readerGo=wireSearch($('#readerSearch'),{onLive:h=>readerOpen(h),onSample:it=>readerSample(it.ds),onMiss:q=>readerMissLive(q),onLoading:q=>{readerTok++;readerSkeleton(q)},onError:(q,retry)=>{readerTok++;liveError($('#readerOut'),retry)}});
 $('#readerTries').addEventListener('click',e=>{const b=e.target.closest('[data-q]'); if(b) readerGo(b.dataset.q)});
-$('#readerOut').addEventListener('click',e=>{const b=e.target.closest('.empty [data-q]'); if(b) readerGo(b.dataset.q)});
+$('#readerSamples').addEventListener('click',e=>{const b=e.target.closest('[data-sample]'); if(b) readerSample(b.dataset.sample)});
+$('#readerOut').addEventListener('click',e=>{const b=e.target.closest('.empty [data-q]'); if(b) readerGo(b.dataset.q); const sb=e.target.closest('.empty [data-sample]'); if(sb) readerSample(sb.dataset.sample)});
+$('#readerOut').addEventListener('click',ev=>{
+  const dr=ev.target.closest('[data-drawer-edge]'); if(dr){openLiveDrawer(dr.dataset.drawerEdge);return}
+  const rs=ev.target.closest('[data-res-node]'); if(rs){goResearcher(rs.dataset.resNode);return}
+  const c=ev.target.closest('.chip[data-live]'); if(!c) return;
+  const host=c.closest('.rbody'), slot=host&&host.querySelector('.why-slot'); if(!slot) return;
+  const was=c.getAttribute('aria-expanded')==='true';
+  $$('.chip',host).forEach(x=>x.setAttribute('aria-expanded','false'));
+  if(was){slot.innerHTML='';return}
+  c.setAttribute('aria-expanded','true');
+  const ctx=c.dataset.ctx?liveCtx.get(c.dataset.ctx):null;
+  if(!c.dataset.liveEdge){slot.innerHTML=noEdgeWhy(ctx);return}
+  const tok=++whyTok;
+  const load=async()=>{
+    slot.innerHTML=`<div class="why" aria-busy="true"><div class="why-head"><span class="t">Why this connection?</span></div><div style="padding:16px 18px">${skelLines(4)}</div></div>`;
+    try{ const r=await apiGet('/edges/'+enc(c.dataset.liveEdge)); if(tok!==whyTok||c.getAttribute('aria-expanded')!=='true') return; slot.innerHTML=liveWhyHtml(r,ctx); setChipSt(c,r.edge.status); }
+    catch(e){ if(tok!==whyTok||c.getAttribute('aria-expanded')!=='true') return; liveError(slot,e.status===404?null:load,e.status===404?'The source for this link is not in the live Atlas any more.':null); }
+  };
+  load();
+});
 
 /* ---------- RESEARCHER ---------- */
 function rng(seed){return ()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -1206,7 +1821,7 @@ function layout(ds){
   const ring=ds.nodes.filter(n=>n.id!==ds.root&&ds.edges.some(e=>(e.s===n.id&&e.t===ds.root)||(e.t===n.id&&e.s===ds.root)))
     .sort((p,q)=>TYPE_ORDER.indexOf(p.t)-TYPE_ORDER.indexOf(q.t));
   const N=ring.length;
-  ring.forEach((n,i)=>{const a=i/N*Math.PI*2-Math.PI/2+.08, f=i%2?.7:1; P[n.id]={x:cx+Math.cos(a)*RX*f,y:cy+Math.sin(a)*RY*f,a,inner:f<1}});
+  ring.forEach((n,i)=>{const a=i/N*Math.PI*2-Math.PI/2+.08, f=N>28?[1,.8,.6][i%3]:(i%2?.7:1); P[n.id]={x:cx+Math.cos(a)*RX*f,y:cy+Math.sin(a)*RY*f,a,inner:f<1}});
   const inner=ds.nodes.filter(n=>!P[n.id]);
   inner.forEach((n,k)=>{const nb=edgesOf(ds,n.id).map(e=>P[other(e,n.id)]).filter(Boolean);
     let a=nb.length?Math.atan2(nb.reduce((s,p)=>s+Math.sin(p.a),0),nb.reduce((s,p)=>s+Math.cos(p.a),0)):k;
@@ -1231,7 +1846,7 @@ function labelPos(ds,n,p,r,placed){
   return {x:x.toFixed(1),y:(b.y+hgt-3).toFixed(1),anc,hide};
 }
 function renderGraph(){
-  const ds=DATA[curRes.ds], P=layout(ds), svg=$('#graph'), sel=curRes.sel;
+  const ds=curDs(), P=layout(ds), svg=$('#graph'), sel=curSel();
   const vis=n=>n.id===ds.root||!hiddenTypes.has(n.t);
   const nb=new Set([sel]); edgesOf(ds,sel).forEach(e=>nb.add(other(e,sel)));
   let h='<g class="edges">';
@@ -1247,9 +1862,10 @@ function renderGraph(){
       <text x="${lb.x}" y="${lb.y}" text-anchor="${lb.anc}" style="${n.id===ds.root?'font-size:13px;font-weight:600':''}${lb.hide&&!on?';opacity:0':lb.hide&&!isSel?';opacity:0':''}">${esc(shortLabel(n.label))}</text></g>`; });
   h+='</g>';
   svg.innerHTML=h;
-  svg.setAttribute('aria-label','Knowledge graph for '+ds.name+'. Selected: '+ds.byId[sel].label);
+  svg.setAttribute('aria-label',(ds.live?'Live knowledge graph around ':'Sample knowledge graph for ')+ds.name+'. Selected: '+ds.byId[sel].label);
 }
 function renderDetail(){
+  if(liveRes) return renderLiveDetail();
   const ds=DATA[curRes.ds], n=ds.byId[curRes.sel], es=edgesOf(ds,n.id).sort((a,b)=>b.conf-a.conf);
   $('#detail').innerHTML=`<div class="tt">${dot(n.t)}${TYPES[n.t].label}</div><div class="nm">${esc(n.label)}</div>
     <p>${esc(n.plain)}</p>${n.sci?`<p style="font-size:13px">${esc(n.sci)}</p>`:''}
@@ -1257,6 +1873,7 @@ function renderDetail(){
     <div class="conn-list">${es.map(e=>{const o=ds.byId[other(e,n.id)];return `<button class="conn" data-edge="${e.i}"><span class="cn">${dot(o.t)}<span style="min-width:0">${esc(o.label)}</span></span>${stPill(e.status)}<span class="cr">${esc(e.s===n.id?e.rel+' →':'← '+e.rel)} ${Math.round(e.conf*100)}%, ${esc(e.src)}</span></button>`}).join('')}</div>`;
 }
 function renderDash(){
+  if(liveRes) return renderLiveDash();
   const ds=DATA[curRes.ds], root=ds.root;
   const row=(e,n,meta)=>`<button class="row" data-edge="${e.i}"><span class="rn">${dot(n.t)}<span style="min-width:0">${esc(n.label)}</span></span>${stPill(e.status)}<span class="rm">${meta}</span></button>`;
   const mech=ds.nodes.filter(n=>n.t==='mechanism').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,`${esc(e.rel)}&ensp;${confHtml(e.conf)}`)}).join('');
@@ -1281,8 +1898,8 @@ function renderDash(){
   const more=$('#evMore'); if(more) more.addEventListener('click',()=>{$('#evBody').innerHTML=all.map(tr).join('');more.remove()});
 }
 function renderTypeFilter(){
-  const ds=DATA[curRes.ds]; const present=new Set(ds.nodes.map(n=>n.t));
-  $('#typeFilter').innerHTML=Object.entries(TYPES).filter(([t])=>present.has(t)).map(([t,v])=>`<button data-type="${t}" aria-pressed="${!hiddenTypes.has(t)}"><span class="dot" style="background:${v.c}"></span>${v.label}</button>`).join('');
+  const ds=curDs(); const present=new Set(ds.nodes.map(n=>n.t));
+  $('#typeFilter').innerHTML=Object.entries(TYPES).filter(([t])=>present.has(t)).map(([t,v])=>`<button data-type="${t}" aria-pressed="${!hiddenTypes.has(t)}"><span class="dot" style="background:${v.c}"></span>${(ds.live&&LIVE_TYPE_LABEL[t])||v.label}</button>`).join('');
 }
 function renderResearcher(key,sel){
   const changed=curRes.ds!==key; curRes={ds:key,sel:sel||DATA[key].root};
@@ -1291,15 +1908,22 @@ function renderResearcher(key,sel){
 }
 $('#typeFilter').addEventListener('click',e=>{const b=e.target.closest('[data-type]'); if(!b) return; const t=b.dataset.type;
   hiddenTypes.has(t)?hiddenTypes.delete(t):hiddenTypes.add(t); b.setAttribute('aria-pressed',!hiddenTypes.has(t)); renderGraph()});
-$('#graph').addEventListener('click',e=>{const ds=DATA[curRes.ds];
-  const n=e.target.closest('.node'); if(n){curRes.sel=n.dataset.node;renderGraph();renderDetail();return}
-  const ed=e.target.closest('.edge'); if(ed) openDrawer(ds,ds.edges[+ed.dataset.edge]);});
-$('#graph').addEventListener('keydown',e=>{const n=e.target.closest('.node'); if(n&&(e.key==='Enter'||e.key===' ')){e.preventDefault();curRes.sel=n.dataset.node;renderGraph();renderDetail();const f=$(`#graph .node[data-node="${curRes.sel}"]`); if(f) f.focus()}});
-['#detail','#dash'].forEach(s=>$(s).addEventListener('click',e=>{const b=e.target.closest('[data-edge]'); if(b) openDrawer(DATA[curRes.ds],DATA[curRes.ds].edges[+b.dataset.edge])}));
-$('#dash').addEventListener('keydown',e=>{const b=e.target.closest('tr[data-edge]'); if(b&&e.key==='Enter') openDrawer(DATA[curRes.ds],DATA[curRes.ds].edges[+b.dataset.edge])});
-const resGo=wireSearch($('#resSearch'),it=>renderResearcher(it.ds,it.id),q=>{
-  $('#detail').innerHTML=`<div class="tt">Search</div><div class="nm">No supported route found.</div><p>“${esc(q)}” is not in the sample index. Searched disease names, genes, mechanisms, phenotypes, studies and researchers across ${Object.values(DATA).reduce((a,d)=>a+d.nodes.length,0)} entities. A confirmed gene, publication or study record could change this.</p>`});
+$('#graph').addEventListener('click',e=>{const ds=curDs();
+  const n=e.target.closest('.node'); if(n){ if(ds.live){ if(n.dataset.node!==ds.root) openLiveRes(n.dataset.node,{label:ds.byId[n.dataset.node]&&ds.byId[n.dataset.node].label}); } else {curRes.sel=n.dataset.node;renderGraph();renderDetail();} return}
+  const ed=e.target.closest('.edge'); if(ed){ const x=ds.edges[+ed.dataset.edge]; if(x) ds.live?openLiveDrawer(x.id):openDrawer(ds,x); }});
+$('#graph').addEventListener('keydown',e=>{const n=e.target.closest('.node'); if(n&&(e.key==='Enter'||e.key===' ')){e.preventDefault(); const ds=curDs();
+  if(ds.live){ if(n.dataset.node!==ds.root) openLiveRes(n.dataset.node,{focus:true,label:ds.byId[n.dataset.node]&&ds.byId[n.dataset.node].label}); return }
+  curRes.sel=n.dataset.node;renderGraph();renderDetail();const f=$(`#graph .node[data-node="${curRes.sel}"]`); if(f) f.focus()}});
+['#detail','#dash'].forEach(s=>$(s).addEventListener('click',e=>{
+  const bk=e.target.closest('[data-back]'); if(bk&&liveRes){const h=liveRes.hist.slice(), p=h.pop(); if(p) openLiveRes(p.id,{back:true,hist:h,label:p.label}); return}
+  const tr=e.target.closest('[data-to-reader]'); if(tr&&liveRes){const n=liveRes.node.node; setMode('reader',true); $('#readerSearch').value=n.label; readerOpen({id:n.id,type:n.type,label:n.label}); return}
+  const ln=e.target.closest('[data-live-node]'); if(ln){openLiveRes(ln.dataset.liveNode);return}
+  const le=e.target.closest('[data-live-edge]'); if(le){openLiveDrawer(le.dataset.liveEdge);return}
+  const b=e.target.closest('[data-edge]'); if(b&&!liveRes) openDrawer(DATA[curRes.ds],DATA[curRes.ds].edges[+b.dataset.edge])}));
+$('#dash').addEventListener('keydown',e=>{ if(e.key!=='Enter') return; const lb=e.target.closest('tr[data-live-edge]'); if(lb){openLiveDrawer(lb.dataset.liveEdge);return} const b=e.target.closest('tr[data-edge]'); if(b&&!liveRes) openDrawer(DATA[curRes.ds],DATA[curRes.ds].edges[+b.dataset.edge])});
+const resGo=wireSearch($('#resSearch'),{onLive:h=>openLiveRes(h.id,{label:h.label}),onSample:it=>resSample(it.ds,it.id),onMiss:q=>{resTok++;resMiss(q)},onError:(q,retry)=>{resTok++;liveError($('#detail'),retry)}});
 $('#resTries').addEventListener('click',e=>{const b=e.target.closest('[data-q]'); if(b) resGo(b.dataset.q)});
+$('#resSamples').addEventListener('click',e=>{const b=e.target.closest('[data-sample]'); if(b){ $('#resSearch').value=DATA[b.dataset.sample].name; resSample(b.dataset.sample); }});
 
 /* ---------- JOURNEY ---------- */
 const J=[
@@ -1528,7 +2152,7 @@ $('#srcGrid').innerHTML=SOURCES.map(([c,list])=>`<div class="src-col"><h4>${c}</
 })();
 
 /* ---------- init ---------- */
-renderReader('leigh'); $('#readerSearch').value='Leigh syndrome';
+readerOpen(LIVE_DEFAULT,{example:true}); liveMetaLine();
 renderJourney(); renderRace();
 $('#rFrom').value='leigh:leigh'; $('#rTo').value='leigh:d_narp'; renderRoute();
 try{ const m=localStorage.getItem('om-mode'); if(m==='researcher') setMode('researcher'); }catch(e){}
@@ -1561,7 +2185,7 @@ if(location.hash==='#researcher') setMode('researcher');
       <button class="og-send" id="og-send" type="submit" aria-label="Send message"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
     </form>
     <div class="og-foot">
-      <button class="og-talk" id="og-talk" type="button" aria-pressed="false" aria-label="Talk with the guide by voice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span id="og-talk-label">Talk</span></button>
+      <button class="og-talk" id="og-talk" type="button" aria-disabled="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span id="og-talk-label">Talk</span><span class="og-sr" id="og-talk-sr"> with the guide by voice</span></button>
       <p id="og-foot-note">Answers come from our concept notes and the live Atlas. Not medical advice.</p>
     </div>
   </div>
@@ -1572,24 +2196,35 @@ if(location.hash==='#researcher') setMode('researcher');
 'use strict';
 try {
 const OG_AGENT_ID = 'agent_7801m41tw0vsfxabzwbe2dp8wh1r';
-const OG_SDK_URL = 'https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm';
-const OG_API = ((location.hostname === '127.0.0.1' || location.hostname === 'localhost') && location.port !== '8077')
-  ? 'http://127.0.0.1:8077/api/v1' : '/api/v1';
+/* two CDNs; a fresh URL per retry, because the browser remembers a failed module import for the same URL */
+const OG_SDK_URLS = ['https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm', 'https://esm.sh/@elevenlabs/client@1.26.0'];
+const OG_API = (() => {
+  try {
+    const m = document.querySelector('meta[name="og-api"]');
+    if (m && m.content) return m.content.replace(/\/$/, '');
+  } catch (e) {}
+  /* the static preview server (port 8765) talks to the local dev API; everything else is same origin */
+  return ((location.hostname === '127.0.0.1' || location.hostname === 'localhost') && location.port === '8765')
+    ? 'http://127.0.0.1:8077/api/v1' : '/api/v1';
+})();
 const OG_MAX = 12000;
+const DEBUG = /[?&]ogdebug\b/.test(location.search);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = id => document.getElementById(id);
 const root = $('og-root'), orb = $('og-orb'), panel = $('og-panel'), log = $('og-log'), live = $('og-live');
 const form = $('og-form'), input = $('og-input'), talkBtn = $('og-talk'), statusEl = $('og-status'), statusText = $('og-status-text');
-const hint = $('og-hint'), selBtn = $('og-sel'), layer = $('og-layer');
+const hint = $('og-hint'), selBtn = $('og-sel'), layer = $('og-layer'), talkLabel = $('og-talk-label'), talkSr = $('og-talk-sr');
 if (!root || !orb || !panel) return;
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
   set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 };
 const clean = s => String(s == null ? '' : s).replace(/\s+/g, ' ').trim();
+const bare = s => !clean(s).replace(/[.…\s]/g, '');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const wait = ms => new Promise(r => setTimeout(r, ms));
 const quote = s => clean(s).replace(/"/g, "'");
+const norm = s => clean(String(s || '').replace(/[*#•]/g, ' ')).toLowerCase();
 
 /* ---------- live Atlas client tools ---------- */
 const NF = { error: 'not found' };
@@ -1612,6 +2247,16 @@ const TOOLS = {
   async atlas_stats() {
     const d = await apiGet('/meta'); if (d.__nf) return NF;
     if (Array.isArray(d.sources)) d.sources = d.sources.slice(0, 25);
+    const n = (d.counts && d.counts.nodes && typeof d.counts.nodes === 'object') ? d.counts.nodes : {};
+    const num = v => (typeof v === 'number' && isFinite(v)) ? v : 0;
+    d.totals = {
+      nodes: Object.values(n).reduce((a, v) => a + num(v), 0),
+      node_types: Object.keys(n).length,
+      edges: d.counts ? d.counts.edges ?? null : null,
+      evidence: d.counts ? d.counts.evidence ?? null : null,
+      diseases: n.disease ?? null,
+      focus_diseases: d.dataset ? d.dataset.focus_diseases ?? null : null
+    };
     return d;
   },
   async search_atlas(p) {
@@ -1647,95 +2292,172 @@ function fit(obj) {
   }
   return JSON.stringify({ truncated: true, text: s.slice(0, OG_MAX - 200) });
 }
-let toolsRunning = 0;
+let toolsRunning = 0, toolUntil = 0, toolTimer = 0;
+/* after an Explain answer the visitor has not asked anything new, so unprompted lookups are skipped (text chat) */
+let explainPending = false, explainLock = false;
 const clientTools = {};
 Object.keys(TOOLS).forEach(name => {
   clientTools[name] = async (params) => {
-    toolsRunning++; renderStatus(); trace('tool', name);
+    if (explainLock && convKind === 'text') { trace('tool-skipped', name); return JSON.stringify({ skipped: 'The visitor did not ask for this. Do not reply or start a new topic.' }); }
+    toolsRunning++; toolUntil = Date.now() + 1200;
+    clearTimeout(toolTimer); toolTimer = setTimeout(renderStatus, 1250);
+    renderStatus(); trace('tool', name);
     try { return fit(await TOOLS[name](params || {})); }
     finally { toolsRunning = Math.max(0, toolsRunning - 1); if (conv) thinking = true; renderStatus(); }
   };
 });
-window.OGGuide = { tools: clientTools };
 
 /* ---------- transcript ---------- */
-function fmt(text) {
-  let t = String(text || '').replace(/\s*[\u2014\u00B7]\s*/g, ', ');
-  t = esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-  return t;
+const DASHES = /[ \t]+[–—][ \t]+|[ \t]*—[ \t]*|[ \t]*·[ \t]*/g;
+function tidy(text) {
+  return String(text || '').replace(/\r/g, '').replace(DASHES, ', ').replace(/([a-z0-9)\]][.!?])([A-Z])/g, '$1 $2');
 }
-function scrollLog() { log.scrollTop = log.scrollHeight; }
+const SMALL = /^(and|of|for|the|or|to|in|with|on|a|an)$/;
+/* sentence case for short 'Title Case Label:' prefixes the agent sometimes writes */
+function label(s) {
+  return s.replace(/^(\*\*)?([A-Z][a-z]+(?: (?:[A-Z][a-z]+|and|of|for|the|or|to|in|with|on)){1,4})(:\*\*|\*\*:|:)(?=\s|$)/, (all, b, words, c) =>
+    (b || '') + words.split(' ').map((w, i) => (i && /^[A-Z][a-z]+$/.test(w) && !SMALL.test(w)) ? w.toLowerCase() : w).join(' ') + c);
+}
+function inline(s) {
+  return esc(label(s.replace(/^#{1,6}\s+/, ''))).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*/g, '');
+}
+function fmt(text) {
+  const lines = tidy(text).split('\n');
+  let html = '', inList = false, gap = false;
+  for (const raw of lines) {
+    const line = raw.replace(/\t/g, '    ');
+    const m = /^( *)[*\-•]\s+(.*\S.*)$/.exec(line);
+    let lvl = 0, body = '';
+    if (m) { lvl = m[1].length >= 2 ? 2 : 1; body = m[2].trim(); }
+    else if (/^ {3,}\S/.test(line)) { lvl = /^ {6,}/.test(line) ? 2 : 1; body = line.trim(); } /* markdown-stripped list from a final message */
+    if (lvl) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += '<li' + (lvl === 2 ? ' class="og-l2"' : '') + '>' + inline(body) + '</li>';
+      gap = false; continue;
+    }
+    const s = line.trim();
+    if (!s) { gap = true; continue; }
+    if (inList) { html += '</ul>'; inList = false; }
+    else if (html) html += gap ? '<br><br>' : '<br>';
+    html += inline(s); gap = false;
+  }
+  if (inList) html += '</ul>';
+  return html;
+}
+const plain = t => clean(tidy(t).replace(/\*\*/g, '').replace(/^\s*[*\-•]\s+/gm, '').replace(/\*/g, ''));
+
+/* scrolling: follow new content only while the reader is at the bottom; long answers show their first line */
+let stick = true;
+log.addEventListener('scroll', () => { stick = log.scrollHeight - log.scrollTop - log.clientHeight < 40; }, { passive: true });
+function follow(el, force) {
+  if (force) stick = true;
+  if (!stick) return;
+  if (el && el.classList && el.classList.contains('og-guide') && el.offsetHeight > log.clientHeight - 24) {
+    if (!el._pinned) { el._pinned = true; log.scrollTop = Math.max(0, el.offsetTop - 12); stick = false; }
+    return;
+  }
+  log.scrollTop = log.scrollHeight;
+}
 function addMsg(who, text) {
   const d = document.createElement('div');
   d.className = 'og-msg ' + (who === 'me' ? 'og-me' : 'og-guide');
   d.innerHTML = fmt(text);
-  log.appendChild(d); scrollLog();
+  log.appendChild(d); follow(d, who === 'me');
   if (who !== 'me') announce(text);
   return d;
 }
 function addNote(text) {
   const d = document.createElement('div'); d.className = 'og-note'; d.textContent = text;
-  log.appendChild(d); scrollLog(); announce(text); return d;
+  log.appendChild(d); follow(d, true); announce(text); return d;
 }
-function announce(text) { live.textContent = ''; setTimeout(() => { live.textContent = clean(String(text).replace(/\*\*/g, '')).replace(/\s*[\u2014\u00B7]\s*/g, ', '); }, 30); }
-let errorShown = false;
+function announce(text) { live.textContent = ''; setTimeout(() => { live.textContent = plain(text); }, 30); }
+let errorShown = false, focusNextError = false;
+const ERR = 'I can’t connect right now. Please try again in a moment.';
 function showError(retry) {
   log.querySelectorAll('.og-error').forEach(e => e.remove());
   const d = document.createElement('div'); d.className = 'og-error';
-  d.innerHTML = '<span>I can’t connect right now. Please try again in a moment.</span><button type="button">Try again</button>';
-  d.querySelector('button').addEventListener('click', () => { d.remove(); errorShown = false; renderStatus(); try { retry && retry(); } catch (e) {} });
-  log.appendChild(d); scrollLog(); announce('I can’t connect right now. Please try again in a moment.');
+  d.innerHTML = '<span>' + ERR + '</span><button type="button">Try again</button>';
+  const btn = d.querySelector('button');
+  btn.addEventListener('click', () => {
+    try { input.focus({ preventScroll: true }); } catch (e) {}
+    d.remove(); errorShown = false; focusNextError = true; renderStatus();
+    setTimeout(() => { focusNextError = false; }, 30000);
+    try { retry && retry(); } catch (e) {}
+  });
+  log.appendChild(d); follow(d, true); announce(ERR);
   errorShown = true; renderStatus();
+  if (focusNextError && !panel.hidden) { focusNextError = false; try { btn.focus({ preventScroll: true }); } catch (e) {} }
 }
 function clearError() { log.querySelectorAll('.og-error').forEach(e => e.remove()); errorShown = false; }
 
 /* ---------- status ---------- */
-let conv = null, convKind = null, starting = null, startingKind = null, sid = 0;
-let connecting = false, thinking = false, agentMode = 'listening';
+let conv = null, convKind = null, starting = null, startingKind = null, sid = 0, sess = null;
+let connecting = false, thinking = false, agentMode = 'listening', modeTimer = 0;
 function renderStatus() {
   let s = 'Ready', cls = '';
-  if (toolsRunning > 0) { s = 'Checking the live Atlas'; cls = 'og-busy og-tool'; }
+  const voiceOn = !!(conv && convKind === 'voice');
+  if (toolsRunning > 0 || Date.now() < toolUntil) { s = 'Checking the live Atlas'; cls = 'og-busy og-tool'; }
   else if (connecting) { s = 'Connecting'; cls = 'og-busy'; }
   else if (errorShown && !conv) { s = 'Offline'; cls = 'og-err'; }
-  else if (conv && convKind === 'voice') { s = agentMode === 'speaking' ? 'Speaking' : (thinking ? 'Thinking' : 'Listening'); cls = agentMode === 'speaking' ? '' : (thinking ? 'og-busy' : ''); }
+  else if (voiceOn) { s = agentMode === 'speaking' ? 'Speaking' : (thinking ? 'Thinking' : 'Listening'); cls = agentMode === 'speaking' ? 'og-live' : (thinking ? 'og-busy' : 'og-live'); }
   else if (thinking) { s = 'Thinking'; cls = 'og-busy'; }
   if (statusText.textContent !== s) statusText.textContent = s;
   statusEl.className = 'og-status ' + cls;
-  orb.classList.toggle('og-voice', !!(conv && convKind === 'voice'));
-  orb.classList.toggle('og-speaking', !!(conv && convKind === 'voice' && agentMode === 'speaking'));
+  orb.classList.toggle('og-voice', voiceOn);
+  orb.classList.toggle('og-speaking', voiceOn && agentMode === 'speaking');
 }
 
 /* ---------- SDK and sessions ---------- */
-let SDK = null, sdkP = null;
+let SDK = null, sdkP = null, sdkTry = 0;
 function loadSDK() {
   if (SDK) return Promise.resolve(SDK);
-  if (!sdkP) sdkP = import(OG_SDK_URL).then(m => { SDK = m; return m; }).catch(e => { sdkP = null; throw e; });
+  if (!sdkP) {
+    const n = sdkTry++;
+    const u = OG_SDK_URLS[n % OG_SDK_URLS.length] + (n >= OG_SDK_URLS.length ? '?r=' + n : '');
+    sdkP = import(u).then(m => { SDK = m; return m; }).catch(e => { sdkP = null; throw e; });
+  }
   return sdkP;
 }
 function prefetch() { loadSDK().catch(() => {}); }
 const isOpen = c => { try { return !!c && (typeof c.isOpen === 'function' ? c.isOpen() : true); } catch (e) { return false; } };
 const sentEcho = [];
 let streamOpen = false, lastFinal = null;
-let curStream = null, lastStreamed = null, lastUser = '', lastGuide = '', carry = '';
+let curStream = null, lastStreamed = null, lastUser = '', lastGuide = '', carry = '', quietTurns = 0;
 
 const evlog = [];
-function trace(kind, data) { evlog.push([Date.now() % 100000, kind, data]); if (evlog.length > 300) evlog.shift(); }
-window.OGGuide.trace = evlog;
-function callbacks(my, onFirst) {
+function trace(kind, data) { if (!DEBUG) return; evlog.push([Date.now() % 100000, kind, data]); if (evlog.length > 300) evlog.shift(); }
+if (DEBUG) window.OGGuide = { tools: clientTools, trace: evlog };
+function endStream(t) {
+  if (!t) return;
+  t.classList.remove('og-streaming'); t._final = true;
+  if (t === curStream) { curStream = null; streamOpen = false; }
+  if (t === lastStreamed) lastStreamed = null;
+}
+function dropEl(el) { if (el && el.parentNode) el.parentNode.removeChild(el); if (el === curStream) { curStream = null; streamOpen = false; } if (el === lastStreamed) lastStreamed = null; }
+function callbacks(my, onFirst, s) {
   const mine = () => my === sid;
+  const muted = () => explainLock && s.kind === 'text';
   return {
     onConnect() { if (!mine()) return; renderStatus(); },
     onStatusChange({ status } = {}) { if (!mine()) return; connecting = status === 'connecting'; renderStatus(); },
-    onModeChange({ mode } = {}) { if (!mine()) return; agentMode = mode === 'speaking' ? 'speaking' : 'listening'; if (agentMode === 'speaking') thinking = false; renderStatus(); },
+    onModeChange({ mode } = {}) {
+      if (!mine()) return;
+      clearTimeout(modeTimer);
+      if (mode === 'speaking') { agentMode = 'speaking'; if (s.kind === 'voice') thinking = false; renderStatus(); }
+      else modeTimer = setTimeout(() => { if (!mine()) return; agentMode = 'listening'; renderStatus(); }, 300);
+    },
     onAgentChatResponsePart(p) {
       if (!mine() || !p) return;
       trace('part', p.type + ':' + String(p.text || '').slice(0, 40));
       try {
+        if (muted()) return;
         if (p.type === 'start') { streamOpen = true; curStream = null; }
         else if (p.type === 'delta') {
           if (!streamOpen || !p.text) return;
           if (!curStream) { curStream = document.createElement('div'); curStream.className = 'og-msg og-guide og-streaming'; curStream._raw = ''; log.appendChild(curStream); }
-          curStream._raw += p.text; curStream.innerHTML = fmt(curStream._raw); scrollLog(); thinking = false; renderStatus();
+          curStream._raw += p.text; curStream.innerHTML = fmt(curStream._raw); follow(curStream);
+          if (s.kind !== 'voice') thinking = false; /* in voice the audio start ends the thinking state */
+          toolUntil = 0; renderStatus();
         } else if (p.type === 'stop') { streamOpen = false; if (curStream) { curStream.classList.remove('og-streaming'); lastStreamed = curStream; curStream = null; } }
       } catch (e) {}
     },
@@ -1747,28 +2469,59 @@ function callbacks(my, onFirst) {
       if (role === 'user') {
         const i = sentEcho.indexOf(text);
         if (i >= 0) { sentEcho.splice(i, 1); return; }
-        if (/^(EXPLAIN|CONTEXT):/.test(text) || !clean(text)) return;
+        if (/^(EXPLAIN|CONTEXT):/.test(text)) return;
+        if (bare(text)) {
+          /* silence: the agent reprompts each turn timeout, so pause voice after two quiet turns */
+          if (s.kind === 'voice' && ++quietTurns >= 2) pauseQuiet();
+          return;
+        }
+        quietTurns = 0; explainPending = false; explainLock = false;
         lastUser = text; addMsg('me', text); return;
       }
-      thinking = false; onFirst && onFirst();
       const target = curStream || (lastStreamed && !lastStreamed._final ? lastStreamed : null);
+      /* the connect acknowledgement of a text session is shown as status only, never as a bubble */
+      if (!s.ackSeen && s.ack && norm(text) === norm(s.ack)) {
+        s.ackSeen = true;
+        if (target && norm(target._raw) === norm(text)) dropEl(target);
+        onFirst && onFirst(); renderStatus(); return;
+      }
+      s.ackSeen = true;
+      onFirst && onFirst();
+      if (muted()) { if (target) dropEl(target); renderStatus(); return; }
+      if (bare(text)) {
+        /* an interrupted turn reports '...': keep what was already streamed, never replace it with dots */
+        endStream(target); thinking = false; renderStatus(); return;
+      }
+      thinking = false;
       if (!target && lastFinal && lastFinal._text === text && document.contains(lastFinal)) { renderStatus(); return; }
       let el = target;
-      if (el) { el.classList.remove('og-streaming'); el.innerHTML = fmt(text); announce(text); scrollLog(); }
-      else el = addMsg('guide', text);
+      if (el) {
+        el.classList.remove('og-streaming');
+        el.innerHTML = (el._raw && norm(el._raw) === norm(text)) ? fmt(el._raw) : fmt(text);
+        announce(text); follow(el);
+      } else el = addMsg('guide', text);
       el._final = true; el._text = text; lastFinal = el;
       if (target === curStream) { curStream = null; streamOpen = false; }
       lastStreamed = null;
-      lastGuide = text; renderStatus();
+      lastGuide = text; pendingWire = '';
+      if (explainPending && s.kind === 'text' && clean(text).length >= 80) { explainPending = false; explainLock = true; }
+      renderStatus();
     },
     onDisconnect(details) {
       if (!mine()) return;
       const wasVoice = convKind === 'voice';
-      conv = null; convKind = null; thinking = false; agentMode = 'listening'; toolsRunning = 0; connecting = false;
+      carry = summary() || carry;
+      conv = null; convKind = null; sess = null; thinking = false; agentMode = 'listening'; toolsRunning = 0; toolUntil = 0; connecting = false;
+      clearTimeout(modeTimer);
       if (curStream) { curStream.classList.remove('og-streaming'); curStream = null; } streamOpen = false;
       setTalk(false); stopLevels();
       const reason = details && details.reason;
-      if (reason === 'error') showError(() => ensureSession(wasVoice ? 'voice' : 'text').catch(handleStartError));
+      const ctxType = details && details.context && details.context.type;
+      if (ctxType === 'max_duration_exceeded') addNote('Let’s pick this up in a fresh conversation. Just send your next message.');
+      else if (reason === 'error') showError(() => {
+        if (wasVoice) { talkBtn.click(); return; }
+        ensureSession('text', 'I’m back. Go ahead.').then(() => addNote('I’m back. Send your message whenever you are ready.')).catch(e => { if (!handleStartError(e)) showError(() => ensureSession('text', 'I’m back. Go ahead.').catch(handleStartError)); });
+      });
       else if (reason === 'agent') addNote('The conversation ended. Send a message whenever you want to pick it up again.');
       renderStatus();
     },
@@ -1788,8 +2541,23 @@ function sendStartContext() {
   if (carry) { ctx(carry); carry = ''; }
 }
 
-class MicError extends Error {}
-async function startSession(kind, firstMessage) {
+class MicError extends Error { constructor(name) { super('mic'); this.micName = name || ''; } }
+function micMessage(name) {
+  if (name === 'NotFoundError' || name === 'OverconstrainedError' || name === 'DevicesNotFoundError') return 'No microphone was found, so let’s keep going by text.';
+  if (name === 'NotReadableError' || name === 'AbortError' || name === 'TrackStartError') return 'Your microphone is busy in another app, so let’s keep going by text. Close the other app and press Talk again.';
+  return 'I couldn’t use your microphone, so let’s keep going by text. You can allow microphone access and press Talk again.';
+}
+async function checkMic() {
+  try { const st = await navigator.mediaDevices.getUserMedia({ audio: true }); st.getTracks().forEach(t => t.stop()); }
+  catch (e) { throw new MicError(e && e.name); }
+}
+function timeout(p, ms, onTimeout) {
+  let timer;
+  const tp = new Promise((_, rej) => { timer = setTimeout(() => { try { onTimeout && onTimeout(); } catch (e) {} rej(new Error('timeout')); }, ms); });
+  return Promise.race([p, tp]).finally(() => clearTimeout(timer));
+}
+async function startSession(kind, firstMessage, o) {
+  o = o || {};
   if (starting) {
     if (startingKind === kind) return starting;
     try { await starting; } catch (e) {}
@@ -1800,23 +2568,24 @@ async function startSession(kind, firstMessage) {
   starting = (async () => {
     const my = ++sid;
     connecting = true; clearError(); renderStatus();
-    const mod = await loadSDK();
+    const mod = await timeout(loadSDK(), 20000);
+    if (my !== sid) throw new Error('superseded');
     const Conversation = mod.Conversation || (mod.default && mod.default.Conversation);
     if (!Conversation) throw new Error('sdk');
-    if (kind === 'voice') {
-      try {
-        const s = await navigator.mediaDevices.getUserMedia({ audio: true });
-        s.getTracks().forEach(t => t.stop());
-      } catch (e) { throw new MicError('mic'); }
-    }
+    if (kind === 'voice' && !o.micChecked) await checkMic();
+    if (my !== sid) throw new Error('superseded');
     let first; const firstP = new Promise(r => { first = r; });
-    const opts = Object.assign({ agentId: OG_AGENT_ID, clientTools }, callbacks(my, () => first()));
+    const s = { my, kind, ack: kind === 'text' ? (firstMessage || '') : '', ackSeen: false };
+    const opts = Object.assign({ agentId: OG_AGENT_ID, clientTools }, callbacks(my, () => first(), s));
     if (kind === 'text') opts.textOnly = true;
     if (firstMessage) opts.overrides = { agent: { firstMessage } };
-    const c = await Conversation.startSession(opts);
+    const sp = Conversation.startSession(opts);
+    /* a connection that lands after a timeout or a newer session is closed right away */
+    sp.then(c => { if (my !== sid) { try { Promise.resolve(c.endSession()).catch(() => {}); } catch (e) {} } }, () => {});
+    const c = await timeout(sp, 15000, () => { if (my === sid) sid++; });
     if (my !== sid) { try { await c.endSession(); } catch (e) {} throw new Error('superseded'); }
-    conv = c; convKind = kind; connecting = false; agentMode = 'listening'; renderStatus();
-    if (kind === 'voice') startLevels();
+    conv = c; convKind = kind; sess = s; connecting = false; agentMode = 'listening'; quietTurns = 0; renderStatus();
+    if (kind === 'voice') { startLevels(); if (o.onLive) o.onLive(); }
     await Promise.race([firstP, wait(4000)]);
     sendStartContext();
     return c;
@@ -1830,29 +2599,46 @@ async function ensureSession(kind, firstMessage) {
   return startSession(kind || 'text', firstMessage);
 }
 async function endConv() {
-  const c = conv; sid++; conv = null; convKind = null; thinking = false; agentMode = 'listening'; toolsRunning = 0;
+  const c = conv; sid++; conv = null; convKind = null; sess = null; thinking = false; agentMode = 'listening'; toolsRunning = 0; toolUntil = 0;
+  clearTimeout(modeTimer);
   if (curStream) { curStream.classList.remove('og-streaming'); curStream = null; } streamOpen = false;
   stopLevels(); renderStatus();
   if (c) { try { await c.endSession(); } catch (e) {} }
 }
 function handleStartError(e) {
-  connecting = false; renderStatus();
-  if (e instanceof MicError) { setTalk(false); addNote('I couldn’t use your microphone, so let’s keep going by text. You can allow microphone access and press Talk again.'); return true; }
+  connecting = false; thinking = false; renderStatus();
+  if (e instanceof MicError) { setTalk(false); addNote(micMessage(e.micName)); return true; }
   if (e && e.message === 'superseded') return true;
   return false;
 }
 
 /* ---------- sending ---------- */
+let pendingWire = '', pendingConv = null, pendingAt = 0;
+function deliver(c, wire) {
+  thinking = true; renderStatus();
+  sentEcho.push(wire); if (sentEcho.length > 20) sentEcho.shift();
+  c.sendUserMessage(wire); pendingConv = c;
+}
 async function send(wire, display, opts) {
   opts = opts || {};
   if (!opts.retry) { addMsg('me', display || wire); }
+  const isExplain = /^EXPLAIN:/.test(wire);
   if (!/^(EXPLAIN|CONTEXT):/.test(wire)) lastUser = wire;
+  explainPending = isExplain; explainLock = false;
+  thinking = true; renderStatus();
+  const ack = opts.ack || 'One moment.';
   try {
-    const c = await ensureSession(opts.kind || 'text', opts.ack || 'One moment.');
-    if (opts.ctx) ctx(opts.ctx);
-    thinking = true; renderStatus();
-    sentEcho.push(wire); if (sentEcho.length > 20) sentEcho.shift();
-    c.sendUserMessage(wire);
+    pendingWire = wire; pendingConv = null; pendingAt = Date.now();
+    let c = await ensureSession(opts.kind || 'text', ack);
+    /* the session may have been replaced (for example Talk was pressed) while it was starting */
+    if (c !== conv || !isOpen(c)) {
+      if (pendingWire === wire && pendingConv && pendingConv === conv) return; /* already delivered by Talk */
+      if (talkBusy) return; /* Talk delivers it as soon as voice is up */
+      c = isOpen(conv) ? conv : await ensureSession(convKind || startingKind || 'text', ack);
+    }
+    if (pendingWire === wire && pendingConv === c) return; /* Talk got there first */
+    if (opts.ctx) [].concat(opts.ctx).forEach(x => x && ctx(x));
+    deliver(c, wire);
   } catch (e) {
     thinking = false;
     if (handleStartError(e)) return;
@@ -1863,7 +2649,7 @@ form.addEventListener('submit', ev => {
   ev.preventDefault();
   const v = input.value.trim(); if (!v) return;
   input.value = '';
-  send(v, v, { kind: convKind || 'text' });
+  send(v, v, { kind: convKind || startingKind || 'text' });
 });
 let lastActivity = 0;
 input.addEventListener('input', () => {
@@ -1873,64 +2659,89 @@ input.addEventListener('input', () => {
 });
 
 /* ---------- voice toggle ---------- */
-function setTalk(on) { talkBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); $('og-talk-label').textContent = on ? 'Talking' : 'Talk'; }
+function setTalk(on) {
+  talkBtn.classList.toggle('og-on', !!on);
+  talkLabel.textContent = on ? 'Stop' : 'Talk';
+  if (talkSr) talkSr.textContent = on ? ' talking with the guide' : ' with the guide by voice';
+}
 function summary() {
   if (!lastUser && !lastGuide) return '';
   const cut = s => clean(s).slice(0, 500);
   return 'continuing the same visit in a new session. The visitor last said: "' + cut(lastUser) + '". You last replied: "' + cut(lastGuide) + '".';
 }
 let talkBusy = false;
+function setBusy(on) { talkBusy = on; talkBtn.setAttribute('aria-disabled', on ? 'true' : 'false'); }
+async function stopVoice(note) {
+  carry = summary() || carry; await endConv(); setTalk(false);
+  if (note) addNote(note);
+}
+async function pauseQuiet() {
+  if (talkBusy || !conv || convKind !== 'voice') return;
+  setBusy(true);
+  try { await stopVoice('I paused voice since it went quiet. Press Talk whenever you want to continue.'); }
+  finally { setBusy(false); }
+}
 talkBtn.addEventListener('click', async () => {
-  if (talkBusy) return; talkBusy = true; talkBtn.disabled = true;
+  if (talkBusy) return; setBusy(true);
   try {
-    if (conv && convKind === 'voice') {
-      carry = summary(); await endConv(); setTalk(false);
-      addNote('Voice is off. We can keep chatting here.');
-      return;
-    }
+    if (conv && convKind === 'voice') { await stopVoice('Voice is off. We can keep chatting here.'); return; }
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { addNote('Voice is not available in this browser, so let’s keep going by text.'); return; }
-    carry = summary(); setTalk(true);
+    setTalk(true);
+    /* check the microphone first, so a refusal keeps the text chat as it was */
+    try { await checkMic(); } catch (e) { handleStartError(e); return; }
+    carry = summary() || carry;
     if (conv) await endConv();
-    try { await startSession('voice', carry ? 'I’m listening. Go ahead.' : 'Hi, I’m the One Mission guide. What would you like to know?'); addNote('Voice is on. Speak whenever you are ready.'); }
+    const first = carry ? 'I’m listening. Go ahead.' : (welcomed ? 'I’m listening. What would you like to know?' : 'Hi, I’m the One Mission guide. What would you like to know?');
+    try {
+      await startSession('voice', first, { micChecked: true, onLive: () => addNote('Voice is on. Speak whenever you are ready.') });
+      /* a typed question that was still waiting for its answer moves over to the voice session */
+      if (pendingWire && pendingConv !== conv && isOpen(conv) && Date.now() - pendingAt < 60000) deliver(conv, pendingWire);
+    }
     catch (e) { setTalk(false); if (!handleStartError(e)) showError(() => talkBtn.click()); }
-  } finally { talkBusy = false; talkBtn.disabled = false; }
+  } finally { setBusy(false); }
 });
 
 /* ---------- orb levels (voice) ---------- */
 let raf = 0, smooth = 0;
+function setLvl(v) { root.style.setProperty('--og-lvl', v); }
 function levelTick() {
   raf = 0;
-  if (!conv || convKind !== 'voice') { orb.style.setProperty('--og-lvl', '0'); return; }
+  if (!conv || convKind !== 'voice') { setLvl('0'); return; }
   let lvl = 0;
   try {
     if (agentMode === 'speaking') {
       if (typeof conv.getOutputByteFrequencyData === 'function') {
         const d = conv.getOutputByteFrequencyData();
-        if (d && d.length) { const n = Math.min(d.length, 48); let s = 0; for (let i = 0; i < n; i++) s += d[i]; lvl = s / n / 255 * 1.8; }
+        if (d && d.length) { const n = Math.min(d.length, 48); let s = 0; for (let i = 0; i < n; i++) s += d[i]; lvl = (s / n - 70) / 130; }
       }
-      if (!lvl && typeof conv.getOutputVolume === 'function') lvl = conv.getOutputVolume() * 1.6;
+      if (!lvl && typeof conv.getOutputVolume === 'function') lvl = conv.getOutputVolume() * 1.4;
     } else {
       if (typeof conv.getInputByteFrequencyData === 'function') {
         const d = conv.getInputByteFrequencyData();
-        if (d && d.length) { const n = Math.min(d.length, 48); let s = 0; for (let i = 0; i < n; i++) s += d[i]; lvl = s / n / 255 * 0.8; }
+        if (d && d.length) { const n = Math.min(d.length, 48); let s = 0; for (let i = 0; i < n; i++) s += d[i]; lvl = (s / n - 20) / 160 * 0.8; }
       } else if (typeof conv.getInputVolume === 'function') lvl = conv.getInputVolume() * 0.6;
     }
   } catch (e) { lvl = 0; }
-  smooth = smooth * 0.7 + Math.min(1, lvl) * 0.3;
-  orb.style.setProperty('--og-lvl', smooth.toFixed(3));
+  lvl = Math.max(0, Math.min(1, lvl || 0));
+  /* quick attack, slower release, so syllables show instead of a held maximum */
+  smooth = lvl > smooth ? smooth * 0.5 + lvl * 0.5 : smooth * 0.85 + lvl * 0.15;
+  setLvl(smooth.toFixed(3));
   raf = requestAnimationFrame(levelTick);
 }
 function startLevels() { if (reduced || raf) return; raf = requestAnimationFrame(levelTick); }
-function stopLevels() { if (raf) cancelAnimationFrame(raf); raf = 0; smooth = 0; orb.style.setProperty('--og-lvl', '0'); }
+function stopLevels() { if (raf) cancelAnimationFrame(raf); raf = 0; smooth = 0; setLvl('0'); }
 
 /* ---------- panel open / close ---------- */
 let returnFocus = null, welcomed = false, idleTimer = 0;
+const sheet = matchMedia('(max-width: 560px)');
+const applySheet = () => panel.setAttribute('aria-modal', sheet.matches ? 'true' : 'false');
+applySheet(); try { sheet.addEventListener('change', applySheet); } catch (e) {}
 function openPanel(opener) {
   clearTimeout(idleTimer);
   if (!panel.hidden) return;
   returnFocus = opener || document.activeElement || orb;
   panel.hidden = false; orb.setAttribute('aria-expanded', 'true'); document.documentElement.classList.add('og-open');
-  hideHint(); prefetch();
+  hideHint(); prefetch(); queuePlace();
   if (!welcomed) { welcomed = true; addMsg('guide', 'Hi, I’m the One Mission guide. Ask me anything about the project or the live Atlas. You can also select text on the page, or use an Explain button, and I will walk you through it.'); }
   setTimeout(() => { try { input.focus({ preventScroll: true }); } catch (e) {} }, 30);
   renderStatus();
@@ -1938,9 +2749,10 @@ function openPanel(opener) {
 function closePanel() {
   if (panel.hidden) return;
   panel.hidden = true; orb.setAttribute('aria-expanded', 'false'); document.documentElement.classList.remove('og-open');
-  if (conv && convKind === 'voice') { carry = summary(); endConv(); setTalk(false); }
+  if (conv && convKind === 'voice') { carry = summary() || carry; endConv(); setTalk(false); }
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(() => { if (panel.hidden && conv) { carry = summary(); endConv(); } }, 120000);
+  idleTimer = setTimeout(() => { if (panel.hidden && conv) { carry = summary() || carry; endConv(); } }, 120000);
+  queuePlace();
   const f = returnFocus && document.contains(returnFocus) && returnFocus !== document.body ? returnFocus : orb;
   try { f.focus({ preventScroll: true }); } catch (e) {}
 }
@@ -1958,18 +2770,28 @@ window.addEventListener('keydown', ev => {
   if (nl && !nl.hidden && !panel.contains(document.activeElement)) return;
   closePanel();
 }, true);
+/* on phones the panel is a modal sheet, so Tab cycles inside it */
+panel.addEventListener('keydown', ev => {
+  if (ev.key !== 'Tab' || !sheet.matches) return;
+  const f = [...panel.querySelectorAll('button, input, [tabindex]:not([tabindex="-1"])')].filter(x => !x.disabled && x.offsetParent !== null);
+  if (!f.length) return;
+  const a = f[0], z = f[f.length - 1];
+  if (ev.shiftKey && document.activeElement === a) { ev.preventDefault(); z.focus(); }
+  else if (!ev.shiftKey && document.activeElement === z) { ev.preventDefault(); a.focus(); }
+});
 
 /* first-visit hint */
 function hideHint() { hint.classList.remove('og-show'); }
-if (!store.get('og-hinted')) {
+if (!store.get('og-hinted') && !sheet.matches) {
   store.set('og-hinted', '1');
   setTimeout(() => { if (panel.hidden) hint.classList.add('og-show'); setTimeout(hideHint, 6000); }, 1200);
 }
 
 /* ---------- explain ---------- */
+const atlasView = () => { const rv = $('researcherView'); return rv && !rv.hidden ? rv : ($('readerView') || $('atlas')); };
 const TARGETS = [
   { key: 'hero', el: () => document.querySelector('section.hero'), id: 'heroTitle', head: () => document.getElementById('heroTitle') },
-  { key: 'atlas', el: () => $('atlas'), id: 'atlas', head: () => { const rv = $('researcherView'); return (rv && !rv.hidden ? rv : $('readerView') || document).querySelector('h2'); } },
+  { key: 'atlas', el: () => $('atlas'), id: 'atlas', head: () => { const v = atlasView(); return v && v.querySelector('h2'); } },
   { key: 'journey', el: () => $('journey'), id: 'journey', head: () => $('journeyTitle') },
   { key: 'jpanel', el: () => $('jpanel'), id: 'jpanel', head: () => $('jpanel') && $('jpanel').querySelector('h3'), sub: true },
   { key: 'tenx', el: () => $('tenx'), id: 'tenx', head: () => $('tenxTitle') },
@@ -1980,16 +2802,42 @@ const TARGETS = [
   { key: 'sources', el: () => $('sources'), id: 'sources', head: () => $('srcTitle') },
   { key: 'about', el: () => $('about'), id: 'about', head: () => $('ctaTitle') }
 ];
-function explainSection(t, opener) {
-  trace('explainSection', t.id + ' ' + (new Error().stack || '').split('\n').slice(1, 6).join(' | '));
+const txt = el => clean(el ? (el.innerText || el.textContent) : '');
+function headingFor(t) {
+  if (t.key === 'jpanel') {
+    const tabs = [...document.querySelectorAll('#jtrack [role="tab"]')];
+    const i = tabs.findIndex(x => x.getAttribute('aria-selected') === 'true');
+    const jp = $('jpanel'), eb = jp && jp.querySelector('.eyebrow'), h = jp && jp.querySelector('h3');
+    const kind = eb ? clean(eb.textContent).replace(/^Step \d+ of \d+:\s*/, '') : '';
+    return 'Journey step ' + (i >= 0 ? i + 1 : 1) + ' of ' + (tabs.length || 6) + (kind ? ' (' + kind + ')' : '') + ': ' + txt(h);
+  }
   const h = t.head && t.head();
-  const heading = quote(h ? h.textContent : t.id);
-  const host = t.el();
-  const lede = host && (t.sub ? host : host.querySelector('.lede, h2 + p, h3 + p'));
-  const extra = lede ? quote(lede.textContent).slice(0, 600) : '';
+  return txt(h) || t.id;
+}
+function ledeFor(t) {
+  const host = t.el(); if (!host) return '';
+  if (t.sub) return txt(host);
+  const scope = t.key === 'atlas' ? atlasView() : host;
+  let l = scope && (scope.querySelector('.sec-head .lede') || (t.key === 'atlas' ? null : scope.querySelector('.lede')));
+  if (!l) { const h = t.head && t.head(); const n = h && h.nextElementSibling; if (n && n.tagName === 'P') l = n; }
+  if (l) return txt(l);
+  if (t.key === 'atlas' && scope) {
+    const inp = scope.querySelector('input[type="search"]');
+    return (scope.id === 'researcherView' ? 'Researcher' : 'Reader') + ' view of the Atlas' + (inp ? ', with a search box: ' + inp.placeholder : '');
+  }
+  return '';
+}
+function sectionCtx(t, lead) {
+  const lede = quote(ledeFor(t)).slice(0, 600);
+  return (lead || 'the section') + ' #' + t.id + ' has the heading "' + quote(headingFor(t)) + '"' + (lede ? ' and currently reads: "' + lede + '"' : '');
+}
+function explainSection(t, opener) {
+  trace('explainSection', t.id);
+  const heading = quote(headingFor(t));
+  const display = t.key === 'jpanel' ? 'Explain this journey step' : 'Explain “' + heading + '”';
   openPanel(opener);
-  send('EXPLAIN: section #' + t.id + ', heading "' + heading + '"', 'Explain “' + heading + '”',
-    { kind: convKind || 'text', ack: 'Happy to explain.', ctx: extra ? 'the section #' + t.id + ' on the page currently reads: "' + extra + '"' : '' });
+  send('EXPLAIN: section #' + t.id + ', heading "' + heading + '"', display,
+    { kind: convKind || startingKind || 'text', ack: 'Happy to explain.', ctx: sectionCtx(t) });
 }
 function sectionFor(el) {
   if (!el || !el.closest) return '';
@@ -2002,6 +2850,16 @@ function sectionFor(el) {
   if (el.closest('header')) return '#top';
   return '';
 }
+function drawerCtx() {
+  const dr = $('drawerRoot'); if (!dr) return '';
+  const ch = dr.querySelector('.dchain'); if (!ch) return '';
+  const parts = [...ch.children].map(x => txt(x)).filter(Boolean).join(', ');
+  const kv = {};
+  dr.querySelectorAll('.kv .k').forEach(k => { const v = k.nextElementSibling; if (v) kv[txt(k)] = txt(v); });
+  const pill = dr.querySelector('.drawer-body > div:not(.dchain):not(.kv)');
+  const st = txt(pill);
+  return 'the evidence drawer is open for: ' + quote(parts) + (st ? ', status ' + quote(st) : '') + (kv.Type && kv.Type !== st ? ', type ' + quote(kv.Type) : '') + (kv.Confidence ? ', confidence ' + quote(kv.Confidence) : '');
+}
 function explainText(text, el, opener) {
   trace('explainText', String(text).slice(0, 40));
   const t = clean(text); if (!t) return;
@@ -2011,14 +2869,21 @@ function explainText(text, el, opener) {
   const wire = word ? 'EXPLAIN: word "' + q + '"' + (sec ? ' (in section ' + sec + ')' : '')
                     : 'EXPLAIN: ' + (sec ? 'section ' + sec + ', ' : '') + 'text "' + q + '"';
   const short = t.length > 90 ? t.slice(0, 88).replace(/\s+\S*$/, '') + '...' : t;
+  const ctxs = [];
+  if (sec === '#drawerRoot') ctxs.push(drawerCtx());
+  else {
+    const tg = TARGETS.find(x => '#' + x.id === sec);
+    if (tg) ctxs.push(sectionCtx(tg, 'the selected text is in a section on the page. That section'));
+  }
   openPanel(opener);
-  send(wire, 'Explain “' + short + '”', { kind: convKind || 'text', ack: 'Happy to explain.' });
+  send(wire, 'Explain “' + short + '”', { kind: convKind || startingKind || 'text', ack: 'Happy to explain.', ctx: ctxs });
 }
 
-/* explain pills, positioned in a document-level layer so page markup and layout stay untouched */
+/* explain pills: each sits in the DOM next to the part it explains (so Tab order follows the page)
+   and is positioned in viewport terms, sticky within its section on pointer devices */
 const touch = matchMedia('(hover: none)');
-const applyTouch = () => root.classList.toggle('og-touch', touch.matches);
-applyTouch(); try { touch.addEventListener('change', () => { applyTouch(); placePills(); }); } catch (e) {}
+const applyTouch = () => document.documentElement.classList.toggle('og-touch', touch.matches);
+applyTouch(); try { touch.addEventListener('change', () => { applyTouch(); queuePlace(); }); } catch (e) {}
 const pills = [];
 TARGETS.forEach(t => {
   const el = t.el(); if (!el) return;
@@ -2026,48 +2891,66 @@ TARGETS.forEach(t => {
   b.type = 'button'; b.className = 'og-xp' + (el.closest('.night') ? ' og-n' : '');
   b.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/></svg>Explain';
   b.addEventListener('click', () => explainSection(t, b));
-  b.addEventListener('focus', () => { const h = t.head && t.head(); b.setAttribute('aria-label', 'Explain this section: ' + clean(h ? h.textContent : t.id)); });
-  { const h0 = t.head && t.head(); b.setAttribute('aria-label', 'Explain this section: ' + clean(h0 ? h0.textContent : t.id)); }
-  layer.appendChild(b);
-  pills.push({ t, el, b });
+  const name = () => b.setAttribute('aria-label', t.key === 'jpanel' ? 'Explain this journey step' : 'Explain this section: ' + headingFor(t));
+  b.addEventListener('focus', name); name();
+  try { if (t.sub) el.parentNode.insertBefore(b, el); else el.insertBefore(b, el.firstChild); }
+  catch (e) { layer.appendChild(b); }
+  pills.push({ t, el, b, x: null, y: null });
 });
+function navBottom() { const n = document.querySelector('header.nav'); if (!n) return 0; const r = n.getBoundingClientRect(); return Math.max(0, r.bottom); }
 function anchorFor(p) {
   const r = p.el.getBoundingClientRect();
   if (!r.height) return null;
-  const sx = window.scrollX, sy = window.scrollY;
   if (p.t.key === 'vlist') {
-    if (innerWidth <= 860) { const eb = document.querySelector('#tenx .validate .eyebrow'); if (eb) { const er = eb.getBoundingClientRect(); return { x: r.right + sx, y: er.top + sy + er.height / 2 - 13 }; } }
-    return { x: r.right + sx, y: r.top + sy - 40 };
+    if (innerWidth <= 860) { const eb = document.querySelector('#tenx .validate .eyebrow'); if (eb) { const er = eb.getBoundingClientRect(); return { x: r.right, y: er.top + er.height / 2 - 13, bottom: r.bottom }; } }
+    return { x: r.right, y: r.top - 40, bottom: r.bottom };
   }
-  if (p.t.key === 'jpanel') return { x: r.right + sx, y: r.top + sy - 38 };
+  if (p.t.key === 'jpanel') return { x: r.right, y: r.top - 38, bottom: r.bottom };
   const w = p.el.querySelector('.wrap') || p.el;
   const wr = w.getBoundingClientRect(), pr = parseFloat(getComputedStyle(w).paddingRight) || 0;
   const pt = parseFloat(getComputedStyle(p.el).paddingTop) || 0;
   const off = Math.max(12, Math.min(32, pt / 2 - 13));
-  return { x: wr.right - pr + sx, y: r.top + sy + off };
+  return { x: wr.right - pr, y: r.top + off, bottom: r.bottom };
+}
+function cbOrigin(b) {
+  const op = b.offsetParent;
+  const body = document.body;
+  if (!op || op === document.documentElement || (op === body && getComputedStyle(body).position === 'static')) return { x: -scrollX, y: -scrollY };
+  const r = op.getBoundingClientRect();
+  return { x: r.left + op.clientLeft - op.scrollLeft, y: r.top + op.clientTop - op.scrollTop };
 }
 let placeQueued = false;
 function placePills() {
   placeQueued = false;
+  const sticky = !touch.matches, nb = navBottom();
+  const pr = (!panel.hidden && innerWidth > 560) ? panel.getBoundingClientRect() : null;
   pills.forEach(p => {
     const a = anchorFor(p);
-    if (!a) { p.b.hidden = true; return; }
-    p.b.hidden = false; p.b.style.left = Math.round(a.x) + 'px'; p.b.style.top = Math.round(a.y) + 'px';
+    if (!a) { if (!p.b.hidden) p.b.hidden = true; return; }
+    if (p.b.hidden) p.b.hidden = false;
+    const bw = p.b.offsetWidth || 82, bh = p.b.offsetHeight || 29;
+    let x = a.x, y = a.y;
+    if (sticky) y = Math.max(a.y, Math.min(Math.max(a.y, nb + 8), a.bottom - 40 - bh));
+    if (pr && x > pr.left - 4 && x - bw < pr.right && y + 3 < pr.bottom && y + 3 + bh > pr.top) x = pr.left - 12;
+    const o = cbOrigin(p.b);
+    const L = Math.round(x - o.x), T = Math.round(y - o.y);
+    if (L !== p.x) { p.b.style.left = L + 'px'; p.x = L; }
+    if (T !== p.y) { p.b.style.top = T + 'px'; p.y = T; }
   });
 }
 const queuePlace = () => { if (!placeQueued) { placeQueued = true; requestAnimationFrame(placePills); } };
 placePills();
 addEventListener('resize', queuePlace, { passive: true });
+addEventListener('scroll', () => { if (!touch.matches || !panel.hidden) queuePlace(); }, { passive: true });
 addEventListener('load', queuePlace);
 try { new ResizeObserver(queuePlace).observe(document.body); } catch (e) {}
 try { new MutationObserver(queuePlace).observe(document.querySelector('main') || document.body, { attributes: true, attributeFilter: ['hidden'], subtree: true }); } catch (e) {}
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(queuePlace).catch(() => {});
-let hoverSet = new Set();
 function setHover(target) {
-  const next = new Set();
-  pills.forEach(p => { if (target && (p.el.contains(target) || p.b === target)) next.add(p); });
-  pills.forEach(p => p.b.classList.toggle('og-on', next.has(p)));
-  hoverSet = next;
+  /* only the most specific pill shows, so a journey step pill never stacks on its section pill */
+  const hit = pills.filter(p => target && (p.el.contains(target) || p.b === target));
+  const on = hit.filter(p => !hit.some(q => q !== p && p.el !== q.el && p.el.contains(q.el)));
+  pills.forEach(p => p.b.classList.toggle('og-on', on.includes(p)));
 }
 document.addEventListener('pointerover', ev => {
   if (ev.pointerType === 'touch') return;
@@ -2146,7 +3029,16 @@ try {
 } catch (e) {}
 
 /* ---------- cleanup ---------- */
-addEventListener('pagehide', () => { const c = conv; conv = null; sid++; stopLevels(); if (c) { try { Promise.resolve(c.endSession()).catch(() => {}); } catch (e) {} } });
+addEventListener('pagehide', () => {
+  const c = conv;
+  if (c) carry = summary() || carry;
+  conv = null; convKind = null; sess = null; sid++; stopLevels();
+  thinking = false; agentMode = 'listening'; toolsRunning = 0; toolUntil = 0; connecting = false; clearTimeout(modeTimer);
+  if (curStream) { curStream.classList.remove('og-streaming'); curStream = null; } streamOpen = false;
+  setTalk(false); renderStatus();
+  if (c) { try { Promise.resolve(c.endSession()).catch(() => {}); } catch (e) {} }
+});
+addEventListener('pageshow', ev => { if (ev.persisted) { setTalk(false); renderStatus(); } });
 } catch (e) { /* the guide must never break the page */ }
 })();
 </script>
