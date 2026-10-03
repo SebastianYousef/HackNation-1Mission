@@ -251,8 +251,10 @@ function defaultEvidence(type, status, src, dst, srcName) {
     return ev("supports", "computed", "Atlas analytics", null, null,
       null, "algorithm:mock-hypothesis-generator");
   switch (srcName) {
-    case "PubMed":
-      return ev("supports", "publication", "PubMed", "PMID:MOCK0001", ex("pubmed/MOCK0001"), `[MOCK] Evidence that ${what}.`, "llm:mock-extractor", "2024-05-01");
+    case "PubMed": // LLM-extracted text is never curated (CLAUDE.md rule 2): curated PubMed rows are bibliographic facts
+      return status === "curated"
+        ? ev("supports", "publication", "PubMed", "PMID:MOCK0001", ex("pubmed/MOCK0001"), null, "curated", "2024-05-01")
+        : ev("supports", "publication", "PubMed", "PMID:MOCK0001", ex("pubmed/MOCK0001"), `[MOCK] Evidence that ${what}.`, "llm:mock-extractor", "2024-05-01");
     case "ClinicalTrials.gov": {
       const t = [src, dst].find((x) => nodes.get(x).type === "trial");
       return ev("supports", "trial_registry", "ClinicalTrials.gov", t, ex(`trials/${t}`), null, "curated", "2025-01-15");
@@ -385,12 +387,16 @@ edge("e-tt-t1-cerl", T.T1, CERL, "trial_tests_intervention", "curated", 0.99);
 edge("e-ts-t2-cln6", T.T2, D.CLN6, "trial_studies_disease", "curated", 0.99);
 
 // ---- publications / people / grant ----------------------------------------
-edge("e-pa-p1-cln5", PUB.P1, D.CLN5, "publication_about", "curated", 0.95);
-edge("e-pa-p1-cln6", PUB.P1, D.CLN6, "publication_about", "curated", 0.95);
-edge("e-pa-p2-cln3", PUB.P2, D.CLN3, "publication_about", "curated", 0.95);
-edge("e-pa-p2-mem", PUB.P2, M.MEM, "publication_about", "curated", 0.9);
-edge("e-pau-a-p1", H.A, PUB.P1, "person_authored", "curated", 0.97);
-edge("e-pau-b-p2", H.B, PUB.P2, "person_authored", "curated", 0.97);
+// mirrors ingest/pubmed.py: publication_about = literature (quote = title), person_authored = curated byline
+const pubEv = (pub, method, quote) => { const n = nodes.get(pub); return ev("supports", "publication", "PubMed", pub, n.url, quote, method, `${n.attrs.year}-01-01`); }; // year-only, as loaded into the date column
+const aboutEv = (pub) => ({ evidence: [pubEv(pub, "algorithm:pubmed_query", nodes.get(pub).attrs.title)] });
+const authoredEv = (pub) => ({ evidence: [pubEv(pub, "curated", null)] });
+edge("e-pa-p1-cln5", PUB.P1, D.CLN5, "publication_about", "literature", 0.5, aboutEv(PUB.P1));
+edge("e-pa-p1-cln6", PUB.P1, D.CLN6, "publication_about", "literature", 0.5, aboutEv(PUB.P1));
+edge("e-pa-p2-cln3", PUB.P2, D.CLN3, "publication_about", "literature", 0.5, aboutEv(PUB.P2));
+edge("e-pa-p2-mem", PUB.P2, M.MEM, "publication_about", "literature", 0.5, aboutEv(PUB.P2));
+edge("e-pau-a-p1", H.A, PUB.P1, "person_authored", "curated", 0.97, authoredEv(PUB.P1));
+edge("e-pau-b-p2", H.B, PUB.P2, "person_authored", "curated", 0.97, authoredEv(PUB.P2));
 edge("e-ps-a-cln5", H.A, D.CLN5, "person_studies", "literature", 0.85);
 edge("e-ps-a-cln3", H.A, D.CLN3, "person_studies", "literature", 0.75);
 edge("e-ps-b-cln3", H.B, D.CLN3, "person_studies", "literature", 0.85);

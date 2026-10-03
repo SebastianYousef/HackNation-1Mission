@@ -636,38 +636,6 @@
       "attrs": {}
     },
     {
-      "id": "E:4083605ab7c2db82",
-      "src": "PMID:MOCK0001",
-      "dst": "MONDO:MOCK0005",
-      "type": "publication_about",
-      "label": "is about",
-      "status": "curated",
-      "confidence": 0.95,
-      "score": null,
-      "support_count": 1,
-      "contradict_count": 0,
-      "sources": [
-        "PubMed"
-      ],
-      "attrs": {}
-    },
-    {
-      "id": "E:e9888db1bb32e9dd",
-      "src": "PMID:MOCK0001",
-      "dst": "MONDO:MOCK0006",
-      "type": "publication_about",
-      "label": "is about",
-      "status": "curated",
-      "confidence": 0.95,
-      "score": null,
-      "support_count": 1,
-      "contradict_count": 0,
-      "sources": [
-        "PubMed"
-      ],
-      "attrs": {}
-    },
-    {
       "id": "E:37068dc133c8a4cf",
       "src": "ASSET:mock-cln5-sheep-model",
       "dst": "MONDO:MOCK0005",
@@ -973,6 +941,38 @@
       "label": "is a form of",
       "status": "literature",
       "confidence": 0.55,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:4083605ab7c2db82",
+      "src": "PMID:MOCK0001",
+      "dst": "MONDO:MOCK0005",
+      "type": "publication_about",
+      "label": "is about",
+      "status": "literature",
+      "confidence": 0.5,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:e9888db1bb32e9dd",
+      "src": "PMID:MOCK0001",
+      "dst": "MONDO:MOCK0006",
+      "type": "publication_about",
+      "label": "is about",
+      "status": "literature",
+      "confidence": 0.5,
       "score": null,
       "support_count": 1,
       "contradict_count": 0,

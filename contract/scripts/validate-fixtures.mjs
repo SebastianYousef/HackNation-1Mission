@@ -127,11 +127,18 @@ for (const r of byDir("edges")) {
       evIds.add(v.id); evCount++;
     }
   if (e.confidence < 0 || e.confidence > 1) err(r, "confidence out of 0..1");
+  // honest statuses (root CLAUDE.md rule 2)
+  const rows = [...f.supporting, ...f.contradicting, ...f.context];
+  if (!rows.length) err(r, "edge has no evidence rows");
+  if (e.status === "curated" && rows.some((v) => v.method.startsWith("llm:"))) err(r, "curated edge has llm:* evidence (LLM output is never curated)");
+  if (e.status === "literature" && !f.supporting.some((v) => v.quote)) err(r, "literature edge has no supporting row with a quote");
 }
 
 // paths
 function checkPath(rel, p, where) {
   const n = p.node_ids.length;
+  if (n < 2) err(rel, `${where}: node_ids must have >= 2 entries`);
+  if (new Set(p.node_ids).size !== n) err(rel, `${where}: node_ids repeat a node (must be a simple path)`);
   if (p.edge_ids.length !== n - 1) err(rel, `${where}: edge_ids length must be node_ids length - 1`);
   if (p.node_ids[0] !== p.from || p.node_ids[n - 1] !== p.to) err(rel, `${where}: from/to do not match node_ids ends`);
   if (!isDeepStrictEqual(p.nodes.map((x) => x.id), p.node_ids)) err(rel, `${where}: nodes order != node_ids`);
@@ -223,13 +230,18 @@ if (!process.argv.includes("--no-types")) {
   const file = path.join(dir, "fixtures.check.ts");
   fs.writeFileSync(file, src);
   try {
+    // shell on Windows: npx is npx.cmd there, which execFileSync cannot spawn directly
     execFileSync("npx", ["-y", "-p", "typescript@5", "tsc", "--noEmit", "--strict", "--target", "es2022", "--module", "esnext",
-      "--moduleResolution", "bundler", "--skipLibCheck", "--allowImportingTsExtensions", file], { stdio: "pipe", encoding: "utf8" });
+      "--moduleResolution", "bundler", "--skipLibCheck", "--allowImportingTsExtensions", file],
+      { stdio: "pipe", encoding: "utf8", shell: process.platform === "win32" });
     typeResult = "ok";
     fs.rmSync(dir, { recursive: true, force: true });
   } catch (e) {
     const out = `${e.stdout ?? ""}${e.stderr ?? ""}`;
-    for (const line of out.split("\n").filter(Boolean)) {
+    const lines = out.split("\n").filter(Boolean);
+    // fail closed: npx missing (ENOENT), killed, etc. must not pass the gate silently
+    if (!lines.length) errors.push(`[tsc] type check did not run (${e.code ?? e.signal ?? "no output"}): ${e.message}. Install node/npx, or pass --no-types to skip it explicitly.`);
+    for (const line of lines) {
       const m = line.match(/fixtures\.check\.ts\((\d+),/);
       const rel = m ? [...lineOf].reverse().find(([l]) => l <= +m[1])?.[1] : null;
       errors.push(`[tsc]${rel ? ` ${rel}:` : ""} ${line}`);

@@ -37,9 +37,9 @@
       "source_name": "PubMed",
       "source_ref": "PMID:MOCK0001",
       "url": "https://example.org/pubmed/MOCK0001",
-      "quote": "[MOCK] Evidence that Dr. A. Example authored [MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease.",
-      "method": "llm:mock-extractor",
-      "published_at": "2024-05-01",
+      "quote": null,
+      "method": "curated",
+      "published_at": "2024-01-01",
       "retrieved_at": "2026-10-01T12:00:00Z"
     }
   ],

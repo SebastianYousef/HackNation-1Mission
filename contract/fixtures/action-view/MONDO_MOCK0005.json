@@ -557,8 +557,8 @@
           "dst": "MONDO:MOCK0005",
           "type": "publication_about",
           "label": "is about",
-          "status": "curated",
-          "confidence": 0.95,
+          "status": "literature",
+          "confidence": 0.5,
           "score": null,
           "support_count": 1,
           "contradict_count": 0,
@@ -584,8 +584,8 @@
           "attrs": {}
         }
       ],
-      "weakest_status": "curated",
-      "min_confidence": 0.95,
+      "weakest_status": "literature",
+      "min_confidence": 0.5,
       "attrs": {}
     },
     {
