@@ -96,9 +96,11 @@ A missing fixture means throwing `ApiError(404, "not_found")`, exactly like the 
 
 ## 4. Screens and routes
 
+`/` on the deployed origin is the team's static landing page, **not** this app. The app's home route is **`/app`**; every home, logo or "back to start" link goes to `/app`. In Lovable preview and local dev, redirect `/` → `/app`.
+
 | Route | Screen | Persona |
 |---|---|---|
-| `/` | **Home.** One big search box ("Search a disease, gene, symptom or mechanism"), three entry chips: *"My family just got a diagnosis"*, *"I lead a patient group"*, *"I research a mechanism"*, and the dataset/coverage line from `/meta`. | all |
+| `/app` | **Home.** One big search box ("Search a disease, gene, symptom or mechanism"), three entry chips: *"My family just got a diagnosis"*, *"I lead a patient group"*, *"I research a mechanism"*, and the dataset/coverage line from `/meta`. | all |
 | `/search?q=` | Results grouped by type, with synonym matches explained. | all |
 | `/d/:id` | **Disease action view** (from `ActionView`), detailed below. | Maria, Devon |
 | `/m/:id` | **Mechanism view.** "Every gene name this mechanism hides under", ranked diseases with groups/assets/unmet need, researchers, trials, interventions. | Priya, Dr. Osei |
