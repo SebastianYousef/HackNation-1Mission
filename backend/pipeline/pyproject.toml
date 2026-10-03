@@ -19,6 +19,7 @@ dependencies = [
 
 [project.optional-dependencies]
 graph = ["python-igraph>=0.11", "leidenalg>=0.10"]
+scrape = ["playwright>=1.47"]   # Bright Data Scraping Browser (connects over CDP; no local browser download)
 dev = ["pytest>=8"]
 
 [project.scripts]
