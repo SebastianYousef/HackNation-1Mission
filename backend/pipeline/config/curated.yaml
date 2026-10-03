@@ -144,10 +144,467 @@ organizations:
             source_name: Beyond Batten Disease Foundation
             url: https://beyondbatten.org/research/cln3-gene/
             retrieved_at: 2026-10-03
+  - id: ORG:gray-foundation
+    label: Charlotte & Gwenyth Gray Foundation to Cure Batten Disease
+    subtype: foundation
+    website: https://www.graygood.org
+    country: US
+    has_registry: null
+    serves:
+      - disease: MONDO:0011144               # CLN6 disease (late infantile, 6A)
+        evidence:
+          - quote: "The foundation currently focuses on Late Infantile Batten disease caused by mutation(s) in the CLN6 gene."
+            source_type: web
+            source_name: NORD (rarediseases.org)
+            url: https://rarediseases.org/organizations/charlotte-gwenyth-gray-foundation-to-cure-batten-disease/
+            retrieved_at: 2026-10-03
+  # Owners of the assets below (academic / clinical / industry; not patient groups)
+  - id: ORG:uke-hamburg
+    label: University Medical Center Hamburg-Eppendorf (UKE), NCL Specialty Clinic
+    subtype: hospital
+    website: https://www.uke.de
+    country: DE
+    has_registry: true
+    serves:
+      - disease: MONDO:0016295
+        evidence:
+          - quote: "For over 20 years, the Hamburg Specialty Center for NCL and related childhood dementias has been established and is treating around 170 patients annually with all types of NCL diseases."
+            source_type: publication
+            source_name: PubMed Central
+            source_ref: PMID:35211079
+            url: https://pmc.ncbi.nlm.nih.gov/articles/PMC8861081/
+            published_at: 2022-02-08
+            retrieved_at: 2026-10-03
+  - id: ORG:university-of-rochester
+    label: University of Rochester
+    subtype: academic
+    website: https://www.rochester.edu
+    country: US
+    has_registry: null
+  - id: ORG:neurogene
+    label: Neurogene Inc.
+    subtype: company
+    website: https://www.neurogene.com
+    country: US
+    has_registry: null
+  - id: ORG:nichd
+    label: Eunice Kennedy Shriver National Institute of Child Health and Human Development (NICHD)
+    subtype: funder
+    website: https://www.nichd.nih.gov
+    country: US
+    has_registry: null
 
-mechanisms: []
+mechanisms:
+  - id: ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes
+    label: ER-to-Golgi transfer of lysosomal enzymes (CLN6-CLN8 EGRESS complex)
+    subtype: biological_process
+    description: CLN8 and CLN6 form an ER complex that recruits newly made lysosomal enzymes and passes them to the Golgi; losing either leaves lysosomes short of enzymes.
+    genes:
+      - gene: CLN8
+        evidence:
+          - quote: "Here, we show that ER-to-Golgi transfer of lysosomal enzymes requires CLN8, an ER-associated membrane protein whose loss of function leads to the lysosomal storage disorder, neuronal ceroid lipofuscinosis 8 (a type of Batten disease)"
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:30397314
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=30397314
+            published_at: 2018-12
+            retrieved_at: 2026-10-03
+      - gene: CLN6
+        evidence:
+          - quote: "Experiments focused on protein interaction and trafficking identified CLN6 as an obligate component of a CLN6-CLN8 complex (herein referred to as EGRESS: ER-to-Golgi relaying of enzymes of the lysosomal system), which recruits lysosomal enzymes at the ER to promote their Golgi transfer."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:32597833
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=32597833
+            published_at: 2020-08-03
+            retrieved_at: 2026-10-03
+    diseases:
+      - disease: MONDO:0010830               # CLN8 disease
+        evidence:
+          - quote: "Our data establish an unanticipated example of an ER receptor serving the biogenesis of an organelle and indicate that impaired transport of lysosomal enzymes underlies Batten disease caused by mutations in CLN8."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:30397314
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=30397314
+            published_at: 2018-12
+            retrieved_at: 2026-10-03
+      - disease: MONDO:0011144               # CLN6 disease
+        evidence:
+          - quote: "These results identify CLN6 and the EGRESS complex as key players in lysosome biogenesis and shed light on the molecular etiology of Batten disease caused by defects in CLN6."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:32597833
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=32597833
+            published_at: 2020-08-03
+            retrieved_at: 2026-10-03
+  - id: ATLAS:mech-subunit-c-storage
+    label: lysosomal storage of mitochondrial ATP synthase subunit c
+    subtype: biological_process
+    description: In several NCLs the main stored protein is subunit c of mitochondrial ATP synthase, which fails to be degraded and builds up in lysosomes.
+    diseases:
+      - disease: MONDO:0009745               # CLN5 disease (variant late infantile NCL)
+        evidence:
+          - quote: "The present analyses indicate that subunit c of the mitochondrial ATP synthase is the major protein in vLINCL brain storage cytosomes."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:9100667
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=9100667
+            published_at: 1997-04
+            retrieved_at: 2026-10-03
+          - quote: "The CLN5Y392X iPSC-derived neural lineage cells showed accumulation of autofluorescent storage material and subunit C of the mitochondrial ATP synthase, both representing the hallmarks of many forms of NCLs, including CLN5 disease."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:28468312
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=28468312
+            published_at: 2017-05-01
+            retrieved_at: 2026-10-03
+      - disease: MONDO:0008769               # CLN2 disease (classical late infantile NCL)
+        evidence:
+          - quote: "Thus, despite clinical differences and the fact that various forms of NCL are caused by different genetic defects, variant and classical LINCL as well as juvenile NCL are all characterized by pronounced lysosomal accumulation of the same hydrophobic protein, subunit c of the mitochondrial ATP synthase."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:9100667
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=9100667
+            published_at: 1997-04
+            retrieved_at: 2026-10-03
+      - disease: MONDO:0019262               # juvenile NCL
+        evidence:
+          - quote: "Thus, despite clinical differences and the fact that various forms of NCL are caused by different genetic defects, variant and classical LINCL as well as juvenile NCL are all characterized by pronounced lysosomal accumulation of the same hydrophobic protein, subunit c of the mitochondrial ATP synthase."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:9100667
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=9100667
+            published_at: 1997-04
+            retrieved_at: 2026-10-03
+          - quote: "Direct sequencing of storage bodies isolated from tissues of children with juvenile and late infantile ceroid-lipofuscinosis established that they also contain large amounts of complete and normal subunit c."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:1535179
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=1535179
+            published_at: 1992-02-15
+            retrieved_at: 2026-10-03
+  - id: ATLAS:mech-lysosomal-bmp-synthesis
+    label: lysosomal bis(monoacylglycero)phosphate (BMP) synthesis
+    subtype: biological_process
+    description: BMP is a lysosomal lipid needed for lipid breakdown; CLN5 is the enzyme that makes it, and CLN3 loss lowers its synthesis.
+    genes:
+      - gene: CLN5
+        evidence:
+          - quote: "Here, we report that the Batten disease gene product CLN5 is the elusive BMP synthase (BMPS)."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:37708259
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=37708259
+            published_at: 2023-09-15
+            retrieved_at: 2026-10-03
+      - gene: CLN3
+        evidence:
+          - quote: "These data illustrate a new finding, a strong correlation between CLN3 protein expression and synthesis of bis(monoacylglycerol)phosphate."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:17482562
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=17482562
+            published_at: 2007-06-22
+            retrieved_at: 2026-10-03
+    diseases:
+      - disease: MONDO:0008767               # CLN3 disease
+        evidence:
+          - quote: "Metabolic labeling of JNCL-fibroblasts demonstrated a reduction in the synthesis of bis(monoacylglycerol)phosphate which was restored following complementation with wild-type-CLN3, substantiating our initial observation in brain."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:17482562
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=17482562
+            published_at: 2007-06-22
+            retrieved_at: 2026-10-03
 
-assets: []
+
+assets:
+  - id: ASSET:dem-child-db
+    label: "DEM-CHILD NCL Patient Database (international NCL registry)"
+    subtype: registry
+    access: on_request
+    url: https://clinicaltrials.gov/study/NCT04613089
+    description: "International natural-history registry for all NCL forms (NCT04613089), with longitudinal clinical ratings and a virtual biorepository; run from the Hamburg NCL Specialty Clinic."
+    owner:
+      id: ORG:uke-hamburg
+      evidence:
+        - quote: "The DEM-CHILD database, an NCL disease registry, was founded in Hamburg as part of the EU-funded FP7 project DEM-CHILD"
+          source_type: publication
+          source_name: PubMed Central
+          source_ref: PMID:35211079
+          url: https://pmc.ncbi.nlm.nih.gov/articles/PMC8861081/
+          published_at: 2022-02-08
+          retrieved_at: 2026-10-03
+    covers:
+      - disease: MONDO:0016295
+        evidence:
+          - quote: "Natural History and Long Term Clinical Assessments of All Forms of Neuronal Ceroid Lipofuscinoses - Capturing Key Symptoms and Disease Progression as Part of the Independent, International NCL DEM-CHILD Patient Database"
+            source_type: trial_registry
+            source_name: ClinicalTrials.gov
+            source_ref: NCT04613089
+            url: https://clinicaltrials.gov/api/v2/studies/NCT04613089
+            retrieved_at: 2026-10-03
+      - disease: MONDO:0008769
+        evidence:
+          - quote: "We did an observational cohort study using data from two independent, international datasets of patients with untreated genotypically confirmed CLN2 disease: the DEM-CHILD dataset (n=74) and the Weill Cornell Medical College (WCMC) dataset (n=66)."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:30119717
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=30119717
+            published_at: 2018-08
+            retrieved_at: 2026-10-03
+      - disease: MONDO:0009745
+        evidence:
+          - quote: "To characterize the phenotypic profile of a cohort of children affected with CLN5, a rare form of neuronal ceroid-lipofuscinosis (NCL), and to trace the features of the natural history of the disease. METHOD: Records of 15 children (nine males, six females) were obtained from the data sets of the DEM-CHILD International NCL Registry."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:28542837
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=28542837
+            published_at: 2017-08
+            retrieved_at: 2026-10-03
+  - id: ASSET:rochester-batten-natural-history
+    label: "University of Rochester Batten disease natural history study (UBDRS)"
+    subtype: natural_history_study
+    access: on_request
+    url: https://clinicaltrials.gov/study/NCT01873924
+    description: "Long-running natural history study of Batten disease that also refines and validates the Unified Batten Disease Rating Scale (NCT01873924)."
+    owner:
+      id: ORG:university-of-rochester
+      evidence:
+        - quote: "\"leadSponsor\":{\"name\":\"University of Rochester\""
+          source_type: trial_registry
+          source_name: ClinicalTrials.gov
+          source_ref: NCT01873924
+          url: https://clinicaltrials.gov/api/v2/studies/NCT01873924
+          retrieved_at: 2026-10-03
+    covers:
+      - disease: MONDO:0016295
+        evidence:
+          - quote: "This study aims to assess the natural history of Batten disease (Neuronal Ceroid Lipofuscinosis) by obtaining information about the motor, behavioral, and functional capabilities of individuals with Batten disease."
+            source_type: trial_registry
+            source_name: ClinicalTrials.gov
+            source_ref: NCT01873924
+            url: https://clinicaltrials.gov/api/v2/studies/NCT01873924
+            retrieved_at: 2026-10-03
+  - id: ASSET:neurogene-cln5-natural-history
+    label: "Neurogene CLN5 natural history and outcome measure study"
+    subtype: natural_history_study
+    access: on_request
+    url: https://clinicaltrials.gov/study/NCT03822650
+    description: "Completed natural history and outcome-measure discovery study in CLN5 disease (NCT03822650)."
+    owner:
+      id: ORG:neurogene
+      evidence:
+        - quote: "\"leadSponsor\":{\"name\":\"Neurogene Inc.\""
+          source_type: trial_registry
+          source_name: ClinicalTrials.gov
+          source_ref: NCT03822650
+          url: https://clinicaltrials.gov/api/v2/studies/NCT03822650
+          retrieved_at: 2026-10-03
+    covers:
+      - disease: MONDO:0009745
+        evidence:
+          - quote: "The purpose of this study is to investigate the clinical characteristics and natural clinical progression of symptoms in individuals with CLN5."
+            source_type: trial_registry
+            source_name: ClinicalTrials.gov
+            source_ref: NCT03822650
+            url: https://clinicaltrials.gov/api/v2/studies/NCT03822650
+            retrieved_at: 2026-10-03
+  - id: ASSET:nichd-cln3-natural-history
+    label: "NIH (NICHD) CLN3 natural history and biomarker study"
+    subtype: natural_history_study
+    access: on_request
+    url: https://clinicaltrials.gov/study/NCT03307304
+    description: "NIH Clinical Center study of people with CLN3 disease looking for clinical and biochemical outcome measures (NCT03307304)."
+    owner:
+      id: ORG:nichd
+      evidence:
+        - quote: "\"leadSponsor\":{\"name\":\"Eunice Kennedy Shriver National Institute of Child Health and Human Development (NICHD)\""
+          source_type: trial_registry
+          source_name: ClinicalTrials.gov
+          source_ref: NCT03307304
+          url: https://clinicaltrials.gov/api/v2/studies/NCT03307304
+          retrieved_at: 2026-10-03
+    covers:
+      - disease: MONDO:0008767
+        evidence:
+          - quote: "To identify clinical or biochemical markers that can be used as therapeutic outcome measures for CLN3."
+            source_type: trial_registry
+            source_name: ClinicalTrials.gov
+            source_ref: NCT03307304
+            url: https://clinicaltrials.gov/api/v2/studies/NCT03307304
+            retrieved_at: 2026-10-03
+  - id: ASSET:cln6-natural-history-study
+    label: "CLN6 disease natural history study (NCT03285425)"
+    subtype: natural_history_study
+    access: on_request
+    url: https://clinicaltrials.gov/study/NCT03285425
+    description: "Natural history study of CLN6 disease led by Dr Emily de los Reyes, run to judge the efficacy of emerging gene therapies (NCT03285425)."
+    covers:
+      - disease: MONDO:0011144
+        evidence:
+          - quote: "It is important to understand disease progression in CLN6 disease to be able to judge therapeutic efficacy as emerging therapies like gene therapy become available."
+            source_type: trial_registry
+            source_name: ClinicalTrials.gov
+            source_ref: NCT03285425
+            url: https://clinicaltrials.gov/api/v2/studies/NCT03285425
+            retrieved_at: 2026-10-03
+  - id: ASSET:cln5-borderdale-sheep
+    label: "CLN5 Borderdale sheep model"
+    subtype: animal_model
+    access: on_request
+    url: https://pubmed.ncbi.nlm.nih.gov/17988881/
+    description: "New Zealand Borderdale sheep with a CLN5 splice-site mutation; a large-animal model used for CLN5 gene-therapy trials."
+    covers:
+      - disease: MONDO:0009745
+        evidence:
+          - quote: "This flock is being expanded as a large animal model for mechanistic studies and trial therapies."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:17988881
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=17988881
+            published_at: 2008-02
+            retrieved_at: 2026-10-03
+    targets:
+      - gene: CLN5
+        evidence:
+          - quote: "A new large animal model of CLN5 neuronal ceroid lipofuscinosis in Borderdale sheep is caused by a nucleotide substitution at a consensus splice site (c.571+1G>A) leading to excision of exon 3."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:17988881
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=17988881
+            published_at: 2008-02
+            retrieved_at: 2026-10-03
+  - id: ASSET:cln5-border-collie
+    label: "CLN5 Border Collie dog model"
+    subtype: animal_model
+    access: on_request
+    url: https://pubmed.ncbi.nlm.nih.gov/16033706/
+    description: "Border Collies with a naturally occurring CLN5 nonsense mutation (Q206X), proposed as a model of human CLN5 disease."
+    covers:
+      - disease: MONDO:0009745
+        evidence:
+          - quote: "This truncation mutation should result in a protein product of a size similar to that of some mutations identified in human CLN5 and therefore the Border collie may make a good model for human NCL."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:16033706
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=16033706
+            published_at: 2005-09
+            retrieved_at: 2026-10-03
+    targets:
+      - gene: CLN5
+        evidence:
+          - quote: "Sequencing of CLN5 revealed a nonsense mutation (Q206X) within exon 4 that correlated with NCL in Border collies."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:16033706
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=16033706
+            published_at: 2005-09
+            retrieved_at: 2026-10-03
+  - id: ASSET:cln5-knockout-mouse
+    label: "Cln5 knockout mouse (Cln5-/-)"
+    subtype: animal_model
+    access: on_request
+    url: https://pubmed.ncbi.nlm.nih.gov/15459177/
+    description: "Mouse model of CLN5 disease made by deleting exon 3 of Cln5; shows vision loss and NCL-type storage."
+    covers:
+      - disease: MONDO:0009745
+        evidence:
+          - quote: "Here, we have developed a novel mouse model for the human vLINCL (CLN5) by targeted deletion of exon 3 of the mouse Cln5 gene."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:15459177
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=15459177
+            published_at: 2004-12-01
+            retrieved_at: 2026-10-03
+    targets:
+      - gene: CLN5
+        evidence:
+          - quote: "Here, we have developed a novel mouse model for the human vLINCL (CLN5) by targeted deletion of exon 3 of the mouse Cln5 gene."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:15459177
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=15459177
+            published_at: 2004-12-01
+            retrieved_at: 2026-10-03
+  - id: ASSET:cln5-patient-ipsc
+    label: "CLN5 patient-derived iPSC line (CLN5Y392X)"
+    subtype: cell_model
+    access: on_request
+    url: https://pubmed.ncbi.nlm.nih.gov/28468312/
+    description: "Induced pluripotent stem cells from a CLN5 patient with the common p.Tyr392X mutation, differentiated into neural cells that show NCL storage."
+    covers:
+      - disease: MONDO:0009745
+        evidence:
+          - quote: "To model NCL in human cells, we generated induced pluripotent stem cells (iPSCs) by reprogramming skin fibroblasts from a patient with CLN5 (ceroid lipofuscinosis, neuronal, 5) disease, the late infantile variant form of NCL."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:28468312
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=28468312
+            published_at: 2017-05-01
+            retrieved_at: 2026-10-03
+    targets:
+      - gene: CLN5
+        evidence:
+          - quote: "These CLN5 patient-derived iPSCs (CLN5Y392X iPSCs) harbouring the most common CLN5 mutation, c.1175_1176delAT (p.Tyr392X), were further differentiated into neural lineage cells, the most affected cell type in NCLs."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:28468312
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=28468312
+            published_at: 2017-05-01
+            retrieved_at: 2026-10-03
+  - id: ASSET:cln3-dex78-mouse
+    label: "Cln3 Δex7/8 knock-in mouse"
+    subtype: animal_model
+    access: on_request
+    url: https://pubmed.ncbi.nlm.nih.gov/12374761/
+    description: "Knock-in mouse carrying the common ~1 kb CLN3 deletion found in most juvenile Batten patients."
+    covers:
+      - disease: MONDO:0008767
+        evidence:
+          - quote: "To investigate the common JNCL mutation, we have introduced an identical genomic DNA deletion into the murine CLN3 homologue (Cln3) to create Cln3( Deltaex7/8) knock-in mice."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:12374761
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=12374761
+            published_at: 2002-10-15
+            retrieved_at: 2026-10-03
+    targets:
+      - gene: CLN3
+        evidence:
+          - quote: "To investigate the common JNCL mutation, we have introduced an identical genomic DNA deletion into the murine CLN3 homologue (Cln3) to create Cln3( Deltaex7/8) knock-in mice."
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:12374761
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=12374761
+            published_at: 2002-10-15
+            retrieved_at: 2026-10-03
+  - id: ASSET:cln6-merino-sheep
+    label: "CLN6 Merino sheep model"
+    subtype: animal_model
+    access: on_request
+    url: https://pubmed.ncbi.nlm.nih.gov/17046213/
+    description: "Australian Merino sheep with a CLN6 missense mutation (c.184C>T), a large-animal model of CLN6 disease."
+    covers:
+      - disease: MONDO:0011144
+        evidence:
+          - quote: "A missense mutation (c.184C>T) in ovine CLN6 causes neuronal ceroid lipofuscinosis in Merino sheep"
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:17046213
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=17046213
+            published_at: 2006-10
+            retrieved_at: 2026-10-03
+    targets:
+      - gene: CLN6
+        evidence:
+          - quote: "These investigations unveiled the mutation responsible for the disease in Merino sheep (c.184C>T; p.Arg62Cys)"
+            source_type: publication
+            source_name: PubMed
+            source_ref: PMID:17046213
+            url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=17046213
+            published_at: 2006-10
+            retrieved_at: 2026-10-03
 
 interventions:
   - id: ATLAS:int-cerliponase-alfa
