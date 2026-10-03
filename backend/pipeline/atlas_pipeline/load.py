@@ -1,5 +1,5 @@
 """Validate the merged graph + analytics + views and load them into Postgres in ONE transaction
-(truncate + COPY). Invariants are checked before anything is written; a violation aborts the load.
+(delete + COPY). Invariants are checked before anything is written; a violation aborts the load.
 Requires the migrations in backend/db/migrations to be applied."""
 from __future__ import annotations
 
@@ -14,8 +14,10 @@ from .store import read_json, read_jsonl
 
 log = logging.getLogger(__name__)
 
-TABLES = ["nodes", "node_names", "edges", "evidence", "clusters", "cluster_members", "paths", "views",
-          "explanations", "dataset_meta"]  # submissions are never truncated
+# Replaced on every load, children first so no FK action fires. submissions is never touched (its
+# node_id is a plain CURIE since migration 20261003000003, so it survives reloads).
+TABLES = ["evidence", "node_names", "cluster_members", "paths", "edges", "clusters", "nodes", "views",
+          "explanations", "dataset_meta"]
 
 ACTION_KEYS = {"disease", "headline", "plain_summary", "treatment_status", "exact_groups", "related_communities",
                "connections", "assets", "trials", "researchers", "shared_people", "next_steps", "coverage"}
@@ -117,7 +119,12 @@ def run(database_url: str | None, dry_run: bool = False) -> None:
         raise SystemExit("DATABASE_URL is not set")
 
     with psycopg.connect(database_url, prepare_threshold=None) as conn, conn.cursor() as cur:
-        cur.execute("truncate " + ", ".join(TABLES) + " cascade")
+        # DELETE, not TRUNCATE: TRUNCATE takes ACCESS EXCLUSIVE until commit and blocks every API read
+        # (even dataset_version()); DELETE lets readers keep the old snapshot until the single commit.
+        # The advisory lock serialises concurrent loads.
+        cur.execute("select pg_advisory_xact_lock(hashtext('atlas_pipeline.load'))")
+        for t in TABLES:
+            cur.execute(f"delete from {t}")
 
         def copy(table: str, cols: list[str], rows) -> None:
             with cur.copy(f"copy {table} ({', '.join(cols)}) from stdin") as cp:
