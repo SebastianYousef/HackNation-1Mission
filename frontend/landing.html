@@ -843,7 +843,7 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
       <div style="display:grid;gap:24px">
         <form class="plan-form" id="planForm" autocomplete="off">
           <label class="f" for="planDisease">Your disease
-            <input type="text" id="planDisease" list="planDiseaseList" placeholder="e.g. Leigh syndrome" required>
+            <input type="text" id="planDisease" list="planDiseaseList" placeholder="e.g. CLN5 disease or Batten disease" required>
             <datalist id="planDiseaseList"></datalist>
           </label>
           <fieldset class="stage" style="border:0;padding:0;margin:0">
@@ -2068,10 +2068,34 @@ const PLAN_KEY='om-plans';
 const loadPlans=()=>{try{return JSON.parse(localStorage.getItem(PLAN_KEY)||'[]')}catch(e){return []}};
 const savePlans=ps=>{try{localStorage.setItem(PLAN_KEY,JSON.stringify(ps))}catch(e){}};
 let plans=loadPlans(), curPlan=null;
-$('#planDiseaseList').innerHTML=Object.values(DATA).map(d=>`<option value="${esc(d.name)}">`).join('');
+$('#planDiseaseList').innerHTML=['CLN5 disease','CLN3 disease','CLN2 disease','CLN6 disease','Batten disease'].concat(Object.values(DATA).map(d=>d.name+' (sample)')).map(n=>`<option value="${esc(n)}">`).join('');
 const ctg=q=>'https://clinicaltrials.gov/search?cond='+encodeURIComponent(q);
 function matchDs(q){const r=searchIdx(q).find(it=>it.t==='disease'&&it.id===DATA[it.ds].root)||searchIdx(q)[0]; return r?DATA[r.ds]:null}
+const LIVE_NEXT={viable:'E',needs_review:'H'};
+function liveSteps(av,stage,q){
+  const L=av.disease.label, firstE=x=>(x&&x.edge_ids&&x.edge_ids[0])||null;
+  const umb=(av.related_communities||[]).filter(r=>r.groups&&r.groups.length).slice(0,2);
+  const groups=(av.exact_groups||[]).map(g=>({edge:g.edge_id,label:g.node.label}));
+  const umbG=[]; umb.forEach(r=>r.groups.forEach(g=>{ if(umbG.length<4&&!umbG.some(x=>x.label===g.node.label)) umbG.push({edge:g.edge_id,label:g.node.label}); }));
+  const regs=(av.assets||[]).filter(a=>a.asset_kind==='registry'||a.asset_kind==='natural_history_study'||a.asset_kind==='biobank').slice(0,4).map(a=>({edge:firstE(a),label:a.node.label}));
+  const trials=(av.trials||[]).filter(t=>t.overall_status!=='TERMINATED'&&t.overall_status!=='WITHDRAWN').slice(0,3);
+  const labs=(av.researchers||[]).slice(0,4).map(r=>({edge:firstE(r),label:r.node.label}));
+  const tx=av.treatment_status||{};
+  const care={id:'care',kind:'Care',title:'Talk to a specialist about the genetic cause',body:'Knowing the exact gene and variant decides which research, studies and communities fit you. A specialist center can confirm it and explain what it means.',status:'E',ents:[],links:[['Find expert centres (Orphanet)','https://www.orpha.net']]};
+  const treat={id:'treat',kind:'Care',title:'Understand where treatment stands',body:(tx.note||'We found no treatment information for this disease.')+' Discuss any study or therapy with your care team.',status:tx.edge_ids&&tx.edge_ids.length?'E':'U',ents:(tx.edge_ids||[]).slice(0,1).map(e=>({edge:e,label:'See the source'})),links:[]};
+  const org=groups.length
+    ?{id:'org',kind:'Community',title:'Connect with a patient organization',body:'Other families have walked this path. These groups list '+L+' on their own sites.',status:'E',ents:groups.slice(0,4),links:[]}
+    :{id:'org',kind:'Community',title:'Connect with a group for the wider family',body:'We found no group for exactly '+L+'. '+(umbG.length?'These groups serve the wider disease family and its families.':'Directories list groups for thousands of rare diseases.'),status:umbG.length?'E':'U',ents:umbG,links:umbG.length?[]:[['NORD','https://rarediseases.org'],['EURORDIS','https://www.eurordis.org']]};
+  const reg={id:'reg',kind:'Research',title:'Join a registry or natural history study',body:'Being counted is often the first thing a future trial needs, and these studies show how the disease changes over time.',status:regs.length?'E':'U',ents:regs,links:regs.length?[]:[['Registries (Orphanet)','https://www.orpha.net']]};
+  const trial={id:'trial',kind:'Research',title:'Look at clinical studies',body:trials.length?'These studies are listed for '+L+' or a closely related form. Check which are recruiting and discuss any study with your doctor before joining.':'We found no clinical study listed for this disease yet.',status:trials.length?'E':'U',ents:[],links:trials.map(t=>[t.nct_id+' ('+String(t.overall_status||'status unknown').toLowerCase().replace(/_/g,' ')+')',t.url||('https://clinicaltrials.gov/study/'+t.nct_id)]).concat([['Search ClinicalTrials.gov',ctg(L)]])};
+  const lab={id:'lab',kind:'Collaboration',title:'Reach out to a research group',body:'These researchers publish on '+L+' or its mechanism. A patient group can offer them participants, samples or questions that matter to families.',status:labs.length?'E':'U',ents:labs,links:[]};
+  const steps=(av.next_steps||[]).slice(0,2).map((n,i)=>({id:'next'+i,kind:'Next step',title:n.title,body:(n.rationale||'')+((n.validation_needed&&n.validation_needed.length)?' To check first: '+n.validation_needed.slice(0,2).join('; ')+'.':''),status:LIVE_NEXT[n.status]||'U',ents:(n.edge_ids||[]).slice(0,2).map(e=>({edge:e,label:'Why this step'})),links:[]}));
+  const gap=(av.coverage&&av.coverage.has_supported_route===false&&av.coverage.gaps&&av.coverage.gaps[0])?[{id:'gap',kind:'Unknown',title:av.coverage.gaps[0].question,body:(av.coverage.gaps[0].why_it_matters||'')+' '+(av.coverage.gaps[0].what_would_resolve||''),status:'U',ents:[],links:[]}]:[];
+  const order={new:[care,treat,org,reg,trial],living:[reg,trial,treat,org,care],leader:[...steps,org,lab,reg,trial]}[stage]||[care,treat,org,reg,trial];
+  return order.concat(stage==='leader'?[]:steps.slice(0,1)).concat(gap);
+}
 function buildSteps(plan){
+  if(plan.snap) return plan.snap;
   const ds=plan.ds?DATA[plan.ds]:null, S=[];
   const ent=(n,e)=>({k:ds.key,i:e.i,label:n.label});
   if(ds){
@@ -2105,25 +2129,40 @@ function renderSaved(){
 const STAGE_LABEL={new:'Just diagnosed',living:'Living with it for a while',leader:'Leading a patient group'};
 function renderPlan(p){
   curPlan=p; const steps=buildSteps(p), done=p.done||{}, n=steps.length, d=steps.filter(s=>done[s.id]).length;
-  $('#planOut').innerHTML=`<div class="plan-head"><div><div class="eyebrow">${p.sample?'Example plan: ':''}${esc(STAGE_LABEL[p.stage])}${p.ds?'':' (not in the Atlas yet)'}</div><div class="pd" style="margin-top:8px">${esc(p.ds?DATA[p.ds].name:p.disease)}</div></div>
+  $('#planOut').innerHTML=`<div class="plan-head"><div><div class="eyebrow">${p.snap?'From the live Atlas: ':(p.ds?'Sample data: ':'')}${esc(STAGE_LABEL[p.stage])}${(p.ds||p.snap)?'':' (not in the Atlas yet)'}</div><div class="pd" style="margin-top:8px">${esc(p.ds?DATA[p.ds].name:p.disease)}</div></div>
     <div class="pbar"><span class="track"><i style="width:${n?d/n*100:0}%"></i></span>${d} of ${n} started</div></div>
     <ol class="psteps">${steps.map((s,i)=>`<li class="pstep ${done[s.id]?'done':''}"><input type="checkbox" id="ps-${s.id}" data-step="${s.id}" ${done[s.id]?'checked':''}><div class="pt"><label for="ps-${s.id}">${esc(s.title)}</label>${stPill(s.status)}<span class="kind">${esc(s.kind)}</span></div>
       <p class="pb">${esc(s.body)}</p>
-      ${(s.ents.length||s.links.length||s.journey)?`<div class="pw">${s.ents.map(e=>`<button type="button" data-k="${e.k}" data-i="${e.i}">${esc(e.label.replace(' (sample)',''))}${/\(sample\)/.test(e.label)?' (sample)':''}</button>`).join('')}${s.links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('')}${s.journey?'<a href="#journey">See it as a connected journey →</a>':''}</div>`:''}</li>`).join('')}</ol>
-    <p class="plan-note">These are practical first steps built from connected information, not medical advice. Talk with your doctor before changing care or joining a study. ${p.sample?'This example uses sample data. Create your own plan on the left; it is saved only in this browser.':'Your plan is saved only in this browser.'}</p>`;
+      ${(s.ents.length||s.links.length||s.journey)?`<div class="pw">${s.ents.map(e=>e.edge!==undefined?(e.edge?`<button type="button" data-live-edge="${esc(e.edge)}">${esc(e.label)}</button>`:`<span class="ent">${esc(e.label)}</span>`):`<button type="button" data-k="${e.k}" data-i="${e.i}">${esc(e.label.replace(' (sample)',''))}${/\(sample\)/.test(e.label)?' (sample)':''}</button>`).join('')}${s.links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('')}${s.journey?'<a href="#journey">See it as a connected journey →</a>':''}</div>`:''}</li>`).join('')}</ol>
+    <p class="plan-note">These are practical first steps built from connected information, not medical advice. Talk with your doctor before changing care or joining a study. ${p.snap?'Built from the live Atlas when you created it, with a source behind every linked item. ':''}Your plan is saved only in this browser.</p>`;
 }
 $('#planOut').addEventListener('change',e=>{const c=e.target.closest('[data-step]'); if(!c||!curPlan) return; curPlan.done=curPlan.done||{}; curPlan.done[c.dataset.step]=c.checked;
-  if(!curPlan.sample){savePlans(plans);renderSaved()} renderPlan(curPlan); const f=$('#ps-'+c.dataset.step); if(f) f.focus();});
-$('#planOut').addEventListener('click',e=>{const b=e.target.closest('button[data-k]'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+  savePlans(plans);renderSaved(); renderPlan(curPlan); const f=$('#ps-'+c.dataset.step); if(f) f.focus();});
+$('#planOut').addEventListener('click',e=>{const le=e.target.closest('button[data-live-edge]'); if(le){openLiveDrawer(le.dataset.liveEdge);return} const b=e.target.closest('button[data-k]'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
 $('#savedPlans').addEventListener('click',e=>{const o=e.target.closest('[data-open]'),x=e.target.closest('[data-del]');
   if(o){const p=plans.find(q=>q.id===o.dataset.open); if(p) renderPlan(p)}
-  if(x){plans=plans.filter(q=>q.id!==x.dataset.del); savePlans(plans); renderSaved(); if(curPlan&&curPlan.id===x.dataset.del) renderPlan(plans[0]||SAMPLE_PLAN)}});
-$('#planForm').addEventListener('submit',e=>{e.preventDefault(); const q=$('#planDisease').value.trim(); if(!q) return;
-  const ds=matchDs(q), stage=($('input[name=stage]:checked')||{}).value||'new';
-  const p={id:'p'+Date.now().toString(36),disease:ds?ds.name:q,ds:ds?ds.key:null,stage,done:{}};
+  if(x){plans=plans.filter(q=>q.id!==x.dataset.del); savePlans(plans); renderSaved(); if(curPlan&&curPlan.id===x.dataset.del){ if(plans[0]) renderPlan(plans[0]); else planEmpty(); }}});
+$('#planForm').addEventListener('submit',async e=>{e.preventDefault(); const raw=$('#planDisease').value.trim(); if(!raw) return;
+  const q=raw.replace(/\s*\(sample\)$/i,''), stage=($('input[name=stage]:checked')||{}).value||'new', btn=$('#planForm button[type=submit]');
+  const sample=/\(sample\)$/i.test(raw)||/^(leigh|dravet)/i.test(q)?matchDs(q):null;
+  let p=null;
+  if(sample){ p={id:'p'+Date.now().toString(36),disease:sample.name,ds:sample.key,stage,done:{}}; }
+  else {
+    btn.disabled=true; $('#planOut').innerHTML='<p class="plan-note">Looking up '+esc(q)+' in the live Atlas.</p>';
+    try{
+      const hits=await apiGet('/search?q='+enc(q)+'&limit=8',{cache:false});
+      // only diseases in the focus slice have an action view (404 otherwise): try the best disease hits in order
+      for(const d of (hits||[]).filter(h=>h.type==='disease'&&h.score>=0.5).slice(0,4)){
+        let av=null; try{ av=await apiGet(avPath(d.id)); }catch(er){ if(er.status===404) continue; throw er; }
+        p={id:'p'+Date.now().toString(36),disease:av.disease.label.charAt(0).toUpperCase()+av.disease.label.slice(1),live:d.id,stage,done:{},snap:liveSteps(av,stage,q)}; break;
+      }
+    }catch(err){ $('#planOut').innerHTML='<p class="plan-note">The live Atlas is not reachable right now. Please try again in a moment.</p>'; btn.disabled=false; return; }
+    btn.disabled=false;
+    if(!p) p={id:'p'+Date.now().toString(36),disease:q,ds:null,stage,done:{}};
+  }
   plans.unshift(p); savePlans(plans); renderSaved(); renderPlan(p); $('#planOut').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});});
-const SAMPLE_PLAN={id:'sample',disease:'Leigh syndrome',ds:'leigh',stage:'new',done:{care:true},sample:true};
-renderSaved(); renderPlan(plans[0]||SAMPLE_PLAN);
+function planEmpty(){curPlan=null; $('#planOut').innerHTML='<div class="plan-head"><div><div class="eyebrow">Your plan</div><div class="pd" style="margin-top:8px">Your first steps will appear here</div></div></div><p class="plan-note">Add your disease and where you are today. One Mission looks it up in the live Atlas and turns what is connected to it into a short list of things you can start on, each with its source.</p>';}
+renderSaved(); if(plans[0]) renderPlan(plans[0]); else planEmpty();
 
 /* ---------- SOURCES ---------- */
 const SOURCES=[
