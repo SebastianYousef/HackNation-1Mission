@@ -110,7 +110,7 @@ language sql stable as $$
     'node', _node_full(n),
     'degree', coalesce((
       select jsonb_object_agg(t, c) from (
-        select o.type as t, count(*) as c
+        select o.type as t, count(distinct o.id) as c
         from edges e join nodes o on o.id = case when e.src = n.id then e.dst else e.src end
         where e.src = n.id or e.dst = n.id group by o.type) d), '{}'::jsonb),
     'clusters', coalesce((
