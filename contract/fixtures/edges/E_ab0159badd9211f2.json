@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:ab0159badd9211f2",
+    "src": "HGNC:MOCK0003",
+    "dst": "ATLAS:mech-membrane-protein-dysfunction",
+    "type": "gene_in_mechanism",
+    "label": "acts in",
+    "status": "curated",
+    "confidence": 0.92,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "GO"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0003",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "CLN3",
+    "summary": "Makes a protein that sits in the lysosome's outer membrane."
+  },
+  "target": {
+    "id": "ATLAS:mech-membrane-protein-dysfunction",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal/ER membrane protein dysfunction",
+    "summary": "A broken protein that is built into a membrane (of the lysosome or the endoplasmic reticulum). It cannot simply be replaced by an infusion."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0030",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "GO",
+      "source_ref": null,
+      "url": "https://example.org/db/go",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

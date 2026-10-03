@@ -1,0 +1,40 @@
+# Slice definition for the Rare Disease Atlas demo build.
+# The slice = all MONDO descendants of `roots`, plus diseases reached by gene-hop
+# expansion from `seed_genes` and the genes of focus diseases.
+version: "2026-10-04a"
+name: "Lysosomal storage diseases (focus: neuronal ceroid lipofuscinoses / Batten disease)"
+
+roots:
+  - MONDO:0002561   # lysosomal storage disease
+focus_roots:
+  - MONDO:0016295   # neuronal ceroid lipofuscinosis  (action views + paths precomputed here)
+extra_diseases: []  # any other MONDO ids to force into the slice
+
+# CLN1..CLN14 genes + close relatives
+seed_genes: [PPT1, TPP1, CLN3, CLN5, CLN6, MFSD8, CLN8, CTSD, DNAJC5, CTSF, ATP13A2, GRN, KCTD7]
+
+expansion:
+  gene_hop: true            # add other diseases associated with seed genes / focus-disease genes
+  max_extra_diseases: 200
+
+literature:                 # API-backed sources are queried for focus diseases only (keeps runs < 10 min)
+  scope: focus              # focus | slice
+  pubmed_per_disease: 20
+  trials_per_disease: 50
+  grants_per_disease: 25
+  grant_fiscal_years: [2021, 2022, 2023, 2024, 2025, 2026]
+
+analytics:
+  top_k: 10                 # disease_similar_to edges kept per disease
+  min_score: 0.15
+  weights: {phenotype: 0.6, mechanism: 0.25, gene: 0.15}
+  min_phenotypes: 3         # diseases with fewer annotations are not scored
+  max_pathway_genes: 200    # pathways bigger than this are too generic for disease_involves_mechanism
+  caution: {min_phenotype: 0.35, max_mechanism: 0.1}
+  hub_degree: 25            # phenotype nodes above this degree get a path penalty
+  paths_per_kind: 5
+  max_path_len: 4
+
+views:
+  action: focus             # action views for focus diseases
+  mechanism_min_diseases: 2 # mechanism views for mechanisms touching >= N slice diseases (focus-linked)

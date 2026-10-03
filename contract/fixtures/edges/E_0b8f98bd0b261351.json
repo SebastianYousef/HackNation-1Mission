@@ -1,0 +1,77 @@
+{
+  "edge": {
+    "id": "E:0b8f98bd0b261351",
+    "src": "MONDO:MOCK0005",
+    "dst": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+    "type": "disease_involves_mechanism",
+    "label": "involves",
+    "status": "hypothesis",
+    "confidence": 0.35,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 1,
+    "sources": [
+      "Atlas analytics",
+      "PubMed"
+    ],
+    "attrs": {
+      "note": "Atlas hypothesis: CLN5 is soluble like TPP1, so cross-correction might apply. Untested."
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "target": {
+    "id": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+    "type": "mechanism",
+    "subtype": "variant_effect",
+    "label": "Soluble lysosomal enzyme deficiency",
+    "summary": "A missing enzyme that normally floats free inside the lysosome. Because it is soluble, it can sometimes be replaced with a manufactured version (enzyme replacement)."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0017",
+      "stance": "supports",
+      "source_type": "computed",
+      "source_name": "Atlas analytics",
+      "source_ref": null,
+      "url": null,
+      "quote": null,
+      "method": "algorithm:mock-hypothesis-generator",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [
+    {
+      "id": "ev-mock-0019",
+      "stance": "contradicts",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0004",
+      "url": "https://example.org/pubmed/MOCK0004",
+      "quote": "[MOCK] Unlike TPP1, no robust enzymatic activity has been established for CLN5, so its replacement cannot be assumed to restore function.",
+      "method": "llm:mock-extractor",
+      "published_at": "2025-08-20",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "context": [
+    {
+      "id": "ev-mock-0018",
+      "stance": "context",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] The CLN5 protein is soluble and found in the lysosomal lumen.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ]
+}

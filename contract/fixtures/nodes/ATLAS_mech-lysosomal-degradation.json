@@ -1,0 +1,28 @@
+{
+  "node": {
+    "id": "ATLAS:mech-lysosomal-degradation",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+    "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells.",
+    "description": "[MOCK] Lysosomal catabolism of proteins and lipids; impairment leads to accumulation of autofluorescent storage material.",
+    "synonyms": [
+      "Lysosomal storage",
+      "Lysosomal protein breakdown",
+      "Autophagy-lysosome pathway"
+    ],
+    "xrefs": {},
+    "attrs": {},
+    "url": "https://example.org/atlas/mechanism/ATLAS_mech-lysosomal-degradation"
+  },
+  "degree": {
+    "disease": 5,
+    "gene": 6,
+    "intervention": 1,
+    "person": 1,
+    "grant": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": true
+}

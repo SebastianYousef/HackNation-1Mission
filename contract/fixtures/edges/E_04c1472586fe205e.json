@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:04c1472586fe205e",
+    "src": "PERSON:mock-researcher-a",
+    "dst": "MONDO:MOCK0003",
+    "type": "person_studies",
+    "label": "studies",
+    "status": "literature",
+    "confidence": 0.75,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PERSON:mock-researcher-a",
+    "type": "person",
+    "subtype": "researcher",
+    "label": "Dr. A. Example",
+    "summary": "(Fictional) neuroscientist studying lysosomal storage in CLN5 and CLN3 disease."
+  },
+  "target": {
+    "id": "MONDO:MOCK0003",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN3 disease",
+    "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0073",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that Dr. A. Example studies CLN3 disease.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

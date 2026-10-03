@@ -1,0 +1,26 @@
+{
+  "node": {
+    "id": "PMID:MOCK0001",
+    "type": "publication",
+    "subtype": null,
+    "label": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+    "summary": "A (mock) paper comparing storage material and symptoms in CLN5 and CLN6 disease.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "pmid": "MOCK0001",
+      "year": 2024,
+      "journal": "Journal of Mock Neurology",
+      "title": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease"
+    },
+    "url": "https://example.org/pubmed/MOCK0001"
+  },
+  "degree": {
+    "disease": 2,
+    "person": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:3823875a05b41a4a",
+    "src": "ORG:mock-cln5-families",
+    "dst": "MONDO:MOCK0005",
+    "type": "organization_serves_disease",
+    "label": "serves families with",
+    "status": "literature",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Organization website"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ORG:mock-cln5-families",
+    "type": "organization",
+    "subtype": "patient_group",
+    "label": "CLN5 Families Network (mock)",
+    "summary": "A (fictional) parent-led group for families affected by CLN5 disease."
+  },
+  "target": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0083",
+      "stance": "supports",
+      "source_type": "patient_org_site",
+      "source_name": "Organization website",
+      "source_ref": null,
+      "url": "https://example.org/cln5-families",
+      "quote": "[MOCK] \"We support families affected by CLN5 disease.\"",
+      "method": "scrape:brightdata",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

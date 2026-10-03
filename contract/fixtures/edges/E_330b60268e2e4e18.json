@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:330b60268e2e4e18",
+    "src": "HGNC:MOCK0002",
+    "dst": "MONDO:MOCK0002",
+    "type": "gene_associated_with_disease",
+    "label": "causes",
+    "status": "curated",
+    "confidence": 0.99,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Orphanet"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0002",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "TPP1",
+    "summary": "Makes TPP1, a soluble lysosomal enzyme that breaks down small proteins. Missing in CLN2 disease."
+  },
+  "target": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0004",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "Orphanet",
+      "source_ref": null,
+      "url": "https://example.org/db/orphanet",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

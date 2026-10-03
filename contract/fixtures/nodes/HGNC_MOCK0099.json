@@ -1,0 +1,24 @@
+{
+  "node": {
+    "id": "HGNC:MOCK0099",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "MOCKG1",
+    "summary": "A FICTIONAL gene used only in this mock dataset.",
+    "description": "[MOCK] Fictional gene for the demo subtype X.",
+    "synonyms": [],
+    "xrefs": {
+      "HGNC": [
+        "MOCK-MOCKG1"
+      ]
+    },
+    "attrs": {},
+    "url": "https://example.org/atlas/gene/HGNC_MOCK0099"
+  },
+  "degree": {
+    "disease": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

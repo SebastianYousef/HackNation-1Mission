@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:c13bb4eb1f6d85d1",
+    "src": "PERSON:mock-researcher-b",
+    "dst": "MONDO:MOCK0003",
+    "type": "person_studies",
+    "label": "studies",
+    "status": "literature",
+    "confidence": 0.85,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PERSON:mock-researcher-b",
+    "type": "person",
+    "subtype": "researcher",
+    "label": "Dr. B. Placeholder",
+    "summary": "(Fictional) cell biologist working on lysosomal membrane proteins, especially CLN3."
+  },
+  "target": {
+    "id": "MONDO:MOCK0003",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN3 disease",
+    "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0074",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that Dr. B. Placeholder studies CLN3 disease.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

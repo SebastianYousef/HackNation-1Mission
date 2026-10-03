@@ -1,0 +1,26 @@
+{
+  "node": {
+    "id": "ASSET:mock-cln5-sheep-model",
+    "type": "asset",
+    "subtype": "animal_model",
+    "label": "CLN5 sheep model (mock entry)",
+    "summary": "A large-animal model with CLN5 changes that researchers use to test treatments. [MOCK record]",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "asset_kind": "animal_model",
+      "access": "restricted",
+      "owner_id": "ORG:mock-example-university-hospital"
+    },
+    "url": "https://example.org/example-hospital/cln5-sheep"
+  },
+  "degree": {
+    "organization": 1,
+    "disease": 1,
+    "gene": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

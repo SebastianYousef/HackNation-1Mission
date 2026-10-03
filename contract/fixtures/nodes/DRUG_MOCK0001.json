@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "DRUG:MOCK0001",
+    "type": "intervention",
+    "subtype": "enzyme_replacement",
+    "label": "Cerliponase alfa",
+    "summary": "A manufactured TPP1 enzyme given into the brain fluid. It is approved for CLN2 disease only.",
+    "description": "[MOCK] Recombinant human tripeptidyl peptidase 1 administered intracerebroventricularly.",
+    "synonyms": [
+      "rhTPP1",
+      "Brineura"
+    ],
+    "xrefs": {},
+    "attrs": {},
+    "url": "https://example.org/atlas/intervention/DRUG_MOCK0001"
+  },
+  "degree": {
+    "disease": 1,
+    "mechanism": 2,
+    "trial": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

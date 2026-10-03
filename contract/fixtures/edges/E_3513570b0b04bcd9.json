@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:3513570b0b04bcd9",
+    "src": "PERSON:mock-researcher-a",
+    "dst": "ORG:mock-example-university-hospital",
+    "type": "person_affiliated_with",
+    "label": "works at",
+    "status": "curated",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "ORCID"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PERSON:mock-researcher-a",
+    "type": "person",
+    "subtype": "researcher",
+    "label": "Dr. A. Example",
+    "summary": "(Fictional) neuroscientist studying lysosomal storage in CLN5 and CLN3 disease."
+  },
+  "target": {
+    "id": "ORG:mock-example-university-hospital",
+    "type": "organization",
+    "subtype": "hospital",
+    "label": "Example University Hospital (mock)",
+    "summary": "A (fictional) hospital with a paediatric neurology team that studies NCL diseases."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0077",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "ORCID",
+      "source_ref": null,
+      "url": "https://example.org/db/orcid",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

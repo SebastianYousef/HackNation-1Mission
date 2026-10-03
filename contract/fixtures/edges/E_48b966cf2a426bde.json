@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:48b966cf2a426bde",
+    "src": "ORG:mock-example-university-hospital",
+    "dst": "ASSET:mock-cln5-sheep-model",
+    "type": "organization_maintains_asset",
+    "label": "maintains",
+    "status": "literature",
+    "confidence": 0.8,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Organization website"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ORG:mock-example-university-hospital",
+    "type": "organization",
+    "subtype": "hospital",
+    "label": "Example University Hospital (mock)",
+    "summary": "A (fictional) hospital with a paediatric neurology team that studies NCL diseases."
+  },
+  "target": {
+    "id": "ASSET:mock-cln5-sheep-model",
+    "type": "asset",
+    "subtype": "animal_model",
+    "label": "CLN5 sheep model (mock entry)",
+    "summary": "A large-animal model with CLN5 changes that researchers use to test treatments. [MOCK record]"
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0092",
+      "stance": "supports",
+      "source_type": "patient_org_site",
+      "source_name": "Organization website",
+      "source_ref": null,
+      "url": "https://example.org/example-hospital",
+      "quote": "[MOCK] \"We support families affected by CLN5 sheep model (mock entry).\"",
+      "method": "scrape:brightdata",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

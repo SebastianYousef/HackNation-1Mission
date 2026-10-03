@@ -1,0 +1,24 @@
+{
+  "node": {
+    "id": "HP:MOCK0006",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Cerebral atrophy",
+    "summary": "Shrinking of brain tissue seen on a brain scan.",
+    "description": null,
+    "synonyms": [
+      "Brain atrophy"
+    ],
+    "xrefs": {},
+    "attrs": {
+      "ic": 4.4
+    },
+    "url": "https://example.org/atlas/phenotype/HP_MOCK0006"
+  },
+  "degree": {
+    "disease": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

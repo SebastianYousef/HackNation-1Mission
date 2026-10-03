@@ -1,0 +1,26 @@
+{
+  "node": {
+    "id": "ORG:mock-cln2-connection",
+    "type": "organization",
+    "subtype": "patient_group",
+    "label": "CLN2 Family Connection (mock)",
+    "summary": "A (fictional) support network for families living with CLN2 disease, including families on enzyme replacement therapy.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "website": "https://example.org/cln2-connection",
+      "country": "DE",
+      "contact_url": "https://example.org/cln2-connection/contact",
+      "has_registry": false,
+      "email_public": null
+    },
+    "url": "https://example.org/cln2-connection"
+  },
+  "degree": {
+    "disease": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

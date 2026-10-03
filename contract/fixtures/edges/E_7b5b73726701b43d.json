@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:7b5b73726701b43d",
+    "src": "ORG:mock-bdsra",
+    "dst": "MONDO:MOCK0005",
+    "type": "organization_serves_disease",
+    "label": "serves families with",
+    "status": "literature",
+    "confidence": 0.8,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Organization website"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ORG:mock-bdsra",
+    "type": "organization",
+    "subtype": "patient_group",
+    "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+    "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]"
+  },
+  "target": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0084",
+      "stance": "supports",
+      "source_type": "patient_org_site",
+      "source_name": "Organization website",
+      "source_ref": null,
+      "url": "https://example.org/bdsra",
+      "quote": "[MOCK] \"We support families affected by CLN5 disease.\"",
+      "method": "scrape:brightdata",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

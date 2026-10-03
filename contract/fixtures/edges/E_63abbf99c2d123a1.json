@@ -1,0 +1,50 @@
+{
+  "edge": {
+    "id": "E:63abbf99c2d123a1",
+    "src": "MONDO:MOCK0099",
+    "dst": "HP:MOCK0001",
+    "type": "disease_has_phenotype",
+    "label": "has symptom",
+    "status": "literature",
+    "confidence": 0.6,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {
+      "frequency": "frequent"
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0099",
+    "type": "disease",
+    "subtype": null,
+    "label": "MOCK ultra-rare NCL subtype X (fictional)",
+    "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis."
+  },
+  "target": {
+    "id": "HP:MOCK0001",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Seizure",
+    "summary": "Sudden bursts of abnormal electrical activity in the brain (fits)."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0052",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that MOCK ultra-rare NCL subtype X (fictional) has symptom Seizure.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

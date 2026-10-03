@@ -1,0 +1,54 @@
+{
+  "edge": {
+    "id": "E:07f23b976e67b457",
+    "src": "MONDO:MOCK0005",
+    "dst": "MONDO:MOCK0006",
+    "type": "disease_similar_to",
+    "label": "is similar to",
+    "status": "inferred",
+    "confidence": 0.8,
+    "score": 0.86,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Atlas analytics"
+    ],
+    "attrs": {
+      "components": {
+        "phenotype": 0.92,
+        "mechanism": 0.8,
+        "gene": 0
+      }
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "target": {
+    "id": "MONDO:MOCK0006",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN6 disease",
+    "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0054",
+      "stance": "supports",
+      "source_type": "computed",
+      "source_name": "Atlas analytics",
+      "source_ref": null,
+      "url": null,
+      "quote": null,
+      "method": "algorithm:mock-similarity-v1",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

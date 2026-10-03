@@ -1,0 +1,718 @@
+{
+  "mechanism": {
+    "id": "ATLAS:mech-lysosomal-degradation",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+    "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells.",
+    "description": "[MOCK] Lysosomal catabolism of proteins and lipids; impairment leads to accumulation of autofluorescent storage material.",
+    "synonyms": [
+      "Lysosomal storage",
+      "Lysosomal protein breakdown",
+      "Autophagy-lysosome pathway"
+    ],
+    "xrefs": {},
+    "attrs": {},
+    "url": "https://example.org/atlas/mechanism/ATLAS_mech-lysosomal-degradation"
+  },
+  "headline": "One lysosomal failure, at least 6 gene names, 5 diseases in this slice",
+  "plain_summary": "Every Batten disease ends in the same place — waste piling up in lysosomes — but the broken part differs. Soluble-enzyme forms (CLN2, maybe CLN5) can in principle be treated by supplying the enzyme; membrane-protein forms (CLN3, CLN6) cannot.",
+  "genes": [
+    {
+      "id": "HGNC:MOCK0005",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "CLN5",
+      "summary": "Makes a soluble protein that works inside the lysosome; its exact job is still being studied."
+    },
+    {
+      "id": "HGNC:MOCK0006",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "CLN6",
+      "summary": "Makes a protein in the cell's endoplasmic reticulum membrane that helps deliver enzymes to lysosomes."
+    },
+    {
+      "id": "HGNC:MOCK0003",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "CLN3",
+      "summary": "Makes a protein that sits in the lysosome's outer membrane."
+    },
+    {
+      "id": "HGNC:MOCK0002",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "TPP1",
+      "summary": "Makes TPP1, a soluble lysosomal enzyme that breaks down small proteins. Missing in CLN2 disease."
+    },
+    {
+      "id": "HGNC:MOCK0001",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "PPT1",
+      "summary": "Makes a soluble lysosomal enzyme; changes cause CLN1 disease."
+    },
+    {
+      "id": "HGNC:MOCK0007",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "MFSD8",
+      "summary": "Makes a lysosomal membrane transporter; changes cause CLN7 disease."
+    }
+  ],
+  "diseases": [
+    {
+      "disease": {
+        "id": "MONDO:MOCK0002",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN2 disease",
+        "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+      },
+      "score": 0.95,
+      "status": "curated",
+      "evidence_edge_ids": [
+        "E:66bef40a899a70ea"
+      ],
+      "cluster": {
+        "id": "cluster:mock-ncl-soluble",
+        "label": "Soluble lysosomal protein NCLs"
+      },
+      "groups": [
+        {
+          "node": {
+            "id": "ORG:mock-cln2-connection",
+            "type": "organization",
+            "subtype": "patient_group",
+            "label": "CLN2 Family Connection (mock)",
+            "summary": "A (fictional) support network for families living with CLN2 disease, including families on enzyme replacement therapy."
+          },
+          "for_disease": {
+            "id": "MONDO:MOCK0002",
+            "type": "disease",
+            "subtype": null,
+            "label": "CLN2 disease",
+            "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+          },
+          "edge_id": "E:7f7b67de786a83f9",
+          "website": "https://example.org/cln2-connection",
+          "contact_url": "https://example.org/cln2-connection/contact",
+          "country": "DE",
+          "has_registry": false
+        },
+        {
+          "node": {
+            "id": "ORG:mock-bdsra",
+            "type": "organization",
+            "subtype": "patient_group",
+            "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+            "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]"
+          },
+          "for_disease": {
+            "id": "MONDO:MOCK0002",
+            "type": "disease",
+            "subtype": null,
+            "label": "CLN2 disease",
+            "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+          },
+          "edge_id": "E:2fff037e50f60ad9",
+          "website": "https://example.org/bdsra",
+          "contact_url": "https://example.org/bdsra/contact",
+          "country": "US",
+          "has_registry": null
+        }
+      ],
+      "assets": [
+        {
+          "node": {
+            "id": "ASSET:mock-ncl-registry",
+            "type": "asset",
+            "subtype": "registry",
+            "label": "International NCL Patient Registry (mock)",
+            "summary": "A (fictional) shared registry where families with several NCL subtypes record their child's health over time."
+          },
+          "asset_kind": "registry",
+          "owner": {
+            "id": "ORG:mock-ncl-registry-consortium",
+            "type": "organization",
+            "subtype": "academic",
+            "label": "International NCL Registry Consortium (mock)",
+            "summary": "A (fictional) academic consortium that runs a shared patient registry for several NCL subtypes."
+          },
+          "covers": [
+            {
+              "id": "MONDO:MOCK0002",
+              "type": "disease",
+              "subtype": null,
+              "label": "CLN2 disease",
+              "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+            },
+            {
+              "id": "MONDO:MOCK0003",
+              "type": "disease",
+              "subtype": null,
+              "label": "CLN3 disease",
+              "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+            },
+            {
+              "id": "MONDO:MOCK0006",
+              "type": "disease",
+              "subtype": null,
+              "label": "CLN6 disease",
+              "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+            }
+          ],
+          "reusability": "direct",
+          "what_differs": [],
+          "needs_review": [],
+          "edge_ids": [
+            "E:369ffdb786219025",
+            "E:80b6491c0b856946",
+            "E:eb7449881c78005e",
+            "E:3a8cc6f1c21fd1e1"
+          ]
+        }
+      ],
+      "unmet_need": null
+    },
+    {
+      "disease": {
+        "id": "MONDO:MOCK0005",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN5 disease",
+        "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+      },
+      "score": 0.85,
+      "status": "literature",
+      "evidence_edge_ids": [
+        "E:b798d149b51c6b9b"
+      ],
+      "cluster": {
+        "id": "cluster:mock-ncl-core",
+        "label": "Childhood NCLs: vision loss + seizures + regression"
+      },
+      "groups": [
+        {
+          "node": {
+            "id": "ORG:mock-cln5-families",
+            "type": "organization",
+            "subtype": "patient_group",
+            "label": "CLN5 Families Network (mock)",
+            "summary": "A (fictional) parent-led group for families affected by CLN5 disease."
+          },
+          "for_disease": {
+            "id": "MONDO:MOCK0005",
+            "type": "disease",
+            "subtype": null,
+            "label": "CLN5 disease",
+            "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+          },
+          "edge_id": "E:3823875a05b41a4a",
+          "website": "https://example.org/cln5-families",
+          "contact_url": "https://example.org/cln5-families/contact",
+          "country": "SE",
+          "has_registry": false
+        },
+        {
+          "node": {
+            "id": "ORG:mock-bdsra",
+            "type": "organization",
+            "subtype": "patient_group",
+            "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+            "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]"
+          },
+          "for_disease": {
+            "id": "MONDO:MOCK0005",
+            "type": "disease",
+            "subtype": null,
+            "label": "CLN5 disease",
+            "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+          },
+          "edge_id": "E:7b5b73726701b43d",
+          "website": "https://example.org/bdsra",
+          "contact_url": "https://example.org/bdsra/contact",
+          "country": "US",
+          "has_registry": null
+        }
+      ],
+      "assets": [
+        {
+          "node": {
+            "id": "ASSET:mock-cln5-sheep-model",
+            "type": "asset",
+            "subtype": "animal_model",
+            "label": "CLN5 sheep model (mock entry)",
+            "summary": "A large-animal model with CLN5 changes that researchers use to test treatments. [MOCK record]"
+          },
+          "asset_kind": "animal_model",
+          "owner": {
+            "id": "ORG:mock-example-university-hospital",
+            "type": "organization",
+            "subtype": "hospital",
+            "label": "Example University Hospital (mock)",
+            "summary": "A (fictional) hospital with a paediatric neurology team that studies NCL diseases."
+          },
+          "covers": [
+            {
+              "id": "MONDO:MOCK0005",
+              "type": "disease",
+              "subtype": null,
+              "label": "CLN5 disease",
+              "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+            }
+          ],
+          "reusability": "direct",
+          "what_differs": [
+            "Large-animal model; access is restricted"
+          ],
+          "needs_review": [],
+          "edge_ids": [
+            "E:37068dc133c8a4cf",
+            "E:48b966cf2a426bde",
+            "E:113bd557152f6568"
+          ]
+        }
+      ],
+      "unmet_need": "No approved therapy; [MOCK] fewer than 100 known patients worldwide"
+    },
+    {
+      "disease": {
+        "id": "MONDO:MOCK0006",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN6 disease",
+        "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+      },
+      "score": 0.84,
+      "status": "literature",
+      "evidence_edge_ids": [
+        "E:b8c5704fed1013e9"
+      ],
+      "cluster": {
+        "id": "cluster:mock-ncl-core",
+        "label": "Childhood NCLs: vision loss + seizures + regression"
+      },
+      "groups": [
+        {
+          "node": {
+            "id": "ORG:mock-cln6-alliance",
+            "type": "organization",
+            "subtype": "patient_group",
+            "label": "CLN6 Parents Alliance (mock)",
+            "summary": "A (fictional) parent group for CLN6 disease that supports a natural history study."
+          },
+          "for_disease": {
+            "id": "MONDO:MOCK0006",
+            "type": "disease",
+            "subtype": null,
+            "label": "CLN6 disease",
+            "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+          },
+          "edge_id": "E:16f12481d54c16aa",
+          "website": "https://example.org/cln6-alliance",
+          "contact_url": "https://example.org/cln6-alliance/contact",
+          "country": "GB",
+          "has_registry": false
+        },
+        {
+          "node": {
+            "id": "ORG:mock-bdsra",
+            "type": "organization",
+            "subtype": "patient_group",
+            "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+            "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]"
+          },
+          "for_disease": {
+            "id": "MONDO:MOCK0006",
+            "type": "disease",
+            "subtype": null,
+            "label": "CLN6 disease",
+            "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+          },
+          "edge_id": "E:1709e55eb2a171c3",
+          "website": "https://example.org/bdsra",
+          "contact_url": "https://example.org/bdsra/contact",
+          "country": "US",
+          "has_registry": null
+        }
+      ],
+      "assets": [
+        {
+          "node": {
+            "id": "ASSET:mock-cln6-natural-history",
+            "type": "asset",
+            "subtype": "natural_history_study",
+            "label": "CLN6 Natural History Study (mock)",
+            "summary": "A (fictional) study that follows children with CLN6 disease over years to learn how the disease progresses."
+          },
+          "asset_kind": "natural_history_study",
+          "owner": {
+            "id": "ORG:mock-example-university-hospital",
+            "type": "organization",
+            "subtype": "hospital",
+            "label": "Example University Hospital (mock)",
+            "summary": "A (fictional) hospital with a paediatric neurology team that studies NCL diseases."
+          },
+          "covers": [
+            {
+              "id": "MONDO:MOCK0006",
+              "type": "disease",
+              "subtype": null,
+              "label": "CLN6 disease",
+              "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+            }
+          ],
+          "reusability": "direct",
+          "what_differs": [],
+          "needs_review": [],
+          "edge_ids": [
+            "E:5ef4c69f024914e7",
+            "E:4dcf7398432dea88"
+          ]
+        }
+      ],
+      "unmet_need": "No approved therapy; early gene therapy trial (mock)"
+    },
+    {
+      "disease": {
+        "id": "MONDO:MOCK0003",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN3 disease",
+        "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+      },
+      "score": 0.82,
+      "status": "literature",
+      "evidence_edge_ids": [
+        "E:91bedaa63bf49941"
+      ],
+      "cluster": {
+        "id": "cluster:mock-ncl-membrane",
+        "label": "Membrane protein NCLs"
+      },
+      "groups": [
+        {
+          "node": {
+            "id": "ORG:mock-bdsra",
+            "type": "organization",
+            "subtype": "patient_group",
+            "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+            "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]"
+          },
+          "for_disease": {
+            "id": "MONDO:MOCK0003",
+            "type": "disease",
+            "subtype": null,
+            "label": "CLN3 disease",
+            "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+          },
+          "edge_id": "E:23e1e9c3bb7ca4c2",
+          "website": "https://example.org/bdsra",
+          "contact_url": "https://example.org/bdsra/contact",
+          "country": "US",
+          "has_registry": null
+        }
+      ],
+      "assets": [
+        {
+          "node": {
+            "id": "ASSET:mock-ncl-registry",
+            "type": "asset",
+            "subtype": "registry",
+            "label": "International NCL Patient Registry (mock)",
+            "summary": "A (fictional) shared registry where families with several NCL subtypes record their child's health over time."
+          },
+          "asset_kind": "registry",
+          "owner": {
+            "id": "ORG:mock-ncl-registry-consortium",
+            "type": "organization",
+            "subtype": "academic",
+            "label": "International NCL Registry Consortium (mock)",
+            "summary": "A (fictional) academic consortium that runs a shared patient registry for several NCL subtypes."
+          },
+          "covers": [
+            {
+              "id": "MONDO:MOCK0002",
+              "type": "disease",
+              "subtype": null,
+              "label": "CLN2 disease",
+              "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+            },
+            {
+              "id": "MONDO:MOCK0003",
+              "type": "disease",
+              "subtype": null,
+              "label": "CLN3 disease",
+              "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+            },
+            {
+              "id": "MONDO:MOCK0006",
+              "type": "disease",
+              "subtype": null,
+              "label": "CLN6 disease",
+              "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+            }
+          ],
+          "reusability": "direct",
+          "what_differs": [],
+          "needs_review": [],
+          "edge_ids": [
+            "E:369ffdb786219025",
+            "E:80b6491c0b856946",
+            "E:eb7449881c78005e",
+            "E:3a8cc6f1c21fd1e1"
+          ]
+        }
+      ],
+      "unmet_need": "No approved therapy"
+    },
+    {
+      "disease": {
+        "id": "MONDO:MOCK0099",
+        "type": "disease",
+        "subtype": null,
+        "label": "MOCK ultra-rare NCL subtype X (fictional)",
+        "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis."
+      },
+      "score": 0.4,
+      "status": "inferred",
+      "evidence_edge_ids": [
+        "E:2b64147005a6a021"
+      ],
+      "cluster": {
+        "id": "cluster:mock-ncl-core",
+        "label": "Childhood NCLs: vision loss + seizures + regression"
+      },
+      "groups": [],
+      "assets": [],
+      "unmet_need": "No approved therapy; no known patient group"
+    }
+  ],
+  "clusters": [
+    {
+      "cluster": {
+        "id": "cluster:mock-ncl-core",
+        "label": "Childhood NCLs: vision loss + seizures + regression",
+        "summary": "Batten-type diseases that share the core symptom triad of vision loss, seizures and loss of skills.",
+        "method": "algorithm:mock-leiden-phenotype",
+        "size": 5,
+        "attrs": {
+          "cohesion": 0.81,
+          "top_phenotypes": [
+            "HP:MOCK0002",
+            "HP:MOCK0001",
+            "HP:MOCK0004"
+          ],
+          "top_mechanisms": [
+            "ATLAS:mech-lysosomal-degradation"
+          ]
+        }
+      },
+      "disease_ids": [
+        "MONDO:MOCK0005",
+        "MONDO:MOCK0006",
+        "MONDO:MOCK0002",
+        "MONDO:MOCK0003",
+        "MONDO:MOCK0099"
+      ],
+      "score": 0.81
+    },
+    {
+      "cluster": {
+        "id": "cluster:mock-ncl-soluble",
+        "label": "Soluble lysosomal protein NCLs",
+        "summary": "NCLs caused by loss of a soluble lysosomal protein — the group where enzyme replacement is plausible in principle.",
+        "method": "algorithm:mock-leiden-mechanism",
+        "size": 2,
+        "attrs": {
+          "cohesion": 0.62,
+          "top_phenotypes": [
+            "HP:MOCK0001",
+            "HP:MOCK0005"
+          ],
+          "top_mechanisms": [
+            "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+            "ATLAS:mech-lysosomal-degradation"
+          ]
+        }
+      },
+      "disease_ids": [
+        "MONDO:MOCK0002",
+        "MONDO:MOCK0005"
+      ],
+      "score": 0.62
+    },
+    {
+      "cluster": {
+        "id": "cluster:mock-ncl-membrane",
+        "label": "Membrane protein NCLs",
+        "summary": "NCLs caused by a broken membrane protein (lysosome or ER); infused enzymes are not expected to help.",
+        "method": "algorithm:mock-leiden-mechanism",
+        "size": 2,
+        "attrs": {
+          "cohesion": 0.7,
+          "top_phenotypes": [
+            "HP:MOCK0002",
+            "HP:MOCK0001"
+          ],
+          "top_mechanisms": [
+            "ATLAS:mech-membrane-protein-dysfunction",
+            "ATLAS:mech-lysosomal-degradation"
+          ]
+        }
+      },
+      "disease_ids": [
+        "MONDO:MOCK0003",
+        "MONDO:MOCK0006"
+      ],
+      "score": 0.7
+    }
+  ],
+  "researchers": [
+    {
+      "node": {
+        "id": "PERSON:mock-researcher-b",
+        "type": "person",
+        "subtype": "researcher",
+        "label": "Dr. B. Placeholder",
+        "summary": "(Fictional) cell biologist working on lysosomal membrane proteins, especially CLN3."
+      },
+      "affiliation": "International NCL Registry Consortium (mock)",
+      "roles": [
+        "researcher"
+      ],
+      "works_on": [
+        {
+          "id": "MONDO:MOCK0003",
+          "type": "disease",
+          "subtype": null,
+          "label": "CLN3 disease",
+          "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+        },
+        {
+          "id": "ATLAS:mech-lysosomal-degradation",
+          "type": "mechanism",
+          "subtype": "biological_process",
+          "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+          "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+        }
+      ],
+      "recent_publications": 1,
+      "active_grants": 0,
+      "contact_url": "https://example.org/people/b-placeholder",
+      "edge_ids": [
+        "E:c13bb4eb1f6d85d1",
+        "E:914cc994d3a36363",
+        "E:c8d5e158a526a1ff"
+      ]
+    },
+    {
+      "node": {
+        "id": "PERSON:mock-researcher-a",
+        "type": "person",
+        "subtype": "researcher",
+        "label": "Dr. A. Example",
+        "summary": "(Fictional) neuroscientist studying lysosomal storage in CLN5 and CLN3 disease."
+      },
+      "affiliation": "Example University Hospital (mock)",
+      "roles": [
+        "researcher",
+        "clinician"
+      ],
+      "works_on": [
+        {
+          "id": "MONDO:MOCK0005",
+          "type": "disease",
+          "subtype": null,
+          "label": "CLN5 disease",
+          "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+        },
+        {
+          "id": "MONDO:MOCK0003",
+          "type": "disease",
+          "subtype": null,
+          "label": "CLN3 disease",
+          "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+        }
+      ],
+      "recent_publications": 1,
+      "active_grants": 1,
+      "contact_url": "https://example.org/people/a-example",
+      "edge_ids": [
+        "E:42bba7533f075e61",
+        "E:04c1472586fe205e",
+        "E:3513570b0b04bcd9"
+      ]
+    }
+  ],
+  "trials": [
+    {
+      "node": {
+        "id": "NCTMOCK0001",
+        "type": "trial",
+        "subtype": null,
+        "label": "[MOCK] Intraventricular cerliponase alfa in children with CLN2 disease",
+        "summary": "A (mock) completed trial of enzyme replacement therapy in CLN2 disease."
+      },
+      "nct_id": "NCTMOCK0001",
+      "phase": "Phase 2",
+      "overall_status": "COMPLETED",
+      "intervention": "Cerliponase alfa",
+      "conditions": [
+        {
+          "id": "MONDO:MOCK0002",
+          "type": "disease",
+          "subtype": null,
+          "label": "CLN2 disease",
+          "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+        }
+      ],
+      "relevance": "shared_mechanism",
+      "eligibility_note": "CLN2 only.",
+      "url": "https://example.org/trials/NCTMOCK0001",
+      "edge_ids": [
+        "E:19aa0730d569532a",
+        "E:abba1f9984ddd279"
+      ]
+    },
+    {
+      "node": {
+        "id": "NCTMOCK0002",
+        "type": "trial",
+        "subtype": null,
+        "label": "[MOCK] Gene transfer study in CLN6 disease",
+        "summary": "A (mock) early-stage gene therapy trial for children with CLN6 disease."
+      },
+      "nct_id": "NCTMOCK0002",
+      "phase": "Phase 1/2",
+      "overall_status": "RECRUITING",
+      "intervention": "[MOCK] AAV9-CLN6 gene transfer",
+      "conditions": [
+        {
+          "id": "MONDO:MOCK0006",
+          "type": "disease",
+          "subtype": null,
+          "label": "CLN6 disease",
+          "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+        }
+      ],
+      "relevance": "shared_mechanism",
+      "eligibility_note": "CLN6 only.",
+      "url": "https://example.org/trials/NCTMOCK0002",
+      "edge_ids": [
+        "E:5ba492c7c873d22c"
+      ]
+    }
+  ],
+  "interventions": [
+    {
+      "id": "DRUG:MOCK0001",
+      "type": "intervention",
+      "subtype": "enzyme_replacement",
+      "label": "Cerliponase alfa",
+      "summary": "A manufactured TPP1 enzyme given into the brain fluid. It is approved for CLN2 disease only."
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "cluster": {
+    "id": "cluster:mock-ncl-core",
+    "label": "Childhood NCLs: vision loss + seizures + regression",
+    "summary": "Batten-type diseases that share the core symptom triad of vision loss, seizures and loss of skills.",
+    "method": "algorithm:mock-leiden-phenotype",
+    "size": 5,
+    "attrs": {
+      "cohesion": 0.81,
+      "top_phenotypes": [
+        "HP:MOCK0002",
+        "HP:MOCK0001",
+        "HP:MOCK0004"
+      ],
+      "top_mechanisms": [
+        "ATLAS:mech-lysosomal-degradation"
+      ]
+    }
+  },
+  "members": [
+    {
+      "id": "MONDO:MOCK0005",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN5 disease",
+      "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet.",
+      "membership": 0.94
+    },
+    {
+      "id": "MONDO:MOCK0006",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN6 disease",
+      "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills.",
+      "membership": 0.92
+    },
+    {
+      "id": "MONDO:MOCK0002",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN2 disease",
+      "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved.",
+      "membership": 0.88
+    },
+    {
+      "id": "MONDO:MOCK0003",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN3 disease",
+      "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills.",
+      "membership": 0.8
+    },
+    {
+      "id": "MONDO:MOCK0099",
+      "type": "disease",
+      "subtype": null,
+      "label": "MOCK ultra-rare NCL subtype X (fictional)",
+      "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis.",
+      "membership": 0.5
+    }
+  ],
+  "top_phenotypes": [
+    {
+      "id": "HP:MOCK0002",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Visual loss",
+      "summary": "Gradual loss of eyesight."
+    },
+    {
+      "id": "HP:MOCK0001",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Seizure",
+      "summary": "Sudden bursts of abnormal electrical activity in the brain (fits)."
+    },
+    {
+      "id": "HP:MOCK0004",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Developmental regression",
+      "summary": "Losing skills (speech, walking, learning) that a child had already gained."
+    }
+  ],
+  "top_mechanisms": [
+    {
+      "id": "ATLAS:mech-lysosomal-degradation",
+      "type": "mechanism",
+      "subtype": "biological_process",
+      "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+      "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+    }
+  ]
+}

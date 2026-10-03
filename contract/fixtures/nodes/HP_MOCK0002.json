@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "HP:MOCK0002",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Visual loss",
+    "summary": "Gradual loss of eyesight.",
+    "description": null,
+    "synonyms": [
+      "Vision loss",
+      "Progressive visual loss"
+    ],
+    "xrefs": {},
+    "attrs": {
+      "ic": 4.2
+    },
+    "url": "https://example.org/atlas/phenotype/HP_MOCK0002"
+  },
+  "degree": {
+    "disease": 5
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

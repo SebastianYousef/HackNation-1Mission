@@ -1,0 +1,31 @@
+{
+  "subject": "CLN5 families would love to learn from your CLN6 natural history study",
+  "body": "Dear CLN6 Parents Alliance,\n\nI lead the CLN5 Families Network, a small parent group for CLN5 disease, which has no approved treatment. While exploring the Rare Disease Atlas we saw that CLN5 and CLN6 disease look very similar in symptoms [1] and that both involve the same failure of lysosomal breakdown in nerve cells [2][3].\n\nWe understand you support a CLN6 natural history study [4]. Would you be open to a short call to share how it was set up, and whether parts of its design could work for CLN5 families? We know the two diseases are not identical, so we would value your honest view of what would and would not transfer.\n\nWarm regards,\nMaria\nCLN5 Families Network (mock)",
+  "citations": [
+    {
+      "n": 1,
+      "edge_id": "E:07f23b976e67b457",
+      "source_ref": null,
+      "url": null
+    },
+    {
+      "n": 2,
+      "edge_id": "E:b798d149b51c6b9b",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001"
+    },
+    {
+      "n": 3,
+      "edge_id": "E:b8c5704fed1013e9",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001"
+    },
+    {
+      "n": 4,
+      "edge_id": "E:5ef4c69f024914e7",
+      "source_ref": null,
+      "url": "https://example.org/example-hospital/cln6-nhs"
+    }
+  ],
+  "model": "mock-model"
+}

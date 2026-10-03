@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:ea5e22651a02fa51",
+    "src": "MONDO:MOCK0005",
+    "dst": "MONDO:MOCK0000",
+    "type": "disease_subtype_of",
+    "label": "is a form of",
+    "status": "curated",
+    "confidence": 0.99,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "MONDO"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "target": {
+    "id": "MONDO:MOCK0000",
+    "type": "disease",
+    "subtype": null,
+    "label": "Neuronal ceroid lipofuscinosis",
+    "summary": "A group of inherited brain diseases (often called Batten disease) in which waste material builds up inside cells' recycling centres, the lysosomes."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0006",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "MONDO",
+      "source_ref": null,
+      "url": "https://example.org/db/mondo",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

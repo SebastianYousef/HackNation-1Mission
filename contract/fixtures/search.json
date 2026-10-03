@@ -1,0 +1,385 @@
+{
+  "cln5": [
+    {
+      "id": "MONDO:MOCK0005",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN5 disease",
+      "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet.",
+      "matched_name": "CLN5",
+      "match_kind": "abbreviation",
+      "score": 1
+    },
+    {
+      "id": "HGNC:MOCK0005",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "CLN5",
+      "summary": "Makes a soluble protein that works inside the lysosome; its exact job is still being studied.",
+      "matched_name": "CLN5",
+      "match_kind": "label",
+      "score": 1
+    },
+    {
+      "id": "ORG:mock-cln5-families",
+      "type": "organization",
+      "subtype": "patient_group",
+      "label": "CLN5 Families Network (mock)",
+      "summary": "A (fictional) parent-led group for families affected by CLN5 disease.",
+      "matched_name": "CLN5 Families Network (mock)",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "ASSET:mock-cln5-sheep-model",
+      "type": "asset",
+      "subtype": "animal_model",
+      "label": "CLN5 sheep model (mock entry)",
+      "summary": "A large-animal model with CLN5 changes that researchers use to test treatments. [MOCK record]",
+      "matched_name": "CLN5 sheep model (mock entry)",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "PMID:MOCK0001",
+      "type": "publication",
+      "subtype": null,
+      "label": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+      "summary": "A (mock) paper comparing storage material and symptoms in CLN5 and CLN6 disease.",
+      "matched_name": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+      "match_kind": "label",
+      "score": 0.6
+    }
+  ],
+  "batten": [
+    {
+      "id": "MONDO:MOCK0000",
+      "type": "disease",
+      "subtype": null,
+      "label": "Neuronal ceroid lipofuscinosis",
+      "summary": "A group of inherited brain diseases (often called Batten disease) in which waste material builds up inside cells' recycling centres, the lysosomes.",
+      "matched_name": "Batten disease",
+      "match_kind": "synonym",
+      "score": 0.9
+    },
+    {
+      "id": "ORG:mock-bdsra",
+      "type": "organization",
+      "subtype": "patient_group",
+      "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+      "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]",
+      "matched_name": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "MONDO:MOCK0002",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN2 disease",
+      "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved.",
+      "matched_name": "Late infantile Batten disease",
+      "match_kind": "synonym",
+      "score": 0.6
+    },
+    {
+      "id": "MONDO:MOCK0003",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN3 disease",
+      "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills.",
+      "matched_name": "Juvenile Batten disease",
+      "match_kind": "synonym",
+      "score": 0.6
+    },
+    {
+      "id": "MONDO:MOCK0005",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN5 disease",
+      "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet.",
+      "matched_name": "CLN5 Batten disease",
+      "match_kind": "synonym",
+      "score": 0.6
+    },
+    {
+      "id": "MONDO:MOCK0006",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN6 disease",
+      "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills.",
+      "matched_name": "CLN6 Batten disease",
+      "match_kind": "synonym",
+      "score": 0.6
+    }
+  ],
+  "cln": [
+    {
+      "id": "MONDO:MOCK0002",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN2 disease",
+      "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved.",
+      "matched_name": "CLN2 disease",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "MONDO:MOCK0003",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN3 disease",
+      "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills.",
+      "matched_name": "CLN3 disease",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "MONDO:MOCK0005",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN5 disease",
+      "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet.",
+      "matched_name": "CLN5 disease",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "MONDO:MOCK0006",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN6 disease",
+      "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills.",
+      "matched_name": "CLN6 disease",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "MONDO:MOCK0099",
+      "type": "disease",
+      "subtype": null,
+      "label": "MOCK ultra-rare NCL subtype X (fictional)",
+      "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis.",
+      "matched_name": "CLN-X",
+      "match_kind": "abbreviation",
+      "score": 0.9
+    },
+    {
+      "id": "ORG:mock-cln2-connection",
+      "type": "organization",
+      "subtype": "patient_group",
+      "label": "CLN2 Family Connection (mock)",
+      "summary": "A (fictional) support network for families living with CLN2 disease, including families on enzyme replacement therapy.",
+      "matched_name": "CLN2 Family Connection (mock)",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "HGNC:MOCK0003",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "CLN3",
+      "summary": "Makes a protein that sits in the lysosome's outer membrane.",
+      "matched_name": "CLN3",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "HGNC:MOCK0005",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "CLN5",
+      "summary": "Makes a soluble protein that works inside the lysosome; its exact job is still being studied.",
+      "matched_name": "CLN5",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "ORG:mock-cln5-families",
+      "type": "organization",
+      "subtype": "patient_group",
+      "label": "CLN5 Families Network (mock)",
+      "summary": "A (fictional) parent-led group for families affected by CLN5 disease.",
+      "matched_name": "CLN5 Families Network (mock)",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "ASSET:mock-cln5-sheep-model",
+      "type": "asset",
+      "subtype": "animal_model",
+      "label": "CLN5 sheep model (mock entry)",
+      "summary": "A large-animal model with CLN5 changes that researchers use to test treatments. [MOCK record]",
+      "matched_name": "CLN5 sheep model (mock entry)",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "HGNC:MOCK0006",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "CLN6",
+      "summary": "Makes a protein in the cell's endoplasmic reticulum membrane that helps deliver enzymes to lysosomes.",
+      "matched_name": "CLN6",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "ASSET:mock-cln6-natural-history",
+      "type": "asset",
+      "subtype": "natural_history_study",
+      "label": "CLN6 Natural History Study (mock)",
+      "summary": "A (fictional) study that follows children with CLN6 disease over years to learn how the disease progresses.",
+      "matched_name": "CLN6 Natural History Study (mock)",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "ORG:mock-cln6-alliance",
+      "type": "organization",
+      "subtype": "patient_group",
+      "label": "CLN6 Parents Alliance (mock)",
+      "summary": "A (fictional) parent group for CLN6 disease that supports a natural history study.",
+      "matched_name": "CLN6 Parents Alliance (mock)",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "PMID:MOCK0002",
+      "type": "publication",
+      "subtype": null,
+      "label": "[MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement",
+      "summary": "A (mock) paper explaining why therapies that work for soluble-enzyme NCLs may not work for CLN3.",
+      "matched_name": "[MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement",
+      "match_kind": "label",
+      "score": 0.6
+    },
+    {
+      "id": "NCTMOCK0002",
+      "type": "trial",
+      "subtype": null,
+      "label": "[MOCK] Gene transfer study in CLN6 disease",
+      "summary": "A (mock) early-stage gene therapy trial for children with CLN6 disease.",
+      "matched_name": "[MOCK] Gene transfer study in CLN6 disease",
+      "match_kind": "label",
+      "score": 0.6
+    },
+    {
+      "id": "NCTMOCK0001",
+      "type": "trial",
+      "subtype": null,
+      "label": "[MOCK] Intraventricular cerliponase alfa in children with CLN2 disease",
+      "summary": "A (mock) completed trial of enzyme replacement therapy in CLN2 disease.",
+      "matched_name": "[MOCK] Intraventricular cerliponase alfa in children with CLN2 disease",
+      "match_kind": "label",
+      "score": 0.6
+    },
+    {
+      "id": "GRANT:MOCK0001",
+      "type": "grant",
+      "subtype": null,
+      "label": "[MOCK] Lysosomal dysfunction across CLN subtypes",
+      "summary": "A (mock) research grant comparing how lysosomes fail in different forms of Batten disease.",
+      "matched_name": "[MOCK] Lysosomal dysfunction across CLN subtypes",
+      "match_kind": "label",
+      "score": 0.6
+    },
+    {
+      "id": "PMID:MOCK0001",
+      "type": "publication",
+      "subtype": null,
+      "label": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+      "summary": "A (mock) paper comparing storage material and symptoms in CLN5 and CLN6 disease.",
+      "matched_name": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+      "match_kind": "label",
+      "score": 0.6
+    }
+  ],
+  "lysosom": [
+    {
+      "id": "ATLAS:mech-lysosomal-degradation",
+      "type": "mechanism",
+      "subtype": "biological_process",
+      "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+      "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells.",
+      "matched_name": "Lysosomal degradation (ceroid lipofuscin storage)",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "ATLAS:mech-membrane-protein-dysfunction",
+      "type": "mechanism",
+      "subtype": "biological_process",
+      "label": "Lysosomal/ER membrane protein dysfunction",
+      "summary": "A broken protein that is built into a membrane (of the lysosome or the endoplasmic reticulum). It cannot simply be replaced by an infusion.",
+      "matched_name": "Lysosomal/ER membrane protein dysfunction",
+      "match_kind": "label",
+      "score": 0.9
+    },
+    {
+      "id": "PMID:MOCK0002",
+      "type": "publication",
+      "subtype": null,
+      "label": "[MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement",
+      "summary": "A (mock) paper explaining why therapies that work for soluble-enzyme NCLs may not work for CLN3.",
+      "matched_name": "[MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement",
+      "match_kind": "label",
+      "score": 0.6
+    },
+    {
+      "id": "GRANT:MOCK0001",
+      "type": "grant",
+      "subtype": null,
+      "label": "[MOCK] Lysosomal dysfunction across CLN subtypes",
+      "summary": "A (mock) research grant comparing how lysosomes fail in different forms of Batten disease.",
+      "matched_name": "[MOCK] Lysosomal dysfunction across CLN subtypes",
+      "match_kind": "label",
+      "score": 0.6
+    },
+    {
+      "id": "PMID:MOCK0001",
+      "type": "publication",
+      "subtype": null,
+      "label": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+      "summary": "A (mock) paper comparing storage material and symptoms in CLN5 and CLN6 disease.",
+      "matched_name": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+      "match_kind": "label",
+      "score": 0.6
+    },
+    {
+      "id": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+      "type": "mechanism",
+      "subtype": "variant_effect",
+      "label": "Soluble lysosomal enzyme deficiency",
+      "summary": "A missing enzyme that normally floats free inside the lysosome. Because it is soluble, it can sometimes be replaced with a manufactured version (enzyme replacement).",
+      "matched_name": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+      "match_kind": "id",
+      "score": 0.6
+    }
+  ],
+  "seizure": [
+    {
+      "id": "HP:MOCK0001",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Seizure",
+      "summary": "Sudden bursts of abnormal electrical activity in the brain (fits).",
+      "matched_name": "Seizure",
+      "match_kind": "label",
+      "score": 1
+    }
+  ],
+  "bdsra": [
+    {
+      "id": "ORG:mock-bdsra",
+      "type": "organization",
+      "subtype": "patient_group",
+      "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+      "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]",
+      "matched_name": "BDSRA",
+      "match_kind": "synonym",
+      "score": 1
+    }
+  ],
+  "zzz": []
+}

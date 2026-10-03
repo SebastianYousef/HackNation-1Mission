@@ -1,0 +1,57 @@
+{
+  "node": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet.",
+    "description": "[MOCK] Neuronal ceroid lipofuscinosis caused by biallelic variants in CLN5, typically with variant late-infantile onset.",
+    "synonyms": [
+      "Neuronal ceroid lipofuscinosis type 5",
+      "CLN5 Batten disease",
+      "Variant late infantile NCL, Finnish type"
+    ],
+    "xrefs": {
+      "ORPHA": [
+        "MOCK-ORPHA-0005"
+      ],
+      "OMIM": [
+        "MOCK-OMIM-0005"
+      ]
+    },
+    "attrs": {
+      "prevalence": "[MOCK] ultra-rare (<1 in 1,000,000)",
+      "onset": "late infantile to childhood",
+      "inheritance": "autosomal recessive",
+      "has_approved_treatment": false,
+      "approved_treatments": []
+    },
+    "url": "https://example.org/atlas/disease/MONDO_MOCK0005"
+  },
+  "degree": {
+    "gene": 1,
+    "disease": 5,
+    "mechanism": 2,
+    "phenotype": 6,
+    "publication": 1,
+    "person": 1,
+    "organization": 2,
+    "asset": 1
+  },
+  "clusters": [
+    {
+      "id": "cluster:mock-ncl-core",
+      "label": "Childhood NCLs: vision loss + seizures + regression",
+      "size": 5,
+      "membership": 0.94
+    },
+    {
+      "id": "cluster:mock-ncl-soluble",
+      "label": "Soluble lysosomal protein NCLs",
+      "size": 2,
+      "membership": 0.55
+    }
+  ],
+  "has_action_view": true,
+  "has_mechanism_view": false
+}

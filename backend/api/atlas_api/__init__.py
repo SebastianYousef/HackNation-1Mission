@@ -1,0 +1,1 @@
+"""Rare Disease Atlas API."""

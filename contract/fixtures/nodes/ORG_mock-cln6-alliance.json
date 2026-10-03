@@ -1,0 +1,26 @@
+{
+  "node": {
+    "id": "ORG:mock-cln6-alliance",
+    "type": "organization",
+    "subtype": "patient_group",
+    "label": "CLN6 Parents Alliance (mock)",
+    "summary": "A (fictional) parent group for CLN6 disease that supports a natural history study.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "website": "https://example.org/cln6-alliance",
+      "country": "GB",
+      "contact_url": "https://example.org/cln6-alliance/contact",
+      "has_registry": false,
+      "email_public": null
+    },
+    "url": "https://example.org/cln6-alliance"
+  },
+  "degree": {
+    "disease": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

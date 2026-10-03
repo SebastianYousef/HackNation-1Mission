@@ -1,0 +1,38 @@
+{
+  "node": {
+    "id": "MONDO:MOCK0099",
+    "type": "disease",
+    "subtype": null,
+    "label": "MOCK ultra-rare NCL subtype X (fictional)",
+    "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis.",
+    "description": "[MOCK] Fictional neuronal ceroid lipofuscinosis subtype reported in a handful of families; gene MOCKG1 (fictional).",
+    "synonyms": [
+      "NCL subtype X (mock)"
+    ],
+    "xrefs": {},
+    "attrs": {
+      "prevalence": "[MOCK] fewer than 20 reported families",
+      "onset": "childhood",
+      "inheritance": "autosomal recessive",
+      "has_approved_treatment": false,
+      "approved_treatments": []
+    },
+    "url": "https://example.org/atlas/disease/MONDO_MOCK0099"
+  },
+  "degree": {
+    "gene": 1,
+    "disease": 2,
+    "mechanism": 1,
+    "phenotype": 2
+  },
+  "clusters": [
+    {
+      "id": "cluster:mock-ncl-core",
+      "label": "Childhood NCLs: vision loss + seizures + regression",
+      "size": 5,
+      "membership": 0.5
+    }
+  ],
+  "has_action_view": true,
+  "has_mechanism_view": false
+}

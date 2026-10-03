@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:5ef4c69f024914e7",
+    "src": "ASSET:mock-cln6-natural-history",
+    "dst": "MONDO:MOCK0006",
+    "type": "asset_covers_disease",
+    "label": "covers",
+    "status": "literature",
+    "confidence": 0.92,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Organization website"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ASSET:mock-cln6-natural-history",
+    "type": "asset",
+    "subtype": "natural_history_study",
+    "label": "CLN6 Natural History Study (mock)",
+    "summary": "A (fictional) study that follows children with CLN6 disease over years to learn how the disease progresses."
+  },
+  "target": {
+    "id": "MONDO:MOCK0006",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN6 disease",
+    "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0096",
+      "stance": "supports",
+      "source_type": "patient_org_site",
+      "source_name": "Organization website",
+      "source_ref": null,
+      "url": "https://example.org/example-hospital/cln6-nhs",
+      "quote": "[MOCK] \"We support families affected by CLN6 disease.\"",
+      "method": "scrape:brightdata",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

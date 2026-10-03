@@ -1,0 +1,50 @@
+{
+  "edge": {
+    "id": "E:e6d8b664f312da37",
+    "src": "MONDO:MOCK0005",
+    "dst": "HP:MOCK0006",
+    "type": "disease_has_phenotype",
+    "label": "has symptom",
+    "status": "curated",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "HPO"
+    ],
+    "attrs": {
+      "frequency": "frequent"
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "target": {
+    "id": "HP:MOCK0006",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Cerebral atrophy",
+    "summary": "Shrinking of brain tissue seen on a brain scan."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0038",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "HPO",
+      "source_ref": null,
+      "url": "https://example.org/db/hpo",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:4a9729a4ac7f953b",
+    "src": "HGNC:MOCK0006",
+    "dst": "MONDO:MOCK0006",
+    "type": "gene_associated_with_disease",
+    "label": "causes",
+    "status": "curated",
+    "confidence": 0.98,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Orphanet"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0006",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "CLN6",
+    "summary": "Makes a protein in the cell's endoplasmic reticulum membrane that helps deliver enzymes to lysosomes."
+  },
+  "target": {
+    "id": "MONDO:MOCK0006",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN6 disease",
+    "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0002",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "Orphanet",
+      "source_ref": null,
+      "url": "https://example.org/db/orphanet",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

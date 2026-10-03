@@ -1,0 +1,51 @@
+{
+  "edge": {
+    "id": "E:0473ed668a18faf9",
+    "src": "MONDO:MOCK0002",
+    "dst": "HP:MOCK0001",
+    "type": "disease_has_phenotype",
+    "label": "has symptom",
+    "status": "curated",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "HPO"
+    ],
+    "attrs": {
+      "frequency": "very frequent",
+      "onset": "late infantile"
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+  },
+  "target": {
+    "id": "HP:MOCK0001",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Seizure",
+    "summary": "Sudden bursts of abnormal electrical activity in the brain (fits)."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0047",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "HPO",
+      "source_ref": null,
+      "url": "https://example.org/db/hpo",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

@@ -1,0 +1,50 @@
+{
+  "edge": {
+    "id": "E:79c1a68333a57626",
+    "src": "MONDO:MOCK0006",
+    "dst": "HP:MOCK0002",
+    "type": "disease_has_phenotype",
+    "label": "has symptom",
+    "status": "curated",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "HPO"
+    ],
+    "attrs": {
+      "frequency": "very frequent"
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0006",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN6 disease",
+    "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+  },
+  "target": {
+    "id": "HP:MOCK0002",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Visual loss",
+    "summary": "Gradual loss of eyesight."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0040",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "HPO",
+      "source_ref": null,
+      "url": "https://example.org/db/hpo",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

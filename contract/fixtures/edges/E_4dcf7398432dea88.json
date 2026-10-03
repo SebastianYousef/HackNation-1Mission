@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:4dcf7398432dea88",
+    "src": "ORG:mock-example-university-hospital",
+    "dst": "ASSET:mock-cln6-natural-history",
+    "type": "organization_maintains_asset",
+    "label": "maintains",
+    "status": "literature",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Organization website"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ORG:mock-example-university-hospital",
+    "type": "organization",
+    "subtype": "hospital",
+    "label": "Example University Hospital (mock)",
+    "summary": "A (fictional) hospital with a paediatric neurology team that studies NCL diseases."
+  },
+  "target": {
+    "id": "ASSET:mock-cln6-natural-history",
+    "type": "asset",
+    "subtype": "natural_history_study",
+    "label": "CLN6 Natural History Study (mock)",
+    "summary": "A (fictional) study that follows children with CLN6 disease over years to learn how the disease progresses."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0091",
+      "stance": "supports",
+      "source_type": "patient_org_site",
+      "source_name": "Organization website",
+      "source_ref": null,
+      "url": "https://example.org/example-hospital",
+      "quote": "[MOCK] \"We support families affected by CLN6 Natural History Study (mock).\"",
+      "method": "scrape:brightdata",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

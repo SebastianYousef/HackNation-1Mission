@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:9ceeedd5ecaa2583",
+    "src": "PERSON:mock-researcher-a",
+    "dst": "PMID:MOCK0001",
+    "type": "person_authored",
+    "label": "authored",
+    "status": "curated",
+    "confidence": 0.97,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PERSON:mock-researcher-a",
+    "type": "person",
+    "subtype": "researcher",
+    "label": "Dr. A. Example",
+    "summary": "(Fictional) neuroscientist studying lysosomal storage in CLN5 and CLN3 disease."
+  },
+  "target": {
+    "id": "PMID:MOCK0001",
+    "type": "publication",
+    "subtype": null,
+    "label": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+    "summary": "A (mock) paper comparing storage material and symptoms in CLN5 and CLN6 disease."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0070",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that Dr. A. Example authored [MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

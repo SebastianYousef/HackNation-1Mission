@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:103b1891ca284727",
+    "src": "HGNC:MOCK0002",
+    "dst": "ATLAS:mech-lysosomal-degradation",
+    "type": "gene_in_mechanism",
+    "label": "acts in",
+    "status": "curated",
+    "confidence": 0.9,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "GO"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0002",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "TPP1",
+    "summary": "Makes TPP1, a soluble lysosomal enzyme that breaks down small proteins. Missing in CLN2 disease."
+  },
+  "target": {
+    "id": "ATLAS:mech-lysosomal-degradation",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+    "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0025",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "GO",
+      "source_ref": null,
+      "url": "https://example.org/db/go",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

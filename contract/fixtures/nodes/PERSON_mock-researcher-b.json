@@ -1,0 +1,30 @@
+{
+  "node": {
+    "id": "PERSON:mock-researcher-b",
+    "type": "person",
+    "subtype": "researcher",
+    "label": "Dr. B. Placeholder",
+    "summary": "(Fictional) cell biologist working on lysosomal membrane proteins, especially CLN3.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "affiliation": "International NCL Registry Consortium (mock)",
+      "orcid": "MOCK-ORCID-0002",
+      "roles": [
+        "researcher"
+      ],
+      "contact_url": "https://example.org/people/b-placeholder"
+    },
+    "url": "https://example.org/people/b-placeholder"
+  },
+  "degree": {
+    "publication": 1,
+    "disease": 1,
+    "mechanism": 1,
+    "organization": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

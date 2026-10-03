@@ -1,0 +1,24 @@
+{
+  "node": {
+    "id": "HGNC:MOCK0007",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "MFSD8",
+    "summary": "Makes a lysosomal membrane transporter; changes cause CLN7 disease.",
+    "description": "[MOCK] Major facilitator superfamily domain containing 8, lysosomal membrane protein.",
+    "synonyms": [],
+    "xrefs": {
+      "HGNC": [
+        "MOCK-MFSD8"
+      ]
+    },
+    "attrs": {},
+    "url": "https://example.org/atlas/gene/HGNC_MOCK0007"
+  },
+  "degree": {
+    "mechanism": 2
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

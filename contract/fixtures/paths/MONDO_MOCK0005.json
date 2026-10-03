@@ -1,0 +1,425 @@
+[
+  {
+    "id": "path-mock-cln5-cln6",
+    "kind": "related_disease",
+    "title": "CLN5 disease and CLN6 disease share lysosomal storage",
+    "score": 0.86,
+    "from": "MONDO:MOCK0005",
+    "to": "MONDO:MOCK0006",
+    "node_ids": [
+      "MONDO:MOCK0005",
+      "ATLAS:mech-lysosomal-degradation",
+      "MONDO:MOCK0006"
+    ],
+    "edge_ids": [
+      "E:b798d149b51c6b9b",
+      "E:b8c5704fed1013e9"
+    ],
+    "nodes": [
+      {
+        "id": "MONDO:MOCK0005",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN5 disease",
+        "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+      },
+      {
+        "id": "ATLAS:mech-lysosomal-degradation",
+        "type": "mechanism",
+        "subtype": "biological_process",
+        "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+        "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+      },
+      {
+        "id": "MONDO:MOCK0006",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN6 disease",
+        "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+      }
+    ],
+    "edges": [
+      {
+        "id": "E:b798d149b51c6b9b",
+        "src": "MONDO:MOCK0005",
+        "dst": "ATLAS:mech-lysosomal-degradation",
+        "type": "disease_involves_mechanism",
+        "label": "involves",
+        "status": "literature",
+        "confidence": 0.85,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "PubMed"
+        ],
+        "attrs": {}
+      },
+      {
+        "id": "E:b8c5704fed1013e9",
+        "src": "MONDO:MOCK0006",
+        "dst": "ATLAS:mech-lysosomal-degradation",
+        "type": "disease_involves_mechanism",
+        "label": "involves",
+        "status": "literature",
+        "confidence": 0.84,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "PubMed"
+        ],
+        "attrs": {}
+      }
+    ],
+    "weakest_status": "literature",
+    "min_confidence": 0.84,
+    "attrs": {}
+  },
+  {
+    "id": "path-mock-cln5-cln6alliance",
+    "kind": "patient_group",
+    "title": "A CLN6 parent group facing the same lysosomal problem",
+    "score": 0.78,
+    "from": "MONDO:MOCK0005",
+    "to": "ORG:mock-cln6-alliance",
+    "node_ids": [
+      "MONDO:MOCK0005",
+      "ATLAS:mech-lysosomal-degradation",
+      "MONDO:MOCK0006",
+      "ORG:mock-cln6-alliance"
+    ],
+    "edge_ids": [
+      "E:b798d149b51c6b9b",
+      "E:b8c5704fed1013e9",
+      "E:16f12481d54c16aa"
+    ],
+    "nodes": [
+      {
+        "id": "MONDO:MOCK0005",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN5 disease",
+        "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+      },
+      {
+        "id": "ATLAS:mech-lysosomal-degradation",
+        "type": "mechanism",
+        "subtype": "biological_process",
+        "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+        "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+      },
+      {
+        "id": "MONDO:MOCK0006",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN6 disease",
+        "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+      },
+      {
+        "id": "ORG:mock-cln6-alliance",
+        "type": "organization",
+        "subtype": "patient_group",
+        "label": "CLN6 Parents Alliance (mock)",
+        "summary": "A (fictional) parent group for CLN6 disease that supports a natural history study."
+      }
+    ],
+    "edges": [
+      {
+        "id": "E:b798d149b51c6b9b",
+        "src": "MONDO:MOCK0005",
+        "dst": "ATLAS:mech-lysosomal-degradation",
+        "type": "disease_involves_mechanism",
+        "label": "involves",
+        "status": "literature",
+        "confidence": 0.85,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "PubMed"
+        ],
+        "attrs": {}
+      },
+      {
+        "id": "E:b8c5704fed1013e9",
+        "src": "MONDO:MOCK0006",
+        "dst": "ATLAS:mech-lysosomal-degradation",
+        "type": "disease_involves_mechanism",
+        "label": "involves",
+        "status": "literature",
+        "confidence": 0.84,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "PubMed"
+        ],
+        "attrs": {}
+      },
+      {
+        "id": "E:16f12481d54c16aa",
+        "src": "ORG:mock-cln6-alliance",
+        "dst": "MONDO:MOCK0006",
+        "type": "organization_serves_disease",
+        "label": "serves families with",
+        "status": "literature",
+        "confidence": 0.95,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "Organization website"
+        ],
+        "attrs": {}
+      }
+    ],
+    "weakest_status": "literature",
+    "min_confidence": 0.84,
+    "attrs": {}
+  },
+  {
+    "id": "path-mock-cln5-nhs",
+    "kind": "asset",
+    "title": "A CLN6 natural history study that could be adapted for CLN5",
+    "score": 0.72,
+    "from": "MONDO:MOCK0005",
+    "to": "ASSET:mock-cln6-natural-history",
+    "node_ids": [
+      "MONDO:MOCK0005",
+      "MONDO:MOCK0006",
+      "ASSET:mock-cln6-natural-history"
+    ],
+    "edge_ids": [
+      "E:07f23b976e67b457",
+      "E:5ef4c69f024914e7"
+    ],
+    "nodes": [
+      {
+        "id": "MONDO:MOCK0005",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN5 disease",
+        "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+      },
+      {
+        "id": "MONDO:MOCK0006",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN6 disease",
+        "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+      },
+      {
+        "id": "ASSET:mock-cln6-natural-history",
+        "type": "asset",
+        "subtype": "natural_history_study",
+        "label": "CLN6 Natural History Study (mock)",
+        "summary": "A (fictional) study that follows children with CLN6 disease over years to learn how the disease progresses."
+      }
+    ],
+    "edges": [
+      {
+        "id": "E:07f23b976e67b457",
+        "src": "MONDO:MOCK0005",
+        "dst": "MONDO:MOCK0006",
+        "type": "disease_similar_to",
+        "label": "is similar to",
+        "status": "inferred",
+        "confidence": 0.8,
+        "score": 0.86,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "Atlas analytics"
+        ],
+        "attrs": {
+          "components": {
+            "phenotype": 0.92,
+            "mechanism": 0.8,
+            "gene": 0
+          }
+        }
+      },
+      {
+        "id": "E:5ef4c69f024914e7",
+        "src": "ASSET:mock-cln6-natural-history",
+        "dst": "MONDO:MOCK0006",
+        "type": "asset_covers_disease",
+        "label": "covers",
+        "status": "literature",
+        "confidence": 0.92,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "Organization website"
+        ],
+        "attrs": {}
+      }
+    ],
+    "weakest_status": "inferred",
+    "min_confidence": 0.8,
+    "attrs": {
+      "reusability": "adaptable"
+    }
+  },
+  {
+    "id": "path-mock-cln5-researcher-a",
+    "kind": "researcher",
+    "title": "Dr. A. Example published on CLN5 lysosomal storage",
+    "score": 0.7,
+    "from": "MONDO:MOCK0005",
+    "to": "PERSON:mock-researcher-a",
+    "node_ids": [
+      "MONDO:MOCK0005",
+      "PMID:MOCK0001",
+      "PERSON:mock-researcher-a"
+    ],
+    "edge_ids": [
+      "E:4083605ab7c2db82",
+      "E:9ceeedd5ecaa2583"
+    ],
+    "nodes": [
+      {
+        "id": "MONDO:MOCK0005",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN5 disease",
+        "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+      },
+      {
+        "id": "PMID:MOCK0001",
+        "type": "publication",
+        "subtype": null,
+        "label": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+        "summary": "A (mock) paper comparing storage material and symptoms in CLN5 and CLN6 disease."
+      },
+      {
+        "id": "PERSON:mock-researcher-a",
+        "type": "person",
+        "subtype": "researcher",
+        "label": "Dr. A. Example",
+        "summary": "(Fictional) neuroscientist studying lysosomal storage in CLN5 and CLN3 disease."
+      }
+    ],
+    "edges": [
+      {
+        "id": "E:4083605ab7c2db82",
+        "src": "PMID:MOCK0001",
+        "dst": "MONDO:MOCK0005",
+        "type": "publication_about",
+        "label": "is about",
+        "status": "curated",
+        "confidence": 0.95,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "PubMed"
+        ],
+        "attrs": {}
+      },
+      {
+        "id": "E:9ceeedd5ecaa2583",
+        "src": "PERSON:mock-researcher-a",
+        "dst": "PMID:MOCK0001",
+        "type": "person_authored",
+        "label": "authored",
+        "status": "curated",
+        "confidence": 0.97,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "PubMed"
+        ],
+        "attrs": {}
+      }
+    ],
+    "weakest_status": "curated",
+    "min_confidence": 0.95,
+    "attrs": {}
+  },
+  {
+    "id": "path-mock-cln5-cerliponase",
+    "kind": "intervention",
+    "title": "HYPOTHESIS: could enzyme replacement (approved for CLN2) apply to CLN5?",
+    "score": 0.35,
+    "from": "MONDO:MOCK0005",
+    "to": "DRUG:MOCK0001",
+    "node_ids": [
+      "MONDO:MOCK0005",
+      "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+      "DRUG:MOCK0001"
+    ],
+    "edge_ids": [
+      "E:0b8f98bd0b261351",
+      "E:29a4f2133012e778"
+    ],
+    "nodes": [
+      {
+        "id": "MONDO:MOCK0005",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN5 disease",
+        "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+      },
+      {
+        "id": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+        "type": "mechanism",
+        "subtype": "variant_effect",
+        "label": "Soluble lysosomal enzyme deficiency",
+        "summary": "A missing enzyme that normally floats free inside the lysosome. Because it is soluble, it can sometimes be replaced with a manufactured version (enzyme replacement)."
+      },
+      {
+        "id": "DRUG:MOCK0001",
+        "type": "intervention",
+        "subtype": "enzyme_replacement",
+        "label": "Cerliponase alfa",
+        "summary": "A manufactured TPP1 enzyme given into the brain fluid. It is approved for CLN2 disease only."
+      }
+    ],
+    "edges": [
+      {
+        "id": "E:0b8f98bd0b261351",
+        "src": "MONDO:MOCK0005",
+        "dst": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+        "type": "disease_involves_mechanism",
+        "label": "involves",
+        "status": "hypothesis",
+        "confidence": 0.35,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 1,
+        "sources": [
+          "Atlas analytics",
+          "PubMed"
+        ],
+        "attrs": {
+          "note": "Atlas hypothesis: CLN5 is soluble like TPP1, so cross-correction might apply. Untested."
+        }
+      },
+      {
+        "id": "E:29a4f2133012e778",
+        "src": "DRUG:MOCK0001",
+        "dst": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+        "type": "intervention_targets_mechanism",
+        "label": "targets",
+        "status": "curated",
+        "confidence": 0.95,
+        "score": null,
+        "support_count": 1,
+        "contradict_count": 0,
+        "sources": [
+          "DrugBank"
+        ],
+        "attrs": {}
+      }
+    ],
+    "weakest_status": "hypothesis",
+    "min_confidence": 0.35,
+    "attrs": {
+      "caution": "CLN2 disease has an approved enzyme replacement therapy (cerliponase alfa) because TPP1 is a soluble lysosomal enzyme that can be supplied from outside the cell. That success does not automatically transfer to CLN5 disease: whether CLN5 can be replaced the same way is unproven."
+    }
+  }
+]

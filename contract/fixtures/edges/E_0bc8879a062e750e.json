@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:0bc8879a062e750e",
+    "src": "HGNC:MOCK0003",
+    "dst": "MONDO:MOCK0003",
+    "type": "gene_associated_with_disease",
+    "label": "causes",
+    "status": "curated",
+    "confidence": 0.98,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Orphanet"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0003",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "CLN3",
+    "summary": "Makes a protein that sits in the lysosome's outer membrane."
+  },
+  "target": {
+    "id": "MONDO:MOCK0003",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN3 disease",
+    "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0003",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "Orphanet",
+      "source_ref": null,
+      "url": "https://example.org/db/orphanet",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

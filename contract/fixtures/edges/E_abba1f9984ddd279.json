@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:abba1f9984ddd279",
+    "src": "NCTMOCK0001",
+    "dst": "DRUG:MOCK0001",
+    "type": "trial_tests_intervention",
+    "label": "tests",
+    "status": "curated",
+    "confidence": 0.99,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "ClinicalTrials.gov"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "NCTMOCK0001",
+    "type": "trial",
+    "subtype": null,
+    "label": "[MOCK] Intraventricular cerliponase alfa in children with CLN2 disease",
+    "summary": "A (mock) completed trial of enzyme replacement therapy in CLN2 disease."
+  },
+  "target": {
+    "id": "DRUG:MOCK0001",
+    "type": "intervention",
+    "subtype": "enzyme_replacement",
+    "label": "Cerliponase alfa",
+    "summary": "A manufactured TPP1 enzyme given into the brain fluid. It is approved for CLN2 disease only."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0064",
+      "stance": "supports",
+      "source_type": "trial_registry",
+      "source_name": "ClinicalTrials.gov",
+      "source_ref": "NCTMOCK0001",
+      "url": "https://example.org/trials/NCTMOCK0001",
+      "quote": null,
+      "method": "curated",
+      "published_at": "2025-01-15",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

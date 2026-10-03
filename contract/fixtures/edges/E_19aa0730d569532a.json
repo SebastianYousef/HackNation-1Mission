@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:19aa0730d569532a",
+    "src": "NCTMOCK0001",
+    "dst": "MONDO:MOCK0002",
+    "type": "trial_studies_disease",
+    "label": "studies",
+    "status": "curated",
+    "confidence": 0.99,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "ClinicalTrials.gov"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "NCTMOCK0001",
+    "type": "trial",
+    "subtype": null,
+    "label": "[MOCK] Intraventricular cerliponase alfa in children with CLN2 disease",
+    "summary": "A (mock) completed trial of enzyme replacement therapy in CLN2 disease."
+  },
+  "target": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0063",
+      "stance": "supports",
+      "source_type": "trial_registry",
+      "source_name": "ClinicalTrials.gov",
+      "source_ref": "NCTMOCK0001",
+      "url": "https://example.org/trials/NCTMOCK0001",
+      "quote": null,
+      "method": "curated",
+      "published_at": "2025-01-15",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

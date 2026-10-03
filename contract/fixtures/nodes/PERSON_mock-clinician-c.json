@@ -1,0 +1,28 @@
+{
+  "node": {
+    "id": "PERSON:mock-clinician-c",
+    "type": "person",
+    "subtype": "clinician",
+    "label": "Dr. C. Sample",
+    "summary": "(Fictional) child neurologist who has run enzyme replacement trials in CLN2 disease.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "affiliation": "Example University Hospital (mock)",
+      "orcid": "MOCK-ORCID-0003",
+      "roles": [
+        "clinician"
+      ],
+      "contact_url": "https://example.org/people/c-sample"
+    },
+    "url": "https://example.org/people/c-sample"
+  },
+  "degree": {
+    "disease": 1,
+    "organization": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

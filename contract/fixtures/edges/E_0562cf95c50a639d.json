@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:0562cf95c50a639d",
+    "src": "HGNC:MOCK0001",
+    "dst": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+    "type": "gene_in_mechanism",
+    "label": "acts in",
+    "status": "curated",
+    "confidence": 0.93,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "GO"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0001",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "PPT1",
+    "summary": "Makes a soluble lysosomal enzyme; changes cause CLN1 disease."
+  },
+  "target": {
+    "id": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+    "type": "mechanism",
+    "subtype": "variant_effect",
+    "label": "Soluble lysosomal enzyme deficiency",
+    "summary": "A missing enzyme that normally floats free inside the lysosome. Because it is soluble, it can sometimes be replaced with a manufactured version (enzyme replacement)."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0029",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "GO",
+      "source_ref": null,
+      "url": "https://example.org/db/go",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:4083605ab7c2db82",
+    "src": "PMID:MOCK0001",
+    "dst": "MONDO:MOCK0005",
+    "type": "publication_about",
+    "label": "is about",
+    "status": "curated",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PMID:MOCK0001",
+    "type": "publication",
+    "subtype": null,
+    "label": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+    "summary": "A (mock) paper comparing storage material and symptoms in CLN5 and CLN6 disease."
+  },
+  "target": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0066",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that [MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease is about CLN5 disease.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

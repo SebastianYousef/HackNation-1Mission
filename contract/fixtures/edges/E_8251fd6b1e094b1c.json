@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:8251fd6b1e094b1c",
+    "src": "MONDO:MOCK0006",
+    "dst": "ATLAS:mech-membrane-protein-dysfunction",
+    "type": "disease_involves_mechanism",
+    "label": "involves",
+    "status": "curated",
+    "confidence": 0.88,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "UniProt"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "MONDO:MOCK0006",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN6 disease",
+    "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+  },
+  "target": {
+    "id": "ATLAS:mech-membrane-protein-dysfunction",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal/ER membrane protein dysfunction",
+    "summary": "A broken protein that is built into a membrane (of the lysosome or the endoplasmic reticulum). It cannot simply be replaced by an infusion."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0021",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "UniProt",
+      "source_ref": null,
+      "url": "https://example.org/db/uniprot",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

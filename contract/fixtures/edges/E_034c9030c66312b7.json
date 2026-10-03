@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:034c9030c66312b7",
+    "src": "HGNC:MOCK0006",
+    "dst": "ATLAS:mech-membrane-protein-dysfunction",
+    "type": "gene_in_mechanism",
+    "label": "acts in",
+    "status": "curated",
+    "confidence": 0.9,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "GO"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0006",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "CLN6",
+    "summary": "Makes a protein in the cell's endoplasmic reticulum membrane that helps deliver enzymes to lysosomes."
+  },
+  "target": {
+    "id": "ATLAS:mech-membrane-protein-dysfunction",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal/ER membrane protein dysfunction",
+    "summary": "A broken protein that is built into a membrane (of the lysosome or the endoplasmic reticulum). It cannot simply be replaced by an infusion."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0031",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "GO",
+      "source_ref": null,
+      "url": "https://example.org/db/go",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

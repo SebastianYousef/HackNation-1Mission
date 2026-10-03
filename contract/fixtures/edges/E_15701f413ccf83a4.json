@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:15701f413ccf83a4",
+    "src": "GRANT:MOCK0001",
+    "dst": "PERSON:mock-researcher-a",
+    "type": "grant_funds_person",
+    "label": "funds",
+    "status": "curated",
+    "confidence": 0.98,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "NCL Research Fund (mock)"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "GRANT:MOCK0001",
+    "type": "grant",
+    "subtype": null,
+    "label": "[MOCK] Lysosomal dysfunction across CLN subtypes",
+    "summary": "A (mock) research grant comparing how lysosomes fail in different forms of Batten disease."
+  },
+  "target": {
+    "id": "PERSON:mock-researcher-a",
+    "type": "person",
+    "subtype": "researcher",
+    "label": "Dr. A. Example",
+    "summary": "(Fictional) neuroscientist studying lysosomal storage in CLN5 and CLN3 disease."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0080",
+      "stance": "supports",
+      "source_type": "grant_database",
+      "source_name": "NCL Research Fund (mock)",
+      "source_ref": "MOCK-R01-0001",
+      "url": "https://example.org/grants/MOCK0001",
+      "quote": null,
+      "method": "curated",
+      "published_at": "2026-01-10",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

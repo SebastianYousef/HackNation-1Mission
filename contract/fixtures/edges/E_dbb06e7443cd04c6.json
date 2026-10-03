@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:dbb06e7443cd04c6",
+    "src": "MONDO:MOCK0002",
+    "dst": "MONDO:MOCK0000",
+    "type": "disease_subtype_of",
+    "label": "is a form of",
+    "status": "curated",
+    "confidence": 0.99,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "MONDO"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+  },
+  "target": {
+    "id": "MONDO:MOCK0000",
+    "type": "disease",
+    "subtype": null,
+    "label": "Neuronal ceroid lipofuscinosis",
+    "summary": "A group of inherited brain diseases (often called Batten disease) in which waste material builds up inside cells' recycling centres, the lysosomes."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0009",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "MONDO",
+      "source_ref": null,
+      "url": "https://example.org/db/mondo",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

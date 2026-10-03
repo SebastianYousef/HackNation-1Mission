@@ -1,0 +1,27 @@
+{
+  "node": {
+    "id": "NCTMOCK0001",
+    "type": "trial",
+    "subtype": null,
+    "label": "[MOCK] Intraventricular cerliponase alfa in children with CLN2 disease",
+    "summary": "A (mock) completed trial of enzyme replacement therapy in CLN2 disease.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "nct_id": "NCTMOCK0001",
+      "phase": "Phase 2",
+      "overall_status": "COMPLETED",
+      "start_date": "2013-09-01",
+      "enrollment": 24
+    },
+    "url": "https://example.org/trials/NCTMOCK0001"
+  },
+  "degree": {
+    "disease": 1,
+    "intervention": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

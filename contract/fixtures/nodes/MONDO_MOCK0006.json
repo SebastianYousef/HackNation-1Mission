@@ -1,0 +1,53 @@
+{
+  "node": {
+    "id": "MONDO:MOCK0006",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN6 disease",
+    "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills.",
+    "description": "[MOCK] Neuronal ceroid lipofuscinosis caused by biallelic variants in CLN6, an endoplasmic-reticulum membrane protein.",
+    "synonyms": [
+      "Neuronal ceroid lipofuscinosis type 6",
+      "CLN6 Batten disease"
+    ],
+    "xrefs": {
+      "ORPHA": [
+        "MOCK-ORPHA-0006"
+      ]
+    },
+    "attrs": {
+      "prevalence": "[MOCK] ultra-rare",
+      "onset": "late infantile",
+      "inheritance": "autosomal recessive",
+      "has_approved_treatment": false,
+      "approved_treatments": []
+    },
+    "url": "https://example.org/atlas/disease/MONDO_MOCK0006"
+  },
+  "degree": {
+    "gene": 1,
+    "disease": 2,
+    "mechanism": 2,
+    "phenotype": 5,
+    "trial": 1,
+    "publication": 1,
+    "organization": 2,
+    "asset": 2
+  },
+  "clusters": [
+    {
+      "id": "cluster:mock-ncl-core",
+      "label": "Childhood NCLs: vision loss + seizures + regression",
+      "size": 5,
+      "membership": 0.92
+    },
+    {
+      "id": "cluster:mock-ncl-membrane",
+      "label": "Membrane protein NCLs",
+      "size": 2,
+      "membership": 0.9
+    }
+  ],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

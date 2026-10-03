@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:2263e435450d82e1",
+    "src": "GRANT:MOCK0001",
+    "dst": "ATLAS:mech-lysosomal-degradation",
+    "type": "grant_studies",
+    "label": "studies",
+    "status": "curated",
+    "confidence": 0.9,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "NCL Research Fund (mock)"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "GRANT:MOCK0001",
+    "type": "grant",
+    "subtype": null,
+    "label": "[MOCK] Lysosomal dysfunction across CLN subtypes",
+    "summary": "A (mock) research grant comparing how lysosomes fail in different forms of Batten disease."
+  },
+  "target": {
+    "id": "ATLAS:mech-lysosomal-degradation",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+    "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0081",
+      "stance": "supports",
+      "source_type": "grant_database",
+      "source_name": "NCL Research Fund (mock)",
+      "source_ref": "MOCK-R01-0001",
+      "url": "https://example.org/grants/MOCK0001",
+      "quote": null,
+      "method": "curated",
+      "published_at": "2026-01-10",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

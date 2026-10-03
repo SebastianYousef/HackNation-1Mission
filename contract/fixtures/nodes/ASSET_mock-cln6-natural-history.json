@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "ASSET:mock-cln6-natural-history",
+    "type": "asset",
+    "subtype": "natural_history_study",
+    "label": "CLN6 Natural History Study (mock)",
+    "summary": "A (fictional) study that follows children with CLN6 disease over years to learn how the disease progresses.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "asset_kind": "natural_history_study",
+      "access": "on_request",
+      "owner_id": "ORG:mock-example-university-hospital"
+    },
+    "url": "https://example.org/example-hospital/cln6-nhs"
+  },
+  "degree": {
+    "organization": 1,
+    "disease": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

@@ -1,0 +1,55 @@
+{
+  "edge": {
+    "id": "E:ff34655b9b3364ff",
+    "src": "MONDO:MOCK0099",
+    "dst": "MONDO:MOCK0005",
+    "type": "disease_similar_to",
+    "label": "is similar to",
+    "status": "inferred",
+    "confidence": 0.45,
+    "score": 0.52,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Atlas analytics"
+    ],
+    "attrs": {
+      "components": {
+        "phenotype": 0.6,
+        "mechanism": 0.4,
+        "gene": 0
+      },
+      "caution": "Subtype X is only known from a few families; similarity is based on two symptoms and an inferred mechanism."
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0099",
+    "type": "disease",
+    "subtype": null,
+    "label": "MOCK ultra-rare NCL subtype X (fictional)",
+    "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis."
+  },
+  "target": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0059",
+      "stance": "supports",
+      "source_type": "computed",
+      "source_name": "Atlas analytics",
+      "source_ref": null,
+      "url": null,
+      "quote": null,
+      "method": "algorithm:mock-similarity-v1",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

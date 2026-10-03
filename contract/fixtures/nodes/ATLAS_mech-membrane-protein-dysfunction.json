@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "ATLAS:mech-membrane-protein-dysfunction",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal/ER membrane protein dysfunction",
+    "summary": "A broken protein that is built into a membrane (of the lysosome or the endoplasmic reticulum). It cannot simply be replaced by an infusion.",
+    "description": "[MOCK] Loss of function of an integral membrane protein of the lysosome or ER; not cross-correctable by enzyme replacement.",
+    "synonyms": [
+      "Lysosomal membrane transport defect",
+      "Membrane protein NCL"
+    ],
+    "xrefs": {},
+    "attrs": {},
+    "url": "https://example.org/atlas/mechanism/ATLAS_mech-membrane-protein-dysfunction"
+  },
+  "degree": {
+    "disease": 2,
+    "gene": 3,
+    "publication": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

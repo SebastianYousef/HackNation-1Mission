@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:2b64147005a6a021",
+    "src": "MONDO:MOCK0099",
+    "dst": "ATLAS:mech-lysosomal-degradation",
+    "type": "disease_involves_mechanism",
+    "label": "involves",
+    "status": "inferred",
+    "confidence": 0.4,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Atlas analytics"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "MONDO:MOCK0099",
+    "type": "disease",
+    "subtype": null,
+    "label": "MOCK ultra-rare NCL subtype X (fictional)",
+    "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis."
+  },
+  "target": {
+    "id": "ATLAS:mech-lysosomal-degradation",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+    "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0015",
+      "stance": "supports",
+      "source_type": "computed",
+      "source_name": "Atlas analytics",
+      "source_ref": null,
+      "url": null,
+      "quote": null,
+      "method": "algorithm:mock-phenotype-to-mechanism",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:c8d5e158a526a1ff",
+    "src": "PERSON:mock-researcher-b",
+    "dst": "ORG:mock-ncl-registry-consortium",
+    "type": "person_affiliated_with",
+    "label": "works at",
+    "status": "curated",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "ORCID"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PERSON:mock-researcher-b",
+    "type": "person",
+    "subtype": "researcher",
+    "label": "Dr. B. Placeholder",
+    "summary": "(Fictional) cell biologist working on lysosomal membrane proteins, especially CLN3."
+  },
+  "target": {
+    "id": "ORG:mock-ncl-registry-consortium",
+    "type": "organization",
+    "subtype": "academic",
+    "label": "International NCL Registry Consortium (mock)",
+    "summary": "A (fictional) academic consortium that runs a shared patient registry for several NCL subtypes."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0078",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "ORCID",
+      "source_ref": null,
+      "url": "https://example.org/db/orcid",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

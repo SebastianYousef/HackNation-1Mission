@@ -1,0 +1,27 @@
+{
+  "node": {
+    "id": "ORG:mock-example-university-hospital",
+    "type": "organization",
+    "subtype": "hospital",
+    "label": "Example University Hospital (mock)",
+    "summary": "A (fictional) hospital with a paediatric neurology team that studies NCL diseases.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "website": "https://example.org/example-hospital",
+      "country": "SE",
+      "contact_url": "https://example.org/example-hospital/ncl-team",
+      "has_registry": false,
+      "email_public": null
+    },
+    "url": "https://example.org/example-hospital"
+  },
+  "degree": {
+    "person": 2,
+    "asset": 2
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

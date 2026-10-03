@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "HP:MOCK0001",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Seizure",
+    "summary": "Sudden bursts of abnormal electrical activity in the brain (fits).",
+    "description": null,
+    "synonyms": [
+      "Epileptic seizure",
+      "Fits"
+    ],
+    "xrefs": {},
+    "attrs": {
+      "ic": 3.1
+    },
+    "url": "https://example.org/atlas/phenotype/HP_MOCK0001"
+  },
+  "degree": {
+    "disease": 5
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

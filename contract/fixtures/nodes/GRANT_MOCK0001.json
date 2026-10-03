@@ -1,0 +1,27 @@
+{
+  "node": {
+    "id": "GRANT:MOCK0001",
+    "type": "grant",
+    "subtype": null,
+    "label": "[MOCK] Lysosomal dysfunction across CLN subtypes",
+    "summary": "A (mock) research grant comparing how lysosomes fail in different forms of Batten disease.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "project_num": "MOCK-R01-0001",
+      "fiscal_year": 2026,
+      "amount_usd": 450000,
+      "agency": "NCL Research Fund (mock)"
+    },
+    "url": "https://example.org/grants/MOCK0001"
+  },
+  "degree": {
+    "person": 1,
+    "mechanism": 1,
+    "organization": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

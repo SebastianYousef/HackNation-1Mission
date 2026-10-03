@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:558f51a817e05dec",
+    "src": "HGNC:MOCK0005",
+    "dst": "MONDO:MOCK0005",
+    "type": "gene_associated_with_disease",
+    "label": "causes",
+    "status": "curated",
+    "confidence": 0.98,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Orphanet"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0005",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "CLN5",
+    "summary": "Makes a soluble protein that works inside the lysosome; its exact job is still being studied."
+  },
+  "target": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0001",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "Orphanet",
+      "source_ref": null,
+      "url": "https://example.org/db/orphanet",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:91bedaa63bf49941",
+    "src": "MONDO:MOCK0003",
+    "dst": "ATLAS:mech-lysosomal-degradation",
+    "type": "disease_involves_mechanism",
+    "label": "involves",
+    "status": "literature",
+    "confidence": 0.82,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "MONDO:MOCK0003",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN3 disease",
+    "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+  },
+  "target": {
+    "id": "ATLAS:mech-lysosomal-degradation",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+    "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0013",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0002",
+      "url": "https://example.org/pubmed/MOCK0002",
+      "quote": "[MOCK] Loss of CLN3 disrupts lysosomal function and leads to storage material accumulation.",
+      "method": "llm:mock-extractor",
+      "published_at": "2025-02-10",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

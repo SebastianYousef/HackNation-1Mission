@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+    "type": "mechanism",
+    "subtype": "variant_effect",
+    "label": "Soluble lysosomal enzyme deficiency",
+    "summary": "A missing enzyme that normally floats free inside the lysosome. Because it is soluble, it can sometimes be replaced with a manufactured version (enzyme replacement).",
+    "description": "[MOCK] Loss of function of a secreted/soluble lysosomal hydrolase amenable in principle to cross-correction.",
+    "synonyms": [
+      "Soluble lysosomal protein loss",
+      "Cross-correctable lysosomal deficiency"
+    ],
+    "xrefs": {},
+    "attrs": {},
+    "url": "https://example.org/atlas/mechanism/ATLAS_mech-soluble-lysosomal-enzyme-deficiency"
+  },
+  "degree": {
+    "disease": 2,
+    "gene": 2,
+    "intervention": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

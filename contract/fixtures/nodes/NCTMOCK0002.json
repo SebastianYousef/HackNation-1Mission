@@ -1,0 +1,26 @@
+{
+  "node": {
+    "id": "NCTMOCK0002",
+    "type": "trial",
+    "subtype": null,
+    "label": "[MOCK] Gene transfer study in CLN6 disease",
+    "summary": "A (mock) early-stage gene therapy trial for children with CLN6 disease.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "nct_id": "NCTMOCK0002",
+      "phase": "Phase 1/2",
+      "overall_status": "RECRUITING",
+      "start_date": "2025-03-01",
+      "enrollment": 12
+    },
+    "url": "https://example.org/trials/NCTMOCK0002"
+  },
+  "degree": {
+    "disease": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

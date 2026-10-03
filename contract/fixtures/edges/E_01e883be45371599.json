@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:01e883be45371599",
+    "src": "PMID:MOCK0002",
+    "dst": "MONDO:MOCK0003",
+    "type": "publication_about",
+    "label": "is about",
+    "status": "curated",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PMID:MOCK0002",
+    "type": "publication",
+    "subtype": null,
+    "label": "[MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement",
+    "summary": "A (mock) paper explaining why therapies that work for soluble-enzyme NCLs may not work for CLN3."
+  },
+  "target": {
+    "id": "MONDO:MOCK0003",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN3 disease",
+    "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0068",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that [MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement is about CLN3 disease.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "HGNC:MOCK0002",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "TPP1",
+    "summary": "Makes TPP1, a soluble lysosomal enzyme that breaks down small proteins. Missing in CLN2 disease.",
+    "description": "[MOCK] Tripeptidyl peptidase 1, a soluble lysosomal serine protease.",
+    "synonyms": [],
+    "xrefs": {
+      "HGNC": [
+        "MOCK-TPP1"
+      ]
+    },
+    "attrs": {},
+    "url": "https://example.org/atlas/gene/HGNC_MOCK0002"
+  },
+  "degree": {
+    "disease": 1,
+    "mechanism": 2
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

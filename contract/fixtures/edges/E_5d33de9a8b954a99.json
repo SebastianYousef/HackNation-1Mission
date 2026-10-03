@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:5d33de9a8b954a99",
+    "src": "PERSON:mock-researcher-b",
+    "dst": "PMID:MOCK0002",
+    "type": "person_authored",
+    "label": "authored",
+    "status": "curated",
+    "confidence": 0.97,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PERSON:mock-researcher-b",
+    "type": "person",
+    "subtype": "researcher",
+    "label": "Dr. B. Placeholder",
+    "summary": "(Fictional) cell biologist working on lysosomal membrane proteins, especially CLN3."
+  },
+  "target": {
+    "id": "PMID:MOCK0002",
+    "type": "publication",
+    "subtype": null,
+    "label": "[MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement",
+    "summary": "A (mock) paper explaining why therapies that work for soluble-enzyme NCLs may not work for CLN3."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0071",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that Dr. B. Placeholder authored [MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

@@ -1,0 +1,1044 @@
+{
+  "center": "MONDO:MOCK0005",
+  "nodes": [
+    {
+      "id": "MONDO:MOCK0005",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN5 disease",
+      "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+    },
+    {
+      "id": "ASSET:mock-cln5-sheep-model",
+      "type": "asset",
+      "subtype": "animal_model",
+      "label": "CLN5 sheep model (mock entry)",
+      "summary": "A large-animal model with CLN5 changes that researchers use to test treatments. [MOCK record]"
+    },
+    {
+      "id": "MONDO:MOCK0002",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN2 disease",
+      "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+    },
+    {
+      "id": "MONDO:MOCK0003",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN3 disease",
+      "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+    },
+    {
+      "id": "MONDO:MOCK0006",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN6 disease",
+      "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+    },
+    {
+      "id": "MONDO:MOCK0099",
+      "type": "disease",
+      "subtype": null,
+      "label": "MOCK ultra-rare NCL subtype X (fictional)",
+      "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis."
+    },
+    {
+      "id": "MONDO:MOCK0000",
+      "type": "disease",
+      "subtype": null,
+      "label": "Neuronal ceroid lipofuscinosis",
+      "summary": "A group of inherited brain diseases (often called Batten disease) in which waste material builds up inside cells' recycling centres, the lysosomes."
+    },
+    {
+      "id": "HGNC:MOCK0005",
+      "type": "gene",
+      "subtype": "protein_coding",
+      "label": "CLN5",
+      "summary": "Makes a soluble protein that works inside the lysosome; its exact job is still being studied."
+    },
+    {
+      "id": "ATLAS:mech-lysosomal-degradation",
+      "type": "mechanism",
+      "subtype": "biological_process",
+      "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+      "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+    },
+    {
+      "id": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+      "type": "mechanism",
+      "subtype": "variant_effect",
+      "label": "Soluble lysosomal enzyme deficiency",
+      "summary": "A missing enzyme that normally floats free inside the lysosome. Because it is soluble, it can sometimes be replaced with a manufactured version (enzyme replacement)."
+    },
+    {
+      "id": "ORG:mock-bdsra",
+      "type": "organization",
+      "subtype": "patient_group",
+      "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+      "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]"
+    },
+    {
+      "id": "ORG:mock-cln5-families",
+      "type": "organization",
+      "subtype": "patient_group",
+      "label": "CLN5 Families Network (mock)",
+      "summary": "A (fictional) parent-led group for families affected by CLN5 disease."
+    },
+    {
+      "id": "PERSON:mock-researcher-a",
+      "type": "person",
+      "subtype": "researcher",
+      "label": "Dr. A. Example",
+      "summary": "(Fictional) neuroscientist studying lysosomal storage in CLN5 and CLN3 disease."
+    },
+    {
+      "id": "HP:MOCK0003",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Ataxia",
+      "summary": "Unsteady, clumsy movement and walking."
+    },
+    {
+      "id": "HP:MOCK0006",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Cerebral atrophy",
+      "summary": "Shrinking of brain tissue seen on a brain scan."
+    },
+    {
+      "id": "HP:MOCK0004",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Developmental regression",
+      "summary": "Losing skills (speech, walking, learning) that a child had already gained."
+    },
+    {
+      "id": "HP:MOCK0005",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Myoclonus",
+      "summary": "Brief, jerky, involuntary muscle twitches."
+    },
+    {
+      "id": "HP:MOCK0001",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Seizure",
+      "summary": "Sudden bursts of abnormal electrical activity in the brain (fits)."
+    },
+    {
+      "id": "HP:MOCK0002",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Visual loss",
+      "summary": "Gradual loss of eyesight."
+    },
+    {
+      "id": "PMID:MOCK0001",
+      "type": "publication",
+      "subtype": null,
+      "label": "[MOCK] Shared lysosomal storage features in CLN5 and CLN6 disease",
+      "summary": "A (mock) paper comparing storage material and symptoms in CLN5 and CLN6 disease."
+    }
+  ],
+  "edges": [
+    {
+      "id": "E:dbb06e7443cd04c6",
+      "src": "MONDO:MOCK0002",
+      "dst": "MONDO:MOCK0000",
+      "type": "disease_subtype_of",
+      "label": "is a form of",
+      "status": "curated",
+      "confidence": 0.99,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "MONDO"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:746dbd93501c5a99",
+      "src": "MONDO:MOCK0003",
+      "dst": "MONDO:MOCK0000",
+      "type": "disease_subtype_of",
+      "label": "is a form of",
+      "status": "curated",
+      "confidence": 0.99,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "MONDO"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:ea5e22651a02fa51",
+      "src": "MONDO:MOCK0005",
+      "dst": "MONDO:MOCK0000",
+      "type": "disease_subtype_of",
+      "label": "is a form of",
+      "status": "curated",
+      "confidence": 0.99,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "MONDO"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:672450b83c7a7677",
+      "src": "MONDO:MOCK0006",
+      "dst": "MONDO:MOCK0000",
+      "type": "disease_subtype_of",
+      "label": "is a form of",
+      "status": "curated",
+      "confidence": 0.99,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "MONDO"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:558f51a817e05dec",
+      "src": "HGNC:MOCK0005",
+      "dst": "MONDO:MOCK0005",
+      "type": "gene_associated_with_disease",
+      "label": "causes",
+      "status": "curated",
+      "confidence": 0.98,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Orphanet"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:4195f7c9a839073c",
+      "src": "MONDO:MOCK0002",
+      "dst": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+      "type": "disease_involves_mechanism",
+      "label": "involves",
+      "status": "curated",
+      "confidence": 0.97,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Reactome"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:9ceeedd5ecaa2583",
+      "src": "PERSON:mock-researcher-a",
+      "dst": "PMID:MOCK0001",
+      "type": "person_authored",
+      "label": "authored",
+      "status": "curated",
+      "confidence": 0.97,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:66bef40a899a70ea",
+      "src": "MONDO:MOCK0002",
+      "dst": "ATLAS:mech-lysosomal-degradation",
+      "type": "disease_involves_mechanism",
+      "label": "involves",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Reactome"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:f54be053e484faa2",
+      "src": "MONDO:MOCK0002",
+      "dst": "HP:MOCK0003",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent"
+      }
+    },
+    {
+      "id": "E:1bc21162e37c1b74",
+      "src": "MONDO:MOCK0002",
+      "dst": "HP:MOCK0005",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "frequent"
+      }
+    },
+    {
+      "id": "E:c011acb17315a2b4",
+      "src": "MONDO:MOCK0002",
+      "dst": "HP:MOCK0004",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent"
+      }
+    },
+    {
+      "id": "E:0473ed668a18faf9",
+      "src": "MONDO:MOCK0002",
+      "dst": "HP:MOCK0001",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent",
+        "onset": "late infantile"
+      }
+    },
+    {
+      "id": "E:d413cf5027584d68",
+      "src": "MONDO:MOCK0002",
+      "dst": "HP:MOCK0002",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "frequent"
+      }
+    },
+    {
+      "id": "E:afb285ba484d3184",
+      "src": "MONDO:MOCK0003",
+      "dst": "HP:MOCK0004",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent"
+      }
+    },
+    {
+      "id": "E:9b9ba081daa8fec1",
+      "src": "MONDO:MOCK0003",
+      "dst": "HP:MOCK0001",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "frequent",
+        "onset": "juvenile"
+      }
+    },
+    {
+      "id": "E:7f4fd3c364aad1f9",
+      "src": "MONDO:MOCK0003",
+      "dst": "HP:MOCK0002",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent",
+        "onset": "juvenile"
+      }
+    },
+    {
+      "id": "E:2ec9a87f7cc6ba14",
+      "src": "MONDO:MOCK0005",
+      "dst": "HP:MOCK0003",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "frequent"
+      }
+    },
+    {
+      "id": "E:e6d8b664f312da37",
+      "src": "MONDO:MOCK0005",
+      "dst": "HP:MOCK0006",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "frequent"
+      }
+    },
+    {
+      "id": "E:411f9ae37b11a4c0",
+      "src": "MONDO:MOCK0005",
+      "dst": "HP:MOCK0005",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "frequent"
+      }
+    },
+    {
+      "id": "E:aa067a16130e54df",
+      "src": "MONDO:MOCK0005",
+      "dst": "HP:MOCK0004",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent"
+      }
+    },
+    {
+      "id": "E:750dfe9b23359a4a",
+      "src": "MONDO:MOCK0005",
+      "dst": "HP:MOCK0001",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent",
+        "onset": "childhood"
+      }
+    },
+    {
+      "id": "E:94d7e8dbd203d130",
+      "src": "MONDO:MOCK0005",
+      "dst": "HP:MOCK0002",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent",
+        "onset": "childhood"
+      }
+    },
+    {
+      "id": "E:0b66254872905753",
+      "src": "MONDO:MOCK0006",
+      "dst": "HP:MOCK0003",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "frequent"
+      }
+    },
+    {
+      "id": "E:e919cfb4c65a5886",
+      "src": "MONDO:MOCK0006",
+      "dst": "HP:MOCK0005",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "frequent"
+      }
+    },
+    {
+      "id": "E:e6d4005a1a9303b4",
+      "src": "MONDO:MOCK0006",
+      "dst": "HP:MOCK0004",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent"
+      }
+    },
+    {
+      "id": "E:1e360be9952331f5",
+      "src": "MONDO:MOCK0006",
+      "dst": "HP:MOCK0001",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent",
+        "onset": "late infantile"
+      }
+    },
+    {
+      "id": "E:79c1a68333a57626",
+      "src": "MONDO:MOCK0006",
+      "dst": "HP:MOCK0002",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "HPO"
+      ],
+      "attrs": {
+        "frequency": "very frequent"
+      }
+    },
+    {
+      "id": "E:3823875a05b41a4a",
+      "src": "ORG:mock-cln5-families",
+      "dst": "MONDO:MOCK0005",
+      "type": "organization_serves_disease",
+      "label": "serves families with",
+      "status": "literature",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Organization website"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:4083605ab7c2db82",
+      "src": "PMID:MOCK0001",
+      "dst": "MONDO:MOCK0005",
+      "type": "publication_about",
+      "label": "is about",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:e9888db1bb32e9dd",
+      "src": "PMID:MOCK0001",
+      "dst": "MONDO:MOCK0006",
+      "type": "publication_about",
+      "label": "is about",
+      "status": "curated",
+      "confidence": 0.95,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:37068dc133c8a4cf",
+      "src": "ASSET:mock-cln5-sheep-model",
+      "dst": "MONDO:MOCK0005",
+      "type": "asset_covers_disease",
+      "label": "covers",
+      "status": "literature",
+      "confidence": 0.9,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Organization website"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:113bd557152f6568",
+      "src": "ASSET:mock-cln5-sheep-model",
+      "dst": "HGNC:MOCK0005",
+      "type": "asset_targets_gene",
+      "label": "models",
+      "status": "literature",
+      "confidence": 0.9,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:f414b4b12296401c",
+      "src": "HGNC:MOCK0005",
+      "dst": "ATLAS:mech-lysosomal-degradation",
+      "type": "gene_in_mechanism",
+      "label": "acts in",
+      "status": "curated",
+      "confidence": 0.9,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "GO"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:b798d149b51c6b9b",
+      "src": "MONDO:MOCK0005",
+      "dst": "ATLAS:mech-lysosomal-degradation",
+      "type": "disease_involves_mechanism",
+      "label": "involves",
+      "status": "literature",
+      "confidence": 0.85,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:23e1e9c3bb7ca4c2",
+      "src": "ORG:mock-bdsra",
+      "dst": "MONDO:MOCK0003",
+      "type": "organization_serves_disease",
+      "label": "serves families with",
+      "status": "literature",
+      "confidence": 0.85,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Organization website"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:42bba7533f075e61",
+      "src": "PERSON:mock-researcher-a",
+      "dst": "MONDO:MOCK0005",
+      "type": "person_studies",
+      "label": "studies",
+      "status": "literature",
+      "confidence": 0.85,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:b8c5704fed1013e9",
+      "src": "MONDO:MOCK0006",
+      "dst": "ATLAS:mech-lysosomal-degradation",
+      "type": "disease_involves_mechanism",
+      "label": "involves",
+      "status": "literature",
+      "confidence": 0.84,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:91bedaa63bf49941",
+      "src": "MONDO:MOCK0003",
+      "dst": "ATLAS:mech-lysosomal-degradation",
+      "type": "disease_involves_mechanism",
+      "label": "involves",
+      "status": "literature",
+      "confidence": 0.82,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:2fff037e50f60ad9",
+      "src": "ORG:mock-bdsra",
+      "dst": "MONDO:MOCK0002",
+      "type": "organization_serves_disease",
+      "label": "serves families with",
+      "status": "literature",
+      "confidence": 0.8,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Organization website"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:7b5b73726701b43d",
+      "src": "ORG:mock-bdsra",
+      "dst": "MONDO:MOCK0005",
+      "type": "organization_serves_disease",
+      "label": "serves families with",
+      "status": "literature",
+      "confidence": 0.8,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Organization website"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:1709e55eb2a171c3",
+      "src": "ORG:mock-bdsra",
+      "dst": "MONDO:MOCK0006",
+      "type": "organization_serves_disease",
+      "label": "serves families with",
+      "status": "literature",
+      "confidence": 0.8,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Organization website"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:07f23b976e67b457",
+      "src": "MONDO:MOCK0005",
+      "dst": "MONDO:MOCK0006",
+      "type": "disease_similar_to",
+      "label": "is similar to",
+      "status": "inferred",
+      "confidence": 0.8,
+      "score": 0.86,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Atlas analytics"
+      ],
+      "attrs": {
+        "components": {
+          "phenotype": 0.92,
+          "mechanism": 0.8,
+          "gene": 0
+        }
+      }
+    },
+    {
+      "id": "E:04c1472586fe205e",
+      "src": "PERSON:mock-researcher-a",
+      "dst": "MONDO:MOCK0003",
+      "type": "person_studies",
+      "label": "studies",
+      "status": "literature",
+      "confidence": 0.75,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:387daa98608d500a",
+      "src": "MONDO:MOCK0005",
+      "dst": "MONDO:MOCK0002",
+      "type": "disease_similar_to",
+      "label": "is similar to",
+      "status": "inferred",
+      "confidence": 0.7,
+      "score": 0.74,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Atlas analytics",
+        "FDA labels"
+      ],
+      "attrs": {
+        "components": {
+          "phenotype": 0.85,
+          "mechanism": 0.6,
+          "gene": 0
+        },
+        "caution": "CLN2 disease has an approved enzyme replacement therapy (cerliponase alfa) because TPP1 is a soluble lysosomal enzyme that can be supplied from outside the cell. That success does not automatically transfer to CLN5 disease: whether CLN5 can be replaced the same way is unproven."
+      }
+    },
+    {
+      "id": "E:4f9c6f5bca5028f5",
+      "src": "MONDO:MOCK0005",
+      "dst": "MONDO:MOCK0003",
+      "type": "disease_similar_to",
+      "label": "is similar to",
+      "status": "inferred",
+      "confidence": 0.65,
+      "score": 0.71,
+      "support_count": 1,
+      "contradict_count": 1,
+      "sources": [
+        "Atlas analytics",
+        "PubMed"
+      ],
+      "attrs": {
+        "components": {
+          "phenotype": 0.78,
+          "mechanism": 0.55,
+          "gene": 0
+        },
+        "caution": "CLN3 is a lysosomal membrane protein, not a soluble enzyme. Similar symptoms do not mean similar treatments: enzyme-replacement-style approaches are not expected to work for CLN3."
+      }
+    },
+    {
+      "id": "E:63abbf99c2d123a1",
+      "src": "MONDO:MOCK0099",
+      "dst": "HP:MOCK0001",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "literature",
+      "confidence": 0.6,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {
+        "frequency": "frequent"
+      }
+    },
+    {
+      "id": "E:c88d16b0a29714eb",
+      "src": "MONDO:MOCK0099",
+      "dst": "HP:MOCK0002",
+      "type": "disease_has_phenotype",
+      "label": "has symptom",
+      "status": "literature",
+      "confidence": 0.6,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {
+        "frequency": "frequent"
+      }
+    },
+    {
+      "id": "E:63794ffcb9784187",
+      "src": "MONDO:MOCK0099",
+      "dst": "MONDO:MOCK0000",
+      "type": "disease_subtype_of",
+      "label": "is a form of",
+      "status": "literature",
+      "confidence": 0.55,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "PubMed"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:ff34655b9b3364ff",
+      "src": "MONDO:MOCK0099",
+      "dst": "MONDO:MOCK0005",
+      "type": "disease_similar_to",
+      "label": "is similar to",
+      "status": "inferred",
+      "confidence": 0.45,
+      "score": 0.52,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Atlas analytics"
+      ],
+      "attrs": {
+        "components": {
+          "phenotype": 0.6,
+          "mechanism": 0.4,
+          "gene": 0
+        },
+        "caution": "Subtype X is only known from a few families; similarity is based on two symptoms and an inferred mechanism."
+      }
+    },
+    {
+      "id": "E:2b64147005a6a021",
+      "src": "MONDO:MOCK0099",
+      "dst": "ATLAS:mech-lysosomal-degradation",
+      "type": "disease_involves_mechanism",
+      "label": "involves",
+      "status": "inferred",
+      "confidence": 0.4,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 0,
+      "sources": [
+        "Atlas analytics"
+      ],
+      "attrs": {}
+    },
+    {
+      "id": "E:0b8f98bd0b261351",
+      "src": "MONDO:MOCK0005",
+      "dst": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+      "type": "disease_involves_mechanism",
+      "label": "involves",
+      "status": "hypothesis",
+      "confidence": 0.35,
+      "score": null,
+      "support_count": 1,
+      "contradict_count": 1,
+      "sources": [
+        "Atlas analytics",
+        "PubMed"
+      ],
+      "attrs": {
+        "note": "Atlas hypothesis: CLN5 is soluble like TPP1, so cross-correction might apply. Untested."
+      }
+    }
+  ],
+  "truncated": false
+}

@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:2c12e4964f795c91",
+    "src": "DRUG:MOCK0001",
+    "dst": "ATLAS:mech-lysosomal-degradation",
+    "type": "intervention_targets_mechanism",
+    "label": "targets",
+    "status": "curated",
+    "confidence": 0.9,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "DrugBank"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "DRUG:MOCK0001",
+    "type": "intervention",
+    "subtype": "enzyme_replacement",
+    "label": "Cerliponase alfa",
+    "summary": "A manufactured TPP1 enzyme given into the brain fluid. It is approved for CLN2 disease only."
+  },
+  "target": {
+    "id": "ATLAS:mech-lysosomal-degradation",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+    "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0062",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "DrugBank",
+      "source_ref": null,
+      "url": "https://example.org/db/drugbank",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "HGNC:MOCK0006",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "CLN6",
+    "summary": "Makes a protein in the cell's endoplasmic reticulum membrane that helps deliver enzymes to lysosomes.",
+    "description": "[MOCK] CLN6 transmembrane ER protein.",
+    "synonyms": [],
+    "xrefs": {
+      "HGNC": [
+        "MOCK-CLN6"
+      ]
+    },
+    "attrs": {},
+    "url": "https://example.org/atlas/gene/HGNC_MOCK0006"
+  },
+  "degree": {
+    "disease": 1,
+    "mechanism": 2
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

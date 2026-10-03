@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:4195f7c9a839073c",
+    "src": "MONDO:MOCK0002",
+    "dst": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+    "type": "disease_involves_mechanism",
+    "label": "involves",
+    "status": "curated",
+    "confidence": 0.97,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Reactome"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+  },
+  "target": {
+    "id": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+    "type": "mechanism",
+    "subtype": "variant_effect",
+    "label": "Soluble lysosomal enzyme deficiency",
+    "summary": "A missing enzyme that normally floats free inside the lysosome. Because it is soluble, it can sometimes be replaced with a manufactured version (enzyme replacement)."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0016",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "Reactome",
+      "source_ref": null,
+      "url": "https://example.org/db/reactome",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

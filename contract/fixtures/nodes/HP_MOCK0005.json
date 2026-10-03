@@ -1,0 +1,24 @@
+{
+  "node": {
+    "id": "HP:MOCK0005",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Myoclonus",
+    "summary": "Brief, jerky, involuntary muscle twitches.",
+    "description": null,
+    "synonyms": [
+      "Myoclonic jerks"
+    ],
+    "xrefs": {},
+    "attrs": {
+      "ic": 4.6
+    },
+    "url": "https://example.org/atlas/phenotype/HP_MOCK0005"
+  },
+  "degree": {
+    "disease": 3
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

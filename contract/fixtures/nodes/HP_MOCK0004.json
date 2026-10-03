@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "HP:MOCK0004",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Developmental regression",
+    "summary": "Losing skills (speech, walking, learning) that a child had already gained.",
+    "description": null,
+    "synonyms": [
+      "Loss of skills",
+      "Cognitive decline"
+    ],
+    "xrefs": {},
+    "attrs": {
+      "ic": 4
+    },
+    "url": "https://example.org/atlas/phenotype/HP_MOCK0004"
+  },
+  "degree": {
+    "disease": 4
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

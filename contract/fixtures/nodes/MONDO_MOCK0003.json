@@ -1,0 +1,54 @@
+{
+  "node": {
+    "id": "MONDO:MOCK0003",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN3 disease",
+    "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills.",
+    "description": "[MOCK] Juvenile neuronal ceroid lipofuscinosis caused by variants in CLN3, a lysosomal membrane protein.",
+    "synonyms": [
+      "Juvenile Batten disease",
+      "Juvenile neuronal ceroid lipofuscinosis",
+      "Neuronal ceroid lipofuscinosis type 3"
+    ],
+    "xrefs": {
+      "ORPHA": [
+        "MOCK-ORPHA-0003"
+      ]
+    },
+    "attrs": {
+      "prevalence": "[MOCK] rare",
+      "onset": "juvenile (4–10 years)",
+      "inheritance": "autosomal recessive",
+      "has_approved_treatment": false,
+      "approved_treatments": []
+    },
+    "url": "https://example.org/atlas/disease/MONDO_MOCK0003"
+  },
+  "degree": {
+    "gene": 1,
+    "disease": 2,
+    "mechanism": 2,
+    "phenotype": 3,
+    "publication": 1,
+    "person": 2,
+    "organization": 1,
+    "asset": 1
+  },
+  "clusters": [
+    {
+      "id": "cluster:mock-ncl-membrane",
+      "label": "Membrane protein NCLs",
+      "size": 2,
+      "membership": 0.93
+    },
+    {
+      "id": "cluster:mock-ncl-core",
+      "label": "Childhood NCLs: vision loss + seizures + regression",
+      "size": 5,
+      "membership": 0.8
+    }
+  ],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:627570012c059ca8",
+    "src": "ORG:mock-ncl-research-fund",
+    "dst": "GRANT:MOCK0001",
+    "type": "organization_funds_grant",
+    "label": "funds",
+    "status": "curated",
+    "confidence": 0.98,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "NCL Research Fund (mock)"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ORG:mock-ncl-research-fund",
+    "type": "organization",
+    "subtype": "funder",
+    "label": "NCL Research Fund (mock)",
+    "summary": "A (fictional) charity that funds research on Batten disease."
+  },
+  "target": {
+    "id": "GRANT:MOCK0001",
+    "type": "grant",
+    "subtype": null,
+    "label": "[MOCK] Lysosomal dysfunction across CLN subtypes",
+    "summary": "A (mock) research grant comparing how lysosomes fail in different forms of Batten disease."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0082",
+      "stance": "supports",
+      "source_type": "grant_database",
+      "source_name": "NCL Research Fund (mock)",
+      "source_ref": "MOCK-R01-0001",
+      "url": "https://example.org/grants/MOCK0001",
+      "quote": null,
+      "method": "curated",
+      "published_at": "2026-01-10",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

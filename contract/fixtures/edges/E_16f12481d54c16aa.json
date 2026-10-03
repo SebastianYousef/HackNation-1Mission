@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:16f12481d54c16aa",
+    "src": "ORG:mock-cln6-alliance",
+    "dst": "MONDO:MOCK0006",
+    "type": "organization_serves_disease",
+    "label": "serves families with",
+    "status": "literature",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Organization website"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ORG:mock-cln6-alliance",
+    "type": "organization",
+    "subtype": "patient_group",
+    "label": "CLN6 Parents Alliance (mock)",
+    "summary": "A (fictional) parent group for CLN6 disease that supports a natural history study."
+  },
+  "target": {
+    "id": "MONDO:MOCK0006",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN6 disease",
+    "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0088",
+      "stance": "supports",
+      "source_type": "patient_org_site",
+      "source_name": "Organization website",
+      "source_ref": null,
+      "url": "https://example.org/cln6-alliance",
+      "quote": "[MOCK] \"We support families affected by CLN6 disease.\"",
+      "method": "scrape:brightdata",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

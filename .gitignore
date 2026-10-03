@@ -1,0 +1,23 @@
+# secrets
+.env
+.env.*
+!.env.example
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# data (reproducible via backend/pipeline)
+data/
+backend/pipeline/data/
+# infra
+infra/certs/
+frontend-dist/
+# node
+node_modules/
+# os/editor
+.DS_Store
+.idea/
+.vscode/
+*.egg-info/
+.pytest_cache/

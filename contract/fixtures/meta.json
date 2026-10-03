@@ -1,0 +1,43 @@
+{
+  "contract_version": "1.0.0",
+  "dataset": {
+    "version": "mock-2026.10.03",
+    "slice": "MOCK: neuronal ceroid lipofuscinoses (Batten disease) within lysosomal storage diseases",
+    "built_at": "2026-10-03T12:00:00Z",
+    "mock": true
+  },
+  "counts": {
+    "nodes": {
+      "disease": 6,
+      "gene": 7,
+      "mechanism": 3,
+      "phenotype": 6,
+      "intervention": 1,
+      "organization": 7,
+      "person": 3,
+      "asset": 3,
+      "trial": 2,
+      "grant": 1,
+      "publication": 2
+    },
+    "edges": 94,
+    "evidence": 98,
+    "clusters": 3
+  },
+  "sources": [
+    "Atlas analytics",
+    "ClinicalTrials.gov",
+    "DrugBank",
+    "FDA labels",
+    "GO",
+    "HPO",
+    "MONDO",
+    "NCL Research Fund (mock)",
+    "ORCID",
+    "Organization website",
+    "Orphanet",
+    "PubMed",
+    "Reactome",
+    "UniProt"
+  ]
+}

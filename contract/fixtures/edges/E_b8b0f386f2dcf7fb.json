@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:b8b0f386f2dcf7fb",
+    "src": "PERSON:mock-clinician-c",
+    "dst": "MONDO:MOCK0002",
+    "type": "person_studies",
+    "label": "studies",
+    "status": "literature",
+    "confidence": 0.85,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PERSON:mock-clinician-c",
+    "type": "person",
+    "subtype": "clinician",
+    "label": "Dr. C. Sample",
+    "summary": "(Fictional) child neurologist who has run enzyme replacement trials in CLN2 disease."
+  },
+  "target": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0076",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that Dr. C. Sample studies CLN2 disease.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

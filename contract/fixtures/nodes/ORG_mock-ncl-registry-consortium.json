@@ -1,0 +1,27 @@
+{
+  "node": {
+    "id": "ORG:mock-ncl-registry-consortium",
+    "type": "organization",
+    "subtype": "academic",
+    "label": "International NCL Registry Consortium (mock)",
+    "summary": "A (fictional) academic consortium that runs a shared patient registry for several NCL subtypes.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "website": "https://example.org/ncl-registry",
+      "country": "NL",
+      "contact_url": "https://example.org/ncl-registry/contact",
+      "has_registry": true,
+      "email_public": "registry@example.org"
+    },
+    "url": "https://example.org/ncl-registry"
+  },
+  "degree": {
+    "person": 1,
+    "asset": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

@@ -1,0 +1,69 @@
+{
+  "edge": {
+    "id": "E:387daa98608d500a",
+    "src": "MONDO:MOCK0005",
+    "dst": "MONDO:MOCK0002",
+    "type": "disease_similar_to",
+    "label": "is similar to",
+    "status": "inferred",
+    "confidence": 0.7,
+    "score": 0.74,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Atlas analytics",
+      "FDA labels"
+    ],
+    "attrs": {
+      "components": {
+        "phenotype": 0.85,
+        "mechanism": 0.6,
+        "gene": 0
+      },
+      "caution": "CLN2 disease has an approved enzyme replacement therapy (cerliponase alfa) because TPP1 is a soluble lysosomal enzyme that can be supplied from outside the cell. That success does not automatically transfer to CLN5 disease: whether CLN5 can be replaced the same way is unproven."
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "target": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0055",
+      "stance": "supports",
+      "source_type": "computed",
+      "source_name": "Atlas analytics",
+      "source_ref": null,
+      "url": null,
+      "quote": null,
+      "method": "algorithm:mock-similarity-v1",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": [
+    {
+      "id": "ev-mock-0056",
+      "stance": "context",
+      "source_type": "database",
+      "source_name": "FDA labels",
+      "source_ref": "MOCK-LABEL-0001",
+      "url": "https://example.org/labels/cerliponase",
+      "quote": "[MOCK] Indicated for children with CLN2 disease (TPP1 deficiency).",
+      "method": "curated",
+      "published_at": "2017-04-27",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ]
+}

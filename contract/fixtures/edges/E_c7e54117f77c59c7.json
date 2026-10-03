@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:c7e54117f77c59c7",
+    "src": "HGNC:MOCK0007",
+    "dst": "ATLAS:mech-lysosomal-degradation",
+    "type": "gene_in_mechanism",
+    "label": "acts in",
+    "status": "curated",
+    "confidence": 0.9,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "GO"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0007",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "MFSD8",
+    "summary": "Makes a lysosomal membrane transporter; changes cause CLN7 disease."
+  },
+  "target": {
+    "id": "ATLAS:mech-lysosomal-degradation",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+    "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0027",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "GO",
+      "source_ref": null,
+      "url": "https://example.org/db/go",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

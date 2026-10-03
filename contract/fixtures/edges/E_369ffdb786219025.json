@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:369ffdb786219025",
+    "src": "ASSET:mock-ncl-registry",
+    "dst": "MONDO:MOCK0002",
+    "type": "asset_covers_disease",
+    "label": "covers",
+    "status": "literature",
+    "confidence": 0.9,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Organization website"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ASSET:mock-ncl-registry",
+    "type": "asset",
+    "subtype": "registry",
+    "label": "International NCL Patient Registry (mock)",
+    "summary": "A (fictional) shared registry where families with several NCL subtypes record their child's health over time."
+  },
+  "target": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0093",
+      "stance": "supports",
+      "source_type": "patient_org_site",
+      "source_name": "Organization website",
+      "source_ref": null,
+      "url": "https://example.org/ncl-registry/registry",
+      "quote": "[MOCK] \"We support families affected by CLN2 disease.\"",
+      "method": "scrape:brightdata",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

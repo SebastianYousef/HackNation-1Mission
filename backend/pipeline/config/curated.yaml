@@ -1,0 +1,41 @@
+# Hand-curated facts that no open database exposes in machine-readable form.
+# Disease references may use any xref (OMIM:/ORPHA:) or MONDO id — `reconcile` maps them.
+# Quotes are null because we do not hold verbatim text; each entry carries a URL to check.
+organizations:
+  - id: ORG:bdsra
+    label: Batten Disease Support and Research Association (BDSRA)
+    subtype: patient_group
+    website: https://bdsra.org
+    country: US
+    has_registry: null
+    serves: [MONDO:0016295]
+  - id: ORG:bdfa-uk
+    label: Batten Disease Family Association (BDFA)
+    subtype: patient_group
+    website: https://www.bdfa-uk.org.uk
+    country: GB
+    has_registry: null
+    serves: [MONDO:0016295]
+  - id: ORG:ncl-stiftung
+    label: NCL-Stiftung
+    subtype: foundation
+    website: https://www.ncl-stiftung.de
+    country: DE
+    has_registry: null
+    serves: [MONDO:0016295]
+  - id: ORG:beyond-batten
+    label: Beyond Batten Disease Foundation
+    subtype: foundation
+    website: https://beyondbatten.org
+    country: US
+    has_registry: null
+    serves: [OMIM:204200]     # CLN3 disease (juvenile NCL)
+
+interventions:
+  - id: ATLAS:int-cerliponase-alfa
+    label: cerliponase alfa (Brineura)
+    subtype: enzyme_replacement
+    treats:
+      - disease: OMIM:204500  # CLN2 disease
+        approval: approved
+        url: https://www.fda.gov/news-events/press-announcements/fda-approves-first-treatment-form-batten-disease

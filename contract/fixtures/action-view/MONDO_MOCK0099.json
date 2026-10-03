@@ -1,0 +1,198 @@
+{
+  "disease": {
+    "id": "MONDO:MOCK0099",
+    "type": "disease",
+    "subtype": null,
+    "label": "MOCK ultra-rare NCL subtype X (fictional)",
+    "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis.",
+    "description": "[MOCK] Fictional neuronal ceroid lipofuscinosis subtype reported in a handful of families; gene MOCKG1 (fictional).",
+    "synonyms": [
+      "NCL subtype X (mock)"
+    ],
+    "xrefs": {},
+    "attrs": {
+      "prevalence": "[MOCK] fewer than 20 reported families",
+      "onset": "childhood",
+      "inheritance": "autosomal recessive",
+      "has_approved_treatment": false,
+      "approved_treatments": []
+    },
+    "url": "https://example.org/atlas/disease/MONDO_MOCK0099"
+  },
+  "headline": "We found no patient group for this exact disease — here is the closest community and how to start one",
+  "plain_summary": "This (fictional) subtype is known from only a few families. The atlas has no patient group, registry or trial for it. Based on two shared symptoms and an inferred lysosomal mechanism, the closest community is CLN5 disease — but this link is weak and needs a specialist's review.",
+  "treatment_status": {
+    "has_approved_treatment": null,
+    "note": "Unknown: no treatment studies were found for this subtype.",
+    "edge_ids": []
+  },
+  "exact_groups": [],
+  "related_communities": [
+    {
+      "disease": {
+        "id": "MONDO:MOCK0005",
+        "type": "disease",
+        "subtype": null,
+        "label": "CLN5 disease",
+        "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+      },
+      "similarity": 0.52,
+      "similarity_edge_id": "E:ff34655b9b3364ff",
+      "why": "Both cause seizures and vision loss in childhood and may involve the same lysosomal problem.",
+      "differences": [
+        "Different gene (MOCKG1 vs CLN5)",
+        "The shared mechanism is inferred, not shown in any paper"
+      ],
+      "caution": "Subtype X is only known from a few families; similarity is based on two symptoms and an inferred mechanism.",
+      "groups": [
+        {
+          "node": {
+            "id": "ORG:mock-cln5-families",
+            "type": "organization",
+            "subtype": "patient_group",
+            "label": "CLN5 Families Network (mock)",
+            "summary": "A (fictional) parent-led group for families affected by CLN5 disease."
+          },
+          "for_disease": {
+            "id": "MONDO:MOCK0005",
+            "type": "disease",
+            "subtype": null,
+            "label": "CLN5 disease",
+            "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+          },
+          "edge_id": "E:3823875a05b41a4a",
+          "website": "https://example.org/cln5-families",
+          "contact_url": "https://example.org/cln5-families/contact",
+          "country": "SE",
+          "has_registry": false
+        },
+        {
+          "node": {
+            "id": "ORG:mock-bdsra",
+            "type": "organization",
+            "subtype": "patient_group",
+            "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+            "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]"
+          },
+          "for_disease": {
+            "id": "MONDO:MOCK0005",
+            "type": "disease",
+            "subtype": null,
+            "label": "CLN5 disease",
+            "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+          },
+          "edge_id": "E:7b5b73726701b43d",
+          "website": "https://example.org/bdsra",
+          "contact_url": "https://example.org/bdsra/contact",
+          "country": "US",
+          "has_registry": null
+        }
+      ]
+    }
+  ],
+  "connections": [],
+  "assets": [],
+  "trials": [],
+  "researchers": [],
+  "shared_people": [],
+  "next_steps": [
+    {
+      "id": "ns-mock-x-1",
+      "kind": "build_missing_group",
+      "title": "Start a small family network for subtype X — BDSRA-style umbrella groups may help you set it up",
+      "rationale": "No group serves this disease today; even a handful of connected families can start a registry later.",
+      "target": null,
+      "status": "viable",
+      "validation_needed": [],
+      "effort": "this_month",
+      "edge_ids": []
+    },
+    {
+      "id": "ns-mock-x-2",
+      "kind": "contact_group",
+      "title": "Ask the CLN5 Families Network whether families with subtype X could join their meetings",
+      "rationale": "CLN5 disease is the closest match in the atlas, but the link is weak.",
+      "target": {
+        "id": "ORG:mock-cln5-families",
+        "type": "organization",
+        "subtype": "patient_group",
+        "label": "CLN5 Families Network (mock)",
+        "summary": "A (fictional) parent-led group for families affected by CLN5 disease."
+      },
+      "status": "needs_review",
+      "validation_needed": [
+        "A specialist should confirm subtype X is clinically close to CLN5"
+      ],
+      "effort": "this_month",
+      "edge_ids": [
+        "E:ff34655b9b3364ff",
+        "E:3823875a05b41a4a"
+      ]
+    },
+    {
+      "id": "ns-mock-x-3",
+      "kind": "contribute_evidence",
+      "title": "Send us any paper, clinic or group that mentions this subtype",
+      "rationale": "Our sources returned almost nothing; your knowledge fills the gap.",
+      "target": null,
+      "status": "viable",
+      "validation_needed": [],
+      "effort": "this_week",
+      "edge_ids": []
+    }
+  ],
+  "coverage": {
+    "has_supported_route": false,
+    "sources": [
+      {
+        "name": "Orphanet",
+        "checked": true,
+        "query": "NCL subtype X OR MOCKG1",
+        "result_count": 0,
+        "checked_at": "2026-10-01T10:00:00Z"
+      },
+      {
+        "name": "PubMed",
+        "checked": true,
+        "query": "NCL subtype X OR MOCKG1",
+        "result_count": 1,
+        "checked_at": "2026-10-01T10:00:00Z"
+      },
+      {
+        "name": "ClinicalTrials.gov",
+        "checked": true,
+        "query": "NCL subtype X OR MOCKG1",
+        "result_count": 0,
+        "checked_at": "2026-10-01T10:00:00Z"
+      },
+      {
+        "name": "NIH RePORTER",
+        "checked": true,
+        "query": "NCL subtype X OR MOCKG1",
+        "result_count": 0,
+        "checked_at": "2026-10-01T10:00:00Z"
+      },
+      {
+        "name": "Patient organization websites (Bright Data scrape)",
+        "checked": true,
+        "query": "NCL subtype X OR MOCKG1",
+        "result_count": 0,
+        "checked_at": "2026-10-01T10:00:00Z"
+      },
+      {
+        "name": "Global Genes directory",
+        "checked": false,
+        "query": null,
+        "result_count": null,
+        "checked_at": null
+      }
+    ],
+    "gaps": [
+      {
+        "question": "Is subtype X really a lysosomal (NCL) disease?",
+        "why_it_matters": "All the connections shown depend on this inferred mechanism.",
+        "what_would_resolve": "Electron microscopy of a skin or blood sample looking for storage material."
+      }
+    ]
+  }
+}

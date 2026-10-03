@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "HGNC:MOCK0003",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "CLN3",
+    "summary": "Makes a protein that sits in the lysosome's outer membrane.",
+    "description": "[MOCK] CLN3 lysosomal/endosomal transmembrane protein.",
+    "synonyms": [],
+    "xrefs": {
+      "HGNC": [
+        "MOCK-CLN3"
+      ]
+    },
+    "attrs": {},
+    "url": "https://example.org/atlas/gene/HGNC_MOCK0003"
+  },
+  "degree": {
+    "disease": 1,
+    "mechanism": 2
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

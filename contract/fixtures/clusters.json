@@ -1,0 +1,56 @@
+[
+  {
+    "id": "cluster:mock-ncl-core",
+    "label": "Childhood NCLs: vision loss + seizures + regression",
+    "summary": "Batten-type diseases that share the core symptom triad of vision loss, seizures and loss of skills.",
+    "method": "algorithm:mock-leiden-phenotype",
+    "size": 5,
+    "attrs": {
+      "cohesion": 0.81,
+      "top_phenotypes": [
+        "HP:MOCK0002",
+        "HP:MOCK0001",
+        "HP:MOCK0004"
+      ],
+      "top_mechanisms": [
+        "ATLAS:mech-lysosomal-degradation"
+      ]
+    }
+  },
+  {
+    "id": "cluster:mock-ncl-membrane",
+    "label": "Membrane protein NCLs",
+    "summary": "NCLs caused by a broken membrane protein (lysosome or ER); infused enzymes are not expected to help.",
+    "method": "algorithm:mock-leiden-mechanism",
+    "size": 2,
+    "attrs": {
+      "cohesion": 0.7,
+      "top_phenotypes": [
+        "HP:MOCK0002",
+        "HP:MOCK0001"
+      ],
+      "top_mechanisms": [
+        "ATLAS:mech-membrane-protein-dysfunction",
+        "ATLAS:mech-lysosomal-degradation"
+      ]
+    }
+  },
+  {
+    "id": "cluster:mock-ncl-soluble",
+    "label": "Soluble lysosomal protein NCLs",
+    "summary": "NCLs caused by loss of a soluble lysosomal protein — the group where enzyme replacement is plausible in principle.",
+    "method": "algorithm:mock-leiden-mechanism",
+    "size": 2,
+    "attrs": {
+      "cohesion": 0.62,
+      "top_phenotypes": [
+        "HP:MOCK0001",
+        "HP:MOCK0005"
+      ],
+      "top_mechanisms": [
+        "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+        "ATLAS:mech-lysosomal-degradation"
+      ]
+    }
+  }
+]

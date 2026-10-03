@@ -1,0 +1,24 @@
+{
+  "node": {
+    "id": "HGNC:MOCK0001",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "PPT1",
+    "summary": "Makes a soluble lysosomal enzyme; changes cause CLN1 disease.",
+    "description": "[MOCK] Palmitoyl-protein thioesterase 1, soluble lysosomal enzyme.",
+    "synonyms": [],
+    "xrefs": {
+      "HGNC": [
+        "MOCK-PPT1"
+      ]
+    },
+    "attrs": {},
+    "url": "https://example.org/atlas/gene/HGNC_MOCK0001"
+  },
+  "degree": {
+    "mechanism": 2
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

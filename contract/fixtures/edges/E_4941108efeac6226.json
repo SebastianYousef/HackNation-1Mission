@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:4941108efeac6226",
+    "src": "PERSON:mock-clinician-c",
+    "dst": "ORG:mock-example-university-hospital",
+    "type": "person_affiliated_with",
+    "label": "works at",
+    "status": "curated",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "ORCID"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PERSON:mock-clinician-c",
+    "type": "person",
+    "subtype": "clinician",
+    "label": "Dr. C. Sample",
+    "summary": "(Fictional) child neurologist who has run enzyme replacement trials in CLN2 disease."
+  },
+  "target": {
+    "id": "ORG:mock-example-university-hospital",
+    "type": "organization",
+    "subtype": "hospital",
+    "label": "Example University Hospital (mock)",
+    "summary": "A (fictional) hospital with a paediatric neurology team that studies NCL diseases."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0079",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "ORCID",
+      "source_ref": null,
+      "url": "https://example.org/db/orcid",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

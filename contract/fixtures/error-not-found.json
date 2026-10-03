@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "not_found",
+    "message": "No node with id 'MONDO:MOCK404' in this dataset.",
+    "request_id": "req-mock-0001"
+  }
+}

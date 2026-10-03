@@ -1,0 +1,27 @@
+{
+  "node": {
+    "id": "PMID:MOCK0002",
+    "type": "publication",
+    "subtype": null,
+    "label": "[MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement",
+    "summary": "A (mock) paper explaining why therapies that work for soluble-enzyme NCLs may not work for CLN3.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "pmid": "MOCK0002",
+      "year": 2025,
+      "journal": "Mock Lysosome Reports",
+      "title": "[MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement"
+    },
+    "url": "https://example.org/pubmed/MOCK0002"
+  },
+  "degree": {
+    "disease": 1,
+    "mechanism": 1,
+    "person": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

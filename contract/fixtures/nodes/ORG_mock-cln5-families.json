@@ -1,0 +1,26 @@
+{
+  "node": {
+    "id": "ORG:mock-cln5-families",
+    "type": "organization",
+    "subtype": "patient_group",
+    "label": "CLN5 Families Network (mock)",
+    "summary": "A (fictional) parent-led group for families affected by CLN5 disease.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "website": "https://example.org/cln5-families",
+      "country": "SE",
+      "contact_url": "https://example.org/cln5-families/contact",
+      "has_registry": false,
+      "email_public": "hello@example.org"
+    },
+    "url": "https://example.org/cln5-families"
+  },
+  "degree": {
+    "disease": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

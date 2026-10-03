@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:ccbb490e52c247eb",
+    "src": "HGNC:MOCK0099",
+    "dst": "MONDO:MOCK0099",
+    "type": "gene_associated_with_disease",
+    "label": "causes",
+    "status": "literature",
+    "confidence": 0.6,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "HGNC:MOCK0099",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "MOCKG1",
+    "summary": "A FICTIONAL gene used only in this mock dataset."
+  },
+  "target": {
+    "id": "MONDO:MOCK0099",
+    "type": "disease",
+    "subtype": null,
+    "label": "MOCK ultra-rare NCL subtype X (fictional)",
+    "summary": "A FICTIONAL, made-up ultra-rare Batten-like disease used to demo the 'no known group' case. Not a real diagnosis."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0005",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0003",
+      "url": "https://example.org/pubmed/MOCK0003",
+      "quote": "[MOCK] Homozygous MOCKG1 variants were found in three unrelated families with an NCL-like illness.",
+      "method": "llm:mock-extractor",
+      "published_at": "2025-11-02",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

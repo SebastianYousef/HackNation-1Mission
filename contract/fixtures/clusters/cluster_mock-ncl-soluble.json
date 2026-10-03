@@ -1,0 +1,70 @@
+{
+  "cluster": {
+    "id": "cluster:mock-ncl-soluble",
+    "label": "Soluble lysosomal protein NCLs",
+    "summary": "NCLs caused by loss of a soluble lysosomal protein — the group where enzyme replacement is plausible in principle.",
+    "method": "algorithm:mock-leiden-mechanism",
+    "size": 2,
+    "attrs": {
+      "cohesion": 0.62,
+      "top_phenotypes": [
+        "HP:MOCK0001",
+        "HP:MOCK0005"
+      ],
+      "top_mechanisms": [
+        "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+        "ATLAS:mech-lysosomal-degradation"
+      ]
+    }
+  },
+  "members": [
+    {
+      "id": "MONDO:MOCK0002",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN2 disease",
+      "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved.",
+      "membership": 0.95
+    },
+    {
+      "id": "MONDO:MOCK0005",
+      "type": "disease",
+      "subtype": null,
+      "label": "CLN5 disease",
+      "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet.",
+      "membership": 0.55
+    }
+  ],
+  "top_phenotypes": [
+    {
+      "id": "HP:MOCK0001",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Seizure",
+      "summary": "Sudden bursts of abnormal electrical activity in the brain (fits)."
+    },
+    {
+      "id": "HP:MOCK0005",
+      "type": "phenotype",
+      "subtype": null,
+      "label": "Myoclonus",
+      "summary": "Brief, jerky, involuntary muscle twitches."
+    }
+  ],
+  "top_mechanisms": [
+    {
+      "id": "ATLAS:mech-soluble-lysosomal-enzyme-deficiency",
+      "type": "mechanism",
+      "subtype": "variant_effect",
+      "label": "Soluble lysosomal enzyme deficiency",
+      "summary": "A missing enzyme that normally floats free inside the lysosome. Because it is soluble, it can sometimes be replaced with a manufactured version (enzyme replacement)."
+    },
+    {
+      "id": "ATLAS:mech-lysosomal-degradation",
+      "type": "mechanism",
+      "subtype": "biological_process",
+      "label": "Lysosomal degradation (ceroid lipofuscin storage)",
+      "summary": "Cells break down worn-out parts inside lysosomes. In all NCLs this recycling fails and waste (lipofuscin) builds up, especially in nerve cells."
+    }
+  ]
+}

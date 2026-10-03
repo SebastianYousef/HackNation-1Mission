@@ -1,0 +1,25 @@
+{
+  "node": {
+    "id": "ASSET:mock-ncl-registry",
+    "type": "asset",
+    "subtype": "registry",
+    "label": "International NCL Patient Registry (mock)",
+    "summary": "A (fictional) shared registry where families with several NCL subtypes record their child's health over time.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "asset_kind": "registry",
+      "access": "on_request",
+      "owner_id": "ORG:mock-ncl-registry-consortium"
+    },
+    "url": "https://example.org/ncl-registry/registry"
+  },
+  "degree": {
+    "organization": 1,
+    "disease": 3
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

@@ -1,0 +1,50 @@
+{
+  "edge": {
+    "id": "E:eaee7fbf4b4d374a",
+    "src": "DRUG:MOCK0001",
+    "dst": "MONDO:MOCK0002",
+    "type": "intervention_treats_disease",
+    "label": "treats",
+    "status": "curated",
+    "confidence": 0.99,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "FDA labels"
+    ],
+    "attrs": {
+      "approval": "approved"
+    }
+  },
+  "source": {
+    "id": "DRUG:MOCK0001",
+    "type": "intervention",
+    "subtype": "enzyme_replacement",
+    "label": "Cerliponase alfa",
+    "summary": "A manufactured TPP1 enzyme given into the brain fluid. It is approved for CLN2 disease only."
+  },
+  "target": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0060",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "FDA labels",
+      "source_ref": null,
+      "url": "https://example.org/db/fda labels",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

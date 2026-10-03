@@ -1,0 +1,26 @@
+{
+  "node": {
+    "id": "HGNC:MOCK0005",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "CLN5",
+    "summary": "Makes a soluble protein that works inside the lysosome; its exact job is still being studied.",
+    "description": "[MOCK] CLN5 intracellular trafficking protein; soluble lysosomal glycoprotein of incompletely understood function.",
+    "synonyms": [],
+    "xrefs": {
+      "HGNC": [
+        "MOCK-CLN5"
+      ]
+    },
+    "attrs": {},
+    "url": "https://example.org/atlas/gene/HGNC_MOCK0005"
+  },
+  "degree": {
+    "disease": 1,
+    "mechanism": 1,
+    "asset": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

@@ -1,0 +1,28 @@
+{
+  "job_id": "job-mock-0001",
+  "state": "done",
+  "result": {
+    "leads": [
+      {
+        "title": "[MOCK] Forum thread: parents of children with an unnamed NCL variant",
+        "url": "https://example.org/forum/ncl-variant-thread",
+        "snippet": "[MOCK] Our daughter was diagnosed with a very rare NCL subtype and we are looking for other families...",
+        "kind": "patient_group"
+      },
+      {
+        "title": "[MOCK] Hospital page: rare NCL subtypes research cohort",
+        "url": "https://example.org/hospital/rare-ncl-cohort",
+        "snippet": "[MOCK] We are recruiting families with genetically unexplained NCL to a research cohort.",
+        "kind": "study"
+      },
+      {
+        "title": "[MOCK] News: families form new Batten subtype network",
+        "url": "https://example.org/news/new-batten-network",
+        "snippet": "[MOCK] A handful of families have started an informal network for an ultra-rare Batten subtype.",
+        "kind": "news"
+      }
+    ],
+    "disclaimer": "These are UNVERIFIED web search results found automatically. They have not been checked by the atlas team or an expert — verify before contacting anyone or sharing medical information."
+  },
+  "error": null
+}

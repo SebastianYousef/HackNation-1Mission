@@ -1,0 +1,69 @@
+{
+  "edge": {
+    "id": "E:4f9c6f5bca5028f5",
+    "src": "MONDO:MOCK0005",
+    "dst": "MONDO:MOCK0003",
+    "type": "disease_similar_to",
+    "label": "is similar to",
+    "status": "inferred",
+    "confidence": 0.65,
+    "score": 0.71,
+    "support_count": 1,
+    "contradict_count": 1,
+    "sources": [
+      "Atlas analytics",
+      "PubMed"
+    ],
+    "attrs": {
+      "components": {
+        "phenotype": 0.78,
+        "mechanism": 0.55,
+        "gene": 0
+      },
+      "caution": "CLN3 is a lysosomal membrane protein, not a soluble enzyme. Similar symptoms do not mean similar treatments: enzyme-replacement-style approaches are not expected to work for CLN3."
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "target": {
+    "id": "MONDO:MOCK0003",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN3 disease",
+    "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0057",
+      "stance": "supports",
+      "source_type": "computed",
+      "source_name": "Atlas analytics",
+      "source_ref": null,
+      "url": null,
+      "quote": null,
+      "method": "algorithm:mock-similarity-v1",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [
+    {
+      "id": "ev-mock-0058",
+      "stance": "contradicts",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0002",
+      "url": "https://example.org/pubmed/MOCK0002",
+      "quote": "[MOCK] Juvenile-onset CLN3 disease follows a distinct course, beginning with isolated vision loss years before seizures.",
+      "method": "llm:mock-extractor",
+      "published_at": "2025-02-10",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "context": []
+}

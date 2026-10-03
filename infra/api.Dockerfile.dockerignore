@@ -1,0 +1,11 @@
+**/.venv
+**/__pycache__
+**/*.pyc
+**/.env
+**/node_modules
+.git
+frontend
+docs
+backend/pipeline
+backend/data
+infra/certs

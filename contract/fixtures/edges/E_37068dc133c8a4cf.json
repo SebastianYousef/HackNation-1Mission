@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:37068dc133c8a4cf",
+    "src": "ASSET:mock-cln5-sheep-model",
+    "dst": "MONDO:MOCK0005",
+    "type": "asset_covers_disease",
+    "label": "covers",
+    "status": "literature",
+    "confidence": 0.9,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Organization website"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ASSET:mock-cln5-sheep-model",
+    "type": "asset",
+    "subtype": "animal_model",
+    "label": "CLN5 sheep model (mock entry)",
+    "summary": "A large-animal model with CLN5 changes that researchers use to test treatments. [MOCK record]"
+  },
+  "target": {
+    "id": "MONDO:MOCK0005",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN5 disease",
+    "summary": "A very rare inherited childhood brain disease that causes vision loss, seizures and loss of skills. There is no approved treatment yet."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0097",
+      "stance": "supports",
+      "source_type": "patient_org_site",
+      "source_name": "Organization website",
+      "source_ref": null,
+      "url": "https://example.org/example-hospital/cln5-sheep",
+      "quote": "[MOCK] \"We support families affected by CLN5 disease.\"",
+      "method": "scrape:brightdata",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

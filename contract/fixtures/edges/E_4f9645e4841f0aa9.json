@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:4f9645e4841f0aa9",
+    "src": "PMID:MOCK0002",
+    "dst": "ATLAS:mech-membrane-protein-dysfunction",
+    "type": "publication_about",
+    "label": "is about",
+    "status": "curated",
+    "confidence": 0.9,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "PMID:MOCK0002",
+    "type": "publication",
+    "subtype": null,
+    "label": "[MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement",
+    "summary": "A (mock) paper explaining why therapies that work for soluble-enzyme NCLs may not work for CLN3."
+  },
+  "target": {
+    "id": "ATLAS:mech-membrane-protein-dysfunction",
+    "type": "mechanism",
+    "subtype": "biological_process",
+    "label": "Lysosomal/ER membrane protein dysfunction",
+    "summary": "A broken protein that is built into a membrane (of the lysosome or the endoplasmic reticulum). It cannot simply be replaced by an infusion."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0069",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that [MOCK] CLN3 is a lysosomal membrane protein: implications for enzyme replacement is about Lysosomal/ER membrane protein dysfunction.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

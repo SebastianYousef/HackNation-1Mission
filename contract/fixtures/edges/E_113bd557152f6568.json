@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:113bd557152f6568",
+    "src": "ASSET:mock-cln5-sheep-model",
+    "dst": "HGNC:MOCK0005",
+    "type": "asset_targets_gene",
+    "label": "models",
+    "status": "literature",
+    "confidence": 0.9,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "PubMed"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ASSET:mock-cln5-sheep-model",
+    "type": "asset",
+    "subtype": "animal_model",
+    "label": "CLN5 sheep model (mock entry)",
+    "summary": "A large-animal model with CLN5 changes that researchers use to test treatments. [MOCK record]"
+  },
+  "target": {
+    "id": "HGNC:MOCK0005",
+    "type": "gene",
+    "subtype": "protein_coding",
+    "label": "CLN5",
+    "summary": "Makes a soluble protein that works inside the lysosome; its exact job is still being studied."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0098",
+      "stance": "supports",
+      "source_type": "publication",
+      "source_name": "PubMed",
+      "source_ref": "PMID:MOCK0001",
+      "url": "https://example.org/pubmed/MOCK0001",
+      "quote": "[MOCK] Evidence that CLN5 sheep model (mock entry) models CLN5.",
+      "method": "llm:mock-extractor",
+      "published_at": "2024-05-01",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

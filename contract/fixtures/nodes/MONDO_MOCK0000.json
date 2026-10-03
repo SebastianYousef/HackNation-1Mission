@@ -1,0 +1,33 @@
+{
+  "node": {
+    "id": "MONDO:MOCK0000",
+    "type": "disease",
+    "subtype": null,
+    "label": "Neuronal ceroid lipofuscinosis",
+    "summary": "A group of inherited brain diseases (often called Batten disease) in which waste material builds up inside cells' recycling centres, the lysosomes.",
+    "description": "[MOCK] Group of lysosomal storage disorders characterised by accumulation of autofluorescent ceroid lipopigment in neurons and other cells.",
+    "synonyms": [
+      "Batten disease",
+      "NCL"
+    ],
+    "xrefs": {
+      "ORPHA": [
+        "MOCK-ORPHA-0000"
+      ]
+    },
+    "attrs": {
+      "inheritance": "mostly autosomal recessive",
+      "has_approved_treatment": true,
+      "approved_treatments": [
+        "Cerliponase alfa (CLN2 disease only)"
+      ]
+    },
+    "url": "https://example.org/atlas/disease/MONDO_MOCK0000"
+  },
+  "degree": {
+    "disease": 5
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

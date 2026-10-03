@@ -1,0 +1,57 @@
+{
+  "node": {
+    "id": "MONDO:MOCK0002",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN2 disease",
+    "summary": "A form of Batten disease that starts in toddlers with seizures and loss of skills. An enzyme replacement therapy is approved.",
+    "description": "[MOCK] Late-infantile neuronal ceroid lipofuscinosis caused by deficiency of the soluble lysosomal enzyme tripeptidyl peptidase 1 (TPP1).",
+    "synonyms": [
+      "Late infantile Batten disease",
+      "TPP1 deficiency",
+      "Neuronal ceroid lipofuscinosis type 2"
+    ],
+    "xrefs": {
+      "ORPHA": [
+        "MOCK-ORPHA-0002"
+      ]
+    },
+    "attrs": {
+      "prevalence": "[MOCK] rare",
+      "onset": "late infantile (2–4 years)",
+      "inheritance": "autosomal recessive",
+      "has_approved_treatment": true,
+      "approved_treatments": [
+        "Cerliponase alfa"
+      ]
+    },
+    "url": "https://example.org/atlas/disease/MONDO_MOCK0002"
+  },
+  "degree": {
+    "gene": 1,
+    "disease": 2,
+    "mechanism": 2,
+    "phenotype": 5,
+    "intervention": 1,
+    "trial": 1,
+    "person": 1,
+    "organization": 2,
+    "asset": 1
+  },
+  "clusters": [
+    {
+      "id": "cluster:mock-ncl-soluble",
+      "label": "Soluble lysosomal protein NCLs",
+      "size": 2,
+      "membership": 0.95
+    },
+    {
+      "id": "cluster:mock-ncl-core",
+      "label": "Childhood NCLs: vision loss + seizures + regression",
+      "size": 5,
+      "membership": 0.88
+    }
+  ],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

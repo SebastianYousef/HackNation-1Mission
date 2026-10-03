@@ -1,0 +1,26 @@
+{
+  "node": {
+    "id": "ORG:mock-ncl-research-fund",
+    "type": "organization",
+    "subtype": "funder",
+    "label": "NCL Research Fund (mock)",
+    "summary": "A (fictional) charity that funds research on Batten disease.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "website": "https://example.org/ncl-fund",
+      "country": "US",
+      "contact_url": "https://example.org/ncl-fund/apply",
+      "has_registry": false,
+      "email_public": null
+    },
+    "url": "https://example.org/ncl-fund"
+  },
+  "degree": {
+    "grant": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

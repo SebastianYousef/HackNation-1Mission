@@ -1,0 +1,50 @@
+{
+  "edge": {
+    "id": "E:afb285ba484d3184",
+    "src": "MONDO:MOCK0003",
+    "dst": "HP:MOCK0004",
+    "type": "disease_has_phenotype",
+    "label": "has symptom",
+    "status": "curated",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "HPO"
+    ],
+    "attrs": {
+      "frequency": "very frequent"
+    }
+  },
+  "source": {
+    "id": "MONDO:MOCK0003",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN3 disease",
+    "summary": "The most common form of Batten disease. It usually starts at school age with vision loss, followed by seizures and loss of skills."
+  },
+  "target": {
+    "id": "HP:MOCK0004",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Developmental regression",
+    "summary": "Losing skills (speech, walking, learning) that a child had already gained."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0046",
+      "stance": "supports",
+      "source_type": "database",
+      "source_name": "HPO",
+      "source_ref": null,
+      "url": "https://example.org/db/hpo",
+      "quote": null,
+      "method": "curated",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

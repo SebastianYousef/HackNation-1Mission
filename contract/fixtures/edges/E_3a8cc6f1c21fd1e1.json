@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:3a8cc6f1c21fd1e1",
+    "src": "ORG:mock-ncl-registry-consortium",
+    "dst": "ASSET:mock-ncl-registry",
+    "type": "organization_maintains_asset",
+    "label": "maintains",
+    "status": "literature",
+    "confidence": 0.95,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "Organization website"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "ORG:mock-ncl-registry-consortium",
+    "type": "organization",
+    "subtype": "academic",
+    "label": "International NCL Registry Consortium (mock)",
+    "summary": "A (fictional) academic consortium that runs a shared patient registry for several NCL subtypes."
+  },
+  "target": {
+    "id": "ASSET:mock-ncl-registry",
+    "type": "asset",
+    "subtype": "registry",
+    "label": "International NCL Patient Registry (mock)",
+    "summary": "A (fictional) shared registry where families with several NCL subtypes record their child's health over time."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0090",
+      "stance": "supports",
+      "source_type": "patient_org_site",
+      "source_name": "Organization website",
+      "source_ref": null,
+      "url": "https://example.org/ncl-registry",
+      "quote": "[MOCK] \"We support families affected by International NCL Patient Registry (mock).\"",
+      "method": "scrape:brightdata",
+      "published_at": null,
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}

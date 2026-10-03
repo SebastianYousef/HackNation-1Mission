@@ -1,0 +1,24 @@
+{
+  "headline": "CLN5 disease and CLN6 disease break the same recycling system in nerve cells",
+  "steps": [
+    {
+      "text": "In CLN5 disease, nerve cells cannot properly break down waste in their lysosomes, so it builds up (reported in a research paper).",
+      "edge_id": "E:b798d149b51c6b9b",
+      "status": "literature",
+      "confidence": 0.85
+    },
+    {
+      "text": "The same lysosomal build-up is reported in CLN6 disease, which is why the atlas links the two communities.",
+      "edge_id": "E:b8c5704fed1013e9",
+      "status": "literature",
+      "confidence": 0.84
+    }
+  ],
+  "uncertainties": [
+    "Both links come from a single (mock) paper; they have not been independently confirmed.",
+    "The broken protein is different: CLN6 sits in a membrane, CLN5 is soluble — so treatments may not transfer."
+  ],
+  "what_to_check_next": "Ask a CLN5/CLN6 researcher whether the two diseases block the same step of lysosomal breakdown.",
+  "model": "mock-model",
+  "cached": true
+}

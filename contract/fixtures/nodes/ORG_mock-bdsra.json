@@ -1,0 +1,28 @@
+{
+  "node": {
+    "id": "ORG:mock-bdsra",
+    "type": "organization",
+    "subtype": "patient_group",
+    "label": "Batten Disease Support, Research and Advocacy Association (BDSRA)",
+    "summary": "A patient advocacy organization supporting families affected by all forms of Batten disease. [MOCK record: details are placeholders]",
+    "description": null,
+    "synonyms": [
+      "BDSRA"
+    ],
+    "xrefs": {},
+    "attrs": {
+      "website": "https://example.org/bdsra",
+      "country": "US",
+      "contact_url": "https://example.org/bdsra/contact",
+      "has_registry": null,
+      "email_public": null
+    },
+    "url": "https://example.org/bdsra"
+  },
+  "degree": {
+    "disease": 4
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

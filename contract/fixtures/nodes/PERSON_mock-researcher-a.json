@@ -1,0 +1,31 @@
+{
+  "node": {
+    "id": "PERSON:mock-researcher-a",
+    "type": "person",
+    "subtype": "researcher",
+    "label": "Dr. A. Example",
+    "summary": "(Fictional) neuroscientist studying lysosomal storage in CLN5 and CLN3 disease.",
+    "description": null,
+    "synonyms": [],
+    "xrefs": {},
+    "attrs": {
+      "affiliation": "Example University Hospital (mock)",
+      "orcid": "MOCK-ORCID-0001",
+      "roles": [
+        "researcher",
+        "clinician"
+      ],
+      "contact_url": "https://example.org/people/a-example"
+    },
+    "url": "https://example.org/people/a-example"
+  },
+  "degree": {
+    "publication": 1,
+    "disease": 2,
+    "organization": 1,
+    "grant": 1
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

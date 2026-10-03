@@ -1,0 +1,24 @@
+{
+  "node": {
+    "id": "HP:MOCK0003",
+    "type": "phenotype",
+    "subtype": null,
+    "label": "Ataxia",
+    "summary": "Unsteady, clumsy movement and walking.",
+    "description": null,
+    "synonyms": [
+      "Unsteady gait"
+    ],
+    "xrefs": {},
+    "attrs": {
+      "ic": 3.5
+    },
+    "url": "https://example.org/atlas/phenotype/HP_MOCK0003"
+  },
+  "degree": {
+    "disease": 3
+  },
+  "clusters": [],
+  "has_action_view": false,
+  "has_mechanism_view": false
+}

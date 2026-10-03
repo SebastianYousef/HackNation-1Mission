@@ -1,0 +1,48 @@
+{
+  "edge": {
+    "id": "E:5ba492c7c873d22c",
+    "src": "NCTMOCK0002",
+    "dst": "MONDO:MOCK0006",
+    "type": "trial_studies_disease",
+    "label": "studies",
+    "status": "curated",
+    "confidence": 0.99,
+    "score": null,
+    "support_count": 1,
+    "contradict_count": 0,
+    "sources": [
+      "ClinicalTrials.gov"
+    ],
+    "attrs": {}
+  },
+  "source": {
+    "id": "NCTMOCK0002",
+    "type": "trial",
+    "subtype": null,
+    "label": "[MOCK] Gene transfer study in CLN6 disease",
+    "summary": "A (mock) early-stage gene therapy trial for children with CLN6 disease."
+  },
+  "target": {
+    "id": "MONDO:MOCK0006",
+    "type": "disease",
+    "subtype": null,
+    "label": "CLN6 disease",
+    "summary": "A rare inherited brain disease of childhood with seizures, vision loss and loss of movement and speech skills."
+  },
+  "supporting": [
+    {
+      "id": "ev-mock-0065",
+      "stance": "supports",
+      "source_type": "trial_registry",
+      "source_name": "ClinicalTrials.gov",
+      "source_ref": "NCTMOCK0002",
+      "url": "https://example.org/trials/NCTMOCK0002",
+      "quote": null,
+      "method": "curated",
+      "published_at": "2025-01-15",
+      "retrieved_at": "2026-10-01T12:00:00Z"
+    }
+  ],
+  "contradicting": [],
+  "context": []
+}
