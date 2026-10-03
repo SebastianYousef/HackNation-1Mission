@@ -181,3 +181,20 @@ def test_confidence_ignores_computed_rows():
     computed = [{"stance": "supports", "source_type": "computed", "source_ref": f"E:{i}"} for i in range(3)]
     assert edge_confidence("literature", [paper, *computed]) == 0.5
     assert edge_confidence("literature", [paper, {**paper, "source_ref": "PMID:2"}]) == 0.6
+
+
+def test_person_id_report_flags_initials_and_conflicting_names():
+    from atlas_pipeline.ids import person_id
+    from atlas_pipeline.reconcile import person_id_report
+
+    def p(last, first, label):
+        return {"id": person_id(last, first), "type": "person", "label": label}
+    r = person_id_report([
+        p("Augustine", "Erika F", "Erika F Augustine"), p("Augustine", "Erika", "Erika Augustine"),  # same person
+        p("Smith", "John A", "John A Smith"), p("Smith", "John B", "John B Smith"),                    # two people
+        p("Elleder", "M", "M Elleder"), p("Nobody", None, "Nobody"),
+        {"id": "MONDO:1", "type": "disease", "label": "x"},
+    ])
+    assert r["initial_only"] == ["PERSON:elleder-m", "PERSON:nobody-x"]
+    assert r["conflicting"] == [("PERSON:smith-john", ["John A Smith", "John B Smith"])]
+    assert len(r["ids"]) == 4
