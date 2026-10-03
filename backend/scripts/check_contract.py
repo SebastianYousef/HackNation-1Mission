@@ -239,13 +239,43 @@ def check_edge(er: dict, path: str) -> list[str]:
         errs += [f"{path}.{bucket}: evidence {v['id']} has stance {v['stance']}" for v in er[bucket]
                  if v["stance"] != stance]
     errs += check_edge_obj(e, path)
+    if e["support_count"] != len(er["supporting"]):
+        errs.append(f"{path}: support_count {e['support_count']} != {len(er['supporting'])} supporting rows")
+    if e["contradict_count"] != len(er["contradicting"]):
+        errs.append(f"{path}: contradict_count {e['contradict_count']} != {len(er['contradicting'])} contradicting rows")
     # honest statuses (root CLAUDE.md rule 2)
     rows = er["supporting"] + er["contradicting"] + er["context"]
     if not rows:
         errs.append(f"{path}: edge has no evidence rows")
     if e["status"] == "curated" and any(v["method"].startswith("llm:") for v in rows):
         errs.append(f"{path}: curated edge has llm:* evidence (LLM output is never curated)")
+    if e["status"] == "literature" and not any(v["quote"] for v in er["supporting"]):
+        errs.append(f"{path}: literature edge has no supporting row with a quote")
     return errs
+
+
+def _num_eq(a: Any, b: Any) -> bool:
+    """Equal, allowing float4 rounding; None only equals None."""
+    if a is None or b is None:
+        return a is b
+    return abs(a - b) <= 1e-6
+
+
+def check_similar(s: dict, disease_id: str, e: dict, path: str) -> list[str]:
+    """A /similar row is its disease_similar_to edge between the two diseases, with the edge's numbers."""
+    errs = []
+    if e["type"] != "disease_similar_to" or {e["src"], e["dst"]} != {disease_id, s["disease"]["id"]}:
+        errs.append(f"{path}: {e['id']} is not a disease_similar_to edge between {disease_id} and {s['disease']['id']}")
+    if not (_num_eq(s["score"], e["score"]) and _num_eq(s["confidence"], e["confidence"]) and s["status"] == e["status"]):
+        errs.append(f"{path}: {e['id']} score/confidence/status differ from the edge")
+    return errs
+
+
+def check_org_card(card: dict, e: dict, path: str) -> list[str]:
+    """An OrgCard's edge_id is the organization_serves_disease edge from its org to its for_disease."""
+    if e["type"] == "organization_serves_disease" and e["src"] == card["node"]["id"] and e["dst"] == card["for_disease"]["id"]:
+        return []
+    return [f"{path}: OrgCard edge {e['id']} is not {card['node']['id']} serves {card['for_disease']['id']}"]
 
 
 # ---------------------------------------------------------------------------- runner
@@ -369,6 +399,23 @@ def main() -> int:
     edge_ids: list[str] = []
     path_edges: list[str] = []
     hits = {"nodes": 0, "edges": 0, "paths": 0, "action_views": 0, "mechanism_views": 0}
+    edge_cache: dict[str, Any] = {}
+    similar_refs: list[tuple[str, dict]] = []      # (disease id, SimilarDisease row)
+    org_refs: dict[tuple, tuple[str, dict]] = {}   # (edge_id, org, for_disease) -> (where, OrgCard)
+
+    def fetch_edge(eid: str) -> Any:
+        if eid not in edge_cache:
+            er = edge_cache[eid] = c.get(f"/api/v1/edges/{enc(eid)}", EDGE_RESP)
+            if er:
+                hits["edges"] += 1
+                c.errors += check_edge(er, f"edge({eid})")
+                if er["edge"]["id"] != eid:
+                    c.errors.append(f"GET /edges/{eid}: edge.id is {er['edge']['id']}")
+        return edge_cache[eid]
+
+    def add_org_cards(cards: list[dict], where: str) -> None:
+        for k, card in enumerate(cards):
+            org_refs.setdefault((card["edge_id"], card["node"]["id"], card["for_disease"]["id"]), (f"{where}[{k}]", card))
     i = 0
     while i < len(node_ids) and i < a.max_nodes:
         nid = node_ids[i]
@@ -387,17 +434,30 @@ def main() -> int:
             edge_ids += [e["id"] for e in nb["edges"]]
             for n in nb["nodes"][:4]:
                 add_node(n["id"])
+        ntype = nr["node"]["type"]
         if nr["has_action_view"]:
             av = c.get(f"/api/v1/diseases/{enc(nid)}/action-view", ACTION_VIEW)
             if av:
                 hits["action_views"] += 1
                 for k, p in enumerate(av["connections"]):
                     c.errors += check_path(p, f"action-view({nid}).connections[{k}]")
+                add_org_cards(av["exact_groups"], f"action-view({nid}).exact_groups")
+                for k, rc in enumerate(av["related_communities"]):
+                    add_org_cards(rc["groups"], f"action-view({nid}).related_communities[{k}].groups")
+        elif ntype == "disease":  # has_action_view=false must mean 404 (the UI hides the screen on this flag)
+            c.get(f"/api/v1/diseases/{enc(nid)}/action-view", API_ERROR, expect=404)
         if nr["has_mechanism_view"]:
-            hits["mechanism_views"] += bool(c.get(f"/api/v1/mechanisms/{enc(nid)}/view", MECHANISM_VIEW))
-        if nr["node"]["type"] == "disease":
+            mv = c.get(f"/api/v1/mechanisms/{enc(nid)}/view", MECHANISM_VIEW)
+            if mv:
+                hits["mechanism_views"] += 1
+                for k, rd in enumerate(mv["diseases"]):
+                    add_org_cards(rd["groups"], f"mechanism-view({nid}).diseases[{k}].groups")
+        elif ntype in ("mechanism", "intervention"):
+            c.get(f"/api/v1/mechanisms/{enc(nid)}/view", API_ERROR, expect=404)
+        if ntype == "disease":
             for s in c.get(f"/api/v1/diseases/{enc(nid)}/similar?limit=5", SIMILAR) or []:
                 edge_ids.append(s["edge_id"])
+                similar_refs.append((nid, s))
             paths = c.get(f"/api/v1/paths?from={enc(nid)}&limit=10", [PATH]) or []
             hits["paths"] += len(paths)
             for k, p in enumerate(paths):
@@ -405,10 +465,16 @@ def main() -> int:
                 path_edges = path_edges or p["edge_ids"]
 
     for eid in list(dict.fromkeys(edge_ids))[: a.max_edges]:
-        er = c.get(f"/api/v1/edges/{enc(eid)}", EDGE_RESP)
+        fetch_edge(eid)
+    # referenced edges are always checked against what references them (beyond --max-edges)
+    for nid, s in similar_refs:
+        er = fetch_edge(s["edge_id"])
         if er:
-            hits["edges"] += 1
-            c.errors += check_edge(er, f"edge({eid})")
+            c.errors += check_similar(s, nid, er["edge"], f"similar({nid})")
+    for where, card in org_refs.values():
+        er = fetch_edge(card["edge_id"])
+        if er:
+            c.errors += check_org_card(card, er["edge"], where)
 
     # error shape
     c.get("/api/v1/nodes/ATLAS%3A__definitely_missing__", API_ERROR, expect=404)
