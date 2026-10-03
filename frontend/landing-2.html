@@ -1,0 +1,1455 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>One Mission</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: alternating night (graph, journey, 10x, CTA) and paper (reader, evidence, sources) bands on a 1200px column; meaning is carried by three status colors and ten node-type hues, nothing else. */
+:root{
+  --paper:#F2F5F7; --paper-2:#E7ECF0; --ink:#0D151E; --ink-2:#4B5867; --ink-3:#7A8796; --rule:#D3DAE1;
+  --accent:#2C56E0; --accent-ink:#FFFFFF;
+  --night:#080D13; --night-2:#0F1720; --night-3:#16212D; --night-ink:#E5EBF1; --night-ink-2:#8F9DAE; --night-rule:#223042;
+  --ev:#178A6A; --hy:#B97A0C; --un:#6E7591;
+  --ev-n:#38C69B; --hy-n:#F0B44A; --un-n:#A2A8C2;
+  --f-display:"Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-body:"Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0E141B; --paper-2:#161E28; --ink:#E3E9EF; --ink-2:#9CA9B8; --ink-3:#6F7C8B; --rule:#253140;
+  --accent:#7C9BFF; --accent-ink:#081020;
+  --night:#05080C; --night-2:#0B1118; --night-3:#121B25;
+  --ev:#3CC79C; --hy:#EEB04A; --un:#A3A9C3; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0E141B; --paper-2:#161E28; --ink:#E3E9EF; --ink-2:#9CA9B8; --ink-3:#6F7C8B; --rule:#253140;
+  --accent:#7C9BFF; --accent-ink:#081020;
+  --night:#05080C; --night-2:#0B1118; --night-3:#121B25;
+  --ev:#3CC79C; --hy:#EEB04A; --un:#A3A9C3; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+.night :focus-visible{outline-color:#9DB4FF}
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+.night{background:var(--night);color:var(--night-ink)}
+.band{padding-block:clamp(72px,10vw,128px)}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.night .eyebrow{color:var(--night-ink-2)}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;letter-spacing:-.015em;text-wrap:balance;margin:0}
+h2{font-size:clamp(34px,4.6vw,56px);line-height:1.05}
+h3{font-size:24px;line-height:1.2}
+p{margin:0}
+.lede{font-size:clamp(17px,1.6vw,20px);color:var(--ink-2);max-width:62ch}
+.night .lede{color:var(--night-ink-2)}
+.sec-head{display:grid;gap:18px;margin-bottom:clamp(40px,5vw,64px);max-width:820px}
+.sample-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px dashed currentColor;border-radius:999px;color:var(--ink-3);white-space:nowrap}
+.night .sample-tag{color:var(--night-ink-2)}
+
+/* status pills */
+.st{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px 2px 7px;border-radius:999px;white-space:nowrap;line-height:1.6}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st.E{color:var(--ev);background:color-mix(in srgb,var(--ev) 12%,transparent)}
+.st.H{color:var(--hy);background:color-mix(in srgb,var(--hy) 13%,transparent)}
+.st.U{color:var(--un);background:color-mix(in srgb,var(--un) 14%,transparent)}
+.st.H::before{background:transparent;border:1.5px dashed currentColor;width:6px;height:6px}
+.st.U::before{background:transparent;border:1.5px dotted currentColor;width:6px;height:6px}
+.night .st.E{color:var(--ev-n);background:color-mix(in srgb,var(--ev-n) 14%,transparent)}
+.night .st.H{color:var(--hy-n);background:color-mix(in srgb,var(--hy-n) 14%,transparent)}
+.night .st.U{color:var(--un-n);background:color-mix(in srgb,var(--un-n) 14%,transparent)}
+
+.btn{background:transparent;display:inline-flex;align-items:center;gap:10px;padding:13px 20px;border-radius:999px;border:1px solid transparent;font-weight:600;font-size:15px;text-decoration:none;transition:transform .15s ease,background .15s ease,border-color .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--night-ink);color:var(--night)}
+.btn-ghost{border-color:var(--night-rule);color:var(--night-ink)}
+.btn-ghost:hover{border-color:var(--night-ink-2)}
+.paper .btn-primary,.btn-primary.on-paper{background:var(--ink);color:var(--paper)}
+.btn .arr{font-family:var(--f-mono);font-weight:400}
+
+/* NAV */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--night) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--night-rule);color:var(--night-ink)}
+.nav .wrap{display:flex;align-items:center;gap:28px;height:60px}
+.wordmark{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-mono);font-weight:500;font-size:13px;letter-spacing:.24em;text-decoration:none;white-space:nowrap}
+.wordmark svg{flex:none}
+.nav-actions{margin-left:auto;display:flex;align-items:center;gap:10px;position:relative}
+.nav .btn{padding:8px 16px;font-size:14px}
+.menu-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--night-rule);color:var(--night-ink);border-radius:999px;padding:8px 14px;font-family:var(--f-mono);font-size:12px;letter-spacing:.12em}
+.menu-btn:hover,.menu-btn[aria-expanded="true"]{border-color:var(--night-ink-2)}
+.menu-btn .bars{display:grid;gap:3px}
+.menu-btn .bars i{display:block;width:14px;height:1.5px;background:currentColor;transition:transform .2s}
+.menu-btn[aria-expanded="true"] .bars i:first-child{transform:translateY(2.25px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] .bars i:last-child{transform:translateY(-2.25px) rotate(-45deg)}
+.nav-links{position:absolute;top:calc(100% + 12px);right:0;width:min(300px,calc(100vw - 32px));display:flex;flex-direction:column;background:var(--night-2);border:1px solid var(--night-rule);border-radius:var(--r);padding:8px;box-shadow:0 24px 50px -24px rgba(0,0,0,.6);animation:fadein .18s ease}
+.nav-links[hidden]{display:none}
+.nav-links a{display:flex;justify-content:space-between;align-items:center;gap:12px;text-decoration:none;color:var(--night-ink);font-size:15px;padding:11px 12px;border-radius:4px}
+.nav-links a:hover,.nav-links a:focus-visible{background:var(--night-3)}
+.nav-links a small{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--night-ink-2)}
+.nav-links .sep{height:1px;background:var(--night-rule);margin:6px 4px}
+.nav-links a.hl{color:#C9D6FF}
+@media (max-width:420px){.wordmark{letter-spacing:.16em;font-size:12px}.nav .btn{padding:8px 12px;font-size:13px}.menu-btn .lbl{display:none}}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;padding-block:clamp(72px,9vw,120px) clamp(64px,8vw,104px)}
+.hero-net{position:absolute;inset:0;pointer-events:none}
+.hero-net svg{position:absolute;right:-4%;top:0;height:100%;width:62%;min-width:560px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 35%);mask-image:linear-gradient(90deg,transparent,#000 35%)}
+.hero .wrap{position:relative}
+.hero h1{font-size:clamp(46px,7.4vw,96px);line-height:.98;letter-spacing:-.025em;max-width:11ch;margin-top:28px}
+.hero h1 em{font-style:italic;color:#B9C8FF}
+.hero .lede{margin-top:28px;max-width:46ch}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
+.roles{margin-top:64px;max-width:720px}
+.roles .eyebrow{margin-bottom:14px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--night-rule);border-radius:var(--r);overflow:hidden}
+.role{display:grid;gap:6px;text-align:left;padding:22px 24px;background:color-mix(in srgb,var(--night-2) 80%,transparent);border:0;transition:background .2s}
+.role+.role{border-left:1px solid var(--night-rule)}
+.role:hover{background:var(--night-3)}
+.role .name{font-family:var(--f-mono);font-size:13px;letter-spacing:.2em;display:flex;justify-content:space-between;align-items:center}
+.role .desc{color:var(--night-ink-2);font-size:15px}
+.role[aria-pressed="true"]{background:var(--night-3);box-shadow:inset 0 -2px 0 #9DB4FF}
+@media (max-width:560px){.role-grid{grid-template-columns:1fr}.role+.role{border-left:0;border-top:1px solid var(--night-rule)}}
+@media (max-width:720px){.hero-net{opacity:.45}}
+
+/* ATLAS */
+.atlas{background:var(--paper)}
+.atlas-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-bottom:40px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:999px;padding:3px;background:var(--paper-2)}
+.seg button{border:0;background:none;padding:8px 18px;border-radius:999px;font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.search{position:relative;max-width:640px}
+.search input{width:100%;font:inherit;font-size:18px;padding:16px 18px 16px 48px;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper);color:var(--ink)}
+.search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
+.search svg.ico{position:absolute;left:17px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+.sugg{position:absolute;z-index:20;left:0;right:0;top:calc(100% + 6px);background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);box-shadow:0 18px 40px -20px rgba(0,0,0,.35);padding:6px;max-height:320px;overflow:auto}
+.sugg button{display:flex;width:100%;align-items:center;gap:10px;justify-content:space-between;text-align:left;border:0;background:none;padding:10px 12px;border-radius:4px}
+.sugg button:hover,.sugg button.active{background:var(--paper-2)}
+.sugg .kind{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.tries{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px;font-size:14px;color:var(--ink-3)}
+.tries button{border:1px solid var(--rule);background:none;border-radius:999px;padding:4px 12px;font-size:13px;color:var(--ink-2)}
+.tries button:hover{border-color:var(--ink-3);color:var(--ink)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 25%,transparent)}
+
+/* Reader */
+.reader-head{display:grid;gap:22px;margin-bottom:56px}
+.reader-head h2{font-size:clamp(34px,4.6vw,54px)}
+.rjourney{position:relative;display:grid;gap:0;max-width:920px}
+.rstep{position:relative;display:grid;grid-template-columns:72px minmax(0,1fr);gap:0 20px;padding-bottom:48px}
+.rstep:last-child{padding-bottom:0}
+.rstep::before{content:"";position:absolute;left:23px;top:52px;bottom:6px;width:1px;background:var(--rule)}
+.rstep:last-child::before{display:none}
+.rnum{width:48px;height:48px;border-radius:50%;border:1px solid var(--rule);display:grid;place-items:center;font-family:var(--f-mono);font-size:13px;background:var(--paper);color:var(--ink-2)}
+.rstep.lead .rnum{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.rbody{min-width:0;padding-top:8px}
+.rbody h3{font-size:clamp(24px,2.6vw,30px);margin-bottom:6px}
+.rbody .q{color:var(--ink-3);font-size:14px;margin-bottom:18px}
+.disease-card{display:grid;gap:12px;max-width:64ch}
+.disease-card .dn{font-family:var(--f-display);font-size:clamp(30px,3.4vw,40px);line-height:1.1}
+.disease-card p{color:var(--ink-2);font-size:17px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:var(--ink-2)}
+.facts b{font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-right:6px}
+details.sci{font-size:14px;color:var(--ink-2)}
+details.sci summary{cursor:pointer;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);list-style:none;display:inline-flex;gap:6px;align-items:center}
+details.sci summary::-webkit-details-marker{display:none}
+details.sci summary::before{content:"+";font-size:14px}
+details.sci[open] summary::before{content:"−"}
+details.sci > div{margin-top:10px;padding-left:14px;border-left:2px solid var(--rule);max-width:64ch}
+.groups{display:grid;gap:18px}
+.group{display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;align-items:start}
+.group > .gl{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding-top:9px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--rule);background:var(--paper);border-radius:999px;padding:6px 12px 6px 10px;font-size:14px;text-align:left;transition:border-color .15s,background .15s}
+.chip:hover{border-color:var(--ink-3)}
+.chip[aria-expanded="true"]{border-color:var(--ink);background:var(--paper-2)}
+.chip .lnk{width:16px;height:2px;flex:none;border-radius:2px}
+.lnk.E{background:var(--ev)}
+.lnk.H{background:repeating-linear-gradient(90deg,var(--hy) 0 4px,transparent 4px 7px)}
+.lnk.U{background:repeating-linear-gradient(90deg,var(--un) 0 2px,transparent 2px 5px)}
+@media (max-width:640px){.group{grid-template-columns:1fr;gap:6px}.group > .gl{padding-top:0}.rstep{grid-template-columns:44px minmax(0,1fr);gap:0 14px}.rnum{width:36px;height:36px;font-size:12px}.rstep::before{left:17.5px;top:40px}}
+.why{margin-top:16px;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper);overflow:hidden;animation:fadein .25s ease}
+.why-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--rule);background:var(--paper-2)}
+.why-head .t{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.why-plain{padding:16px 18px 4px;font-size:16px;max-width:68ch}
+.kv{display:grid;grid-template-columns:170px minmax(0,1fr);gap:0;padding:8px 18px 14px}
+.kv > div{padding:9px 0;border-top:1px solid var(--rule);font-size:14px;min-width:0}
+.kv > div:nth-child(-n+2){border-top:0}
+.kv .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:11px}
+.kv .muted{color:var(--ink-3)}
+@media (max-width:560px){.kv{grid-template-columns:1fr}.kv .k{border-top:1px solid var(--rule);padding-bottom:0}.kv .k + div{border-top:0;padding-top:2px}}
+.conf{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums}
+.conf .bar{width:90px;height:4px;border-radius:2px;background:var(--rule);overflow:hidden}
+.conf .bar i{display:block;height:100%;background:currentColor}
+.night .conf .bar{background:var(--night-rule)}
+.why-foot{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:12px 18px;border-top:1px solid var(--rule);font-size:13px}
+.why-foot button,.linkbtn{border:0;background:none;padding:0;color:var(--accent);font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.next-box{display:grid;gap:14px;padding:24px;border:1px solid var(--ink);border-radius:var(--r);max-width:720px}
+.next-box .nt{font-family:var(--f-display);font-size:clamp(22px,2.4vw,28px);line-height:1.2}
+.next-box ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:15px;display:grid;gap:4px}
+.empty{display:grid;gap:18px;padding:28px;border:1px dashed var(--ink-3);border-radius:var(--r);max-width:760px}
+.empty .big{font-family:var(--f-display);font-size:clamp(26px,3vw,34px);line-height:1.15}
+.empty-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.empty-grid h4{margin:0 0 6px;font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.empty-grid ul{margin:0;padding-left:16px;font-size:14px;color:var(--ink-2);display:grid;gap:4px}
+@media (max-width:720px){.empty-grid{grid-template-columns:1fr}}
+@keyframes fadein{from{opacity:.0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* Researcher */
+.res{background:var(--night);color:var(--night-ink);border-radius:10px;padding:clamp(20px,3vw,36px);margin-inline:calc(-1 * clamp(0px,1vw,12px))}
+.res .search input{background:var(--night-2);border-color:var(--night-rule);color:var(--night-ink)}
+.res .search input:focus{border-color:#9DB4FF;box-shadow:0 0 0 3px rgba(157,180,255,.18)}
+.res .search svg.ico{color:var(--night-ink-2)}
+.res .sugg{background:var(--night-2);border-color:var(--night-rule)}
+.res .sugg button:hover,.res .sugg button.active{background:var(--night-3)}
+.res .sugg .kind{color:var(--night-ink-2)}
+.res .tries{color:var(--night-ink-2)}
+.res .tries button{border-color:var(--night-rule);color:var(--night-ink-2)}
+.res .tries button:hover{color:var(--night-ink);border-color:var(--night-ink-2)}
+.res-head{display:grid;gap:20px;margin-bottom:28px}
+.res-head h2{font-size:clamp(30px,4vw,48px)}
+.graph-shell{display:grid;grid-template-columns:minmax(0,1fr) 340px;border:1px solid var(--night-rule);border-radius:var(--r);overflow:hidden;background:var(--night-2)}
+.graph-wrap{position:relative;min-width:0;border-right:1px solid var(--night-rule)}
+.graph-wrap svg#graph{display:block;width:100%;height:auto;touch-action:manipulation}
+.type-filter{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px;border-bottom:1px solid var(--night-rule)}
+.type-filter button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--night-rule);background:none;border-radius:999px;padding:3px 10px 3px 8px;font-size:12px;color:var(--night-ink)}
+.type-filter button[aria-pressed="false"]{opacity:.4}
+.type-filter button[aria-pressed="false"] .dot{background:transparent!important}
+.graph-legend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 14px;border-top:1px solid var(--night-rule);font-size:12px;color:var(--night-ink-2)}
+.graph-legend span{display:inline-flex;align-items:center;gap:8px}
+.graph-legend svg{flex:none}
+.node{cursor:pointer}
+.node circle{transition:opacity .2s, r .2s}
+.node text{font-family:var(--f-body);font-size:11px;fill:var(--night-ink);paint-order:stroke;stroke:var(--night-2);stroke-width:4px;stroke-linejoin:round;pointer-events:none;transition:opacity .2s}
+.edge{transition:opacity .2s}
+.edge-hit{stroke:transparent;stroke-width:12;cursor:pointer}
+.dim{opacity:.13}
+.detail{padding:20px;display:grid;align-content:start;gap:14px;max-height:640px;overflow:auto;min-width:0}
+.detail .tt{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--night-ink-2)}
+.detail .nm{font-family:var(--f-display);font-size:26px;line-height:1.15}
+.detail p{font-size:14px;color:var(--night-ink-2)}
+.conn-list{display:grid;border-top:1px solid var(--night-rule)}
+.conn{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:10px 0;border:0;border-bottom:1px solid var(--night-rule);background:none;text-align:left;color:var(--night-ink)}
+.conn:hover .cn{text-decoration:underline;text-underline-offset:3px}
+.conn .cn{display:flex;align-items:center;gap:8px;font-size:14px;min-width:0}
+.conn .cr{grid-column:1/-1;font-size:12px;color:var(--night-ink-2)}
+@media (max-width:960px){.graph-shell{grid-template-columns:1fr}.graph-wrap{border-right:0;border-bottom:1px solid var(--night-rule)}.detail{max-height:none}}
+.dash{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1px;background:var(--night-rule);border:1px solid var(--night-rule);border-radius:var(--r);overflow:hidden;margin-top:28px}
+.panel{background:var(--night-2);padding:20px;min-width:0}
+.panel h4{margin:0 0 4px;font-family:var(--f-mono);font-weight:500;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.panel .sub{font-size:13px;color:var(--night-ink-2);margin-bottom:14px}
+.p4{grid-column:span 4}.p6{grid-column:span 6}.p8{grid-column:span 8}.p12{grid-column:span 12}
+@media (max-width:960px){.p4,.p6,.p8{grid-column:span 12}}
+.rows{display:grid}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:10px 0;border:0;border-top:1px solid var(--night-rule);background:none;text-align:left;color:var(--night-ink);width:100%}
+.row:first-child{border-top:0}
+.row:hover .rn{text-decoration:underline;text-underline-offset:3px}
+.row .rn{display:flex;align-items:center;gap:8px;font-size:14px;min-width:0}
+.row .rm{grid-column:1/-1;font-size:12px;color:var(--night-ink-2)}
+.share-tags{display:flex;flex-wrap:wrap;gap:4px}
+.share-tags span{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border:1px solid var(--night-rule);border-radius:3px;color:var(--night-ink-2)}
+.share-tags span.on{color:var(--night-ink);border-color:var(--night-ink-2)}
+.tbl-wrap{overflow-x:auto}
+table.ev{width:100%;border-collapse:collapse;font-size:13px;min-width:880px}
+table.ev th{font-family:var(--f-mono);font-weight:500;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--night-ink-2);text-align:left;padding:8px 10px;border-bottom:1px solid var(--night-rule)}
+table.ev td{padding:10px;border-bottom:1px solid var(--night-rule);vertical-align:top;color:var(--night-ink-2)}
+table.ev td:first-child{color:var(--night-ink)}
+table.ev tr{cursor:pointer}
+table.ev tbody tr:hover td{background:var(--night-3)}
+table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-size:12px;white-space:nowrap}
+
+/* JOURNEY */
+.journey{position:relative}
+.jtrack{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:relative;margin-top:8px}
+.jline{position:absolute;left:calc(100%/12);right:calc(100%/12);top:27px;height:2px}
+.jline svg{width:100%;height:8px;overflow:visible;display:block}
+.jstep{position:relative;display:grid;justify-items:center;text-align:center;gap:10px;padding:0 8px 4px;border:0;background:none;color:var(--night-ink)}
+.jnode{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--night-2);border:1px solid var(--night-rule);position:relative;z-index:1;transition:transform .2s,border-color .2s,background .2s}
+.jnode i{width:12px;height:12px;border-radius:50%}
+.jstep:hover .jnode{transform:scale(1.06);border-color:var(--night-ink-2)}
+.jstep[aria-selected="true"] .jnode{background:var(--night-3);border-color:#9DB4FF;box-shadow:0 0 0 6px rgba(157,180,255,.08)}
+.jlabel{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.16em}
+.jtitle{font-size:14px;color:var(--night-ink-2);max-width:20ch;line-height:1.35}
+.jstep[aria-selected="true"] .jtitle{color:var(--night-ink)}
+.jpanel{margin-top:44px;border-top:1px solid var(--night-rule);padding-top:32px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px}
+.jpanel h3{font-size:clamp(26px,3vw,36px)}
+.jpanel .lead{color:var(--night-ink-2);font-size:17px;margin-top:12px;max-width:56ch}
+.jcols{display:grid;gap:18px}
+.jcols h4{margin:0 0 6px;font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--night-ink-2)}
+.jcols p{font-size:15px}
+.pulse{offset-rotate:0deg}
+@media (max-width:860px){
+  .jtrack{grid-template-columns:1fr;gap:0}
+  .jline{display:none}
+  .jstep{grid-template-columns:56px minmax(0,1fr);justify-items:start;text-align:left;align-items:center;gap:4px 16px;padding:0 0 22px}
+  .jstep::after{content:"";position:absolute;left:27.5px;top:56px;bottom:0;width:1px;background:var(--night-rule)}
+  .jstep:last-child::after{display:none}
+  .jnode{grid-row:span 2}
+  .jtitle{max-width:none}
+  .jpanel{grid-template-columns:1fr;gap:24px}
+}
+
+/* 10x */
+.tenx{background:var(--night-2)}
+.tenx h2{max-width:20ch}
+.race{border:1px solid var(--night-rule);border-radius:var(--r);background:var(--night);overflow:hidden}
+.race-top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--night-rule)}
+.race-top .counts{display:flex;gap:28px;font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:var(--night-ink-2);font-variant-numeric:tabular-nums}
+.race-top .counts b{font-size:22px;font-weight:500;color:var(--night-ink);margin-left:8px;letter-spacing:0}
+.race-svg{overflow-x:auto}
+.race-svg svg{display:block;width:100%;min-width:760px;height:auto}
+.race-svg text{font-family:var(--f-body)}
+.race-note{padding:12px 20px;border-top:1px solid var(--night-rule);font-size:13px;color:var(--night-ink-2)}
+.flows{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--night-rule);border:1px solid var(--night-rule);border-radius:var(--r);overflow:hidden;margin-top:28px}
+.flow{background:var(--night);padding:24px}
+.flow h4{margin:0 0 16px;font-family:var(--f-mono);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--night-ink-2)}
+.flow ol{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.flow li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--night-rule);font-size:15px}
+.flow li:first-child{border-top:0}
+.flow li .m{font-family:var(--f-mono);font-size:12px;color:var(--night-ink-2);font-variant-numeric:tabular-nums}
+.flow li i{width:10px;height:10px;border-radius:2px}
+@media (max-width:720px){.flows{grid-template-columns:1fr}}
+.validate{margin-top:72px;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px}
+.validate h3{font-size:clamp(26px,3vw,36px)}
+.legend3{display:grid;gap:14px;margin-top:24px}
+.legend3 div{display:grid;gap:4px}
+.legend3 p{font-size:14px;color:var(--night-ink-2)}
+.vlist{list-style:none;margin:0;padding:0;counter-reset:v}
+.vlist li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:6px 14px;padding:18px 0;border-top:1px solid var(--night-rule)}
+.vlist li:last-child{border-bottom:1px solid var(--night-rule)}
+.vlist .n{font-family:var(--f-mono);font-size:13px;color:var(--night-ink-2);padding-top:2px}
+.vlist .q{font-size:17px;font-weight:500}
+.vlist .d{grid-column:2/-1;font-size:14px;color:var(--night-ink-2)}
+@media (max-width:860px){.validate{grid-template-columns:1fr;gap:28px}}
+@media (max-width:520px){.vlist li{grid-template-columns:28px minmax(0,1fr)}.vlist li .st{grid-column:2;justify-self:start}}
+
+/* COMMUNITIES */
+.comm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
+@media (max-width:860px){.comm-grid{grid-template-columns:1fr;gap:36px}}
+.comm-col h3{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--ink)}
+.comm-col h3 span{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.comm{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;width:100%;padding:16px 0;border:0;border-bottom:1px solid var(--rule);background:none;text-align:left}
+.comm:hover .cname{text-decoration:underline;text-underline-offset:3px}
+.comm .cname{font-weight:600;font-size:16px;min-width:0}
+.comm .ckind{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.comm .cdesc{grid-column:1/-1;font-size:14px;color:var(--ink-2)}
+.comm .cwhy{grid-column:1/-1;font-size:13px;color:var(--ink-3)}
+
+/* PLANS */
+.plans{background:var(--paper-2)}
+.plan-grid{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:48px;align-items:start}
+@media (max-width:900px){.plan-grid{grid-template-columns:1fr;gap:32px}}
+.plan-form{display:grid;gap:18px;padding:24px;background:var(--paper);border:1px solid var(--rule);border-radius:var(--r)}
+.plan-form label.f{display:grid;gap:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.plan-form input[type=text],.plan-form select{font:inherit;font-size:16px;letter-spacing:0;text-transform:none;padding:12px;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink);width:100%}
+.plan-form input:focus,.plan-form select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
+.stage{display:grid;gap:8px}
+.stage label{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--ink);cursor:pointer;padding:10px 12px;border:1px solid var(--rule);border-radius:4px}
+.stage label:has(input:checked){border-color:var(--ink);background:var(--paper-2)}
+.stage input{margin-top:4px;accent-color:var(--ink)}
+.stage small{display:block;color:var(--ink-3);font-size:13px}
+.saved{display:grid;gap:0;margin-top:4px}
+.saved .eyebrow{margin-bottom:8px}
+.saved-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--rule);font-size:14px}
+.saved-row button{border:0;background:none;padding:0;text-align:left}
+.saved-row .open{font-weight:600}
+.saved-row .open:hover{text-decoration:underline;text-underline-offset:3px}
+.saved-row .prog{font-family:var(--f-mono);font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.saved-row .del{color:var(--ink-3);font-size:13px}
+.saved-row .del:hover{color:var(--ink)}
+.plan-out{min-width:0}
+.plan-head{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:end;justify-content:space-between;padding-bottom:18px;border-bottom:1px solid var(--ink)}
+.plan-head .pd{font-family:var(--f-display);font-size:clamp(28px,3.4vw,40px);line-height:1.1}
+.pbar{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pbar .track{width:140px;height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
+.pbar .track i{display:block;height:100%;background:var(--ev);transition:width .3s}
+.psteps{list-style:none;margin:0;padding:0;counter-reset:ps}
+.pstep{display:grid;grid-template-columns:32px minmax(0,1fr);gap:4px 16px;padding:20px 0;border-bottom:1px solid var(--rule)}
+.pstep input{width:20px;height:20px;margin:3px 0 0;accent-color:var(--ev);cursor:pointer}
+.pstep .pt{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.pstep .pt label{font-size:17px;font-weight:600;cursor:pointer}
+.pstep.done .pt label{text-decoration:line-through;text-decoration-color:var(--ink-3);color:var(--ink-3)}
+.pstep .kind{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.pstep .pb{grid-column:2;font-size:15px;color:var(--ink-2);max-width:66ch}
+.pstep .pw{grid-column:2;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;margin-top:6px}
+.pstep .pw a{color:var(--accent);font-weight:600}
+.pstep .pw .ent{color:var(--ink)}
+.pstep .pw button{border:0;background:none;padding:0;color:var(--accent);font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.plan-note{margin-top:20px;font-size:13px;color:var(--ink-3);max-width:70ch}
+
+/* TRUST */
+.trust-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start}
+@media (max-width:900px){.trust-grid{grid-template-columns:1fr;gap:36px}}
+.chain{display:grid;border-top:1px solid var(--rule)}
+.chain-row{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.1fr) 20px auto;gap:10px;align-items:center;padding:16px 0;border:0;border-bottom:1px solid var(--rule);background:none;text-align:left;width:100%}
+.chain-row:hover .rel{text-decoration:underline;text-underline-offset:3px}
+.chain-row .src{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);min-width:0}
+.chain-row .rel{font-size:15px;min-width:0}
+.chain-row .ar{color:var(--ink-3);font-family:var(--f-mono)}
+.chain-head{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.1fr) 20px auto;gap:10px;padding:0 0 8px}
+.chain-head span{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+@media (max-width:560px){.chain-row,.chain-head{grid-template-columns:minmax(0,1fr) auto}.chain-row .ar,.chain-head .ar{display:none}.chain-row .src{grid-column:1/-1}.chain-head span:nth-child(3){display:none}}
+.route{border:1px solid var(--rule);border-radius:var(--r);background:var(--paper);overflow:hidden}
+.route-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:18px;border-bottom:1px solid var(--rule);background:var(--paper-2)}
+.route-form label{display:grid;gap:6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);min-width:0}
+.route-form select{font:inherit;font-size:15px;letter-spacing:0;text-transform:none;padding:10px;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
+.route-form .opts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;font-size:14px;color:var(--ink-2)}
+.route-form .opts label{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-body);font-size:14px;letter-spacing:0;text-transform:none;color:var(--ink-2)}
+@media (max-width:560px){.route-form{grid-template-columns:1fr}}
+.route-out{padding:20px}
+.hops{list-style:none;margin:0;padding:0;display:grid}
+.hop{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;padding-bottom:6px}
+.hop .rail{position:relative;display:flex;justify-content:center}
+.hop .rail i{width:11px;height:11px;border-radius:50%;margin-top:5px;position:relative;z-index:1}
+.hop .rail::after{content:"";position:absolute;top:16px;bottom:-6px;width:2px;background:var(--rule)}
+.hop:last-child .rail::after{display:none}
+.hop.H .rail::after{background:repeating-linear-gradient(180deg,var(--hy) 0 4px,transparent 4px 7px)}
+.hop.E .rail::after{background:var(--ev)}
+.hop .nlab{font-weight:600;font-size:15px}
+.hop .elink{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:13px;color:var(--ink-2);padding:6px 0 12px;border:0;background:none;text-align:left}
+.hop .elink:hover .relx{text-decoration:underline}
+
+/* SOURCES */
+.sources{border-top:1px solid var(--rule)}
+.src-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink)}
+.src-col{padding:20px 20px 8px 0;min-width:0}
+.src-col+.src-col{padding-left:20px;border-left:1px solid var(--rule)}
+.src-col h4{margin:0 0 14px;font-family:var(--f-mono);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.src-col ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.src-col a{font-weight:600;text-decoration:none;font-size:15px}
+.src-col a:hover{text-decoration:underline;text-underline-offset:3px}
+.src-col span{display:block;font-size:13px;color:var(--ink-3)}
+@media (max-width:860px){.src-grid{grid-template-columns:1fr 1fr}.src-col:nth-child(3){padding-left:0;border-left:0}.src-col{border-top:1px solid var(--rule)}.src-col:nth-child(-n+2){border-top:0}}
+@media (max-width:480px){.src-grid{grid-template-columns:1fr}.src-col,.src-col+.src-col{padding-left:0;border-left:0;border-top:1px solid var(--rule)}.src-col:first-child{border-top:0}}
+
+/* CTA */
+.cta h2{font-size:clamp(38px,5.6vw,72px);line-height:1.04;max-width:18ch}
+.cta h2 span{color:var(--night-ink-2)}
+.cta .hero-ctas{margin-top:44px}
+.cta small{display:block;margin-top:28px;color:var(--night-ink-2);font-size:14px}
+footer{background:var(--night);color:var(--night-ink-2);border-top:1px solid var(--night-rule);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-between;padding-block:28px}
+footer p{max-width:70ch}
+
+/* DRAWER */
+.scrim{position:fixed;inset:0;background:rgba(4,8,12,.5);z-index:60;animation:fadein .2s ease}
+.drawer{position:fixed;z-index:61;top:0;right:0;bottom:0;width:min(480px,100%);background:var(--paper);color:var(--ink);border-left:1px solid var(--rule);display:flex;flex-direction:column;box-shadow:-30px 0 60px -30px rgba(0,0,0,.4);animation:slidein .25s ease;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@keyframes slidein{from{transform:translateX(24px);opacity:.4}to{transform:none;opacity:1}}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--rule)}
+.drawer-head button{border:1px solid var(--rule);background:none;border-radius:999px;padding:4px 12px;font-family:var(--f-mono);font-size:12px}
+.drawer-body{overflow:auto;padding:22px 20px 32px;display:grid;gap:18px;align-content:start}
+.dchain{display:grid;gap:6px}
+.dchain .a,.dchain .b{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-size:22px;line-height:1.2}
+.dchain .r{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:var(--ink-2);padding-left:17px;border-left:2px solid var(--rule);margin-left:4px}
+.drawer .kv{padding:0}
+.drawer .why-plain{padding:0}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<header class="nav" id="top">
+  <div class="wrap">
+    <a class="wordmark" href="#top" aria-label="One Mission home">
+      <svg width="26" height="14" viewBox="0 0 26 14" aria-hidden="true"><circle cx="4" cy="7" r="3.2" fill="none" stroke="currentColor" stroke-width="1.4"/><line x1="7.5" y1="7" x2="18.5" y2="7" stroke="currentColor" stroke-width="1.4"/><circle cx="22" cy="7" r="3.2" fill="currentColor"/></svg>
+      ONE MISSION
+    </a>
+    <div class="nav-actions">
+      <a class="btn btn-primary" href="#atlas">Explore Atlas</a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-haspopup="true"><span class="bars" aria-hidden="true"><i></i><i></i></span><span class="lbl">MENU</span></button>
+      <nav class="nav-links" id="navLinks" aria-label="Main" hidden>
+        <a href="#atlas">Atlas <small>Search</small></a>
+        <a href="#journey">Journey <small>Worked example</small></a>
+        <a href="#communities">Communities <small>Patient groups</small></a>
+        <a href="#plans" class="hl">Plans <small>Your first step</small></a>
+        <div class="sep" role="separator"></div>
+        <a href="#atlas" data-mode="reader">For Readers</a>
+        <a href="#atlas" data-mode="researcher">For Researchers</a>
+        <div class="sep" role="separator"></div>
+        <a href="#evidence">Evidence</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- 1 HERO -->
+<section class="hero night" aria-labelledby="heroTitle">
+  <div class="hero-net" id="heroNet" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="eyebrow">Rare disease knowledge atlas</div>
+    <h1 id="heroTitle">From isolated disease to <em>shared action.</em></h1>
+    <p class="lede">Connect the knowledge, people and research already working toward a treatment, and discover the next step together.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#atlas">Explore the Atlas <span class="arr">→</span></a>
+      <a class="btn btn-ghost" href="#tenx">See the 10× Journey</a>
+    </div>
+    <div class="roles">
+      <div class="eyebrow">Continue as</div>
+      <div class="role-grid" role="group" aria-label="Choose your view">
+        <button class="role" data-role="reader" aria-pressed="false">
+          <span class="name">READER <span aria-hidden="true">→</span></span>
+          <span class="desc">For patients, caregivers and patient organizations.</span>
+        </button>
+        <button class="role" data-role="researcher" aria-pressed="false">
+          <span class="name">RESEARCHER <span aria-hidden="true">→</span></span>
+          <span class="desc">For researchers, clinicians, biotech and pharma.</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2+3 ATLAS -->
+<section class="atlas band" id="atlas" aria-label="Atlas">
+  <div class="wrap">
+    <div class="atlas-top">
+      <div class="eyebrow">The Atlas</div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <span class="sample-tag">Sample data · demo</span>
+        <div class="seg" role="group" aria-label="View">
+          <button data-mode="reader" aria-pressed="true">READER</button>
+          <button data-mode="researcher" aria-pressed="false">RESEARCHER</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="readerView">
+      <div class="reader-head">
+        <h2>Start with what you know.</h2>
+        <div class="search" data-scope="reader">
+          <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="readerSearch" type="search" autocomplete="off" placeholder="Search a disease, gene or symptom..." aria-label="Search a disease, gene or symptom">
+          <div class="sugg" hidden></div>
+        </div>
+        <div class="tries" id="readerTries">Try:
+          <button data-q="Leigh syndrome">Leigh syndrome</button>
+          <button data-q="SCN1A">SCN1A</button>
+          <button data-q="fever-sensitive seizures">fever-sensitive seizures</button>
+          <button data-q="Alström syndrome">Alström syndrome</button>
+        </div>
+      </div>
+      <div id="readerOut"></div>
+    </div>
+
+    <div id="researcherView" hidden>
+      <div class="res">
+        <div class="res-head">
+          <div class="eyebrow">Researcher view</div>
+          <h2>Find connections hidden across disease boundaries.</h2>
+          <div class="search" data-scope="researcher">
+            <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input id="resSearch" type="search" autocomplete="off" placeholder="Search disease, gene, mechanism, phenotype, study or researcher..." aria-label="Search disease, gene, mechanism, phenotype, study or researcher">
+            <div class="sugg" hidden></div>
+          </div>
+          <div class="tries" id="resTries">Try:
+            <button data-q="MT-ATP6">MT-ATP6</button>
+            <button data-q="mTOR signaling">mTOR signaling</button>
+            <button data-q="Dravet syndrome">Dravet syndrome</button>
+            <button data-q="Patient iPSC-derived interneurons">iPSC interneurons</button>
+          </div>
+        </div>
+        <div class="graph-shell">
+          <div class="graph-wrap">
+            <div class="type-filter" id="typeFilter" aria-label="Show node types"></div>
+            <svg id="graph" viewBox="0 0 800 600" role="img" aria-label="Knowledge graph of the selected disease"></svg>
+            <div class="graph-legend">
+              <span><svg width="28" height="6"><line x1="0" y1="3" x2="28" y2="3" stroke="var(--ev-n)" stroke-width="2"/></svg>Evidence</span>
+              <span><svg width="28" height="6"><line x1="0" y1="3" x2="28" y2="3" stroke="var(--hy-n)" stroke-width="2" stroke-dasharray="5 4"/></svg>Hypothesis</span>
+              <span><svg width="28" height="6"><line x1="0" y1="3" x2="28" y2="3" stroke="var(--un-n)" stroke-width="2" stroke-dasharray="1.5 4" stroke-linecap="round"/></svg>Unknown</span>
+              <span>Click a node to explore. Click a line for its evidence.</span>
+            </div>
+          </div>
+          <aside class="detail" id="detail" aria-live="polite"></aside>
+        </div>
+        <div class="dash" id="dash"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 JOURNEY -->
+<section class="night band journey" id="journey" aria-labelledby="journeyTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Worked example · Leigh syndrome · sample data</div>
+      <h2 id="journeyTitle">One connected journey</h2>
+      <p class="lede">Six steps from a diagnosis to an experiment someone could run. Select a step to see why it connects to the one before it, what it rests on, and what could break it.</p>
+    </div>
+    <div class="jtrack" id="jtrack" role="tablist" aria-label="Journey steps">
+      <div class="jline" aria-hidden="true"><svg id="jlineSvg" preserveAspectRatio="none" viewBox="0 0 1000 8"></svg></div>
+    </div>
+    <div class="jpanel" id="jpanel" role="tabpanel"></div>
+  </div>
+</section>
+
+<!-- 5 10x -->
+<section class="night band tenx" id="tenx" aria-labelledby="tenxTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The 10× question</div>
+      <h2 id="tenxTitle">Can we move one meaningful step toward treatment 10× faster?</h2>
+      <p class="lede">Today, reaching the next research decision means rediscovering what already exists. If the knowledge, assets and people were already connected, the same decision could be reached in a fraction of the time. In the span of one decision today, the connected route could complete ten.</p>
+    </div>
+    <div class="race">
+      <div class="race-top">
+        <button class="btn btn-ghost" id="playBtn" style="padding:8px 16px;font-size:14px">▶ Replay the timeline</button>
+        <div class="counts" aria-live="polite">
+          <span>Decisions · Today <b id="cToday">1</b></span>
+          <span>Decisions · One Mission <b id="cOM">10</b></span>
+          <span>Month <b id="cMonth">36</b></span>
+        </div>
+      </div>
+      <div class="race-svg"><svg id="raceSvg" viewBox="0 0 1000 300" role="img" aria-label="Timeline comparing one research decision today with ten decision cycles on the connected route over 36 months"></svg></div>
+      <div class="race-note"><span class="st H">Hypothesis</span>&nbsp; Illustrative model. Durations are assumptions for discussion, not measurements. The 10× figure is the claim this project sets out to test.</div>
+    </div>
+    <div class="flows">
+      <div class="flow"><h4>Today</h4><ol id="flowToday"></ol></div>
+      <div class="flow"><h4>One Mission</h4><ol id="flowOM"></ol></div>
+    </div>
+
+    <div class="validate">
+      <div>
+        <div class="eyebrow">Before anyone acts</div>
+        <h3 style="margin-top:12px">What would need to be validated?</h3>
+        <div class="legend3">
+          <div><span class="st E">Evidence</span><p>Supported by published or registered sources you can inspect.</p></div>
+          <div><span class="st H">Hypothesis</span><p>Inferred by connecting evidence. Plausible, untested.</p></div>
+          <div><span class="st U">Unknown</span><p>Not enough information to say either way.</p></div>
+        </div>
+        <p style="margin-top:24px;font-size:14px;color:var(--night-ink-2);max-width:44ch">An inferred connection is never presented as established clinical evidence. Every hypothesis carries the evidence it was built from.</p>
+      </div>
+      <ol class="vlist" id="vlist"></ol>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITIES -->
+<section class="band" id="communities" aria-labelledby="commTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Communities · sample data</div>
+      <h2 id="commTitle">The people already on the path.</h2>
+      <p class="lede">Patient organizations and family communities hold knowledge no database has: lived experience, registries, samples and the trust to bring families into research. One Mission shows which communities connect to a disease, and why, including related communities that share a gene or mechanism.</p>
+    </div>
+    <div class="comm-grid" id="commGrid"></div>
+    <p style="margin-top:28px;font-size:13px;color:var(--ink-3);max-width:70ch">All organizations shown are placeholders marked "(sample)". Select one to see why it is connected and how strong the evidence is.</p>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section class="band plans" id="plans" aria-labelledby="plansTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Plans</div>
+      <h2 id="plansTitle">Plan your first step.</h2>
+      <p class="lede">Add your disease and where you are today. One Mission turns what is already connected to it into a short list of things you can start on: people to talk to, communities to join and research you can take part in.</p>
+    </div>
+    <div class="plan-grid">
+      <div style="display:grid;gap:24px">
+        <form class="plan-form" id="planForm" autocomplete="off">
+          <label class="f" for="planDisease">Your disease
+            <input type="text" id="planDisease" list="planDiseaseList" placeholder="e.g. Leigh syndrome" required>
+            <datalist id="planDiseaseList"></datalist>
+          </label>
+          <fieldset class="stage" style="border:0;padding:0;margin:0">
+            <legend class="eyebrow" style="margin-bottom:8px">Where are you now?</legend>
+            <label for="stNew"><input type="radio" name="stage" id="stNew" value="new" checked><span>Just diagnosed<small>Finding my way and the right people</small></span></label>
+            <label for="stLiving"><input type="radio" name="stage" id="stLiving" value="living"><span>Living with it for a while<small>Ready to take part in research</small></span></label>
+            <label for="stLeader"><input type="radio" name="stage" id="stLeader" value="leader"><span>Leading a patient group<small>Looking for collaborators and assets</small></span></label>
+          </fieldset>
+          <button type="submit" class="btn btn-primary on-paper" style="justify-content:center">Create my plan <span class="arr">→</span></button>
+        </form>
+        <div class="saved" id="savedPlans"></div>
+      </div>
+      <div class="plan-out" id="planOut" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 TRUST -->
+<section class="band" id="evidence" aria-labelledby="evTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Trust &amp; evidence</div>
+      <h2 id="evTitle">Every connection needs evidence.</h2>
+      <p class="lede">One Mission connects information from research papers, disease databases, clinical studies and patient organizations. Each line in the graph carries where it came from, what kind of relationship it is, and how confident we can be.</p>
+    </div>
+    <div class="trust-grid">
+      <div>
+        <div class="chain-head"><span>Source</span><span class="ar"></span><span>Relationship</span><span class="ar"></span><span>Confidence</span></div>
+        <div class="chain" id="chain"></div>
+        <p style="margin-top:16px;font-size:14px;color:var(--ink-3)">Select a row to inspect the original evidence.</p>
+      </div>
+      <div class="route">
+        <form class="route-form" id="routeForm">
+          <label for="rFrom">From<select id="rFrom"></select></label>
+          <label for="rTo">To<select id="rTo"></select></label>
+          <div class="opts">
+            <label for="rHyp"><input type="checkbox" id="rHyp"> Include hypotheses</label>
+            <button type="button" class="linkbtn" data-pair="leigh:leigh|leigh:d_narp">Leigh → NARP</button>
+            <button type="button" class="linkbtn" data-pair="dravet:dravet|dravet:d_scn2a">Dravet → SCN2A</button>
+            <button type="button" class="linkbtn" data-pair="leigh:leigh|dravet:dravet">Leigh → Dravet</button>
+          </div>
+        </form>
+        <div class="route-out" id="routeOut" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 SOURCES -->
+<section class="band sources" id="sources" aria-labelledby="srcTitle" style="padding-top:clamp(56px,7vw,88px)">
+  <div class="wrap">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:24px">
+      <h3 id="srcTitle">Data sources</h3>
+      <p style="font-size:14px;color:var(--ink-3);max-width:60ch">The public infrastructure the Atlas is designed to draw on. This prototype shows sample records shaped like these sources.</p>
+    </div>
+    <div class="src-grid" id="srcGrid"></div>
+  </div>
+</section>
+
+<!-- 10 CTA -->
+<section class="night band cta" id="about" aria-labelledby="ctaTitle">
+  <div class="wrap">
+    <h2 id="ctaTitle">The goal is not to find more information. <span>It is to connect the right information, people and action.</span></h2>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#atlas" data-mode="reader">Explore the Atlas <span class="arr">→</span></a>
+      <a class="btn btn-ghost" href="#atlas" data-mode="researcher">See the Researcher View</a>
+    </div>
+    <small>Built to turn an isolated diagnosis into a shared path toward treatment.</small>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="wrap">
+    <span class="wordmark" style="color:var(--night-ink)">ONE MISSION</span>
+    <p>About this prototype: every disease profile, organization, lab and study shown here is sample data for demonstration. Named diseases, genes and models are real; labs, groups and records marked "sample" or "example" are placeholders. Nothing here is medical advice.</p>
+  </div>
+</footer>
+
+<div id="drawerRoot"></div>
+
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SVGNS='http://www.w3.org/2000/svg';
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const TYPES={
+  disease:{label:'Disease',c:'#EEF2F7'}, gene:{label:'Gene',c:'#5B8CFF'}, variant:{label:'Variant',c:'#A9BEFF'},
+  mechanism:{label:'Mechanism',c:'#A68BFF'}, phenotype:{label:'Phenotype',c:'#3FC1C9'}, publication:{label:'Publication',c:'#97A3B4'},
+  researcher:{label:'Researcher',c:'#F2A65A'}, study:{label:'Study',c:'#EC6F98'}, org:{label:'Patient organization',c:'#7FD18B'}, asset:{label:'Research asset',c:'#E6CF55'}
+};
+const STATUS={E:'Evidence',H:'Hypothesis',U:'Unknown'};
+const SRC_URL={'OMIM':'https://omim.org','HPO':'https://hpo.jax.org','MONDO':'https://mondo.monarchinitiative.org','ClinVar':'https://www.ncbi.nlm.nih.gov/clinvar/','PubMed':'https://pubmed.ncbi.nlm.nih.gov','PMC':'https://www.ncbi.nlm.nih.gov/pmc/','NIH RePORTER':'https://reporter.nih.gov','ClinicalTrials.gov':'https://clinicaltrials.gov','NORD':'https://rarediseases.org','Global Genes':'https://globalgenes.org','Orphanet':'https://www.orpha.net','EURORDIS':'https://www.eurordis.org'};
+
+/* ---------- SAMPLE DATA ----------
+   edges: [source, target, relationship, status, confidence, source label, date, evidence, plain-language, contradictory, share] */
+const DATA={
+leigh:{
+  name:'Leigh syndrome',
+  plain:'A rare, progressive brain disorder that usually begins in infancy or early childhood. It happens when mitochondria, the parts of the cell that make energy, cannot keep up. The brain and muscles, which need the most energy, are affected first.',
+  sci:'Subacute necrotizing encephalomyelopathy. A genetically heterogeneous primary mitochondrial disease with dozens of reported nuclear and mitochondrial DNA causes, characterized by symmetric lesions of the basal ganglia and/or brainstem.',
+  facts:[['Onset','Usually before age 2'],['Causes','Dozens of genes'],['Inheritance','Autosomal recessive, X-linked or maternal']],
+  aliases:['subacute necrotizing encephalomyelopathy','mitochondrial','MILS','maternally inherited Leigh syndrome'],
+  next:{title:'Run one shared biomarker study across the Leigh syndrome and NARP communities.',
+    plain:'Both conditions can come from the same MT-ATP6 change. A family group, a registry and a lab with matching cell models already exist. The next step is to ask them to measure one blood biomarker (GDF-15) together, in cells and in people.',
+    status:'H', checks:['Confirm the registry’s consent covers shared analysis','Check that heteroplasmy level is recorded for both groups','Agree one outcome measure before collecting samples']},
+  nodes:[
+    ['leigh','disease','Leigh syndrome','',''],
+    ['g_surf1','gene','SURF1','Helps assemble complex IV, one of the energy machines inside mitochondria.','Assembly factor for cytochrome c oxidase (complex IV). Biallelic loss-of-function variants are among the most frequently reported nuclear causes.'],
+    ['g_atp6','gene','MT-ATP6','Carried in the mitochondria’s own DNA. Codes part of the machine that makes ATP, the cell’s energy currency.','Encodes subunit a of mitochondrial ATP synthase (complex V). Variants are maternally inherited and heteroplasmic.'],
+    ['g_ndufs4','gene','NDUFS4','Codes part of complex I, the first step of the energy chain.','Accessory subunit of NADH:ubiquinone oxidoreductase (complex I).'],
+    ['v_8993','variant','m.8993T>G','A specific change in MT-ATP6. How severe it is depends on what share of mitochondria carry it.','Pathogenic MT-ATP6 variant; phenotype tracks heteroplasmy level (higher levels associated with MILS, lower with NARP).'],
+    ['m_oxphos','mechanism','OXPHOS deficiency','The cell’s energy production line runs short.','Impaired oxidative phosphorylation leading to energy failure, lactate accumulation and selective neuronal vulnerability.'],
+    ['m_c4','mechanism','Complex IV assembly defect','One energy machine is not built correctly.','Reduced cytochrome c oxidase activity due to defective assembly.'],
+    ['m_c5','mechanism','ATP synthase dysfunction','The final step that makes ATP works poorly.','Impaired proton translocation and ATP synthesis at complex V.'],
+    ['m_mtor','mechanism','mTOR signaling','A growth and nutrient signal. Turning it down helped mice with a Leigh-like disease in lab studies.','Mechanistic target of rapamycin pathway; rapamycin treatment extended survival in Ndufs4 knockout mice.'],
+    ['p_regress','phenotype','Developmental regression','Loss of skills a child had already learned.','HP:0002376'],
+    ['p_lactic','phenotype','Elevated lactate','A blood or spinal fluid sign that cells are short of energy.','HP:0003128 Lactic acidosis'],
+    ['p_hypo','phenotype','Hypotonia','Low muscle tone; a “floppy” feel.','HP:0001252'],
+    ['p_mri','phenotype','Basal ganglia lesions on MRI','Symmetric changes deep in the brain seen on scans.','Bilateral symmetric T2 hyperintensities of basal ganglia and/or brainstem.'],
+    ['d_narp','disease','NARP','Neuropathy, ataxia and retinitis pigmentosa. Caused by the same MT-ATP6 changes, usually in a smaller share of mitochondria.','Lies on a clinical spectrum with MILS determined largely by heteroplasmy.'],
+    ['d_melas','disease','MELAS','Another mitochondrial disease with stroke-like episodes. Different main gene, overlapping energy problem.','Most often m.3243A>G in MT-TL1.'],
+    ['o_found','org','Mitochondrial disease foundation (sample)','A patient organization supporting families across mitochondrial diseases.','Sample placeholder organization.','org'],
+    ['o_family','org','Leigh syndrome family network (sample)','A caregiver group sharing experience and supporting research.','Sample placeholder organization.','org'],
+    ['c_narp','org','MT-ATP6 / NARP family group (sample)','Families affected by MT-ATP6 changes, including NARP and Leigh syndrome.','Sample placeholder community.','community'],
+    ['c_melas','org','MELAS patient community (sample)','A community for a related mitochondrial disease.','Sample placeholder community.','community'],
+    ['r_bio','researcher','Lab A · Mitochondrial bioenergetics (sample)','Studies how cells make energy and what goes wrong.','Sample placeholder lab.','researcher'],
+    ['r_ipsc','researcher','Lab B · iPSC neuron models (sample)','Grows nerve cells from patients’ own cells to study disease in a dish.','Sample placeholder lab.','researcher'],
+    ['r_clinic','researcher','Clinic C · Pediatric mitochondrial medicine (sample)','Doctors who diagnose and care for children with mitochondrial disease.','Sample placeholder clinic.','clinician'],
+    ['pub_spec','publication','Review: MT-ATP6 spectrum from NARP to MILS (example record)','A paper summarizing how one gene causes a range of conditions.','Example record; not a real citation.'],
+    ['pub_mtor','publication','Model study: mTOR inhibition in Ndufs4 knockout mice (example record)','A lab study testing a drug in mice.','Example record; not a real citation.'],
+    ['s_nhs','study','Natural history study, primary mitochondrial disease (sample)','Follows people over time to learn how the disease changes.','Sample placeholder study.','nhs'],
+    ['s_trial','study','Interventional studies in mitochondrial disease','Clinical studies testing possible treatments.','Search of ClinicalTrials.gov for primary mitochondrial disease.','clinical'],
+    ['a_reg','asset','Mitochondrial disease patient registry (sample)','A shared, consented database of patient information.','Sample placeholder registry.','registry'],
+    ['a_gdf','asset','GDF-15 and FGF-21','Proteins in the blood that rise in many mitochondrial diseases.','Circulating biomarkers of mitochondrial dysfunction; best characterized in mitochondrial myopathy.','biomarker'],
+    ['a_mouse','asset','Ndufs4 knockout mouse','A widely used mouse model with a Leigh-like disease.','Develops progressive encephalopathy resembling Leigh syndrome.','model'],
+    ['a_ipsc','asset','MT-ATP6 patient iPSC neuron lines (sample)','Patient-derived nerve cells carrying the MT-ATP6 change.','Sample placeholder asset.','model']
+  ],
+  edges:[
+    ['leigh','g_surf1','is caused by variants in','E',.95,'OMIM · ClinVar','2024','Biallelic SURF1 variants are among the most frequently reported nuclear causes of Leigh syndrome.','Changes in this gene are a well-documented cause.','None found in the sample index.'],
+    ['leigh','g_atp6','is caused by variants in','E',.93,'OMIM · ClinVar','2024','Pathogenic MT-ATP6 variants cause maternally inherited Leigh syndrome (MILS).','Changes in this gene are a well-documented cause, passed down through the mother.','None found in the sample index.'],
+    ['leigh','g_ndufs4','is caused by variants in','E',.9,'OMIM · ClinVar','2023','Biallelic NDUFS4 variants cause complex I deficiency presenting as Leigh syndrome.','A less common but documented cause.','None found in the sample index.'],
+    ['g_atp6','v_8993','has pathogenic variant','E',.95,'ClinVar','2024','Classified pathogenic by multiple submitters.','This specific change is known to cause disease.','None found in the sample index.'],
+    ['v_8993','leigh','at high heteroplasmy is associated with','E',.88,'PubMed (review)','2023','High heteroplasmy levels are typically associated with MILS; lower levels with NARP.','When most mitochondria carry the change, it tends to cause Leigh syndrome.','Thresholds vary between tissues and individuals; blood levels may not reflect brain levels.'],
+    ['v_8993','d_narp','at lower heteroplasmy is associated with','E',.86,'PubMed (review)','2023','Lower heteroplasmy levels are typically associated with NARP.','When fewer mitochondria carry the change, it tends to cause NARP.','Overlap between groups is substantial; heteroplasmy alone does not predict outcome.'],
+    ['leigh','d_narp','shares causal variants with','E',.87,'OMIM · PubMed','2024','NARP and MILS form a clinical spectrum driven by the same MT-ATP6 variants.','Same gene change, different severity. Families can include both.','Clinical courses differ markedly; findings in one may not transfer to the other.','variant effect'],
+    ['leigh','d_melas','shares mechanism with','H',.52,'MONDO · HPO (inferred)','2025','Both involve OXPHOS deficiency and overlapping features such as lactic acidosis and brain lesions.','Both are energy-production diseases, but usually caused by different genes.','MELAS is mainly linked to MT-TL1; shared downstream biology does not imply shared treatment response.','mechanism'],
+    ['g_surf1','m_c4','is required for','E',.92,'PubMed','2022','SURF1 loss reduces assembled complex IV.','Without it, complex IV is not built properly.','Some residual complex IV activity remains in many patients.'],
+    ['g_atp6','m_c5','encodes subunit of','E',.95,'PubMed','2022','MT-ATP6 encodes subunit a of ATP synthase.','This gene is a building block of the ATP machine.','None found in the sample index.'],
+    ['g_ndufs4','m_oxphos','loss reduces','E',.9,'PubMed','2022','NDUFS4 loss destabilizes complex I.','Without it, the first step of the energy chain falters.','None found in the sample index.'],
+    ['m_c4','m_oxphos','contributes to','E',.9,'PubMed','2021','Complex IV deficiency impairs oxidative phosphorylation.','A faulty machine slows the whole line.','None found in the sample index.'],
+    ['m_c5','m_oxphos','contributes to','E',.9,'PubMed','2021','Complex V dysfunction reduces ATP output.','A faulty final step slows energy output.','None found in the sample index.'],
+    ['leigh','m_oxphos','has core mechanism','E',.94,'OMIM · PubMed','2024','Leigh syndrome is defined by primary defects in mitochondrial energy production.','At its core, this disease is about cells running short of energy.','None found in the sample index.'],
+    ['leigh','m_mtor','may be modulated through','H',.45,'PubMed (mouse model)','2023','Rapamycin extended survival and delayed neurological decline in Ndufs4 knockout mice.','Turning down this signal helped mice. Whether it helps people is not known.','Evidence is from an animal model only. Benefit in people with Leigh syndrome has not been established, and effects may differ by genetic cause.'],
+    ['m_mtor','a_mouse','was tested in','E',.8,'PubMed','2023','mTOR inhibition studied in Ndufs4 knockout mice.','This idea has been tried in the mouse model.','Results vary with dosing and timing across studies.'],
+    ['pub_mtor','a_mouse','reports results in','E',.9,'PubMed (example record)','2023','Example publication describing model outcomes.','This paper describes what happened in the mice.','—'],
+    ['pub_mtor','leigh','is relevant to','E',.7,'PubMed (example record)','2023','Model study framed around Leigh syndrome.','This paper is about a Leigh-like disease in mice.','Model relevance to human disease is partial.'],
+    ['pub_spec','leigh','describes','E',.9,'PubMed (example record)','2023','Review covering MILS clinical features.','This paper explains Leigh syndrome caused by MT-ATP6.','—'],
+    ['pub_spec','d_narp','describes','E',.9,'PubMed (example record)','2023','Review covering NARP clinical features.','The same paper explains NARP.','—'],
+    ['leigh','p_regress','presents with','E',.9,'HPO · Orphanet','2024','Frequently annotated phenotype.','Many children lose skills they had learned.','Not all patients show regression; some present with slower development from the start.'],
+    ['leigh','p_lactic','presents with','E',.85,'HPO · Orphanet','2024','Frequently annotated phenotype.','Blood tests often show a sign of energy shortage.','Lactate can be normal in some patients, so a normal result does not rule out the condition.'],
+    ['leigh','p_hypo','presents with','E',.85,'HPO · Orphanet','2024','Frequently annotated phenotype.','Low muscle tone is common.','Non-specific; seen in many conditions.'],
+    ['leigh','p_mri','presents with','E',.92,'HPO · Orphanet','2024','Characteristic neuroimaging finding used in diagnostic criteria.','Brain scans usually show a typical pattern.','Lesions may be absent early in the disease.'],
+    ['o_found','leigh','supports families with','E',.8,'NORD · Global Genes (sample directory)','2025','Listed in patient organization directories.','This organization helps families living with Leigh syndrome.','—'],
+    ['o_family','leigh','is a community for','E',.8,'Global Genes (sample directory)','2025','Listed in patient organization directories.','Families affected by Leigh syndrome meet here.','—'],
+    ['c_narp','leigh','is a related community through shared MT-ATP6 variants','E',.72,'Orphanet · EURORDIS (sample)','2025','Group includes families with MILS and NARP.','Many of these families share the same gene change.','Membership overlap is estimated, not counted.'],
+    ['c_narp','d_narp','is a community for','E',.8,'EURORDIS (sample)','2025','Listed in patient organization directories.','Families affected by NARP meet here.','—'],
+    ['c_melas','leigh','is a related community through shared mechanism','H',.48,'Inferred from MONDO','2025','Connected through shared OXPHOS biology.','A community for a related energy disease.','Different main gene; overlap of research questions is unconfirmed.'],
+    ['r_bio','m_oxphos','studies','E',.75,'NIH RePORTER · PubMed (sample)','2025','Funded projects on OXPHOS biology.','This lab studies the energy problem behind the disease.','—'],
+    ['r_bio','leigh','publishes on','E',.7,'PubMed (sample)','2024','Publications mentioning Leigh syndrome.','This lab has written about Leigh syndrome.','—'],
+    ['r_ipsc','a_ipsc','maintains','E',.8,'NIH RePORTER (sample)','2025','Asset listed in funded project.','This lab already has MT-ATP6 patient cells.','—'],
+    ['r_ipsc','leigh','works on a related mechanism','H',.58,'Inferred from PubMed','2025','Lab works on MT-ATP6 models; no Leigh-specific project found in the sample index.','This lab works on the same gene, but not on Leigh syndrome directly.','No Leigh-specific funding or publications found.'],
+    ['r_clinic','leigh','treats patients with','E',.85,'Orphanet expert centre listing (sample)','2025','Listed expert centre.','These doctors see children with Leigh syndrome.','—'],
+    ['r_clinic','s_nhs','is a site for','E',.8,'ClinicalTrials.gov (sample)','2025','Listed study site.','This clinic takes part in the natural history study.','—'],
+    ['s_nhs','leigh','enrolls people with','E',.85,'ClinicalTrials.gov (sample)','2025','Eligibility includes Leigh syndrome.','This study follows people with Leigh syndrome over time.','—'],
+    ['s_trial','leigh','includes participants with','E',.7,'ClinicalTrials.gov','2025','Registered interventional studies in primary mitochondrial disease include some participants with Leigh syndrome.','Some treatment studies include people with Leigh syndrome.','Eligibility varies; many studies focus on adults or myopathy.'],
+    ['a_reg','leigh','collects data on','E',.8,'Orphanet (sample)','2025','Registry scope includes Leigh syndrome.','This registry already holds information about Leigh syndrome.','—'],
+    ['a_reg','d_narp','also collects data on','E',.75,'Orphanet (sample)','2025','Registry scope includes NARP.','The same registry also covers NARP.','Whether heteroplasmy is recorded is unknown.'],
+    ['a_gdf','leigh','is a candidate biomarker for','H',.5,'PubMed','2024','GDF-15 and FGF-21 are elevated in many primary mitochondrial diseases.','These blood markers might help track Leigh syndrome, but this has not been shown.','Sensitivity is lower in some genetic subtypes and in children. Not validated for tracking Leigh syndrome progression.'],
+    ['a_mouse','leigh','models','E',.85,'PubMed','2023','Ndufs4 knockout mice develop progressive neurological disease resembling Leigh syndrome.','This mouse develops a disease like Leigh syndrome.','Models a single genetic cause (complex I); may not represent MT-ATP6 or SURF1 disease.'],
+    ['a_ipsc','d_narp','models','E',.7,'PubMed (sample)','2024','Lines carry m.8993T>G at a range of heteroplasmy levels.','These cells carry the same change seen in NARP.','—'],
+    ['a_ipsc','leigh','could model','H',.6,'PubMed','2024','Patient iPSC-derived neural cells carrying MT-ATP6 variants show bioenergetic defects in published work.','These cells might also be useful for Leigh syndrome research.','Neurons in a dish do not reproduce whole-brain disease or the timing of decline.']
+  ],
+  reuse:{a_reg:'Already covers NARP. Adding one shared biomarker field may be feasible.',a_ipsc:'Range of heteroplasmy levels could serve both MILS and NARP questions.',a_mouse:'Data from earlier studies could inform dose and timing.',a_gdf:'Assays are available; validation in children is needed.'}
+},
+dravet:{
+  name:'Dravet syndrome',
+  plain:'A rare, severe form of epilepsy that starts in the first year of life, often with long seizures brought on by fever or warmth. Most children also develop learning, movement and behavior challenges over time.',
+  sci:'A developmental and epileptic encephalopathy, most often caused by de novo heterozygous loss-of-function variants in SCN1A. Previously termed severe myoclonic epilepsy of infancy (SMEI).',
+  facts:[['Onset','First year of life'],['Main gene','SCN1A'],['Inheritance','Usually a new (de novo) change']],
+  aliases:['SMEI','severe myoclonic epilepsy of infancy','epilepsy','seizures','febrile seizures','fever seizures'],
+  next:{title:'Reuse the existing interneuron cell models and natural history study across the SCN1A spectrum.',
+    plain:'Dravet syndrome and GEFS+ share one gene. Cell models and a natural history study already exist. The next step is to check whether GEFS+ families could use the same outcome measures, so results from one group can inform the other.',
+    status:'H', checks:['Confirm the GEFS+ variants studied reduce channel function like Dravet variants','Check natural history study consent and eligibility','Agree outcome measures with both family communities']},
+  nodes:[
+    ['dravet','disease','Dravet syndrome','',''],
+    ['g_scn1a','gene','SCN1A','The instruction for a sodium channel (Nav1.1) that lets certain brain cells send signals.','Encodes the alpha subunit of voltage-gated sodium channel Nav1.1.'],
+    ['v_lof','variant','SCN1A loss-of-function variants','Changes that leave a cell with only one working copy of the gene.','Truncating and missense variants causing reduced Nav1.1 function.'],
+    ['m_hap','mechanism','Nav1.1 haploinsufficiency','Half the normal amount of a working channel.','Reduced Nav1.1 current from a single functional allele.'],
+    ['m_inter','mechanism','Reduced inhibitory interneuron firing','The brain’s “brake” cells fire less, so activity runs unchecked.','Impaired action potential firing of GABAergic interneurons, especially parvalbumin-positive cells.'],
+    ['m_5ht','mechanism','Serotonin (5-HT) signaling','A brain chemical system targeted by one approved medicine.','Serotonergic modulation; fenfluramine is a serotonin-releasing agent.'],
+    ['p_fever','phenotype','Fever-sensitive seizures','Seizures brought on by fever or warmth.','HP:0011171 Febrile seizures'],
+    ['p_status','phenotype','Prolonged seizures','Seizures that last a long time and need emergency treatment.','HP:0002133 Status epilepticus'],
+    ['p_dd','phenotype','Developmental delay','Learning and skills develop more slowly.','HP:0001263'],
+    ['p_gait','phenotype','Crouch gait','A bent-knee walking pattern that can appear later in childhood.','HP:0033741 (crouch gait), reported in adolescents and adults.'],
+    ['d_gefs','disease','GEFS+','Generalized epilepsy with febrile seizures plus. Usually milder, also linked to SCN1A.','Familial epilepsy syndrome; SCN1A missense variants common.'],
+    ['d_scn2a','disease','SCN2A-related epilepsy','A different sodium-channel epilepsy. Sounds similar, may work in the opposite way.','Early-onset forms often gain-of-function; later-onset often loss-of-function.'],
+    ['o_found','org','Dravet family foundation (sample)','A patient organization funding research and supporting families.','Sample placeholder organization.','org'],
+    ['o_net','org','Dravet caregiver network (sample)','A caregiver group sharing practical support.','Sample placeholder organization.','org'],
+    ['c_scn1a','org','SCN1A spectrum community (sample)','Families across conditions linked to SCN1A, including GEFS+.','Sample placeholder community.','community'],
+    ['c_scn2a','org','SCN2A family community (sample)','Families affected by SCN2A-related conditions.','Sample placeholder community.','community'],
+    ['r_ephys','researcher','Lab D · Interneuron electrophysiology (sample)','Measures how brain cells fire, to understand seizures.','Sample placeholder lab.','researcher'],
+    ['r_aso','researcher','Lab E · Antisense therapy development (sample)','Develops medicines that adjust how much of a protein a cell makes.','Sample placeholder lab.','researcher'],
+    ['r_clinic','researcher','Clinic F · Pediatric epilepsy center (sample)','Doctors who diagnose and treat children with severe epilepsy.','Sample placeholder clinic.','clinician'],
+    ['pub_inter','publication','Model study: interneuron dysfunction in Scn1a+/- mice (example record)','A lab study showing which brain cells are affected.','Example record; not a real citation.'],
+    ['pub_nh','publication','Cohort study: long-term outcomes in Dravet syndrome (example record)','A paper following people with Dravet syndrome into adulthood.','Example record; not a real citation.'],
+    ['s_nhs','study','Natural history study of SCN1A-related epilepsy (sample)','Follows people over time to learn how the condition changes.','Sample placeholder study.','nhs'],
+    ['s_aso','study','Clinical studies of SCN1A-upregulating antisense therapy','Studies testing a medicine designed to boost the working gene copy.','Registered on ClinicalTrials.gov.','clinical'],
+    ['a_reg','asset','Dravet syndrome patient registry (sample)','A shared, consented database of patient information.','Sample placeholder registry.','registry'],
+    ['a_bio','asset','Fluid biomarker of progression','A blood or spinal fluid test that tracks the disease. None is validated yet.','No validated fluid biomarker identified in sources searched.','biomarker'],
+    ['a_mouse','asset','Scn1a+/- mouse','A widely used mouse model of Dravet syndrome.','Heterozygous knockout reproducing seizures and premature death.','model'],
+    ['a_ipsc','asset','Patient iPSC-derived interneurons','Brain cells grown from patients’ own cells.','Reported in multiple laboratories.','model']
+  ],
+  edges:[
+    ['dravet','g_scn1a','is caused by variants in','E',.97,'OMIM · ClinVar','2024','De novo SCN1A variants are found in roughly 80% of people with Dravet syndrome.','Most people with Dravet syndrome have a change in this gene.','About 1 in 5 people with the clinical diagnosis have no SCN1A variant; other genes can cause similar pictures.'],
+    ['g_scn1a','v_lof','has variant class','E',.95,'ClinVar','2024','Truncating and missense loss-of-function variants are classified pathogenic.','These kinds of changes stop the gene working properly.','Some missense variants have uncertain significance.'],
+    ['v_lof','m_hap','results in','E',.9,'PubMed','2023','Loss of one allele reduces Nav1.1 current.','One broken copy means half the working channel.','—'],
+    ['m_hap','m_inter','leads to','E',.85,'PubMed (mouse models)','2023','Reduced Nav1.1 impairs interneuron firing in Scn1a+/- mice.','Less channel makes the brain’s brake cells weaker.','Some studies report partial compensation with age in mice; human relevance is still being studied.'],
+    ['dravet','m_hap','has core mechanism','E',.92,'OMIM · PubMed','2024','Haploinsufficiency of SCN1A is the main disease mechanism.','The core problem is too little of one working channel.','—'],
+    ['dravet','m_inter','involves','E',.82,'PubMed','2023','Interneuron dysfunction is a central model of seizure generation.','Weak brake cells help explain the seizures.','Other cell types also contribute.'],
+    ['dravet','m_5ht','has seizures reduced by targeting','E',.7,'ClinicalTrials.gov · PubMed','2024','Fenfluramine, which acts on serotonin signaling, reduced convulsive seizure frequency in randomized controlled trials.','A medicine acting on this system lowered seizures in clinical trials.','Fenfluramine may also act through sigma-1 receptors; how it helps is not fully resolved.'],
+    ['dravet','p_fever','presents with','E',.92,'HPO · Orphanet','2024','Hallmark early feature.','Seizures with fever are often the first sign.','—'],
+    ['dravet','p_status','presents with','E',.88,'HPO · Orphanet','2024','Frequently annotated phenotype.','Long seizures are common, especially early.','—'],
+    ['dravet','p_dd','presents with','E',.88,'HPO · Orphanet','2024','Frequently annotated phenotype.','Development usually slows after the first year.','Severity varies widely.'],
+    ['dravet','p_gait','presents with','E',.72,'HPO · PubMed','2023','Reported in adolescents and adults.','Some older children and adults develop a bent-knee walk.','Not universal; frequency estimates vary.'],
+    ['dravet','d_gefs','shares causal gene with','E',.85,'OMIM · PubMed','2024','SCN1A variants underlie both; GEFS+ variants are more often missense with milder effects.','Same gene, usually milder effect in GEFS+.','Severity differences mean results may not transfer directly.','variant effect'],
+    ['dravet','d_scn2a','shares pathway with','H',.35,'Inferred from MONDO · HPO','2025','Both are sodium-channel epilepsies with overlapping seizure types.','These conditions sound alike, but may work in opposite ways.','Early-onset SCN2A epilepsy is often gain-of-function, the opposite of SCN1A loss in Dravet. Sodium channel blockers help some SCN2A patients but can worsen Dravet seizures.','pathway'],
+    ['o_found','dravet','supports families with','E',.82,'NORD · Global Genes (sample directory)','2025','Listed in patient organization directories.','This organization helps families living with Dravet syndrome.','—'],
+    ['o_net','dravet','is a community for','E',.8,'Global Genes (sample directory)','2025','Listed in patient organization directories.','Caregivers share support here.','—'],
+    ['c_scn1a','dravet','is a related community through the shared gene','E',.78,'EURORDIS (sample)','2025','Group spans Dravet syndrome and GEFS+.','Families with different SCN1A conditions meet here.','—'],
+    ['c_scn1a','d_gefs','is a community for','E',.8,'EURORDIS (sample)','2025','Listed in patient organization directories.','GEFS+ families are part of this group.','—'],
+    ['c_scn2a','dravet','is a related community through sodium-channel biology','H',.35,'Inferred','2025','Connected through channel family only.','A community for a related channel condition.','Disease mechanisms may run in opposite directions.'],
+    ['r_ephys','m_inter','studies','E',.75,'NIH RePORTER (sample)','2025','Funded project on interneuron excitability.','This lab studies the brain’s brake cells.','—'],
+    ['r_ephys','dravet','publishes on','E',.7,'PubMed (sample)','2024','Publications mentioning Dravet syndrome.','This lab has written about Dravet syndrome.','—'],
+    ['r_aso','s_aso','develops approaches evaluated in','E',.7,'NIH RePORTER (sample)','2025','Funded project on antisense upregulation.','This lab works on the kind of medicine being tested.','—'],
+    ['r_aso','dravet','works on','E',.72,'PubMed (sample)','2024','Publications on SCN1A upregulation.','This lab works on a possible treatment.','—'],
+    ['r_clinic','dravet','treats patients with','E',.85,'Orphanet expert centre listing (sample)','2025','Listed expert centre.','These doctors see children with Dravet syndrome.','—'],
+    ['r_clinic','s_nhs','is a site for','E',.8,'ClinicalTrials.gov (sample)','2025','Listed study site.','This clinic takes part in the natural history study.','—'],
+    ['pub_inter','a_mouse','reports results in','E',.9,'PubMed (example record)','2023','Example publication describing model findings.','This paper describes what was found in the mice.','—'],
+    ['pub_inter','dravet','is relevant to','E',.85,'PubMed (example record)','2023','Model study framed around Dravet syndrome.','This paper is about the disease mechanism.','—'],
+    ['pub_nh','dravet','describes','E',.85,'PubMed (example record)','2024','Cohort study of long-term outcomes.','This paper follows people with Dravet syndrome over many years.','—'],
+    ['s_nhs','dravet','enrolls people with','E',.85,'ClinicalTrials.gov (sample)','2025','Eligibility includes Dravet syndrome.','This study follows people with Dravet syndrome over time.','—'],
+    ['s_aso','dravet','evaluates a therapy for','E',.82,'ClinicalTrials.gov','2025','Studies of SCN1A-upregulating antisense oligonucleotides are registered.','A possible treatment is being tested in people.','Efficacy has not yet been established in completed phase 3 trials (as of the sample index).'],
+    ['a_reg','dravet','collects data on','E',.8,'Orphanet (sample)','2025','Registry scope includes Dravet syndrome.','This registry holds information about Dravet syndrome.','—'],
+    ['a_bio','dravet','is not yet validated for','U',.2,'PubMed · ClinicalTrials.gov (searched)','2025','No validated fluid biomarker that tracks progression was found. Seizure diaries and EEG remain the main measures.','There is no blood test yet that tracks the disease.','—'],
+    ['a_mouse','dravet','models','E',.88,'PubMed','2023','Scn1a+/- mice reproduce temperature-sensitive seizures and premature death.','This mouse develops a disease like Dravet syndrome.','Strain background strongly affects severity.'],
+    ['a_mouse','m_inter','is used to study','E',.85,'PubMed','2023','Primary model for interneuron studies.','Scientists use this mouse to study brake cells.','—'],
+    ['a_ipsc','dravet','models','E',.75,'PubMed','2023','Patient iPSC-derived interneurons show reduced excitability in several reports.','Cells from patients show the same weakness in a dish.','Findings vary between labs and differentiation protocols.'],
+    ['a_ipsc','d_scn2a','could be adapted to model','H',.4,'Inferred','2025','Same cell platform, different gene.','The same cell method might be used for SCN2A.','Only useful if the SCN2A variants studied act in the same direction.']
+  ],
+  reuse:{a_reg:'Could add GEFS+ participants with shared fields.',a_ipsc:'Adaptable to SCN2A only if variant direction is confirmed first.',a_mouse:'Established model with shared protocols.',a_bio:'Gap. No asset to reuse; a biomarker discovery effort would be needed.'}
+}
+};
+
+/* normalise */
+Object.entries(DATA).forEach(([k,ds])=>{
+  ds.key=k;
+  ds.nodes=ds.nodes.map(a=>({id:a[0],t:a[1],label:a[2],plain:a[3],sci:a[4],cat:a[5]||a[1]}));
+  ds.byId=Object.fromEntries(ds.nodes.map(n=>[n.id,n]));
+  ds.root=ds.nodes[0].id; ds.byId[ds.root].plain=ds.plain; ds.byId[ds.root].sci=ds.sci;
+  ds.edges=ds.edges.map((a,i)=>({i,s:a[0],t:a[1],rel:a[2],status:a[3],conf:a[4],src:a[5],date:a[6],ev:a[7],plain:a[8],contra:a[9],share:a[10]}));
+});
+const gid=(ds,id)=>ds.key+':'+id;
+const fromGid=g=>{const [k,id]=g.split(':');return {ds:DATA[k],n:DATA[k].byId[id]}};
+
+/* search index */
+const INDEX=[];
+Object.values(DATA).forEach(ds=>{
+  ds.nodes.forEach(n=>INDEX.push({ds:ds.key,id:n.id,label:n.label,kind:TYPES[n.t].label,t:n.t}));
+  ds.aliases.forEach(a=>INDEX.push({ds:ds.key,id:ds.root,label:a,kind:'Also known as · '+ds.name,t:'disease',alias:true}));
+});
+function searchIdx(q){q=q.trim().toLowerCase(); if(!q) return [];
+  return INDEX.map(it=>{const l=it.label.toLowerCase(); const p=l.startsWith(q)?0:l.includes(q)?1:9; return [p,it]}).filter(x=>x[0]<9).sort((a,b)=>a[0]-b[0]||a[1].label.length-b[1].label.length).slice(0,8).map(x=>x[1]);}
+
+/* ---------- helpers ---------- */
+const stPill=s=>`<span class="st ${s}">${STATUS[s]}</span>`;
+const confHtml=c=>`<span class="conf"><span class="bar"><i style="width:${Math.round(c*100)}%"></i></span>${Math.round(c*100)}% · ${c>=.8?'High':c>=.55?'Moderate':'Low'}</span>`;
+const dot=t=>`<span class="dot" style="background:${TYPES[t].c}"></span>`;
+function srcLinks(src){
+  const parts=[]; Object.keys(SRC_URL).forEach(k=>{ if(src.includes(k) && !(k==='PMC'&&!/\bPMC\b/.test(src))) parts.push(`<a href="${SRC_URL[k]}" target="_blank" rel="noopener">${k} ↗</a>`)});
+  return parts.join(' · ');
+}
+function edgesOf(ds,id){return ds.edges.filter(e=>e.s===id||e.t===id)}
+function rootEdge(ds,id){return ds.edges.find(e=>(e.s===id&&e.t===ds.root)||(e.t===id&&e.s===ds.root))||edgesOf(ds,id)[0]}
+function other(e,id){return e.s===id?e.t:e.s}
+function sentence(ds,e){return `${ds.byId[e.s].label} ${e.rel} ${ds.byId[e.t].label}`}
+
+/* ---------- Drawer ---------- */
+let lastFocus=null;
+function openDrawer(ds,e){
+  lastFocus=document.activeElement;
+  const a=ds.byId[e.s], b=ds.byId[e.t];
+  $('#drawerRoot').innerHTML=`<div class="scrim" data-close></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <div class="drawer-head"><span class="eyebrow" id="dTitle">Why this connection?</span><button data-close>Close ✕</button></div>
+    <div class="drawer-body">
+      <div class="dchain"><div class="a">${dot(a.t)}${esc(a.label)}</div><div class="r">${esc(e.rel)}</div><div class="b">${dot(b.t)}${esc(b.label)}</div></div>
+      <div>${stPill(e.status)} <span class="sample-tag" style="margin-left:6px">Sample record</span></div>
+      <p class="why-plain">${esc(e.plain)}</p>
+      <div class="kv">
+        <div class="k">Relationship</div><div>${esc(sentence(ds,e))}</div>
+        <div class="k">Type</div><div>${STATUS[e.status]}${e.share?` · shared ${esc(e.share)}`:''}</div>
+        <div class="k">Supporting evidence</div><div>${esc(e.ev)}</div>
+        <div class="k">Source</div><div>${esc(e.src)}</div>
+        <div class="k">Confidence</div><div>${confHtml(e.conf)}</div>
+        <div class="k">Date</div><div class="num">${esc(e.date)}</div>
+        <div class="k">Contradictory evidence</div><div class="${e.contra&&e.contra!=='—'?'':'muted'}">${esc(e.contra&&e.contra!=='—'?e.contra:'None recorded.')}</div>
+      </div>
+      <div style="font-size:13px"><span class="eyebrow" style="display:block;margin-bottom:6px">Inspect original evidence</span>${srcLinks(e.src)||'<span style="color:var(--ink-3)">Inferred link. No single original record.</span>'}</div>
+      ${e.status!=='E'?`<p style="font-size:13px;color:var(--ink-3)">This is ${e.status==='H'?'a hypothesis built from connected evidence':'an open question'}. It is not established clinical evidence.</p>`:''}
+    </div>
+  </aside>`;
+  const btn=$('#drawerRoot .drawer-head button'); btn.focus();
+}
+function closeDrawer(){ if(!$('#drawerRoot').innerHTML) return; $('#drawerRoot').innerHTML=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+document.addEventListener('click',ev=>{ if(ev.target.closest('[data-close]')) closeDrawer(); });
+document.addEventListener('keydown',ev=>{ if(ev.key==='Escape') closeDrawer(); });
+
+/* ---------- Mode switching ---------- */
+let mode='reader';
+function setMode(m,scroll){
+  mode=m;
+  $('#readerView').hidden=m!=='reader'; $('#researcherView').hidden=m!=='researcher';
+  $$('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
+  $$('.role').forEach(b=>b.setAttribute('aria-pressed',b.dataset.role===m));
+  if(m==='researcher') renderResearcher(curRes.ds, curRes.sel);
+  if(scroll) $('#atlas').scrollIntoView({behavior:reduced?'auto':'smooth'});
+}
+$$('.seg button').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+$$('.role').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.role,true)));
+$$('[data-mode]').forEach(a=>{ if(a.tagName==='A') a.addEventListener('click',ev=>{ev.preventDefault();closeMenu();setMode(a.dataset.mode,true)}) });
+const menuBtn=$('#menuBtn');
+function closeMenu(){ $('#navLinks').hidden=true; menuBtn.setAttribute('aria-expanded','false'); }
+menuBtn.addEventListener('click',e=>{e.stopPropagation(); const o=$('#navLinks').hidden; $('#navLinks').hidden=!o; menuBtn.setAttribute('aria-expanded',o); if(o) $('#navLinks a').focus();});
+document.addEventListener('click',e=>{ if(!e.target.closest('.nav-actions')) closeMenu(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('#navLinks').hidden){closeMenu();menuBtn.focus();} });
+$$('#navLinks a:not([data-mode])').forEach(a=>a.addEventListener('click',closeMenu));
+
+/* ---------- Search widgets ---------- */
+function wireSearch(input,onPick,onMiss){
+  const box=input.parentElement.querySelector('.sugg'); let items=[],act=-1;
+  const draw=()=>{ if(!items.length){box.hidden=true;return}
+    box.innerHTML=items.map((it,i)=>`<button type="button" data-i="${i}" class="${i===act?'active':''}"><span style="display:flex;gap:10px;align-items:center;min-width:0">${dot(it.t)}<span>${esc(it.label)}</span></span><span class="kind">${esc(it.kind)}</span></button>`).join(''); box.hidden=false; };
+  input.addEventListener('input',()=>{items=searchIdx(input.value);act=-1;draw()});
+  input.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'){act=Math.min(items.length-1,act+1);draw();e.preventDefault()}
+    else if(e.key==='ArrowUp'){act=Math.max(0,act-1);draw();e.preventDefault()}
+    else if(e.key==='Enter'){e.preventDefault(); const it=items[act>=0?act:0]; box.hidden=true; if(it){input.value=it.alias?DATA[it.ds].name:it.label; onPick(it)} else if(input.value.trim()) onMiss(input.value.trim())}
+    else if(e.key==='Escape'){box.hidden=true}
+  });
+  box.addEventListener('mousedown',e=>{const b=e.target.closest('button'); if(!b) return; e.preventDefault(); const it=items[+b.dataset.i]; box.hidden=true; input.value=it.alias?DATA[it.ds].name:it.label; onPick(it)});
+  input.addEventListener('blur',()=>setTimeout(()=>box.hidden=true,120));
+  return q=>{input.value=q; const r=searchIdx(q); if(r.length){ const it=r[0]; input.value=it.alias?DATA[it.ds].name:it.label; onPick(it)} else onMiss(q)};
+}
+
+/* ---------- READER ---------- */
+const R_STEPS=[
+  {n:'01',title:'Your disease',q:''},
+  {n:'02',title:'What connects to it?',q:'Genes, mechanisms, signs and symptoms, related diseases and communities.',groups:[['Genes',n=>n.t==='gene'],['Mechanisms',n=>n.t==='mechanism'],['Signs & symptoms',n=>n.t==='phenotype'],['Related diseases',n=>n.t==='disease'],['Patient communities',n=>n.cat==='community']]},
+  {n:'03',title:'Who is already working on this?',q:'Patient organizations, researchers, clinicians and relevant studies.',groups:[['Patient organizations',n=>n.cat==='org'],['Researchers',n=>n.cat==='researcher'],['Clinicians',n=>n.cat==='clinician'],['Relevant studies',n=>n.t==='publication']]},
+  {n:'04',title:'What already exists?',q:'Resources that could be used instead of rebuilt.',groups:[['Registries',n=>n.cat==='registry'],['Natural history studies',n=>n.cat==='nhs'],['Biomarkers',n=>n.cat==='biomarker'],['Clinical studies',n=>n.cat==='clinical'],['Research models',n=>n.cat==='model']]},
+  {n:'05',title:'What could happen next?',q:'One concrete action, built from the connections above.'}
+];
+let readerDs='leigh';
+function readerWhy(ds,n){
+  const e=rootEdge(ds,n.id);
+  return `<div class="why" data-why>
+    <div class="why-head"><span class="t">Why this connection?</span>${stPill(e.status)}</div>
+    <p class="why-plain">${esc(e.plain)}</p>
+    <div class="kv">
+      <div class="k">Relationship</div><div>${esc(sentence(ds,e))}</div>
+      <div class="k">Evidence</div><div>${esc(e.ev)}</div>
+      <div class="k">Source</div><div>${esc(e.src)}</div>
+      <div class="k">Confidence</div><div>${confHtml(e.conf)}</div>
+      <div class="k">Contradictory evidence</div><div class="${e.contra&&e.contra!=='—'?'':'muted'}">${esc(e.contra&&e.contra!=='—'?e.contra:'None recorded.')}</div>
+    </div>
+    <div class="why-foot">
+      <details class="sci" style="flex:1 1 100%"><summary>Scientific detail</summary><div><p><b>${esc(n.label)}</b> (${TYPES[n.t].label}). ${esc(n.sci)}</p><p style="margin-top:6px">Recorded ${esc(e.date)} · ${esc(e.src)}</p></div></details>
+      <button type="button" data-open-edge="${e.i}">Inspect original evidence</button>
+    </div>
+  </div>`;
+}
+function renderReader(key){
+  readerDs=key; const ds=DATA[key]; const out=$('#readerOut');
+  const root=ds.byId[ds.root];
+  const used=new Set([ds.root]);
+  let html='<div class="rjourney">';
+  R_STEPS.forEach((st,si)=>{
+    html+=`<div class="rstep ${si===0?'lead':''}"><div class="rnum">${st.n}</div><div class="rbody"><h3>${st.title}</h3>${st.q?`<p class="q">${st.q}</p>`:''}`;
+    if(si===0){
+      html+=`<div class="disease-card"><div class="dn">${esc(root.label)}</div><p>${esc(ds.plain)}</p>
+        <div class="facts">${ds.facts.map(f=>`<span><b>${f[0]}</b>${esc(f[1])}</span>`).join('')}</div>
+        <details class="sci"><summary>Scientific detail</summary><div>${esc(ds.sci)}</div></details></div>`;
+    } else if(st.groups){
+      html+='<div class="groups">';
+      st.groups.forEach(([gl,fn])=>{
+        const ns=ds.nodes.filter(n=>n.id!==ds.root&&fn(n));
+        if(!ns.length) return;
+        html+=`<div class="group"><div class="gl">${gl}</div><div class="chips">${ns.map(n=>{const e=rootEdge(ds,n.id);return `<button type="button" class="chip" aria-expanded="false" data-node="${n.id}" title="${esc(n.plain)}"><span class="lnk ${e.status}" aria-hidden="true"></span>${esc(n.label)}<span class="sr" style="position:absolute;left:-9999px">${STATUS[e.status]}</span></button>`}).join('')}</div></div>`;
+      });
+      html+='</div><div class="why-slot"></div>';
+    } else {
+      const nx=ds.next;
+      html+=`<div class="next-box"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Suggested next action</span>${stPill(nx.status)}</div>
+        <div class="nt">${esc(nx.title)}</div><p style="color:var(--ink-2)">${esc(nx.plain)}</p>
+        <div><div class="eyebrow" style="margin-bottom:6px">Check before acting</div><ul>${nx.checks.map(c=>`<li>${esc(c)}</li>`).join('')}</ul></div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:4px"><a class="btn btn-primary on-paper" href="#journey" style="padding:10px 16px;font-size:14px">See this as a connected journey <span class="arr">→</span></a></div></div>`;
+    }
+    html+='</div></div>';
+  });
+  html+='</div><p style="margin-top:40px;font-size:13px;color:var(--ink-3);max-width:70ch">Line marks show how strong each connection is: <span class="lnk E" style="display:inline-block;width:16px;height:2px;vertical-align:middle"></span> evidence, <span class="lnk H" style="display:inline-block;width:16px;height:2px;vertical-align:middle"></span> hypothesis, <span class="lnk U" style="display:inline-block;width:16px;height:2px;vertical-align:middle"></span> unknown. Select any item to see why it is connected.</p>';
+  out.innerHTML=html;
+}
+$('#readerOut').addEventListener('click',ev=>{
+  const ob=ev.target.closest('[data-open-edge]'); if(ob){openDrawer(DATA[readerDs],DATA[readerDs].edges[+ob.dataset.openEdge]);return}
+  const c=ev.target.closest('.chip'); if(!c) return;
+  const body=c.closest('.rbody'), slot=body.querySelector('.why-slot');
+  const was=c.getAttribute('aria-expanded')==='true';
+  $$('.chip',body).forEach(x=>x.setAttribute('aria-expanded','false'));
+  if(was){slot.innerHTML='';return}
+  c.setAttribute('aria-expanded','true');
+  slot.innerHTML=readerWhy(DATA[readerDs],DATA[readerDs].byId[c.dataset.node]);
+});
+function readerMiss(q){
+  const total=Object.values(DATA).reduce((a,d)=>a+d.edges.length,0);
+  $('#readerOut').innerHTML=`<div class="empty">
+    <span class="eyebrow">Searched: “${esc(q)}”</span>
+    <div class="big">No supported route found.</div>
+    <p style="color:var(--ink-2);max-width:62ch">We could not find this in the sample index. That does not mean no connection exists. It means the sources below do not yet support one we can show you.</p>
+    <div class="empty-grid">
+      <div><h4>What was searched</h4><ul><li>Disease names and synonyms (MONDO, Orphanet)</li><li>Genes and variants (OMIM, ClinVar)</li><li>Symptoms (HPO)</li><li>${total} relationships in the sample index</li></ul></div>
+      <div><h4>What is currently unknown</h4><ul><li>Whether this condition has a profile in the full Atlas</li><li>Whether it shares a gene or mechanism with indexed diseases</li></ul></div>
+      <div><h4>What could change this</h4><ul><li>A confirmed gene or variant</li><li>A publication linking it to a known mechanism</li><li>A patient organization adding its knowledge</li></ul></div>
+    </div>
+    <div class="tries" style="margin-top:0">Try instead: <button data-q="Leigh syndrome">Leigh syndrome</button><button data-q="Dravet syndrome">Dravet syndrome</button></div>
+  </div>`;
+}
+const readerGo=wireSearch($('#readerSearch'),it=>renderReader(it.ds),readerMiss);
+$('#readerTries').addEventListener('click',e=>{const b=e.target.closest('[data-q]'); if(b) readerGo(b.dataset.q)});
+$('#readerOut').addEventListener('click',e=>{const b=e.target.closest('.empty [data-q]'); if(b) readerGo(b.dataset.q)});
+
+/* ---------- RESEARCHER ---------- */
+function rng(seed){return ()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const TYPE_ORDER=['gene','variant','mechanism','phenotype','disease','org','researcher','study','publication','asset'];
+function layout(ds){
+  if(ds._pos) return ds._pos;
+  const cx=400,cy=300,RX=235,RY=242,P={};
+  P[ds.root]={x:cx,y:cy,a:0,lead:true};
+  const ring=ds.nodes.filter(n=>n.id!==ds.root&&ds.edges.some(e=>(e.s===n.id&&e.t===ds.root)||(e.t===n.id&&e.s===ds.root)))
+    .sort((p,q)=>TYPE_ORDER.indexOf(p.t)-TYPE_ORDER.indexOf(q.t));
+  const N=ring.length;
+  ring.forEach((n,i)=>{const a=i/N*Math.PI*2-Math.PI/2+.08, f=i%2?.7:1; P[n.id]={x:cx+Math.cos(a)*RX*f,y:cy+Math.sin(a)*RY*f,a,inner:f<1}});
+  const inner=ds.nodes.filter(n=>!P[n.id]);
+  inner.forEach((n,k)=>{const nb=edgesOf(ds,n.id).map(e=>P[other(e,n.id)]).filter(Boolean);
+    let a=nb.length?Math.atan2(nb.reduce((s,p)=>s+Math.sin(p.a),0),nb.reduce((s,p)=>s+Math.cos(p.a),0)):k;
+    a+=(k%2?.18:-.18); P[n.id]={x:cx+Math.cos(a)*RX*.42,y:cy+Math.sin(a)*RY*.42,a}; });
+  return ds._pos=P;
+}
+const hiddenTypes=new Set();
+let curRes={ds:'leigh',sel:'leigh'};
+const EDGE_COL={E:'var(--ev-n)',H:'var(--hy-n)',U:'var(--un-n)'};
+const EDGE_DASH={E:'',H:'5 4',U:'1.5 4'};
+function radius(ds,n){return n.id===ds.root?18:n.t==='disease'?13:(n.t==='gene'||n.t==='mechanism')?10:7.5}
+function shortLabel(s){s=s.replace(/ \((sample|example record)\)/,''); return s.length>26?s.slice(0,24)+'…':s}
+function labelPos(ds,n,p,r,placed){
+  const txt=shortLabel(n.label), w=txt.length*(n.id===ds.root?7.4:5.9)+4, hgt=13;
+  const c=Math.cos(p.a), pref=n.id===ds.root?'L':(Math.abs(c)>.3&&!p.inner)?(c>0?'R':'L'):(((Math.sin(p.a)<0)!==!!p.inner)?'T':'B');
+  const opts=[pref,'T','B','R','L'].filter((v,i,a)=>a.indexOf(v)===i);
+  const box=o=>{const x=o==='R'?p.x+r+5:o==='L'?p.x-r-5-w:p.x-w/2, y=o==='T'?p.y-r-5-hgt:o==='B'?p.y+r+3:p.y-hgt/2;return {x,y,w,h:hgt,o}};
+  const hit=b=>b.x<4||b.x+b.w>796||b.y<2||b.y+b.h>598||placed.some(q=>b.x<q.x+q.w&&b.x+b.w>q.x&&b.y<q.y+q.h&&b.y+b.h>q.y);
+  let b=opts.map(box).find(b=>!hit(b)); const hide=!b; if(!b) b=box(pref);
+  if(!hide) placed.push(b);
+  const anc=b.o==='R'?'start':b.o==='L'?'end':'middle', x=b.o==='R'?b.x:b.o==='L'?b.x+b.w:p.x;
+  return {x:x.toFixed(1),y:(b.y+hgt-3).toFixed(1),anc,hide};
+}
+function renderGraph(){
+  const ds=DATA[curRes.ds], P=layout(ds), svg=$('#graph'), sel=curRes.sel;
+  const vis=n=>n.id===ds.root||!hiddenTypes.has(n.t);
+  const nb=new Set([sel]); edgesOf(ds,sel).forEach(e=>nb.add(other(e,sel)));
+  let h='<g class="edges">';
+  ds.edges.forEach(e=>{ const a=ds.byId[e.s],b=ds.byId[e.t]; if(!vis(a)||!vis(b)) return;
+    const on=e.s===sel||e.t===sel; const pa=P[e.s],pb=P[e.t];
+    h+=`<g class="edge ${on?'':'dim'}" data-edge="${e.i}"><line x1="${pa.x.toFixed(1)}" y1="${pa.y.toFixed(1)}" x2="${pb.x.toFixed(1)}" y2="${pb.y.toFixed(1)}" stroke="${EDGE_COL[e.status]}" stroke-width="${on?1.8:1}" stroke-dasharray="${EDGE_DASH[e.status]}" stroke-linecap="round" opacity="${on?.95:.6}"/><line class="edge-hit" x1="${pa.x}" y1="${pa.y}" x2="${pb.x}" y2="${pb.y}"><title>${esc(sentence(ds,e))} (${STATUS[e.status]})</title></line></g>`; });
+  h+='</g><g class="nodes">'; const placed=[]; ds.nodes.forEach(m=>{if(!vis(m))return;const q=P[m.id],rr=radius(ds,m);placed.push({x:q.x-rr,y:q.y-rr,w:rr*2,h:rr*2})});
+  ds.nodes.forEach(n=>{ if(!vis(n)) return; const p=P[n.id],r=radius(ds,n),on=nb.has(n.id),isSel=n.id===sel;
+    const lb=labelPos(ds,n,p,r,placed);
+    h+=`<g class="node ${on?'':'dim'}" data-node="${n.id}" tabindex="0" role="button" aria-label="${esc(n.label)}, ${TYPES[n.t].label}">
+      ${isSel?`<circle cx="${p.x}" cy="${p.y}" r="${r+6}" fill="none" stroke="#9DB4FF" stroke-width="1.5"/>`:''}
+      <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${TYPES[n.t].c}" stroke="var(--night-2)" stroke-width="2"/>
+      <text x="${lb.x}" y="${lb.y}" text-anchor="${lb.anc}" style="${n.id===ds.root?'font-size:13px;font-weight:600':''}${lb.hide&&!on?';opacity:0':lb.hide&&!isSel?';opacity:0':''}">${esc(shortLabel(n.label))}</text></g>`; });
+  h+='</g>';
+  svg.innerHTML=h;
+  svg.setAttribute('aria-label','Knowledge graph for '+ds.name+'. Selected: '+ds.byId[sel].label);
+}
+function renderDetail(){
+  const ds=DATA[curRes.ds], n=ds.byId[curRes.sel], es=edgesOf(ds,n.id).sort((a,b)=>b.conf-a.conf);
+  $('#detail').innerHTML=`<div class="tt">${dot(n.t)}${TYPES[n.t].label}</div><div class="nm">${esc(n.label)}</div>
+    <p>${esc(n.plain)}</p>${n.sci?`<p style="font-size:13px">${esc(n.sci)}</p>`:''}
+    <div class="eyebrow" style="margin-top:6px">Connections · ${es.length}</div>
+    <div class="conn-list">${es.map(e=>{const o=ds.byId[other(e,n.id)];return `<button class="conn" data-edge="${e.i}"><span class="cn">${dot(o.t)}<span style="min-width:0">${esc(o.label)}</span></span>${stPill(e.status)}<span class="cr">${esc(e.s===n.id?e.rel+' →':'← '+e.rel)} · ${Math.round(e.conf*100)}% · ${esc(e.src)}</span></button>`}).join('')}</div>`;
+}
+function renderDash(){
+  const ds=DATA[curRes.ds], root=ds.root;
+  const row=(e,n,meta)=>`<button class="row" data-edge="${e.i}"><span class="rn">${dot(n.t)}<span style="min-width:0">${esc(n.label)}</span></span>${stPill(e.status)}<span class="rm">${meta}</span></button>`;
+  const mech=ds.nodes.filter(n=>n.t==='mechanism').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,`${esc(e.rel)} · ${confHtml(e.conf)}`)}).join('');
+  const overlap=ds.edges.filter(e=>e.share).map(e=>{const n=ds.byId[other(e,root)];
+    const tags=['pathway','variant effect','mechanism','phenotype'].map(t=>`<span class="${t===e.share?'on':''}">${t}</span>`).join('');
+    return row(e,n,`<span class="share-tags">${tags}</span><span style="display:block;margin-top:6px">${esc(e.ev)}</span>`)}).join('');
+  const research=ds.nodes.filter(n=>n.t==='publication'||n.t==='study'||n.cat==='registry'||n.cat==='model').map(n=>{const e=rootEdge(ds,n.id);
+    const lab={publication:'Publication',nhs:'Natural history study',clinical:'Clinical trials',registry:'Registry',model:'Research model'}[n.cat]||TYPES[n.t].label;return row(e,n,`${lab} · ${esc(e.src)}`)}).join('');
+  const people=ds.nodes.filter(n=>n.t==='researcher'||n.t==='org').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,`${esc(e.rel)} · ${esc(e.src)}`)}).join('');
+  const assets=ds.nodes.filter(n=>n.t==='asset').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,esc(ds.reuse[n.id]||''))}).join('');
+  const all=[...ds.edges].sort((a,b)=>b.conf-a.conf);
+  const tr=e=>`<tr data-edge="${e.i}" tabindex="0"><td>${esc(ds.byId[e.s].label)} <span style="color:var(--night-ink-2)">→ ${esc(e.rel)} →</span> ${esc(ds.byId[e.t].label)}</td><td>${stPill(e.status)}</td><td>${esc(e.src)}</td><td class="num">${Math.round(e.conf*100)}%</td><td class="num">${esc(e.date)}</td><td>${esc(e.ev)}</td><td>${esc(e.contra&&e.contra!=='—'?e.contra:'None recorded')}</td></tr>`;
+  $('#dash').innerHTML=`
+    <div class="panel p4"><h4>Related mechanisms</h4><p class="sub">Mechanisms connected to ${esc(ds.name)}.</p><div class="rows">${mech}</div></div>
+    <div class="panel p8"><h4>Mechanistic overlap</h4><p class="sub">Diseases sharing a pathway, variant effect, biological mechanism or phenotype.</p><div class="rows">${overlap}</div></div>
+    <div class="panel p6"><h4>Existing research</h4><p class="sub">Publications, trials, registries, natural history studies and models.</p><div class="rows">${research}</div></div>
+    <div class="panel p6"><h4>Researchers &amp; collaborators</h4><p class="sub">People and organizations working on related mechanisms.</p><div class="rows">${people}</div></div>
+    <div class="panel p12"><h4>Reusable assets</h4><p class="sub">Assets that may be shared or adapted. Reuse is a hypothesis until the owner confirms.</p><div class="rows" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));column-gap:24px">${assets}</div></div>
+    <div class="panel p12"><h4>Evidence</h4><p class="sub">Every relationship with its source, type, confidence, date, supporting evidence and contradictory findings.</p>
+      <div class="tbl-wrap"><table class="ev"><thead><tr><th>Relationship</th><th>Type</th><th>Source</th><th>Conf.</th><th>Date</th><th>Supporting evidence</th><th>Contradictory findings</th></tr></thead><tbody id="evBody">${all.slice(0,8).map(tr).join('')}</tbody></table></div>
+      ${all.length>8?`<button class="btn btn-ghost" id="evMore" style="margin-top:14px;padding:8px 16px;font-size:13px">Show all ${all.length} relationships</button>`:''}</div>`;
+  const more=$('#evMore'); if(more) more.addEventListener('click',()=>{$('#evBody').innerHTML=all.map(tr).join('');more.remove()});
+}
+function renderTypeFilter(){
+  const ds=DATA[curRes.ds]; const present=new Set(ds.nodes.map(n=>n.t));
+  $('#typeFilter').innerHTML=Object.entries(TYPES).filter(([t])=>present.has(t)).map(([t,v])=>`<button data-type="${t}" aria-pressed="${!hiddenTypes.has(t)}"><span class="dot" style="background:${v.c}"></span>${v.label}</button>`).join('');
+}
+function renderResearcher(key,sel){
+  const changed=curRes.ds!==key; curRes={ds:key,sel:sel||DATA[key].root};
+  if(changed||!$('#typeFilter').children.length) renderTypeFilter();
+  renderGraph(); renderDetail(); if(changed||!$('#dash').children.length) renderDash();
+}
+$('#typeFilter').addEventListener('click',e=>{const b=e.target.closest('[data-type]'); if(!b) return; const t=b.dataset.type;
+  hiddenTypes.has(t)?hiddenTypes.delete(t):hiddenTypes.add(t); b.setAttribute('aria-pressed',!hiddenTypes.has(t)); renderGraph()});
+$('#graph').addEventListener('click',e=>{const ds=DATA[curRes.ds];
+  const n=e.target.closest('.node'); if(n){curRes.sel=n.dataset.node;renderGraph();renderDetail();return}
+  const ed=e.target.closest('.edge'); if(ed) openDrawer(ds,ds.edges[+ed.dataset.edge]);});
+$('#graph').addEventListener('keydown',e=>{const n=e.target.closest('.node'); if(n&&(e.key==='Enter'||e.key===' ')){e.preventDefault();curRes.sel=n.dataset.node;renderGraph();renderDetail();const f=$(`#graph .node[data-node="${curRes.sel}"]`); if(f) f.focus()}});
+['#detail','#dash'].forEach(s=>$(s).addEventListener('click',e=>{const b=e.target.closest('[data-edge]'); if(b) openDrawer(DATA[curRes.ds],DATA[curRes.ds].edges[+b.dataset.edge])}));
+$('#dash').addEventListener('keydown',e=>{const b=e.target.closest('tr[data-edge]'); if(b&&e.key==='Enter') openDrawer(DATA[curRes.ds],DATA[curRes.ds].edges[+b.dataset.edge])});
+const resGo=wireSearch($('#resSearch'),it=>renderResearcher(it.ds,it.id),q=>{
+  $('#detail').innerHTML=`<div class="tt">Search</div><div class="nm">No supported route found.</div><p>“${esc(q)}” is not in the sample index. Searched disease names, genes, mechanisms, phenotypes, studies and researchers across ${Object.values(DATA).reduce((a,d)=>a+d.nodes.length,0)} entities. A confirmed gene, publication or study record could change this.</p>`});
+$('#resTries').addEventListener('click',e=>{const b=e.target.closest('[data-q]'); if(b) resGo(b.dataset.q)});
+
+/* ---------- JOURNEY ---------- */
+const J=[
+  {k:'DISEASE',t:'Leigh syndrome',s:'E',c:.94,lead:'The starting point: a diagnosis with dozens of possible genetic causes and no approved therapy that changes the course of the disease.',why:'Everything that follows is anchored to a confirmed diagnosis and, where known, its genetic cause.',rests:'Clinical diagnostic criteria and gene panels (OMIM, Orphanet).',breaks:'If the genetic cause is unknown, later steps narrow less precisely.',src:'OMIM · Orphanet'},
+  {k:'MECHANISM',t:'ATP synthase dysfunction (MT-ATP6)',s:'E',c:.93,lead:'For families with an MT-ATP6 change, the disease runs through one specific failure: the final step that makes ATP.',why:'Naming the mechanism, not just the gene, is what lets us look across disease boundaries.',rests:'MT-ATP6 encodes subunit a of ATP synthase; pathogenic variants reduce ATP synthesis (ClinVar, PubMed).',breaks:'Only applies to the MT-ATP6 subgroup, not all Leigh syndrome.',src:'ClinVar · PubMed'},
+  {k:'RELATED COMMUNITY',t:'NARP and MT-ATP6 families',s:'E',c:.87,lead:'The same variant, m.8993T>G, causes NARP when fewer mitochondria carry it. A second community has been working on the same biology.',why:'Two groups who rarely meet share a cause. Their data, samples and questions can be pooled.',rests:'NARP and MILS form a clinical spectrum driven by heteroplasmy (OMIM, review literature).',breaks:'Clinical courses differ a lot. Findings in milder NARP may not transfer to Leigh syndrome.',src:'OMIM · PubMed'},
+  {k:'EXISTING ASSET',t:'Registry and MT-ATP6 iPSC neuron lines',s:'H',c:.6,lead:'A mitochondrial registry already covers both conditions, and a lab already holds patient-derived neurons across heteroplasmy levels.',why:'Reusing assets that exist skips the slowest part of a new study: building cohorts and models from scratch.',rests:'Registry scope and lab asset listings (sample records modeled on Orphanet and NIH RePORTER).',breaks:'Consent may not cover the new use. Heteroplasmy may not be recorded. Lines may not be shareable.',src:'Orphanet · NIH RePORTER (sample)'},
+  {k:'COLLABORATOR',t:'Lab B with Clinic C',s:'U',c:.35,lead:'The lab holding the cell lines and the clinic running the natural history study are the people who could act.',why:'An asset is only useful if its owner can and wants to collaborate.',rests:'Both are linked to the same mechanism and study in the sample index.',breaks:'Willingness, capacity, funding and agreements are all unknown until someone asks.',src:'NIH RePORTER · ClinicalTrials.gov (sample)'},
+  {k:'NEXT EXPERIMENT',t:'Test GDF-15 across MILS and NARP',s:'H',c:.5,lead:'Measure GDF-15 in matched iPSC neurons and in registry participants across both conditions, and see whether it tracks heteroplasmy and severity.',why:'A shared, validated biomarker is a milestone every future treatment trial in this group would need.',rests:'GDF-15 is elevated in many mitochondrial diseases (PubMed).',breaks:'GDF-15 is less sensitive in children and some subtypes. It may not track progression in brain-predominant disease.',src:'PubMed'}
+];
+let jSel=0;
+function renderJourney(){
+  const tr=$('#jtrack'); const line=tr.querySelector('.jline');
+  tr.innerHTML=''; tr.appendChild(line);
+  const sColor={E:'var(--ev-n)',H:'var(--hy-n)',U:'var(--un-n)'};
+  J.forEach((s,i)=>{ const b=document.createElement('button'); b.className='jstep'; b.setAttribute('role','tab'); b.setAttribute('aria-selected',i===jSel); b.id='jtab'+i;
+    b.innerHTML=`<span class="jnode"><i style="background:${sColor[s.s]}"></i></span><span class="jlabel">${s.k}</span><span class="jtitle">${esc(s.t)}</span>`;
+    b.addEventListener('click',()=>{jSel=i;renderJourney()}); tr.appendChild(b); });
+  // connector: each segment styled by the status of the step it leads into
+  let l=''; const seg=1000/5;
+  for(let i=0;i<5;i++){const s=J[i+1].s; l+=`<line x1="${i*seg}" y1="4" x2="${(i+1)*seg}" y2="4" stroke="${sColor[s]}" stroke-width="2" stroke-dasharray="${s==='E'?'':s==='H'?'10 7':'2 7'}" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`}
+  if(!reduced) l+=`<circle r="4" cy="4" fill="#E5EBF1"><animate attributeName="cx" from="0" to="${jSel*seg}" dur="${0.4+jSel*0.25}s" fill="freeze"/></circle>`;
+  $('#jlineSvg').innerHTML=l;
+  const s=J[jSel];
+  $('#jpanel').setAttribute('aria-labelledby','jtab'+jSel);
+  $('#jpanel').innerHTML=`<div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Step ${jSel+1} of 6 · ${s.k}</span>${stPill(s.s)}</div>
+    <h3 style="margin-top:14px">${esc(s.t)}</h3><p class="lead">${esc(s.lead)}</p>
+    <div style="margin-top:22px;display:flex;gap:18px;flex-wrap:wrap;align-items:center"><span style="color:var(--night-ink-2)">${confHtml(s.c)}</span><span class="mono" style="color:var(--night-ink-2);letter-spacing:.04em;text-transform:none">${esc(s.src)}</span></div>
+    <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+      ${jSel>0?`<button class="btn btn-ghost" data-j="${jSel-1}" style="padding:8px 14px;font-size:13px">← ${J[jSel-1].k}</button>`:''}
+      ${jSel<5?`<button class="btn btn-ghost" data-j="${jSel+1}" style="padding:8px 14px;font-size:13px">${J[jSel+1].k} →</button>`:''}</div></div>
+    <div class="jcols"><div><h4>Why this step</h4><p>${esc(s.why)}</p></div><div><h4>What it rests on</h4><p>${esc(s.rests)}</p></div><div><h4>What could break it</h4><p>${esc(s.breaks)}</p></div></div>`;
+}
+$('#jpanel').addEventListener('click',e=>{const b=e.target.closest('[data-j]'); if(b){jSel=+b.dataset.j;renderJourney();$('#jtab'+jSel).focus()}});
+$('#jtrack').addEventListener('keydown',e=>{ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft'&&e.key!=='ArrowDown'&&e.key!=='ArrowUp') return; e.preventDefault(); jSel=(jSel+(e.key==='ArrowRight'||e.key==='ArrowDown'?1:5))%6; renderJourney(); $('#jtab'+jSel).focus(); });
+
+/* ---------- 10x ---------- */
+const TODAY=[['Scattered knowledge',4],['Manual research',8],['Cold outreach',5],['Rebuilding existing assets',12],['Slow collaboration',7]];
+const OM=[['Disease',.2],['Evidence',.8],['Connection',.6],['Existing asset',.8],['Collaborator',.7],['Shared action',.5]];
+const TOTAL=36, X0=24, X1=976, xs=m=>X0+(X1-X0)*m/TOTAL;
+const greys=['#2A3746','#334354','#3C4F63','#465B72','#506780'];
+const blues=['#5B8CFF','#6C98FF','#7FA5FF','#93B3FF','#A8C1FF','#BDD0FF'];
+function renderRace(){
+  let h='';
+  // axis
+  for(let m=0;m<=36;m+=6){const x=xs(m);h+=`<line x1="${x}" y1="40" x2="${x}" y2="262" stroke="var(--night-rule)" stroke-width="1"/><text x="${x}" y="284" fill="var(--night-ink-2)" font-size="12" text-anchor="${m===0?'start':m===36?'end':'middle'}" style="font-family:var(--f-mono)">${m===0?'0':m+' mo'}</text>`}
+  // Today lane
+  h+=`<text x="${X0}" y="30" fill="var(--night-ink)" font-size="14" font-weight="600">Today</text><text x="${X0+56}" y="30" fill="var(--night-ink-2)" font-size="13">one research decision</text>`;
+  let t=0; TODAY.forEach(([l,d],i)=>{const x=xs(t),w=xs(t+d)-x; h+=`<rect x="${x+1}" y="48" width="${w-2}" height="54" rx="3" fill="${greys[i]}"><title>${l}: about ${d} months (assumption)</title></rect>`;
+    if(w>l.length*7+20) h+=`<text x="${x+10}" y="72" fill="#E5EBF1" font-size="12.5">${l}</text><text x="${x+10}" y="90" fill="#AEBBCB" font-size="11.5" style="font-family:var(--f-mono)">~${d} mo</text>`; t+=d;});
+  h+=`<g class="decision" data-lane="t" data-m="36"><path d="M${xs(36)} 40 l7 7 l-7 7 l-7 -7z" fill="#E5EBF1"/></g>`;
+  // One Mission lane
+  h+=`<text x="${X0}" y="148" fill="var(--night-ink)" font-size="14" font-weight="600">One Mission</text><text x="${X0+102}" y="148" fill="var(--night-ink-2)" font-size="13">ten decision cycles in the same time</text>`;
+  const cyc=OM.reduce((a,b)=>a+b[1],0);
+  for(let c=0;c<10;c++){ let m=c*cyc;
+    OM.forEach(([l,d],i)=>{const x=xs(m),w=xs(m+d)-x; h+=`<rect x="${x}" y="166" width="${Math.max(w-.6,1)}" height="54" fill="${blues[i]}" opacity="${c===0?1:.72}"><title>Cycle ${c+1} · ${l}: about ${Math.round(d*30)} days (assumption)</title></rect>`; m+=d;});
+    h+=`<g class="decision" data-lane="o" data-m="${((c+1)*cyc).toFixed(2)}"><path d="M${xs((c+1)*cyc)} 158 l6 6 l-6 6 l-6 -6z" fill="#E5EBF1"/></g>`;
+    if(c<9) h+=`<line x1="${xs((c+1)*cyc)}" y1="166" x2="${xs((c+1)*cyc)}" y2="220" stroke="var(--night)" stroke-width="2"/>`;
+  }
+  // callout for cycle 1
+  h+=`<path d="M${xs(0)} 228 v10 h${xs(cyc)-xs(0)} v-10" fill="none" stroke="var(--night-ink-2)" stroke-width="1"/><text x="${xs(0)}" y="254" fill="var(--night-ink-2)" font-size="12">One cycle ≈ ${cyc.toFixed(1)} months: disease → evidence → connection → existing asset → collaborator → shared action</text>`;
+  h+=`<line id="playhead" x1="${xs(36)}" y1="40" x2="${xs(36)}" y2="226" stroke="#E5EBF1" stroke-width="1.5" opacity="0"/>`;
+  $('#raceSvg').innerHTML=h;
+  // flows
+  $('#flowToday').innerHTML=TODAY.map(([l,d],i)=>`<li><i style="background:${greys[i]}"></i><span>${l}</span><span class="m">~${d} mo</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Next research decision</span><span class="m">month ${TOTAL}</span></li>`;
+  $('#flowOM').innerHTML=OM.map(([l,d],i)=>`<li><i style="background:${blues[i]}"></i><span>${l}</span><span class="m">~${Math.round(d*30)} days</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Next research decision</span><span class="m">month ${cyc.toFixed(1)}</span></li>`;
+}
+let raf=0;
+function play(){
+  cancelAnimationFrame(raf); const ph=$('#playhead'); const dur=reduced?1:6500; const t0=performance.now();
+  const cyc=OM.reduce((a,b)=>a+b[1],0);
+  ph.setAttribute('opacity','1');
+  const step=now=>{ const k=Math.min(1,(now-t0)/dur), m=k*TOTAL; const x=xs(m); ph.setAttribute('x1',x); ph.setAttribute('x2',x);
+    $('#cMonth').textContent=Math.floor(m); $('#cOM').textContent=Math.min(10,Math.floor(m/cyc+1e-6)); $('#cToday').textContent=k>=1?1:0;
+    $$('#raceSvg .decision').forEach(g=>g.style.opacity=(+g.dataset.m<=m+1e-6)?1:.15);
+    if(k<1) raf=requestAnimationFrame(step); else ph.setAttribute('opacity','0'); };
+  raf=requestAnimationFrame(step);
+}
+$('#playBtn').addEventListener('click',play);
+
+const VAL=[
+  ['Is the biological connection valid?','E','Partly. MT-ATP6 variants are documented in both MILS and NARP. Whether shared biology means shared biomarker behavior is untested.'],
+  ['Can the existing research asset be reused?','H','Registry and cell lines exist. Consent terms, data fields and sharing agreements have not been checked.'],
+  ['Are the relevant patient populations comparable?','U','Age, severity and heteroplasmy differ between groups. Comparability needs data we do not yet have.'],
+  ['Can the identified researchers or organizations collaborate?','U','Nobody has been asked. Capacity, funding and willingness are unknown.'],
+  ['Can this route meaningfully shorten the next treatment milestone?','H','This is the central claim. It can only be answered by running the route and timing it.']
+];
+$('#vlist').innerHTML=VAL.map((v,i)=>`<li><span class="n">0${i+1}</span><span class="q">${v[0]}</span>${stPill(v[1])}<span class="d">${v[2]}</span></li>`).join('');
+
+/* ---------- TRUST ---------- */
+const CHAIN=[['leigh',6],['leigh',14],['dravet',12],['dravet',30]];
+$('#chain').innerHTML=CHAIN.map(([k,i])=>{const ds=DATA[k],e=ds.edges[i];return `<button class="chain-row" data-k="${k}" data-i="${i}"><span class="src">${esc(e.src)}</span><span class="ar">→</span><span class="rel">${esc(sentence(ds,e))}</span><span class="ar">→</span><span style="display:grid;gap:4px;justify-items:end">${stPill(e.status)}<span class="conf" style="color:var(--ink-2)">${Math.round(e.conf*100)}%</span></span></button>`}).join('');
+$('#chain').addEventListener('click',e=>{const b=e.target.closest('.chain-row'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+
+const ALLN=[]; Object.values(DATA).forEach(ds=>ds.nodes.forEach(n=>{ if(['disease','gene','mechanism','asset','variant'].includes(n.t)) ALLN.push({g:gid(ds,n.id),label:n.label,ds:ds.name,t:n.t})}));
+const opt=ALLN.map(n=>`<option value="${n.g}">${esc(n.label)} · ${esc(n.ds)}</option>`).join('');
+$('#rFrom').innerHTML=opt; $('#rTo').innerHTML=opt;
+function findRoute(a,b,withHyp){
+  const A=fromGid(a),B=fromGid(b); if(A.ds!==B.ds) return null;
+  const ds=A.ds, ok=e=>e.status==='E'||(withHyp&&e.status==='H');
+  const prev={[A.n.id]:null}, q=[A.n.id];
+  while(q.length){const cur=q.shift(); if(cur===B.n.id) break;
+    ds.edges.filter(e=>ok(e)&&(e.s===cur||e.t===cur)).forEach(e=>{const o=other(e,cur); if(!(o in prev)){prev[o]={from:cur,e};q.push(o)}});}
+  if(!(B.n.id in prev)) return null;
+  const path=[]; let c=B.n.id; while(prev[c]){path.unshift(prev[c]);c=prev[c].from}
+  return {ds,start:A.n.id,path};
+}
+function renderRoute(){
+  const a=$('#rFrom').value,b=$('#rTo').value,h=$('#rHyp').checked,out=$('#routeOut');
+  if(a===b){out.innerHTML='<p style="color:var(--ink-3)">Choose two different entities.</p>';return}
+  const r=findRoute(a,b,h);
+  if(r){ const ds=r.ds; const hasH=r.path.some(p=>p.e.status==='H');
+    let html=`<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"><span class="eyebrow">Route found · ${r.path.length} step${r.path.length>1?'s':''}</span>${stPill(hasH?'H':'E')}</div><ol class="hops">`;
+    let cur=r.start;
+    r.path.forEach(p=>{const n=ds.byId[cur]; html+=`<li class="hop ${p.e.status}"><span class="rail"><i style="background:${TYPES[n.t].c};box-shadow:0 0 0 1px var(--ink-3)"></i></span><div><div class="nlab">${esc(n.label)}</div><button class="elink" data-k="${ds.key}" data-i="${p.e.i}"><span class="mono" style="font-size:11px">${esc(p.e.src)}</span><span>→</span><span class="relx">${esc(p.e.rel)}</span><span>→</span>${confHtml(p.e.conf)}</button></div></li>`; cur=other(p.e,cur)});
+    const last=ds.byId[cur]; html+=`<li class="hop"><span class="rail"><i style="background:${TYPES[last.t].c};box-shadow:0 0 0 1px var(--ink-3)"></i></span><div><div class="nlab">${esc(last.label)}</div></div></li></ol>`;
+    if(hasH) html+=`<p style="margin-top:10px;font-size:13px;color:var(--ink-3)">This route passes through at least one hypothesis. It is a lead to test, not established evidence.</p>`;
+    out.innerHTML=html; return; }
+  const A=fromGid(a),B=fromGid(b); const cross=A.ds!==B.ds;
+  const examined=cross?A.ds.edges.length+B.ds.edges.length:A.ds.edges.length;
+  const hyp=cross?0:A.ds.edges.filter(e=>e.status==='H').length;
+  out.innerHTML=`<div style="display:grid;gap:16px">
+    <span class="eyebrow">${esc(A.n.label)} → ${esc(B.n.label)}</span>
+    <div style="font-family:var(--f-display);font-size:28px;line-height:1.15">No supported route found.</div>
+    <div class="empty-grid" style="grid-template-columns:1fr">
+      <div><h4>What was searched</h4><ul><li>${examined} relationships across genes, mechanisms, phenotypes, studies and assets</li><li>${h?'Evidence and hypothesis links':'Evidence links only'}${!h&&hyp?` (${hyp} hypothesis links excluded)`:''}</li><li>Shared symptoms alone (such as seizures) are not counted as a route</li></ul></div>
+      <div><h4>What is currently unknown</h4><ul>${cross?'<li>Whether these diseases share any downstream biology not yet in the index</li><li>Whether energy failure in interneurons plays a role in sodium-channel epilepsies</li>':'<li>Whether an unrecorded study or asset links these two</li>'}</ul></div>
+      <div><h4>What evidence could change the conclusion</h4><ul><li>A publication showing a shared mechanism or pathway</li><li>A variant or gene implicated in both conditions</li><li>A research asset validated in both diseases</li></ul></div>
+    </div>
+    ${!h&&!cross&&hyp?'<button type="button" class="linkbtn" id="tryHyp" style="justify-self:start">Search again including hypotheses</button>':''}
+  </div>`;
+  const th=$('#tryHyp'); if(th) th.addEventListener('click',()=>{$('#rHyp').checked=true;renderRoute()});
+}
+['#rFrom','#rTo','#rHyp'].forEach(s=>$(s).addEventListener('change',renderRoute));
+$('#routeForm').addEventListener('submit',e=>e.preventDefault());
+$$('[data-pair]').forEach(b=>b.addEventListener('click',()=>{const [a,c]=b.dataset.pair.split('|');$('#rFrom').value=a;$('#rTo').value=c;$('#rHyp').checked=false;renderRoute()}));
+$('#routeOut').addEventListener('click',e=>{const b=e.target.closest('.elink'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+
+/* ---------- COMMUNITIES ---------- */
+$('#commGrid').innerHTML=Object.values(DATA).map(ds=>{
+  const orgs=ds.nodes.filter(n=>n.t==='org').sort((a,b)=>(a.cat==='org'?0:1)-(b.cat==='org'?0:1));
+  return `<div class="comm-col"><h3>${esc(ds.name)}<span>${orgs.length} communities</span></h3>${orgs.map(n=>{const e=rootEdge(ds,n.id);
+    return `<button class="comm" data-k="${ds.key}" data-i="${e.i}"><span class="cname">${esc(n.label.replace(' (sample)',''))}</span>${stPill(e.status)}<span class="ckind">${n.cat==='org'?'Patient organization':'Related community'} · sample</span><span class="cdesc">${esc(n.plain)}</span><span class="cwhy">${esc(e.plain)}</span></button>`}).join('')}</div>`}).join('');
+$('#commGrid').addEventListener('click',e=>{const b=e.target.closest('.comm'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+
+/* ---------- PLANS ---------- */
+const PLAN_KEY='om-plans';
+const loadPlans=()=>{try{return JSON.parse(localStorage.getItem(PLAN_KEY)||'[]')}catch(e){return []}};
+const savePlans=ps=>{try{localStorage.setItem(PLAN_KEY,JSON.stringify(ps))}catch(e){}};
+let plans=loadPlans(), curPlan=null;
+$('#planDiseaseList').innerHTML=Object.values(DATA).map(d=>`<option value="${esc(d.name)}">`).join('');
+const ctg=q=>'https://clinicaltrials.gov/search?cond='+encodeURIComponent(q);
+function matchDs(q){const r=searchIdx(q).find(it=>it.t==='disease'&&it.id===DATA[it.ds].root)||searchIdx(q)[0]; return r?DATA[r.ds]:null}
+function buildSteps(plan){
+  const ds=plan.ds?DATA[plan.ds]:null, S=[];
+  const ent=(n,e)=>({k:ds.key,i:e.i,label:n.label});
+  if(ds){
+    const pick=f=>ds.nodes.filter(f), first=f=>pick(f)[0];
+    const clinic=first(n=>n.cat==='clinician'), orgs=pick(n=>n.cat==='org'), comms=pick(n=>n.cat==='community'&&rootEdge(ds,n.id).status==='E');
+    const reg=first(n=>n.cat==='registry'), nhs=first(n=>n.cat==='nhs'), trial=first(n=>n.cat==='clinical'), labs=pick(n=>n.cat==='researcher');
+    const care={id:'care',kind:'Care',title:'Talk to a specialist about the genetic cause',body:`Knowing the exact gene and variant decides which research, studies and communities fit you. A specialist center can confirm it and explain what it means.`,status:'E',ents:clinic?[ent(clinic,rootEdge(ds,clinic.id))]:[],links:[['Find expert centres (Orphanet)','https://www.orpha.net']]};
+    const org={id:'org',kind:'Community',title:'Connect with a patient organization',body:'Other families have walked this path. Patient organizations share practical knowledge and often know about studies before they are public.',status:'E',ents:orgs.map(n=>ent(n,rootEdge(ds,n.id))),links:[]};
+    const comm={id:'comm',kind:'Community',title:'Meet a related community',body:'Some families with a different diagnosis share your gene or biology. Their questions and data can help yours.',status:comms.length?'E':'U',ents:comms.map(n=>ent(n,rootEdge(ds,n.id))),links:[]};
+    const r1={id:'reg',kind:'Research',title:'Join the patient registry',body:'Registries let researchers find and count people with the disease. Being counted is often the first thing a future trial needs.',status:'E',ents:reg?[ent(reg,rootEdge(ds,reg.id))]:[],links:[]};
+    const r2={id:'nhs',kind:'Research',title:'Ask about the natural history study',body:'These studies follow people over time so researchers learn how the disease changes. That knowledge is needed before any treatment can be tested.',status:'E',ents:nhs?[ent(nhs,rootEdge(ds,nhs.id))]:[],links:[]};
+    const r3={id:'trial',kind:'Research',title:'Look for clinical studies you could join',body:'Check which studies are recruiting and whether you match their criteria. Discuss any study with your doctor before joining.',status:'E',ents:trial?[ent(trial,rootEdge(ds,trial.id))]:[],links:[['Search ClinicalTrials.gov',ctg(ds.name)]]};
+    const lab={id:'lab',kind:'Collaboration',title:'Reach out to a research group',body:'These groups work on your disease or its mechanism. A patient group can offer them participants, samples or questions that matter to families.',status:labs.some(n=>rootEdge(ds,n.id).status==='E')?'E':'H',ents:labs.map(n=>ent(n,rootEdge(ds,n.id))),links:[]};
+    const nx={id:'next',kind:'Shared action',title:ds.next.title,body:ds.next.plain+' This is a hypothesis to test together, not an established result.',status:ds.next.status,ents:[],links:[],journey:true};
+    const order={new:[care,org,comm,r1,r2,r3],living:[r1,r2,r3,org,comm,care],leader:[nx,lab,r1,r2,comm,r3]}[plan.stage]||[care,org,comm,r1,r2,r3];
+    S.push(...order);
+  } else {
+    S.push(
+      {id:'care',kind:'Care',title:'Ask your doctor about genetic testing',body:'A confirmed gene or variant is the key that connects a diagnosis to research, communities and other diseases.',status:'E',ents:[],links:[['Find expert centres (Orphanet)','https://www.orpha.net']]},
+      {id:'org',kind:'Community',title:'Look for a patient organization',body:'Directories list groups for thousands of rare diseases, including umbrella groups when none exists yet for yours.',status:'E',ents:[],links:[['NORD','https://rarediseases.org'],['Global Genes','https://globalgenes.org'],['EURORDIS','https://www.eurordis.org']]},
+      {id:'trial',kind:'Research',title:'Search for studies and registries',body:'Studies and registries may exist even when information is hard to find.',status:'E',ents:[],links:[['Search ClinicalTrials.gov',ctg(plan.disease)],['Registries (Orphanet)','https://www.orpha.net']]},
+      {id:'gap',kind:'Unknown',title:'Help put your disease on the map',body:'One Mission has no supported connections for this disease yet. A confirmed gene, a publication or a patient group adding its knowledge would change that.',status:'U',ents:[],links:[]}
+    );
+  }
+  return S;
+}
+function renderSaved(){
+  $('#savedPlans').innerHTML=plans.length?`<div class="eyebrow">Your saved plans · on this device</div>`+plans.map(p=>{const n=buildSteps(p).length,d=Object.values(p.done||{}).filter(Boolean).length;
+    return `<div class="saved-row"><button class="open" data-open="${p.id}">${esc(p.disease)}</button><span class="prog">${d}/${n}</span><button class="del" data-del="${p.id}" aria-label="Delete plan for ${esc(p.disease)}">Delete</button></div>`}).join(''):'';
+}
+const STAGE_LABEL={new:'Just diagnosed',living:'Living with it for a while',leader:'Leading a patient group'};
+function renderPlan(p){
+  curPlan=p; const steps=buildSteps(p), done=p.done||{}, n=steps.length, d=steps.filter(s=>done[s.id]).length;
+  $('#planOut').innerHTML=`<div class="plan-head"><div><div class="eyebrow">${p.sample?'Example plan · ':''}${esc(STAGE_LABEL[p.stage])}${p.ds?'':' · not in the Atlas yet'}</div><div class="pd" style="margin-top:8px">${esc(p.ds?DATA[p.ds].name:p.disease)}</div></div>
+    <div class="pbar"><span class="track"><i style="width:${n?d/n*100:0}%"></i></span>${d} of ${n} started</div></div>
+    <ol class="psteps">${steps.map((s,i)=>`<li class="pstep ${done[s.id]?'done':''}"><input type="checkbox" id="ps-${s.id}" data-step="${s.id}" ${done[s.id]?'checked':''}><div class="pt"><label for="ps-${s.id}">${esc(s.title)}</label>${stPill(s.status)}<span class="kind">${esc(s.kind)}</span></div>
+      <p class="pb">${esc(s.body)}</p>
+      ${(s.ents.length||s.links.length||s.journey)?`<div class="pw">${s.ents.map(e=>`<button type="button" data-k="${e.k}" data-i="${e.i}">${esc(e.label.replace(' (sample)',''))}${/\(sample\)/.test(e.label)?' · sample':''}</button>`).join('')}${s.links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('')}${s.journey?'<a href="#journey">See it as a connected journey →</a>':''}</div>`:''}</li>`).join('')}</ol>
+    <p class="plan-note">These are practical first steps built from connected information, not medical advice. Talk with your doctor before changing care or joining a study. ${p.sample?'This example uses sample data. Create your own plan on the left; it is saved only in this browser.':'Your plan is saved only in this browser.'}</p>`;
+}
+$('#planOut').addEventListener('change',e=>{const c=e.target.closest('[data-step]'); if(!c||!curPlan) return; curPlan.done=curPlan.done||{}; curPlan.done[c.dataset.step]=c.checked;
+  if(!curPlan.sample){savePlans(plans);renderSaved()} renderPlan(curPlan); const f=$('#ps-'+c.dataset.step); if(f) f.focus();});
+$('#planOut').addEventListener('click',e=>{const b=e.target.closest('button[data-k]'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+$('#savedPlans').addEventListener('click',e=>{const o=e.target.closest('[data-open]'),x=e.target.closest('[data-del]');
+  if(o){const p=plans.find(q=>q.id===o.dataset.open); if(p) renderPlan(p)}
+  if(x){plans=plans.filter(q=>q.id!==x.dataset.del); savePlans(plans); renderSaved(); if(curPlan&&curPlan.id===x.dataset.del) renderPlan(plans[0]||SAMPLE_PLAN)}});
+$('#planForm').addEventListener('submit',e=>{e.preventDefault(); const q=$('#planDisease').value.trim(); if(!q) return;
+  const ds=matchDs(q), stage=($('input[name=stage]:checked')||{}).value||'new';
+  const p={id:'p'+Date.now().toString(36),disease:ds?ds.name:q,ds:ds?ds.key:null,stage,done:{}};
+  plans.unshift(p); savePlans(plans); renderSaved(); renderPlan(p); $('#planOut').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});});
+const SAMPLE_PLAN={id:'sample',disease:'Leigh syndrome',ds:'leigh',stage:'new',done:{care:true},sample:true};
+renderSaved(); renderPlan(plans[0]||SAMPLE_PLAN);
+
+/* ---------- SOURCES ---------- */
+const SOURCES=[
+  ['Biology',[['OMIM','Gene and disease relationships','https://omim.org'],['HPO','Standard terms for signs and symptoms','https://hpo.jax.org'],['MONDO','Unified disease identifiers and synonyms','https://mondo.monarchinitiative.org'],['ClinVar','Variant interpretations','https://www.ncbi.nlm.nih.gov/clinvar/']]],
+  ['Research',[['PubMed / PMC','Publications and full text','https://pubmed.ncbi.nlm.nih.gov'],['NIH RePORTER','Funded projects, labs and investigators','https://reporter.nih.gov']]],
+  ['Clinical',[['ClinicalTrials.gov','Registered trials and natural history studies','https://clinicaltrials.gov']]],
+  ['Patient communities',[['NORD','US patient organizations and disease reports','https://rarediseases.org'],['Global Genes','Patient advocacy directory','https://globalgenes.org'],['Orphanet','Expert centres, registries and nomenclature','https://www.orpha.net'],['EURORDIS','European patient alliance','https://www.eurordis.org']]]
+];
+$('#srcGrid').innerHTML=SOURCES.map(([c,list])=>`<div class="src-col"><h4>${c}</h4><ul>${list.map(s=>`<li><a href="${s[2]}" target="_blank" rel="noopener">${s[0]}</a><span>${s[1]}</span></li>`).join('')}</ul></div>`).join('');
+
+/* ---------- HERO NETWORK ---------- */
+(function hero(){
+  const W=900,H=640,r=rng(42),pts=[];
+  for(let i=0;i<46;i++) pts.push({x:40+r()*(W-80),y:30+r()*(H-60)});
+  const path=[{x:150,y:470,l:'disease'},{x:300,y:360,l:'mechanism'},{x:450,y:420,l:'community'},{x:590,y:290,l:'asset'},{x:720,y:350,l:'collaborator'},{x:830,y:210,l:'shared action'}];
+  let h=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">`;
+  const all=pts.concat(path);
+  all.forEach((p,i)=>{ const ds=all.map((q,j)=>[j,(q.x-p.x)**2+(q.y-p.y)**2]).filter(x=>x[0]!==i).sort((a,b)=>a[1]-b[1]).slice(0,2);
+    ds.forEach(([j])=>{ if(j>i) h+=`<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${all[j].x.toFixed(1)}" y2="${all[j].y.toFixed(1)}" stroke="#3A4B60" stroke-width="1" opacity=".55"/>`}); });
+  pts.forEach((p,i)=>{h+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${(1.6+r()*2.2).toFixed(1)}" fill="${['#5B8CFF','#A68BFF','#3FC1C9','#7FD18B','#E6CF55','#F2A65A','#8B98AA'][i%7]}" opacity=".55">${reduced?'':`<animate attributeName="opacity" values=".25;.7;.25" dur="${(4+r()*5).toFixed(1)}s" begin="${(r()*4).toFixed(1)}s" repeatCount="indefinite"/>`}</circle>`});
+  const d='M'+path.map(p=>p.x+' '+p.y).join(' L');
+  h+=`<path d="${d}" fill="none" stroke="#9DB4FF" stroke-width="1.6" opacity=".35"/>`;
+  h+=`<path d="${d}" fill="none" stroke="#C9D6FF" stroke-width="2" stroke-linecap="round" pathLength="100" stroke-dasharray="14 86">${reduced?'':'<animate attributeName="stroke-dashoffset" from="100" to="0" dur="5s" repeatCount="indefinite"/>'}</path>`;
+  path.forEach((p,i)=>{h+=`<circle cx="${p.x}" cy="${p.y}" r="${i===0||i===5?7:5}" fill="${i===5?'#C9D6FF':'#0F1720'}" stroke="#C9D6FF" stroke-width="1.5"/><text x="${p.x+12}" y="${p.y-10}" fill="#8F9DAE" font-size="12" style="font-family:'IBM Plex Mono',monospace;letter-spacing:.08em">${p.l.toUpperCase()}</text>`});
+  h+='</svg>'; $('#heroNet').innerHTML=h;
+})();
+
+/* ---------- init ---------- */
+renderReader('leigh'); $('#readerSearch').value='Leigh syndrome';
+renderJourney(); renderRace();
+$('#rFrom').value='leigh:leigh'; $('#rTo').value='leigh:d_narp'; renderRoute();
+try{ const m=localStorage.getItem('om-mode'); if(m==='researcher') setMode('researcher'); }catch(e){}
+const _set=setMode; setMode=function(m,s){_set(m,s); try{localStorage.setItem('om-mode',m)}catch(e){}};
+if(location.hash==='#researcher') setMode('researcher');
+})();
+</script>
+</body></html>
