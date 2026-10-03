@@ -961,7 +961,7 @@ function openDrawer(ds,e){
     <div class="drawer-head"><span class="eyebrow" id="dTitle">Why this connection?</span><button data-close>Close ✕</button></div>
     <div class="drawer-body">
       <div class="dchain"><div class="a">${dot(a.t)}${esc(a.label)}</div><div class="r">${esc(e.rel)}</div><div class="b">${dot(b.t)}${esc(b.label)}</div></div>
-      <div>${stPill(e.status)} <span class="sample-tag" style="margin-left:6px">Sample record</span></div>
+      <div>${stPill(e.status)}</div>
       <p class="why-plain">${esc(e.plain)}</p>
       <div class="kv">
         <div class="k">Relationship</div><div>${esc(sentence(ds,e))}</div>
