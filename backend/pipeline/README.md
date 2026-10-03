@@ -59,16 +59,13 @@ Everything under `data/` (raw downloads, interim jsonl/parquet, LLM cache, snaps
 - Zones' IP allowlists must contain the machine's public IP (not a 100.x Tailscale address). Limit a test run with `ATLAS_BRIGHTDATA_DISEASES=MONDO:…,MONDO:…` and `ATLAS_BRIGHTDATA_PER_DISEASE=3`; a full run is one search per focus disease.
 
 ## Status (first real run, 2026-10-03)
-Real data for the lysosomal slice:
-- 3,426 nodes (195 diseases, 115 genes, 1,615 phenotypes, 346 pathways, 659 people, 249 publications, 56 trials, 77 grants)
-- 11,119 edges: 7,823 curated, 1,708 literature, 1,588 inferred
-- 548 similarity pairs, 15 Leiden clusters, 61 bridging people, 533 paths, 39 action views + 19 mechanism views
+Real data for the lysosomal slice. For the current dataset version and counts (nodes by type, edges, evidence, clusters, focus diseases) see `GET /api/v1/meta`; they change with every load, so they are not kept here.
 
 `check_contract.py` passed against the API serving this data (300 requests, 0 mismatches). The CLN3 vs. CLN2/CLN1 counterexamples are found automatically.
 
 **Not yet run:** `extract` / `reconcile` with an OpenAI key. `brightdata_orgs` has only been run for CLN5, CLN3 and CLN2 in a scratch data dir (12 hypothesis edges: 9 on curated orgs with quotes naming the org, 3 on new orgs, two of them quote-less search leads); the shared `data/interim/brightdata_orgs.*` is still empty.
 
 **Known data gaps to work on (B1):**
-- Few patient groups and no assets yet; add them via `curated.yaml` and Bright Data.
+- Patient groups and assets cover only a few diseases (mostly the NCL subtypes in `curated.yaml`); add more via `curated.yaml` and Bright Data.
 - Reactome barely covers the CLN genes. Add curated `ATLAS:mech-*` mechanisms such as lysosomal protein degradation.
 - `plain_summary` is empty for most nodes.
