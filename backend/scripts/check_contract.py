@@ -202,12 +202,29 @@ def check_path(p: dict, path: str) -> list[str]:
     for i, e in enumerate(p["edges"][: len(p["node_ids"]) - 1]):
         if {e["src"], e["dst"]} != {p["node_ids"][i], p["node_ids"][i + 1]}:
             errs.append(f"{path}: edge {e['id']} does not connect {p['node_ids'][i]} and {p['node_ids'][i + 1]}")
+    # A path is never stronger than its weakest edge. It equals the edge minimum unless an honesty cap
+    # (attrs.status_cap / attrs.confidence_cap) lowers it; then it equals the cap.
     order = ["curated", "literature", "inferred", "hypothesis"]
-    if p["edges"] and p["weakest_status"] != max((e["status"] for e in p["edges"]), key=order.index):
-        errs.append(f"{path}: weakest_status is not the weakest edge status")
+    attrs = p.get("attrs") or {}
+    if p["edges"] and p["weakest_status"] in order:
+        edge_min = max((e["status"] for e in p["edges"]), key=order.index)
+        cap = attrs.get("status_cap")
+        want = max(edge_min, cap, key=order.index) if cap in order else edge_min
+        if order.index(p["weakest_status"]) < order.index(edge_min):
+            errs.append(f"{path}: weakest_status is stronger than the weakest edge status ({edge_min})")
+        elif p["weakest_status"] != want:
+            errs.append(f"{path}: weakest_status {p['weakest_status']} != {want}"
+                        f" ({'status_cap' if cap else 'weakest edge status'})")
     # tolerance: the database stores confidence as float4
-    if p["edges"] and abs(p["min_confidence"] - min(e["confidence"] for e in p["edges"])) > 1e-6:
-        errs.append(f"{path}: min_confidence is not the minimum edge confidence")
+    if p["edges"] and isinstance(p["min_confidence"], (int, float)):
+        edge_min = min(e["confidence"] for e in p["edges"])
+        cap = attrs.get("confidence_cap")
+        want = min(edge_min, cap) if isinstance(cap, (int, float)) else edge_min
+        if p["min_confidence"] > edge_min + 1e-6:
+            errs.append(f"{path}: min_confidence is above the minimum edge confidence ({edge_min})")
+        elif abs(p["min_confidence"] - want) > 1e-6:
+            errs.append(f"{path}: min_confidence {p['min_confidence']} != {want}"
+                        f" ({'confidence_cap' if cap is not None else 'minimum edge confidence'})")
     for e in p["edges"]:
         errs += check_edge_obj(e, path)
     return errs

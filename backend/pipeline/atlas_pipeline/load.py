@@ -6,6 +6,7 @@ from __future__ import annotations
 import logging
 from collections import Counter
 
+from .analytics.paths import path_strength
 from .config import INTERIM, slice_config
 from .graph import Graph, load_graph
 from .llm import usage
@@ -77,6 +78,8 @@ def validate(g: Graph, clusters: list[dict], members: list[dict], paths: list[di
             ok = ok and e is not None and {e["src"], e["dst"]} == {p["node_ids"][i], p["node_ids"][i + 1]}
         if not ok:
             errs.append(f"path {p['id']}: invalid")
+        elif (p.get("weakest_status"), p.get("min_confidence")) != path_strength(g, p["edge_ids"], p.get("attrs") or {}):
+            errs.append(f"path {p['id']}: weakest_status/min_confidence missing or stale (re-run analytics)")
     for v in views:
         need = ACTION_KEYS if v["kind"] == "action" else MECH_KEYS
         if set(v["payload"]) != need:
@@ -152,9 +155,10 @@ def run(database_url: str | None, dry_run: bool = False) -> None:
               for c in clusters))
         copy("cluster_members", ["cluster_id", "node_id", "membership"],
              ((m["cluster_id"], m["node_id"], m["membership"]) for m in members))
-        copy("paths", ["id", "from_id", "to_id", "kind", "title", "node_ids", "edge_ids", "score", "attrs"],
+        copy("paths", ["id", "from_id", "to_id", "kind", "title", "node_ids", "edge_ids", "score",
+                       "weakest_status", "min_confidence", "attrs"],
              ((p["id"], p["from_id"], p["to_id"], p["kind"], p["title"], p["node_ids"], p["edge_ids"], p["score"],
-               Jsonb(p.get("attrs") or {})) for p in paths))
+               p["weakest_status"], p["min_confidence"], Jsonb(p.get("attrs") or {})) for p in paths))
         copy("views", ["kind", "key", "payload"], ((v["kind"], v["key"], Jsonb(v["payload"])) for v in views))
         copy("dataset_meta", ["key", "value"], ((k, Jsonb(v)) for k, v in meta.items()))
     log.info("loaded dataset %s into Postgres", version)

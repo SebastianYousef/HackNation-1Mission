@@ -10,7 +10,8 @@ reaches groups and studies of its broader family (CLN5 -> NCL -> BDSRA) but neve
 Then the best `paths_per_kind` per kind are kept.
 Score = product of edge confidences x 0.85^(hops-1) x hub factor.
 
-Honesty caps (in attrs, applied by views.path_json; edges keep their own status):
+Honesty caps (in attrs; edges keep their own status). path_strength applies them once, here: every row carries
+weakest_status / min_confidence, which the loader stores and both GET /paths and the views serve unchanged:
   * a route through a phenotype hinges on one shared symptom -> status_cap "inferred", confidence_cap 0.25
   * an intervention reached through another, unrelated disease (not an ancestor, no shared gene) is a
     therapy-transfer guess -> dropped; a trial reached that way -> status_cap "hypothesis" + caution.
@@ -117,10 +118,23 @@ def other_subtype_therapy(d: str, serves_t: set[str], therapy: bool, cond_genes:
     return therapy and d not in serves_t and bool(named) and not any(s & genes_d for s in named)
 
 
+STATUS_RANK = ["curated", "literature", "inferred", "hypothesis"]
+
+
+def path_strength(g: Graph, edge_ids: list[str], attrs: dict) -> tuple[str, float]:
+    """The one rule for a path's strength: the weakest edge status and the lowest edge confidence, lowered
+    (never raised) by attrs.status_cap / attrs.confidence_cap."""
+    es = [g.edges[x] for x in edge_ids]
+    weakest = max([e["status"] for e in es] + ([attrs["status_cap"]] if attrs.get("status_cap") else []),
+                  key=STATUS_RANK.index)
+    min_conf = min([e["confidence"] for e in es] +
+                   ([attrs["confidence_cap"]] if attrs.get("confidence_cap") is not None else []))
+    return weakest, min_conf
+
+
 def _cap(attrs: dict, status: str, caution: str) -> None:
     """Lower the path's honesty caps (never raise them) and record why."""
-    rank = ["curated", "literature", "inferred", "hypothesis"]
-    if rank.index(status) > rank.index(attrs.get("status_cap") or "curated"):
+    if STATUS_RANK.index(status) > STATUS_RANK.index(attrs.get("status_cap") or "curated"):
         attrs["status_cap"] = status
     attrs["confidence_cap"] = min(attrs.get("confidence_cap", WEAK_CONF), WEAK_CONF)
     attrs["caution"] = f"{attrs['caution']} {caution}" if attrs.get("caution") else caution
@@ -213,9 +227,11 @@ def run(g: Graph) -> list[dict]:
         for kind in sorted(best):
             for score, nodes, eids, attrs in sorted(best[kind], key=lambda x: (-x[0], x[1]))[:per_kind]:
                 labels = [g.nodes[n]["label"] for n in nodes]
+                weakest, min_conf = path_strength(g, eids, attrs)
                 rows.append({"id": path_id(kind, nodes), "from_id": d, "to_id": nodes[-1], "kind": kind,
                              "title": " → ".join(labels), "node_ids": nodes, "edge_ids": eids,
-                             "score": round(score, 4), "attrs": attrs})
+                             "score": round(score, 4), "weakest_status": weakest, "min_confidence": min_conf,
+                             "attrs": attrs})
     write_jsonl("paths.jsonl", rows)
     log.info("paths: %d paths from %d focus diseases (%d therapy-transfer routes dropped)",
              len(rows), len(focus), n_dropped)

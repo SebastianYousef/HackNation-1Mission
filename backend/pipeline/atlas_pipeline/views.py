@@ -13,7 +13,7 @@ from pydantic import BaseModel
 
 from . import llm
 from .analytics.overlap import person_disease_links
-from .analytics.paths import counterexample_therapy, other_subtype_therapy
+from .analytics.paths import counterexample_therapy, other_subtype_therapy, path_strength
 from .config import slice_config
 from .graph import Graph, load_graph
 from .config import INTERIM
@@ -169,15 +169,12 @@ def asset_card(ix: Index, aid: str, d: str, related: set[str], family: dict[str,
 
 
 def path_json(g: Graph, p: dict) -> dict:
-    """weakest_status / min_confidence come from the edges, lowered by the path's honesty caps
-    (attrs.status_cap / confidence_cap, set in analytics/paths.py): a route that hinges on one shared
-    symptom or on a therapy transfer is never shown as stronger than inferred / hypothesis."""
-    es = [g.edges[x] for x in p["edge_ids"]]
+    """weakest_status / min_confidence are the capped values analytics/paths.py stored on the path (the
+    same ones GET /paths serves): a route that hinges on one shared symptom or on a therapy transfer is
+    never shown as stronger than inferred / hypothesis."""
     attrs = p.get("attrs") or {}
-    weakest = max([e["status"] for e in es] + ([attrs["status_cap"]] if attrs.get("status_cap") else []),
-                  key=STATUS_RANK.index)
-    min_conf = min([e["confidence"] for e in es] +
-                   ([attrs["confidence_cap"]] if attrs.get("confidence_cap") is not None else []))
+    weakest, min_conf = (p["weakest_status"], p["min_confidence"]) if "weakest_status" in p \
+        else path_strength(g, p["edge_ids"], attrs)
     return {"id": p["id"], "kind": p["kind"], "title": p["title"], "score": p["score"], "from": p["from_id"],
             "to": p["to_id"], "node_ids": p["node_ids"], "edge_ids": p["edge_ids"],
             "nodes": [brief(g, n) for n in p["node_ids"]], "edges": [edge_json(g, x) for x in p["edge_ids"]],
