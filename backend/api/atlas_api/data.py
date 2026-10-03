@@ -6,13 +6,17 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import time
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
 from psycopg_pool import AsyncConnectionPool
 
 from .config import Settings
+
+log = logging.getLogger("atlas_api")
 
 
 def safe_id(node_id: str) -> str:
@@ -60,7 +64,7 @@ class Fixtures:
         path = self.root / rel
         try:
             mtime = path.stat().st_mtime
-        except FileNotFoundError:
+        except (OSError, ValueError):  # missing, name too long, NUL byte -> 404
             return None
         hit = self._cache.get(path)
         if hit and hit[0] == mtime:
@@ -98,13 +102,42 @@ class Data:
         ts, v = self._version
         if time.monotonic() - ts < 15 and v:
             return v
-        if self.s.data_mode == "db" and self.db is not None:
-            v = "db-" + str(await self.db.scalar(
-                "select coalesce(value->>'version', md5(value::text)) from dataset_meta where key = 'dataset'") or "0")
+        dbv = None
+        if self.s.needs_db and self.db is not None:  # also mixed mode (DB_ENDPOINTS): a load must bust caches
+            try:
+                dbv = "db-" + str(await self.db.scalar(
+                    "select coalesce(value->>'version', md5(value::text)) from dataset_meta where key = 'dataset'")
+                    or "0")
+            except Exception as exc:
+                if self.s.data_mode == "db":
+                    raise
+                log.warning("dataset version from DB unavailable: %s", exc)  # mixed mode: keep fixtures up
+        if self.s.data_mode == "db":
+            v = dbv or "db-0"
         else:
-            v = self.fx.version()
+            v = self.fx.version() + (f"+{dbv}" if dbv else "")
         self._version = (time.monotonic(), v)
         return v
+
+    def _fx_one(self, folder: str, ident: str, payload_id: Callable[[Any], Any]) -> Any | None:
+        """Fixture for `ident`, or None unless the payload's own id is exactly `ident`
+        (safe_id is many-to-one: MONDO_1 and MONDO/1 would otherwise alias MONDO:1)."""
+        data = self.fx.load(f"{folder}/{safe_id(ident)}.json")
+        try:
+            return data if data is not None and payload_id(data) == ident else None
+        except (KeyError, TypeError, IndexError):
+            return None
+
+    def _fx_list(self, folder: str, ident: str) -> list | None:
+        """List fixtures (similar, paths) carry no source id: check it against the node fixture."""
+        data = self.fx.load(f"{folder}/{safe_id(ident)}.json")
+        if data is None:
+            return None
+        node = self.fx.load(f"nodes/{safe_id(ident)}.json")
+        real = (node or {}).get("node", {}).get("id")
+        if (real is not None and real != ident) or (real is None and ":" not in ident):
+            return None
+        return data
 
     # ---- GET endpoints ----------------------------------------------------
     async def meta(self) -> str | None:
@@ -134,7 +167,7 @@ class Data:
     async def node(self, node_id: str) -> str | None:
         if self._use_db("node"):
             return await self._sql("select api_node(%s::text)::text", node_id)
-        return _dump(self.fx.load(f"nodes/{safe_id(node_id)}.json"))
+        return _dump(self._fx_one("nodes", node_id, lambda d: d["node"]["id"]))
 
     async def neighborhood(self, node_id: str, depth: int, edge_types: list[str] | None,
                            statuses: list[str] | None, min_confidence: float, max_nodes: int) -> str | None:
@@ -142,7 +175,7 @@ class Data:
             return await self._sql(
                 "select api_neighborhood(%s::text, %s::int, %s::text[], %s::text[], %s::real, %s::int)::text",
                 node_id, depth, edge_types, statuses, min_confidence, max_nodes)
-        nb = self.fx.load(f"neighborhood/{safe_id(node_id)}.json")
+        nb = self._fx_one("neighborhood", node_id, lambda d: d["center"])
         if nb is None:
             return None
         if edge_types or statuses or min_confidence > 0:  # approximate the filters on the static fixture
@@ -152,24 +185,34 @@ class Data:
                      and e["confidence"] >= min_confidence]
             keep = {nb["center"]} | {e["src"] for e in edges} | {e["dst"] for e in edges}
             nb = {**nb, "nodes": [n for n in nb["nodes"] if n["id"] in keep], "edges": edges}
+        others = [n for n in nb["nodes"] if n["id"] != nb["center"]]
+        if len(others) > max_nodes - 1:  # honour max_nodes: keep the best-connected neighbours (depth ignored)
+            best: dict[str, float] = {}
+            for e in nb["edges"]:
+                for x in (e["src"], e["dst"]):
+                    best[x] = max(best.get(x, 0.0), e["confidence"])
+            others.sort(key=lambda n: -best.get(n["id"], 0.0))
+            keep = {nb["center"]} | {n["id"] for n in others[:max_nodes - 1]}
+            nb = {**nb, "nodes": [n for n in nb["nodes"] if n["id"] in keep],
+                  "edges": [e for e in nb["edges"] if e["src"] in keep and e["dst"] in keep], "truncated": True}
         return _dump(nb)
 
     async def edge(self, edge_id: str) -> str | None:
         if self._use_db("edge"):
             return await self._sql("select api_edge(%s::text)::text", edge_id)
-        return _dump(self.fx.load(f"edges/{safe_id(edge_id)}.json"))
+        return _dump(self._fx_one("edges", edge_id, lambda d: d["edge"]["id"]))
 
     async def similar(self, disease_id: str, limit: int) -> str | None:
         if self._use_db("similar"):
             return await self._sql("select api_similar_diseases(%s::text, %s::int)::text", disease_id, limit)
-        sim = self.fx.load(f"similar/{safe_id(disease_id)}.json")
+        sim = self._fx_list("similar", disease_id)
         return None if sim is None else _dump(sim[:limit])
 
     async def paths(self, from_id: str, to_id: str | None, kind: str | None, limit: int) -> str | None:
         if self._use_db("paths"):
             return await self._sql("select api_paths(%s::text, %s::text, %s::text, %s::int)::text",
                                    from_id, to_id, kind, limit)
-        ps = self.fx.load(f"paths/{safe_id(from_id)}.json")
+        ps = self._fx_list("paths", from_id)
         if ps is None:
             return None
         ps = [p for p in ps if (not to_id or p["to"] == to_id) and (not kind or p["kind"] == kind)]
@@ -183,17 +226,17 @@ class Data:
     async def cluster(self, cluster_id: str) -> str | None:
         if self._use_db("cluster"):
             return await self._sql("select api_cluster(%s::text)::text", cluster_id)
-        return _dump(self.fx.load(f"clusters/{safe_id(cluster_id)}.json"))
+        return _dump(self._fx_one("clusters", cluster_id, lambda d: d["cluster"]["id"]))
 
     async def action_view(self, disease_id: str) -> str | None:
         if self._use_db("action_view"):
             return await self._sql("select api_action_view(%s::text)::text", disease_id)
-        return _dump(self.fx.load(f"action-view/{safe_id(disease_id)}.json"))
+        return _dump(self._fx_one("action-view", disease_id, lambda d: d["disease"]["id"]))
 
     async def mechanism_view(self, mech_id: str) -> str | None:
         if self._use_db("mechanism_view"):
             return await self._sql("select api_mechanism_view(%s::text)::text", mech_id)
-        return _dump(self.fx.load(f"mechanism-view/{safe_id(mech_id)}.json"))
+        return _dump(self._fx_one("mechanism-view", mech_id, lambda d: d["mechanism"]["id"]))
 
     # ---- helpers for AI / jobs ---------------------------------------------
     async def edge_obj(self, edge_id: str) -> dict | None:

@@ -17,6 +17,9 @@ from .config import Settings
 
 log = logging.getLogger("atlas_api.jobs")
 QUEUE = "atlas:jobs"
+# A job is popped before it runs (no lease): if the worker dies mid-job, "running"
+# expires after this and polling gets a 404 instead of spinning for job_ttl_seconds.
+RUNNING_TTL_SECONDS = 120
 DISCLAIMER = ("Unverified web search results. They have not been reviewed by the Atlas team; "
               "check each source before acting on it.")
 
@@ -33,8 +36,8 @@ def status(job_id: str, state: str, result: dict | None = None, error: str | Non
     return {"job_id": job_id, "state": state, "result": result, "error": error}
 
 
-async def save(store: Store, settings: Settings, st: dict) -> None:
-    await store.set(job_key(st["job_id"]), json.dumps(st).encode(), settings.job_ttl_seconds)
+async def save(store: Store, settings: Settings, st: dict, ttl: int | None = None) -> None:
+    await store.set(job_key(st["job_id"]), json.dumps(st).encode(), ttl or settings.job_ttl_seconds)
 
 
 async def load(store: Store, job_id: str) -> dict | None:
@@ -81,7 +84,7 @@ def classify(lead: dict) -> str:
 
 
 async def run_gap_search(settings: Settings, store: Store, job_id: str, disease_id: str, label: str) -> None:
-    await save(store, settings, status(job_id, "running"))
+    await save(store, settings, status(job_id, "running"), RUNNING_TTL_SECONDS)
     try:
         if not settings.brightdata_api_key:
             raise RuntimeError("web search is not configured (BRIGHTDATA_API_KEY missing)")

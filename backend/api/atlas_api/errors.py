@@ -76,4 +76,12 @@ def install_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(Exception)
     async def _internal(request: Request, exc: Exception) -> JSONResponse:
         log.exception("unhandled error request_id=%s", request_id(request))
-        return error_response(request, 500, "internal", "internal server error")
+        # 500s are rendered outside CORSMiddleware: add CORS headers here, or a
+        # cross-origin browser cannot read the body or X-Request-Id.
+        headers: dict[str, str] = {}
+        origin = request.headers.get("origin", "")
+        cors_re = getattr(request.app.state, "cors_re", None)
+        if origin and cors_re is not None and cors_re.match(origin):
+            headers = {"Access-Control-Allow-Origin": origin, "Vary": "Origin",
+                       "Access-Control-Expose-Headers": "X-Request-Id, X-Served-By, X-Cache, ETag"}
+        return error_response(request, 500, "internal", "internal server error", headers)

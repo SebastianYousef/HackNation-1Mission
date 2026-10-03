@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     ai_rate_limit_per_minute: int = 10
     shutdown_grace_seconds: float = 0.0
     job_ttl_seconds: int = 3600
+    # How many reverse proxies in front of the API append to X-Forwarded-For. The
+    # client IP (rate limits, logs) is the entry that many hops from the RIGHT, so a
+    # client-supplied (leftmost) value is never trusted. 0 = ignore XFF, use the socket peer.
+    trusted_proxy_hops: int = 1
+    max_body_bytes: int = 64 * 1024
 
     def uses_db(self, endpoint: str) -> bool:
         if self.data_mode == "db":

@@ -2,16 +2,19 @@
 `{x:path}` params also survive an encoded '/' (%2F)."""
 from __future__ import annotations
 
+import ipaddress
 import json
 import uuid
 from collections.abc import Awaitable, Callable
 from typing import Annotated, Literal
+from urllib.parse import urlencode
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Query, Request, Response
 from pydantic import BaseModel, Field
+from redis.exceptions import RedisError
 
 from . import jobs
-from .errors import ApiError, bad_request, not_found
+from .errors import ApiError, bad_request, not_found, unavailable
 
 router = APIRouter(prefix="/api/v1")
 
@@ -28,6 +31,8 @@ EDGE_STATUSES = {"curated", "literature", "inferred", "hypothesis"}
 PathKind = Literal["related_disease", "patient_group", "asset", "researcher", "trial", "intervention"]
 
 JSON = "application/json"
+MAX_ID = 200
+Id = Annotated[str, Field(min_length=1, max_length=MAX_ID)]
 
 
 def _csv(value: str | None, allowed: set[str], name: str) -> list[str] | None:
@@ -47,12 +52,15 @@ def _clamp(v: int, lo: int, hi: int) -> int:
 async def _cached_get(request: Request, what: str, load: Callable[[], Awaitable[str | None]]) -> Response:
     """Shared GET path: ETag/304, shared response cache (Redis), 404 on NULL."""
     st = request.app.state
+    if any("\x00" in v or len(v) > MAX_ID for v in request.path_params.values()):
+        raise not_found(what)  # cannot be a real id; never reaches the filesystem or Postgres
     version = await st.data.dataset_version()
     etag = f'W/"{version}"'
     headers = {"ETag": etag, "Cache-Control": "public, max-age=60", "Vary": "Origin"}
     if etag in request.headers.get("if-none-match", ""):
         return Response(status_code=304, headers=headers)
-    key = f"resp:{version}:{request.url.path}?{'&'.join(sorted(str(request.url.query).split('&')))}"
+    # Parsed params (last value of a repeated param wins, as FastAPI binds it), sorted.
+    key = f"resp:{version}:{request.url.path}?{urlencode(sorted(request.query_params.items()))}"
     body = await st.store.get(key)
     headers["X-Cache"] = "HIT" if body is not None else "MISS"
     if body is None:
@@ -64,10 +72,27 @@ async def _cached_get(request: Request, what: str, load: Callable[[], Awaitable[
     return Response(content=body, media_type=JSON, headers=headers)
 
 
+def client_ip(request: Request) -> str:
+    """Client address for rate limits and logs. Behind TRUSTED_PROXY_HOPS proxies the
+    client is the entry that many hops from the RIGHT of X-Forwarded-For (each proxy
+    appends what it saw); the leftmost entries are whatever the client sent."""
+    peer = request.client.host if request.client else "unknown"
+    hops = request.app.state.settings.trusted_proxy_hops
+    xff = ",".join(request.headers.getlist("x-forwarded-for"))
+    entries = [e.strip() for e in xff.split(",") if e.strip()]
+    if hops <= 0 or not entries:
+        return peer
+    candidate = entries[-min(hops, len(entries))]
+    try:
+        return str(ipaddress.ip_address(candidate))
+    except ValueError:
+        return peer  # garbage never becomes a rate-limit key
+
+
 def rate_limit(bucket: str):
     async def dep(request: Request) -> None:
         st = request.app.state
-        ip = request.client.host if request.client else "unknown"
+        ip = client_ip(request)
         limit = st.settings.ai_rate_limit_per_minute
         if await st.store.incr_window(f"rl:{bucket}:{ip}", 60) > limit:
             raise ApiError(429, "rate_limited", f"too many requests: max {limit}/min for {bucket}",
@@ -131,8 +156,8 @@ async def mechanism_view(request: Request, mech_id: str) -> Response:
 
 
 @router.get("/paths")
-async def paths(request: Request, from_: Annotated[str, Query(alias="from", min_length=1)],
-                to: str | None = None, kind: PathKind | None = None, limit: int = 10) -> Response:
+async def paths(request: Request, from_: Annotated[str, Query(alias="from", min_length=1, max_length=MAX_ID)],
+                to: Annotated[str | None, Query(max_length=MAX_ID)] = None, kind: PathKind | None = None, limit: int = 10) -> Response:
     return await _cached_get(request, f"node {from_}", lambda: request.app.state.data.paths(
         from_, to or None, kind, _clamp(limit, 1, 50)))
 
@@ -150,14 +175,14 @@ async def cluster(request: Request, cluster_id: str) -> Response:
 # ---- AI ---------------------------------------------------------------------------
 
 class ExplainRequest(BaseModel):
-    edge_ids: list[str] = Field(min_length=1, max_length=8)
+    edge_ids: list[Id] = Field(min_length=1, max_length=8)
     audience: Literal["family", "expert"]
 
 
 class OutreachRequest(BaseModel):
-    disease_id: str = Field(min_length=1)
-    target_id: str = Field(min_length=1)
-    edge_ids: list[str] = Field(min_length=1, max_length=12)
+    disease_id: Id
+    target_id: Id
+    edge_ids: list[Id] = Field(min_length=1, max_length=12)
 
 
 NO_STORE = {"Cache-Control": "no-store"}
@@ -178,7 +203,7 @@ async def outreach_draft(request: Request, body: OutreachRequest, response: Resp
 # ---- jobs -------------------------------------------------------------------------
 
 class GapSearchRequest(BaseModel):
-    disease_id: str = Field(min_length=1)
+    disease_id: Id
 
 
 @router.post("/gap-search", status_code=202, dependencies=[rate_limit("jobs")])
@@ -195,7 +220,10 @@ async def gap_search(request: Request, body: GapSearchRequest, response: Respons
     await jobs.save(st.store, st.settings, jobs.status(job_id, "queued"))
     payload = {"kind": "gap_search", "job_id": job_id, "disease_id": body.disease_id, "label": n["node"]["label"]}
     if st.store.redis is not None:
-        await st.store.redis.lpush(jobs.QUEUE, json.dumps(payload))
+        try:
+            await st.store.redis.lpush(jobs.QUEUE, json.dumps(payload))
+        except RedisError as exc:
+            raise unavailable("job queue unavailable") from exc
     else:  # dev without Redis: run in this process after the response is sent
         background.add_task(jobs.run_gap_search, st.settings, st.store, job_id, body.disease_id, payload["label"])
     return {"job_id": job_id}
@@ -217,7 +245,7 @@ async def job(request: Request, job_id: str, response: Response) -> dict:
 # ---- submissions ------------------------------------------------------------------
 
 class SubmissionRequest(BaseModel):
-    node_id: str | None = None
+    node_id: str | None = Field(default=None, max_length=MAX_ID)
     kind: Literal["missing_group", "missing_asset", "correction", "new_evidence", "other"]
     url: str | None = Field(default=None, max_length=2000)
     note: str = Field(min_length=1, max_length=2000)
@@ -230,8 +258,8 @@ async def submit(request: Request, body: SubmissionRequest, response: Response) 
     response.headers.update(NO_STORE)
     if not st.settings.uses_db("submissions") or st.data.db is None:
         return {"id": str(uuid.uuid4())}  # fixtures mode: accepted, not stored
-    node_id = body.node_id
-    if node_id and await st.data.db.scalar("select 1 from nodes where id = %s", (node_id,)) is None:
+    node_id = (body.node_id or "").strip() or None  # "" from an empty form select = no node
+    if node_id is not None and await st.data.db.scalar("select 1 from nodes where id = %s", (node_id,)) is None:
         raise bad_request(f"unknown node_id {node_id}")
     new_id = await st.data.db.scalar(
         "insert into submissions(node_id, kind, url, note, contact) values (%s,%s,%s,%s,%s) returning id::text",

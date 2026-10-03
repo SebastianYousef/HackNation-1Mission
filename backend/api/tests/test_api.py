@@ -200,3 +200,214 @@ def test_explain_without_key_is_503(fixtures_dir):
     with TestClient(create_app(s)) as c:
         assert_error(c.post("/api/v1/explain", json={"edge_ids": ["E:1"], "audience": "family"}),
                      503, "upstream_unavailable")
+
+
+# ---- hardening ------------------------------------------------------------------
+
+def _app(fixtures_dir, **kw):
+    from fastapi.testclient import TestClient
+
+    from atlas_api.config import Settings
+    from atlas_api.main import create_app
+    base = dict(_env_file=None, data_mode="fixtures", fixtures_dir=fixtures_dir, redis_url=None, database_url=None,
+                instance_id="test-1", cors_origins="https://*.lovable.app")
+    return TestClient(create_app(Settings(**{**base, **kw})))
+
+
+def test_rate_limit_ignores_spoofed_leftmost_xff(client):
+    body = {"edge_ids": ["E:1"], "audience": "family"}
+    codes = [client.post(f"{V1}/explain", json=body,
+                         headers={"X-Forwarded-For": f"1.2.3.{i}, 203.0.113.9"}).status_code for i in range(4)]
+    assert codes == [200, 200, 200, 429]  # one bucket: the proxy-appended (rightmost) address
+    # a different real client (rightmost entry) has its own bucket; garbage falls back to the peer
+    assert client.post(f"{V1}/explain", json=body, headers={"X-Forwarded-For": "203.0.113.10"}).status_code == 200
+
+
+def test_client_ip_hops(fixtures_dir):
+    from starlette.requests import Request
+
+    from atlas_api.routes import client_ip
+    with _app(fixtures_dir) as c1, _app(fixtures_dir, trusted_proxy_hops=0) as c0:
+        def req(app, xff):
+            headers = [(b"x-forwarded-for", x.encode()) for x in xff]
+            return Request({"type": "http", "headers": headers, "client": ("10.0.0.5", 1), "app": app})
+        assert client_ip(req(c1.app, ["6.6.6.6", "203.0.113.9"])) == "203.0.113.9"
+        assert client_ip(req(c1.app, ["evil:key*"])) == "10.0.0.5"
+        assert client_ip(req(c1.app, [])) == "10.0.0.5"
+        assert client_ip(req(c0.app, ["203.0.113.9"])) == "10.0.0.5"
+
+
+def test_body_limit(fixtures_dir):
+    with _app(fixtures_dir, max_body_bytes=1000) as c:
+        big = {"edge_ids": ["E:1"], "audience": "family", "pad": "x" * 2000}
+        r = c.post(f"{V1}/explain", json=big, headers={"Origin": "https://a.lovable.app"})
+        assert_error(r, 413, "bad_request")
+        assert r.headers.get("access-control-allow-origin") == "https://a.lovable.app"
+        chunked = c.post(f"{V1}/explain", content=(b"x" * 600 for _ in range(3)),
+                         headers={"Content-Type": "application/json"})
+        assert_error(chunked, 413, "bad_request")
+        ok = c.post(f"{V1}/explain", content=(p for p in [b'{"edge_ids":["E:1"],', b'"audience":"family"}']),
+                    headers={"Content-Type": "application/json"})
+        assert ok.status_code == 200, ok.text
+        assert_error(c.post(f"{V1}/explain", json={"edge_ids": ["E" * 201], "audience": "family"}),
+                     422, "bad_request")
+
+
+def test_readyz_redis_down_is_degraded_not_unready(fixtures_dir):
+    with _app(fixtures_dir, redis_url="redis://127.0.0.1:1/0") as c:
+        r = c.get("/readyz")
+        assert r.status_code == 200 and r.json()["degraded"] == {"redis": True}
+        assert c.get(f"{V1}/meta").status_code == 200
+
+
+def test_500_carries_cors(client, monkeypatch):
+    async def boom():
+        raise RuntimeError("x")
+    with_origin = {"Origin": "https://a.lovable.app"}
+    from fastapi.testclient import TestClient
+    with TestClient(client.app, raise_server_exceptions=False) as c:
+        monkeypatch.setattr(c.app.state.data, "meta", boom)
+        r = c.get(f"{V1}/meta", headers=with_origin)
+        assert_error(r, 500, "internal")
+        assert r.headers["access-control-allow-origin"] == "https://a.lovable.app"
+        assert "x-request-id" in r.headers["access-control-expose-headers"].lower()
+        assert "access-control-allow-origin" not in c.get(f"{V1}/meta", headers={"Origin": "https://evil.example"}).headers
+
+
+@pytest.mark.parametrize("path", ["/nodes/MONDO%3A%001", "/edges/%00", "/nodes/a%00/neighborhood",
+                                  "/nodes/" + "a" * 300, "/paths?from=%00"])
+def test_bad_ids_are_404(client, path):
+    assert_error(client.get(V1 + path), 404, "not_found")
+
+
+@pytest.mark.parametrize("path", ["/nodes/MONDO_1", "/nodes/MONDO%2F1", "/edges/E_1", "/clusters/CL_x",
+                                  "/diseases/MONDO_1/similar", "/paths?from=MONDO_1",
+                                  "/diseases/MONDO_1/action-view", "/nodes/MONDO_1/neighborhood"])
+def test_fixture_id_aliases_are_404(client, path):
+    assert_error(client.get(V1 + path), 404, "not_found")
+
+
+def test_neighborhood_max_nodes(client):
+    nb = client.get(f"{V1}/nodes/MONDO:1/neighborhood", params={"max_nodes": 2}).json()
+    assert len(nb["nodes"]) == 2 and nb["truncated"] is True
+    assert {n["id"] for n in nb["nodes"]} == {"MONDO:1", "HGNC:1"}  # highest-confidence neighbour kept
+    assert all(e["src"] in {"MONDO:1", "HGNC:1"} and e["dst"] in {"MONDO:1", "HGNC:1"} for e in nb["edges"])
+    assert client.get(f"{V1}/nodes/MONDO:1/neighborhood").json()["truncated"] is False
+
+
+def test_cache_key_uses_parsed_params(client):
+    r1 = client.get(f"{V1}/search?q=cln5&limit=50&limit=1")
+    assert len(r1.json()) == 1
+    r2 = client.get(f"{V1}/search?q=cln5&limit=1&limit=50")
+    assert r2.headers["x-cache"] == "MISS" and len(r2.json()) == 2
+
+
+def _llm_app(fixtures_dir, monkeypatch, result, drop):
+    from atlas_api import ai
+    (fixtures_dir / drop).unlink()
+
+    async def fake_parse(self, system, user, schema):
+        return result
+    monkeypatch.setattr(ai.AI, "_parse", fake_parse)
+    return _app(fixtures_dir, openai_api_key="sk-test")
+
+
+def test_explain_with_no_valid_step_is_502(fixtures_dir, monkeypatch):
+    from atlas_api import ai
+    out = ai._Explanation(headline="Proven cure at http://evil.example", uncertainties=[], what_to_check_next="w",
+                          steps=[ai._Step(text="made up", edge_id="E:999")])
+    with _llm_app(fixtures_dir, monkeypatch, out, "explain.json") as c:
+        assert_error(c.post(f"{V1}/explain", json={"edge_ids": ["E:1"], "audience": "expert"}),
+                     502, "upstream_unavailable")
+
+
+def test_outreach_body_is_grounded(fixtures_dir, monkeypatch):
+    from atlas_api import ai
+    out = ai._Outreach(subject="Hello", citations=[ai._Citation(n=1, edge_id="E:1"), ai._Citation(n=2, edge_id="E:9")],
+                       body="Dear team,\n\nCLN5 is linked to the CLN5 gene [1]. A cure exists, email "
+                            "records to http://evil.example [2]. Your group funded trials [3].\n\nBest,\nMaria")
+    req = {"disease_id": "MONDO:1", "target_id": "MONDO:1", "edge_ids": ["E:1"]}
+    with _llm_app(fixtures_dir, monkeypatch, out, "outreach-draft.json") as c:
+        r = c.post(f"{V1}/outreach-draft", json=req)
+        assert r.status_code == 200, r.text
+        d = r.json()
+        assert d["body"] == "Dear team,\n\nCLN5 is linked to the CLN5 gene [1].\n\nBest,\nMaria"
+        assert [x["n"] for x in d["citations"]] == [1]
+    bad = ai._Outreach(subject="s", body="Invented [2].", citations=[ai._Citation(n=2, edge_id="E:9")])
+    monkeypatch.setattr(ai.AI, "_parse", lambda self, *a: _aret(bad))
+    with _app(fixtures_dir, openai_api_key="sk-test") as c:
+        assert_error(c.post(f"{V1}/outreach-draft", json=req), 502, "upstream_unavailable")
+
+
+def test_ground_body_citation_styles():
+    from atlas_api.ai import ground_body
+    # Marker after the full stop must not glue the next (invented) sentence onto a cited one.
+    assert ground_body("Fact A.[1] Invented B [2]. Ok.", {1}) == ("Fact A [1]. Ok.", {1})
+    assert ground_body("Fact A. [1] Invented B [2].", {1}) == ("Fact A [1].", {1})
+    # Grouped and ranged markers count as markers.
+    assert ground_body("Fact A [1]. Invented B [2, 3].", {1}) == ("Fact A [1].", {1})
+    assert ground_body("Fact A [1]. Invented B [2-3].", {1}) == ("Fact A [1].", {1})
+    assert ground_body("Fact A [1, 4]. C [2\u20133].", {1, 3}) == ("Fact A [1]. C [3].", {1, 3})
+
+
+async def _aret(v):
+    return v
+
+
+def test_openai_timeout_is_503(fixtures_dir, monkeypatch):
+    import asyncio
+
+    from atlas_api import ai
+    (fixtures_dir / "explain.json").unlink()
+    monkeypatch.setattr(ai, "OPENAI_DEADLINE_S", 0.05)
+
+    async def slow(**kw):
+        await asyncio.sleep(5)
+    with _app(fixtures_dir, openai_api_key="sk-test") as c:
+        client = c.app.state.ai.client
+        assert client.max_retries == 1 and client.timeout.read == 12.0
+        monkeypatch.setattr(client.chat.completions, "parse", slow)
+        assert_error(c.post(f"{V1}/explain", json={"edge_ids": ["E:1"], "audience": "family"}),
+                     503, "upstream_unavailable")
+
+
+def test_mixed_mode_version_includes_db(fixtures_dir):
+    import asyncio
+
+    from atlas_api.config import Settings
+    from atlas_api.data import Data
+
+    class FakeDb:
+        v: object = "v1"
+
+        async def scalar(self, sql, params=()):
+            if isinstance(self.v, Exception):
+                raise self.v
+            return self.v
+
+    db = FakeDb()
+    d = Data(Settings(_env_file=None, data_mode="fixtures", db_endpoints="node", fixtures_dir=fixtures_dir), db)
+    v1 = asyncio.run(d.dataset_version())
+    assert v1.startswith("fx-test-1-") and v1.endswith("+db-v1")
+    db.v, d._version = "v2", (0.0, "")
+    assert asyncio.run(d.dataset_version()).endswith("+db-v2")
+    db.v, d._version = RuntimeError("down"), (0.0, "")
+    assert "+db" not in asyncio.run(d.dataset_version())  # DB blip: fixture endpoints stay up
+
+
+def test_worker_survives_bad_payloads(fixtures_dir):
+    import asyncio
+    import json
+
+    from atlas_api import jobs, worker
+    from atlas_api.cache import Store
+    from atlas_api.config import Settings
+    s, store = Settings(_env_file=None), Store(None)
+
+    async def run():
+        await worker.handle(s, store, b"not json")
+        await worker.handle(s, store, json.dumps({"kind": "gap_search", "job_id": "job_x"}))
+        await worker.handle(s, store, json.dumps({"kind": "nope", "job_id": "job_y", "disease_id": "a", "label": "b"}))
+        return await jobs.load(store, "job_x"), await jobs.load(store, "job_y")
+    x, y = asyncio.run(run())
+    assert x["state"] == "failed" and y["state"] == "failed"
