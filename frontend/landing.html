@@ -2,7 +2,7 @@
 <title>One Mission</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: alternating night (graph, journey, 10x, CTA) and paper (reader, evidence, sources) bands on a 1200px column; meaning is carried by three status colors and ten node-type hues, nothing else. */
 :root{
@@ -13,7 +13,7 @@
   --ev-n:#38C69B; --hy-n:#F0B44A; --un-n:#A2A8C2;
   --f-display:"Newsreader", "Iowan Old Style", Georgia, serif;
   --f-body:"Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --f-mono:var(--f-body);
   --r:6px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
@@ -68,7 +68,7 @@ p{margin:0}
 .btn-ghost{border-color:var(--night-rule);color:var(--night-ink)}
 .btn-ghost:hover{border-color:var(--night-ink-2)}
 .paper .btn-primary,.btn-primary.on-paper{background:var(--ink);color:var(--paper)}
-.btn .arr{font-family:var(--f-mono);font-weight:400}
+.btn .arr{font-family:var(--f-body);font-weight:400}
 
 /* NAV */
 .nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--night) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--night-rule);color:var(--night-ink)}
@@ -136,7 +136,7 @@ p{margin:0}
 .rstep:last-child{padding-bottom:0}
 .rstep::before{content:"";position:absolute;left:23px;top:52px;bottom:6px;width:1px;background:var(--rule)}
 .rstep:last-child::before{display:none}
-.rnum{width:48px;height:48px;border-radius:50%;border:1px solid var(--rule);display:grid;place-items:center;font-family:var(--f-mono);font-size:13px;background:var(--paper);color:var(--ink-2)}
+.rnum{width:48px;height:48px;border-radius:50%;border:1px solid var(--rule);display:grid;place-items:center;font-family:var(--f-body);font-size:13px;background:var(--paper);color:var(--ink-2)}
 .rstep.lead .rnum{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .rbody{min-width:0;padding-top:8px}
 .rbody h3{font-size:clamp(24px,2.6vw,30px);margin-bottom:6px}
@@ -174,7 +174,7 @@ details.sci > div{margin-top:10px;padding-left:14px;border-left:2px solid var(--
 .kv .k{font-family:var(--f-body);font-size:12.5px;letter-spacing:.005em;color:var(--ink-3);padding-top:11px;font-weight:500}
 .kv .muted{color:var(--ink-3)}
 @media (max-width:560px){.kv{grid-template-columns:1fr}.kv .k{border-top:1px solid var(--rule);padding-bottom:0}.kv .k + div{border-top:0;padding-top:2px}}
-.conf{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums}
+.conf{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-body);font-size:12px;font-variant-numeric:tabular-nums}
 .conf .bar{width:90px;height:4px;border-radius:2px;background:var(--rule);overflow:hidden}
 .conf .bar i{display:block;height:100%;background:currentColor}
 .night .conf .bar{background:var(--night-rule)}
@@ -252,7 +252,7 @@ table.ev td{padding:10px;border-bottom:1px solid var(--night-rule);vertical-alig
 table.ev td:first-child{color:var(--night-ink)}
 table.ev tr{cursor:pointer}
 table.ev tbody tr:hover td{background:var(--night-3)}
-table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-size:12px;white-space:nowrap}
+table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-body);font-size:12px;white-space:nowrap}
 
 /* JOURNEY */
 .journey{position:relative}
@@ -290,7 +290,7 @@ table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-s
 .tenx h2{max-width:20ch}
 .race{border:1px solid var(--night-rule);border-radius:var(--r);background:var(--night);overflow:hidden}
 .race-top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--night-rule)}
-.race-top .counts{display:flex;gap:28px;font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:var(--night-ink-2);font-variant-numeric:tabular-nums}
+.race-top .counts{display:flex;gap:28px;font-family:var(--f-body);font-size:12px;letter-spacing:.005em;color:var(--night-ink-2);font-variant-numeric:tabular-nums}
 .race-top .counts b{font-size:22px;font-weight:500;color:var(--night-ink);margin-left:8px;letter-spacing:0}
 .race-svg{overflow-x:auto}
 .race-svg svg{display:block;width:100%;min-width:760px;height:auto}
@@ -302,7 +302,7 @@ table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-s
 .flow ol{list-style:none;margin:0;padding:0;display:grid;gap:0}
 .flow li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--night-rule);font-size:15px}
 .flow li:first-child{border-top:0}
-.flow li .m{font-family:var(--f-mono);font-size:12px;color:var(--night-ink-2);font-variant-numeric:tabular-nums}
+.flow li .m{font-family:var(--f-body);font-size:12px;color:var(--night-ink-2);font-variant-numeric:tabular-nums}
 .flow li i{width:10px;height:10px;border-radius:2px}
 @media (max-width:720px){.flows{grid-template-columns:1fr}}
 .validate{margin-top:72px;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px}
@@ -313,7 +313,7 @@ table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-s
 .vlist{list-style:none;margin:0;padding:0;counter-reset:v}
 .vlist li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:6px 14px;padding:18px 0;border-top:1px solid var(--night-rule)}
 .vlist li:last-child{border-bottom:1px solid var(--night-rule)}
-.vlist .n{font-family:var(--f-mono);font-size:13px;color:var(--night-ink-2);padding-top:2px}
+.vlist .n{font-family:var(--f-body);font-size:13px;color:var(--night-ink-2);padding-top:2px}
 .vlist .q{font-size:17px;font-weight:500}
 .vlist .d{grid-column:2/-1;font-size:14px;color:var(--night-ink-2)}
 @media (max-width:860px){.validate{grid-template-columns:1fr;gap:28px}}
@@ -337,9 +337,9 @@ table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-mono);font-s
 .chain{display:grid;border-top:1px solid var(--rule)}
 .chain-row{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.1fr) 20px auto;gap:10px;align-items:center;padding:16px 0;border:0;border-bottom:1px solid var(--rule);background:none;text-align:left;width:100%}
 .chain-row:hover .rel{text-decoration:underline;text-underline-offset:3px}
-.chain-row .src{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);min-width:0}
+.chain-row .src{font-family:var(--f-body);font-size:12px;color:var(--ink-2);min-width:0}
 .chain-row .rel{font-size:15px;min-width:0}
-.chain-row .ar{color:var(--ink-3);font-family:var(--f-mono)}
+.chain-row .ar{color:var(--ink-3);font-family:var(--f-body)}
 .chain-head{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.1fr) 20px auto;gap:10px;padding:0 0 8px}
 .chain-head span{font-family:var(--f-body);font-size:12.5px;letter-spacing:.005em;color:var(--ink-3);font-weight:500}
 @media (max-width:560px){.chain-row,.chain-head{grid-template-columns:minmax(0,1fr) auto}.chain-row .ar,.chain-head .ar{display:none}.chain-row .src{grid-column:1/-1}.chain-head span:nth-child(3){display:none}}
@@ -390,11 +390,11 @@ footer p{max-width:70ch}
 .drawer{position:fixed;z-index:61;top:0;right:0;bottom:0;width:min(480px,100%);background:var(--paper);color:var(--ink);border-left:1px solid var(--rule);display:flex;flex-direction:column;box-shadow:-30px 0 60px -30px rgba(0,0,0,.4);animation:slidein .25s ease;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @keyframes slidein{from{transform:translateX(24px);opacity:.4}to{transform:none;opacity:1}}
 .drawer-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--rule)}
-.drawer-head button{border:1px solid var(--rule);background:none;border-radius:999px;padding:4px 12px;font-family:var(--f-mono);font-size:12px}
+.drawer-head button{border:1px solid var(--rule);background:none;border-radius:999px;padding:4px 12px;font-family:var(--f-body);font-size:12px}
 .drawer-body{overflow:auto;padding:22px 20px 32px;display:grid;gap:18px;align-content:start}
 .dchain{display:grid;gap:6px}
 .dchain .a,.dchain .b{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-size:22px;line-height:1.2}
-.dchain .r{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:var(--ink-2);padding-left:17px;border-left:2px solid var(--rule);margin-left:4px}
+.dchain .r{font-family:var(--f-body);font-size:12px;letter-spacing:.005em;color:var(--ink-2);padding-left:17px;border-left:2px solid var(--rule);margin-left:4px}
 .drawer .kv{padding:0}
 .drawer .why-plain{padding:0}
 
@@ -458,7 +458,6 @@ footer p{max-width:70ch}
     <div class="atlas-top">
       <div class="eyebrow">The Atlas</div>
       <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <span class="sample-tag">Sample data · demo</span>
         <div class="seg" role="group" aria-label="View">
           <button data-mode="reader" aria-pressed="true">Reader</button>
           <button data-mode="researcher" aria-pressed="false">Researcher</button>
@@ -524,7 +523,7 @@ footer p{max-width:70ch}
 <section class="night band journey" id="journey" aria-labelledby="journeyTitle">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow">Worked example · Leigh syndrome · sample data</div>
+      <div class="eyebrow">Worked example: Leigh syndrome (sample data)</div>
       <h2 id="journeyTitle">One connected journey</h2>
       <p class="lede">Six steps from a diagnosis to an experiment someone could run. Select a step to see why it connects to the one before it, what it rests on, and what could break it.</p>
     </div>
@@ -547,8 +546,8 @@ footer p{max-width:70ch}
       <div class="race-top">
         <button class="btn btn-ghost" id="playBtn" style="padding:8px 16px;font-size:14px">▶ Replay the timeline</button>
         <div class="counts" aria-live="polite">
-          <span>Decisions · Today <b id="cToday">1</b></span>
-          <span>Decisions · One Mission <b id="cOM">10</b></span>
+          <span>Decisions today <b id="cToday">1</b></span>
+          <span>Decisions with One Mission <b id="cOM">10</b></span>
           <span>Month <b id="cMonth">36</b></span>
         </div>
       </div>
@@ -580,7 +579,7 @@ footer p{max-width:70ch}
 <section class="band" id="communities" aria-labelledby="commTitle">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow">Communities · sample data</div>
+      <div class="eyebrow">Communities (sample data)</div>
       <h2 id="commTitle">The people already on the path.</h2>
       <p class="lede">Patient organizations and family communities hold knowledge no database has: lived experience, registries, samples and the trust to bring families into research. One Mission shows which communities connect to a disease, and why, including related communities that share a gene or mechanism.</p>
     </div>
@@ -700,9 +699,9 @@ leigh:{
     ['o_family','org','Leigh syndrome family network (sample)','A caregiver group sharing experience and supporting research.','Sample placeholder organization.','org'],
     ['c_narp','org','MT-ATP6 / NARP family group (sample)','Families affected by MT-ATP6 changes, including NARP and Leigh syndrome.','Sample placeholder community.','community'],
     ['c_melas','org','MELAS patient community (sample)','A community for a related mitochondrial disease.','Sample placeholder community.','community'],
-    ['r_bio','researcher','Lab A · Mitochondrial bioenergetics (sample)','Studies how cells make energy and what goes wrong.','Sample placeholder lab.','researcher'],
-    ['r_ipsc','researcher','Lab B · iPSC neuron models (sample)','Grows nerve cells from patients’ own cells to study disease in a dish.','Sample placeholder lab.','researcher'],
-    ['r_clinic','researcher','Clinic C · Pediatric mitochondrial medicine (sample)','Doctors who diagnose and care for children with mitochondrial disease.','Sample placeholder clinic.','clinician'],
+    ['r_bio','researcher','Lab A: Mitochondrial bioenergetics (sample)','Studies how cells make energy and what goes wrong.','Sample placeholder lab.','researcher'],
+    ['r_ipsc','researcher','Lab B: iPSC neuron models (sample)','Grows nerve cells from patients’ own cells to study disease in a dish.','Sample placeholder lab.','researcher'],
+    ['r_clinic','researcher','Clinic C: Pediatric mitochondrial medicine (sample)','Doctors who diagnose and care for children with mitochondrial disease.','Sample placeholder clinic.','clinician'],
     ['pub_spec','publication','Review: MT-ATP6 spectrum from NARP to MILS (example record)','A paper summarizing how one gene causes a range of conditions.','Example record; not a real citation.'],
     ['pub_mtor','publication','Model study: mTOR inhibition in Ndufs4 knockout mice (example record)','A lab study testing a drug in mice.','Example record; not a real citation.'],
     ['s_nhs','study','Natural history study, primary mitochondrial disease (sample)','Follows people over time to learn how the disease changes.','Sample placeholder study.','nhs'],
@@ -713,48 +712,48 @@ leigh:{
     ['a_ipsc','asset','MT-ATP6 patient iPSC neuron lines (sample)','Patient-derived nerve cells carrying the MT-ATP6 change.','Sample placeholder asset.','model']
   ],
   edges:[
-    ['leigh','g_surf1','is caused by variants in','E',.95,'OMIM · ClinVar','2024','Biallelic SURF1 variants are among the most frequently reported nuclear causes of Leigh syndrome.','Changes in this gene are a well-documented cause.','None found in the sample index.'],
-    ['leigh','g_atp6','is caused by variants in','E',.93,'OMIM · ClinVar','2024','Pathogenic MT-ATP6 variants cause maternally inherited Leigh syndrome (MILS).','Changes in this gene are a well-documented cause, passed down through the mother.','None found in the sample index.'],
-    ['leigh','g_ndufs4','is caused by variants in','E',.9,'OMIM · ClinVar','2023','Biallelic NDUFS4 variants cause complex I deficiency presenting as Leigh syndrome.','A less common but documented cause.','None found in the sample index.'],
+    ['leigh','g_surf1','is caused by variants in','E',.95,'OMIM, ClinVar','2024','Biallelic SURF1 variants are among the most frequently reported nuclear causes of Leigh syndrome.','Changes in this gene are a well-documented cause.','None found in the sample index.'],
+    ['leigh','g_atp6','is caused by variants in','E',.93,'OMIM, ClinVar','2024','Pathogenic MT-ATP6 variants cause maternally inherited Leigh syndrome (MILS).','Changes in this gene are a well-documented cause, passed down through the mother.','None found in the sample index.'],
+    ['leigh','g_ndufs4','is caused by variants in','E',.9,'OMIM, ClinVar','2023','Biallelic NDUFS4 variants cause complex I deficiency presenting as Leigh syndrome.','A less common but documented cause.','None found in the sample index.'],
     ['g_atp6','v_8993','has pathogenic variant','E',.95,'ClinVar','2024','Classified pathogenic by multiple submitters.','This specific change is known to cause disease.','None found in the sample index.'],
     ['v_8993','leigh','at high heteroplasmy is associated with','E',.88,'PubMed (review)','2023','High heteroplasmy levels are typically associated with MILS; lower levels with NARP.','When most mitochondria carry the change, it tends to cause Leigh syndrome.','Thresholds vary between tissues and individuals; blood levels may not reflect brain levels.'],
     ['v_8993','d_narp','at lower heteroplasmy is associated with','E',.86,'PubMed (review)','2023','Lower heteroplasmy levels are typically associated with NARP.','When fewer mitochondria carry the change, it tends to cause NARP.','Overlap between groups is substantial; heteroplasmy alone does not predict outcome.'],
-    ['leigh','d_narp','shares causal variants with','E',.87,'OMIM · PubMed','2024','NARP and MILS form a clinical spectrum driven by the same MT-ATP6 variants.','Same gene change, different severity. Families can include both.','Clinical courses differ markedly; findings in one may not transfer to the other.','variant effect'],
-    ['leigh','d_melas','shares mechanism with','H',.52,'MONDO · HPO (inferred)','2025','Both involve OXPHOS deficiency and overlapping features such as lactic acidosis and brain lesions.','Both are energy-production diseases, but usually caused by different genes.','MELAS is mainly linked to MT-TL1; shared downstream biology does not imply shared treatment response.','mechanism'],
+    ['leigh','d_narp','shares causal variants with','E',.87,'OMIM, PubMed','2024','NARP and MILS form a clinical spectrum driven by the same MT-ATP6 variants.','Same gene change, different severity. Families can include both.','Clinical courses differ markedly; findings in one may not transfer to the other.','variant effect'],
+    ['leigh','d_melas','shares mechanism with','H',.52,'MONDO, HPO (inferred)','2025','Both involve OXPHOS deficiency and overlapping features such as lactic acidosis and brain lesions.','Both are energy-production diseases, but usually caused by different genes.','MELAS is mainly linked to MT-TL1; shared downstream biology does not imply shared treatment response.','mechanism'],
     ['g_surf1','m_c4','is required for','E',.92,'PubMed','2022','SURF1 loss reduces assembled complex IV.','Without it, complex IV is not built properly.','Some residual complex IV activity remains in many patients.'],
     ['g_atp6','m_c5','encodes subunit of','E',.95,'PubMed','2022','MT-ATP6 encodes subunit a of ATP synthase.','This gene is a building block of the ATP machine.','None found in the sample index.'],
     ['g_ndufs4','m_oxphos','loss reduces','E',.9,'PubMed','2022','NDUFS4 loss destabilizes complex I.','Without it, the first step of the energy chain falters.','None found in the sample index.'],
     ['m_c4','m_oxphos','contributes to','E',.9,'PubMed','2021','Complex IV deficiency impairs oxidative phosphorylation.','A faulty machine slows the whole line.','None found in the sample index.'],
     ['m_c5','m_oxphos','contributes to','E',.9,'PubMed','2021','Complex V dysfunction reduces ATP output.','A faulty final step slows energy output.','None found in the sample index.'],
-    ['leigh','m_oxphos','has core mechanism','E',.94,'OMIM · PubMed','2024','Leigh syndrome is defined by primary defects in mitochondrial energy production.','At its core, this disease is about cells running short of energy.','None found in the sample index.'],
+    ['leigh','m_oxphos','has core mechanism','E',.94,'OMIM, PubMed','2024','Leigh syndrome is defined by primary defects in mitochondrial energy production.','At its core, this disease is about cells running short of energy.','None found in the sample index.'],
     ['leigh','m_mtor','may be modulated through','H',.45,'PubMed (mouse model)','2023','Rapamycin extended survival and delayed neurological decline in Ndufs4 knockout mice.','Turning down this signal helped mice. Whether it helps people is not known.','Evidence is from an animal model only. Benefit in people with Leigh syndrome has not been established, and effects may differ by genetic cause.'],
     ['m_mtor','a_mouse','was tested in','E',.8,'PubMed','2023','mTOR inhibition studied in Ndufs4 knockout mice.','This idea has been tried in the mouse model.','Results vary with dosing and timing across studies.'],
-    ['pub_mtor','a_mouse','reports results in','E',.9,'PubMed (example record)','2023','Example publication describing model outcomes.','This paper describes what happened in the mice.','—'],
+    ['pub_mtor','a_mouse','reports results in','E',.9,'PubMed (example record)','2023','Example publication describing model outcomes.','This paper describes what happened in the mice.',''],
     ['pub_mtor','leigh','is relevant to','E',.7,'PubMed (example record)','2023','Model study framed around Leigh syndrome.','This paper is about a Leigh-like disease in mice.','Model relevance to human disease is partial.'],
-    ['pub_spec','leigh','describes','E',.9,'PubMed (example record)','2023','Review covering MILS clinical features.','This paper explains Leigh syndrome caused by MT-ATP6.','—'],
-    ['pub_spec','d_narp','describes','E',.9,'PubMed (example record)','2023','Review covering NARP clinical features.','The same paper explains NARP.','—'],
-    ['leigh','p_regress','presents with','E',.9,'HPO · Orphanet','2024','Frequently annotated phenotype.','Many children lose skills they had learned.','Not all patients show regression; some present with slower development from the start.'],
-    ['leigh','p_lactic','presents with','E',.85,'HPO · Orphanet','2024','Frequently annotated phenotype.','Blood tests often show a sign of energy shortage.','Lactate can be normal in some patients, so a normal result does not rule out the condition.'],
-    ['leigh','p_hypo','presents with','E',.85,'HPO · Orphanet','2024','Frequently annotated phenotype.','Low muscle tone is common.','Non-specific; seen in many conditions.'],
-    ['leigh','p_mri','presents with','E',.92,'HPO · Orphanet','2024','Characteristic neuroimaging finding used in diagnostic criteria.','Brain scans usually show a typical pattern.','Lesions may be absent early in the disease.'],
-    ['o_found','leigh','supports families with','E',.8,'NORD · Global Genes (sample directory)','2025','Listed in patient organization directories.','This organization helps families living with Leigh syndrome.','—'],
-    ['o_family','leigh','is a community for','E',.8,'Global Genes (sample directory)','2025','Listed in patient organization directories.','Families affected by Leigh syndrome meet here.','—'],
-    ['c_narp','leigh','is a related community through shared MT-ATP6 variants','E',.72,'Orphanet · EURORDIS (sample)','2025','Group includes families with MILS and NARP.','Many of these families share the same gene change.','Membership overlap is estimated, not counted.'],
-    ['c_narp','d_narp','is a community for','E',.8,'EURORDIS (sample)','2025','Listed in patient organization directories.','Families affected by NARP meet here.','—'],
+    ['pub_spec','leigh','describes','E',.9,'PubMed (example record)','2023','Review covering MILS clinical features.','This paper explains Leigh syndrome caused by MT-ATP6.',''],
+    ['pub_spec','d_narp','describes','E',.9,'PubMed (example record)','2023','Review covering NARP clinical features.','The same paper explains NARP.',''],
+    ['leigh','p_regress','presents with','E',.9,'HPO, Orphanet','2024','Frequently annotated phenotype.','Many children lose skills they had learned.','Not all patients show regression; some present with slower development from the start.'],
+    ['leigh','p_lactic','presents with','E',.85,'HPO, Orphanet','2024','Frequently annotated phenotype.','Blood tests often show a sign of energy shortage.','Lactate can be normal in some patients, so a normal result does not rule out the condition.'],
+    ['leigh','p_hypo','presents with','E',.85,'HPO, Orphanet','2024','Frequently annotated phenotype.','Low muscle tone is common.','Non-specific; seen in many conditions.'],
+    ['leigh','p_mri','presents with','E',.92,'HPO, Orphanet','2024','Characteristic neuroimaging finding used in diagnostic criteria.','Brain scans usually show a typical pattern.','Lesions may be absent early in the disease.'],
+    ['o_found','leigh','supports families with','E',.8,'NORD, Global Genes (sample directory)','2025','Listed in patient organization directories.','This organization helps families living with Leigh syndrome.',''],
+    ['o_family','leigh','is a community for','E',.8,'Global Genes (sample directory)','2025','Listed in patient organization directories.','Families affected by Leigh syndrome meet here.',''],
+    ['c_narp','leigh','is a related community through shared MT-ATP6 variants','E',.72,'Orphanet, EURORDIS (sample)','2025','Group includes families with MILS and NARP.','Many of these families share the same gene change.','Membership overlap is estimated, not counted.'],
+    ['c_narp','d_narp','is a community for','E',.8,'EURORDIS (sample)','2025','Listed in patient organization directories.','Families affected by NARP meet here.',''],
     ['c_melas','leigh','is a related community through shared mechanism','H',.48,'Inferred from MONDO','2025','Connected through shared OXPHOS biology.','A community for a related energy disease.','Different main gene; overlap of research questions is unconfirmed.'],
-    ['r_bio','m_oxphos','studies','E',.75,'NIH RePORTER · PubMed (sample)','2025','Funded projects on OXPHOS biology.','This lab studies the energy problem behind the disease.','—'],
-    ['r_bio','leigh','publishes on','E',.7,'PubMed (sample)','2024','Publications mentioning Leigh syndrome.','This lab has written about Leigh syndrome.','—'],
-    ['r_ipsc','a_ipsc','maintains','E',.8,'NIH RePORTER (sample)','2025','Asset listed in funded project.','This lab already has MT-ATP6 patient cells.','—'],
+    ['r_bio','m_oxphos','studies','E',.75,'NIH RePORTER, PubMed (sample)','2025','Funded projects on OXPHOS biology.','This lab studies the energy problem behind the disease.',''],
+    ['r_bio','leigh','publishes on','E',.7,'PubMed (sample)','2024','Publications mentioning Leigh syndrome.','This lab has written about Leigh syndrome.',''],
+    ['r_ipsc','a_ipsc','maintains','E',.8,'NIH RePORTER (sample)','2025','Asset listed in funded project.','This lab already has MT-ATP6 patient cells.',''],
     ['r_ipsc','leigh','works on a related mechanism','H',.58,'Inferred from PubMed','2025','Lab works on MT-ATP6 models; no Leigh-specific project found in the sample index.','This lab works on the same gene, but not on Leigh syndrome directly.','No Leigh-specific funding or publications found.'],
-    ['r_clinic','leigh','treats patients with','E',.85,'Orphanet expert centre listing (sample)','2025','Listed expert centre.','These doctors see children with Leigh syndrome.','—'],
-    ['r_clinic','s_nhs','is a site for','E',.8,'ClinicalTrials.gov (sample)','2025','Listed study site.','This clinic takes part in the natural history study.','—'],
-    ['s_nhs','leigh','enrolls people with','E',.85,'ClinicalTrials.gov (sample)','2025','Eligibility includes Leigh syndrome.','This study follows people with Leigh syndrome over time.','—'],
+    ['r_clinic','leigh','treats patients with','E',.85,'Orphanet expert centre listing (sample)','2025','Listed expert centre.','These doctors see children with Leigh syndrome.',''],
+    ['r_clinic','s_nhs','is a site for','E',.8,'ClinicalTrials.gov (sample)','2025','Listed study site.','This clinic takes part in the natural history study.',''],
+    ['s_nhs','leigh','enrolls people with','E',.85,'ClinicalTrials.gov (sample)','2025','Eligibility includes Leigh syndrome.','This study follows people with Leigh syndrome over time.',''],
     ['s_trial','leigh','includes participants with','E',.7,'ClinicalTrials.gov','2025','Registered interventional studies in primary mitochondrial disease include some participants with Leigh syndrome.','Some treatment studies include people with Leigh syndrome.','Eligibility varies; many studies focus on adults or myopathy.'],
-    ['a_reg','leigh','collects data on','E',.8,'Orphanet (sample)','2025','Registry scope includes Leigh syndrome.','This registry already holds information about Leigh syndrome.','—'],
+    ['a_reg','leigh','collects data on','E',.8,'Orphanet (sample)','2025','Registry scope includes Leigh syndrome.','This registry already holds information about Leigh syndrome.',''],
     ['a_reg','d_narp','also collects data on','E',.75,'Orphanet (sample)','2025','Registry scope includes NARP.','The same registry also covers NARP.','Whether heteroplasmy is recorded is unknown.'],
     ['a_gdf','leigh','is a candidate biomarker for','H',.5,'PubMed','2024','GDF-15 and FGF-21 are elevated in many primary mitochondrial diseases.','These blood markers might help track Leigh syndrome, but this has not been shown.','Sensitivity is lower in some genetic subtypes and in children. Not validated for tracking Leigh syndrome progression.'],
     ['a_mouse','leigh','models','E',.85,'PubMed','2023','Ndufs4 knockout mice develop progressive neurological disease resembling Leigh syndrome.','This mouse develops a disease like Leigh syndrome.','Models a single genetic cause (complex I); may not represent MT-ATP6 or SURF1 disease.'],
-    ['a_ipsc','d_narp','models','E',.7,'PubMed (sample)','2024','Lines carry m.8993T>G at a range of heteroplasmy levels.','These cells carry the same change seen in NARP.','—'],
+    ['a_ipsc','d_narp','models','E',.7,'PubMed (sample)','2024','Lines carry m.8993T>G at a range of heteroplasmy levels.','These cells carry the same change seen in NARP.',''],
     ['a_ipsc','leigh','could model','H',.6,'PubMed','2024','Patient iPSC-derived neural cells carrying MT-ATP6 variants show bioenergetic defects in published work.','These cells might also be useful for Leigh syndrome research.','Neurons in a dish do not reproduce whole-brain disease or the timing of decline.']
   ],
   reuse:{a_reg:'Already covers NARP. Adding one shared biomarker field may be feasible.',a_ipsc:'Range of heteroplasmy levels could serve both MILS and NARP questions.',a_mouse:'Data from earlier studies could inform dose and timing.',a_gdf:'Assays are available; validation in children is needed.'}
@@ -785,9 +784,9 @@ dravet:{
     ['o_net','org','Dravet caregiver network (sample)','A caregiver group sharing practical support.','Sample placeholder organization.','org'],
     ['c_scn1a','org','SCN1A spectrum community (sample)','Families across conditions linked to SCN1A, including GEFS+.','Sample placeholder community.','community'],
     ['c_scn2a','org','SCN2A family community (sample)','Families affected by SCN2A-related conditions.','Sample placeholder community.','community'],
-    ['r_ephys','researcher','Lab D · Interneuron electrophysiology (sample)','Measures how brain cells fire, to understand seizures.','Sample placeholder lab.','researcher'],
-    ['r_aso','researcher','Lab E · Antisense therapy development (sample)','Develops medicines that adjust how much of a protein a cell makes.','Sample placeholder lab.','researcher'],
-    ['r_clinic','researcher','Clinic F · Pediatric epilepsy center (sample)','Doctors who diagnose and treat children with severe epilepsy.','Sample placeholder clinic.','clinician'],
+    ['r_ephys','researcher','Lab D: Interneuron electrophysiology (sample)','Measures how brain cells fire, to understand seizures.','Sample placeholder lab.','researcher'],
+    ['r_aso','researcher','Lab E: Antisense therapy development (sample)','Develops medicines that adjust how much of a protein a cell makes.','Sample placeholder lab.','researcher'],
+    ['r_clinic','researcher','Clinic F: Pediatric epilepsy center (sample)','Doctors who diagnose and treat children with severe epilepsy.','Sample placeholder clinic.','clinician'],
     ['pub_inter','publication','Model study: interneuron dysfunction in Scn1a+/- mice (example record)','A lab study showing which brain cells are affected.','Example record; not a real citation.'],
     ['pub_nh','publication','Cohort study: long-term outcomes in Dravet syndrome (example record)','A paper following people with Dravet syndrome into adulthood.','Example record; not a real citation.'],
     ['s_nhs','study','Natural history study of SCN1A-related epilepsy (sample)','Follows people over time to learn how the condition changes.','Sample placeholder study.','nhs'],
@@ -798,39 +797,39 @@ dravet:{
     ['a_ipsc','asset','Patient iPSC-derived interneurons','Brain cells grown from patients’ own cells.','Reported in multiple laboratories.','model']
   ],
   edges:[
-    ['dravet','g_scn1a','is caused by variants in','E',.97,'OMIM · ClinVar','2024','De novo SCN1A variants are found in roughly 80% of people with Dravet syndrome.','Most people with Dravet syndrome have a change in this gene.','About 1 in 5 people with the clinical diagnosis have no SCN1A variant; other genes can cause similar pictures.'],
+    ['dravet','g_scn1a','is caused by variants in','E',.97,'OMIM, ClinVar','2024','De novo SCN1A variants are found in roughly 80% of people with Dravet syndrome.','Most people with Dravet syndrome have a change in this gene.','About 1 in 5 people with the clinical diagnosis have no SCN1A variant; other genes can cause similar pictures.'],
     ['g_scn1a','v_lof','has variant class','E',.95,'ClinVar','2024','Truncating and missense loss-of-function variants are classified pathogenic.','These kinds of changes stop the gene working properly.','Some missense variants have uncertain significance.'],
-    ['v_lof','m_hap','results in','E',.9,'PubMed','2023','Loss of one allele reduces Nav1.1 current.','One broken copy means half the working channel.','—'],
+    ['v_lof','m_hap','results in','E',.9,'PubMed','2023','Loss of one allele reduces Nav1.1 current.','One broken copy means half the working channel.',''],
     ['m_hap','m_inter','leads to','E',.85,'PubMed (mouse models)','2023','Reduced Nav1.1 impairs interneuron firing in Scn1a+/- mice.','Less channel makes the brain’s brake cells weaker.','Some studies report partial compensation with age in mice; human relevance is still being studied.'],
-    ['dravet','m_hap','has core mechanism','E',.92,'OMIM · PubMed','2024','Haploinsufficiency of SCN1A is the main disease mechanism.','The core problem is too little of one working channel.','—'],
+    ['dravet','m_hap','has core mechanism','E',.92,'OMIM, PubMed','2024','Haploinsufficiency of SCN1A is the main disease mechanism.','The core problem is too little of one working channel.',''],
     ['dravet','m_inter','involves','E',.82,'PubMed','2023','Interneuron dysfunction is a central model of seizure generation.','Weak brake cells help explain the seizures.','Other cell types also contribute.'],
-    ['dravet','m_5ht','has seizures reduced by targeting','E',.7,'ClinicalTrials.gov · PubMed','2024','Fenfluramine, which acts on serotonin signaling, reduced convulsive seizure frequency in randomized controlled trials.','A medicine acting on this system lowered seizures in clinical trials.','Fenfluramine may also act through sigma-1 receptors; how it helps is not fully resolved.'],
-    ['dravet','p_fever','presents with','E',.92,'HPO · Orphanet','2024','Hallmark early feature.','Seizures with fever are often the first sign.','—'],
-    ['dravet','p_status','presents with','E',.88,'HPO · Orphanet','2024','Frequently annotated phenotype.','Long seizures are common, especially early.','—'],
-    ['dravet','p_dd','presents with','E',.88,'HPO · Orphanet','2024','Frequently annotated phenotype.','Development usually slows after the first year.','Severity varies widely.'],
-    ['dravet','p_gait','presents with','E',.72,'HPO · PubMed','2023','Reported in adolescents and adults.','Some older children and adults develop a bent-knee walk.','Not universal; frequency estimates vary.'],
-    ['dravet','d_gefs','shares causal gene with','E',.85,'OMIM · PubMed','2024','SCN1A variants underlie both; GEFS+ variants are more often missense with milder effects.','Same gene, usually milder effect in GEFS+.','Severity differences mean results may not transfer directly.','variant effect'],
-    ['dravet','d_scn2a','shares pathway with','H',.35,'Inferred from MONDO · HPO','2025','Both are sodium-channel epilepsies with overlapping seizure types.','These conditions sound alike, but may work in opposite ways.','Early-onset SCN2A epilepsy is often gain-of-function, the opposite of SCN1A loss in Dravet. Sodium channel blockers help some SCN2A patients but can worsen Dravet seizures.','pathway'],
-    ['o_found','dravet','supports families with','E',.82,'NORD · Global Genes (sample directory)','2025','Listed in patient organization directories.','This organization helps families living with Dravet syndrome.','—'],
-    ['o_net','dravet','is a community for','E',.8,'Global Genes (sample directory)','2025','Listed in patient organization directories.','Caregivers share support here.','—'],
-    ['c_scn1a','dravet','is a related community through the shared gene','E',.78,'EURORDIS (sample)','2025','Group spans Dravet syndrome and GEFS+.','Families with different SCN1A conditions meet here.','—'],
-    ['c_scn1a','d_gefs','is a community for','E',.8,'EURORDIS (sample)','2025','Listed in patient organization directories.','GEFS+ families are part of this group.','—'],
+    ['dravet','m_5ht','has seizures reduced by targeting','E',.7,'ClinicalTrials.gov, PubMed','2024','Fenfluramine, which acts on serotonin signaling, reduced convulsive seizure frequency in randomized controlled trials.','A medicine acting on this system lowered seizures in clinical trials.','Fenfluramine may also act through sigma-1 receptors; how it helps is not fully resolved.'],
+    ['dravet','p_fever','presents with','E',.92,'HPO, Orphanet','2024','Hallmark early feature.','Seizures with fever are often the first sign.',''],
+    ['dravet','p_status','presents with','E',.88,'HPO, Orphanet','2024','Frequently annotated phenotype.','Long seizures are common, especially early.',''],
+    ['dravet','p_dd','presents with','E',.88,'HPO, Orphanet','2024','Frequently annotated phenotype.','Development usually slows after the first year.','Severity varies widely.'],
+    ['dravet','p_gait','presents with','E',.72,'HPO, PubMed','2023','Reported in adolescents and adults.','Some older children and adults develop a bent-knee walk.','Not universal; frequency estimates vary.'],
+    ['dravet','d_gefs','shares causal gene with','E',.85,'OMIM, PubMed','2024','SCN1A variants underlie both; GEFS+ variants are more often missense with milder effects.','Same gene, usually milder effect in GEFS+.','Severity differences mean results may not transfer directly.','variant effect'],
+    ['dravet','d_scn2a','shares pathway with','H',.35,'Inferred from MONDO, HPO','2025','Both are sodium-channel epilepsies with overlapping seizure types.','These conditions sound alike, but may work in opposite ways.','Early-onset SCN2A epilepsy is often gain-of-function, the opposite of SCN1A loss in Dravet. Sodium channel blockers help some SCN2A patients but can worsen Dravet seizures.','pathway'],
+    ['o_found','dravet','supports families with','E',.82,'NORD, Global Genes (sample directory)','2025','Listed in patient organization directories.','This organization helps families living with Dravet syndrome.',''],
+    ['o_net','dravet','is a community for','E',.8,'Global Genes (sample directory)','2025','Listed in patient organization directories.','Caregivers share support here.',''],
+    ['c_scn1a','dravet','is a related community through the shared gene','E',.78,'EURORDIS (sample)','2025','Group spans Dravet syndrome and GEFS+.','Families with different SCN1A conditions meet here.',''],
+    ['c_scn1a','d_gefs','is a community for','E',.8,'EURORDIS (sample)','2025','Listed in patient organization directories.','GEFS+ families are part of this group.',''],
     ['c_scn2a','dravet','is a related community through sodium-channel biology','H',.35,'Inferred','2025','Connected through channel family only.','A community for a related channel condition.','Disease mechanisms may run in opposite directions.'],
-    ['r_ephys','m_inter','studies','E',.75,'NIH RePORTER (sample)','2025','Funded project on interneuron excitability.','This lab studies the brain’s brake cells.','—'],
-    ['r_ephys','dravet','publishes on','E',.7,'PubMed (sample)','2024','Publications mentioning Dravet syndrome.','This lab has written about Dravet syndrome.','—'],
-    ['r_aso','s_aso','develops approaches evaluated in','E',.7,'NIH RePORTER (sample)','2025','Funded project on antisense upregulation.','This lab works on the kind of medicine being tested.','—'],
-    ['r_aso','dravet','works on','E',.72,'PubMed (sample)','2024','Publications on SCN1A upregulation.','This lab works on a possible treatment.','—'],
-    ['r_clinic','dravet','treats patients with','E',.85,'Orphanet expert centre listing (sample)','2025','Listed expert centre.','These doctors see children with Dravet syndrome.','—'],
-    ['r_clinic','s_nhs','is a site for','E',.8,'ClinicalTrials.gov (sample)','2025','Listed study site.','This clinic takes part in the natural history study.','—'],
-    ['pub_inter','a_mouse','reports results in','E',.9,'PubMed (example record)','2023','Example publication describing model findings.','This paper describes what was found in the mice.','—'],
-    ['pub_inter','dravet','is relevant to','E',.85,'PubMed (example record)','2023','Model study framed around Dravet syndrome.','This paper is about the disease mechanism.','—'],
-    ['pub_nh','dravet','describes','E',.85,'PubMed (example record)','2024','Cohort study of long-term outcomes.','This paper follows people with Dravet syndrome over many years.','—'],
-    ['s_nhs','dravet','enrolls people with','E',.85,'ClinicalTrials.gov (sample)','2025','Eligibility includes Dravet syndrome.','This study follows people with Dravet syndrome over time.','—'],
+    ['r_ephys','m_inter','studies','E',.75,'NIH RePORTER (sample)','2025','Funded project on interneuron excitability.','This lab studies the brain’s brake cells.',''],
+    ['r_ephys','dravet','publishes on','E',.7,'PubMed (sample)','2024','Publications mentioning Dravet syndrome.','This lab has written about Dravet syndrome.',''],
+    ['r_aso','s_aso','develops approaches evaluated in','E',.7,'NIH RePORTER (sample)','2025','Funded project on antisense upregulation.','This lab works on the kind of medicine being tested.',''],
+    ['r_aso','dravet','works on','E',.72,'PubMed (sample)','2024','Publications on SCN1A upregulation.','This lab works on a possible treatment.',''],
+    ['r_clinic','dravet','treats patients with','E',.85,'Orphanet expert centre listing (sample)','2025','Listed expert centre.','These doctors see children with Dravet syndrome.',''],
+    ['r_clinic','s_nhs','is a site for','E',.8,'ClinicalTrials.gov (sample)','2025','Listed study site.','This clinic takes part in the natural history study.',''],
+    ['pub_inter','a_mouse','reports results in','E',.9,'PubMed (example record)','2023','Example publication describing model findings.','This paper describes what was found in the mice.',''],
+    ['pub_inter','dravet','is relevant to','E',.85,'PubMed (example record)','2023','Model study framed around Dravet syndrome.','This paper is about the disease mechanism.',''],
+    ['pub_nh','dravet','describes','E',.85,'PubMed (example record)','2024','Cohort study of long-term outcomes.','This paper follows people with Dravet syndrome over many years.',''],
+    ['s_nhs','dravet','enrolls people with','E',.85,'ClinicalTrials.gov (sample)','2025','Eligibility includes Dravet syndrome.','This study follows people with Dravet syndrome over time.',''],
     ['s_aso','dravet','evaluates a therapy for','E',.82,'ClinicalTrials.gov','2025','Studies of SCN1A-upregulating antisense oligonucleotides are registered.','A possible treatment is being tested in people.','Efficacy has not yet been established in completed phase 3 trials (as of the sample index).'],
-    ['a_reg','dravet','collects data on','E',.8,'Orphanet (sample)','2025','Registry scope includes Dravet syndrome.','This registry holds information about Dravet syndrome.','—'],
-    ['a_bio','dravet','is not yet validated for','U',.2,'PubMed · ClinicalTrials.gov (searched)','2025','No validated fluid biomarker that tracks progression was found. Seizure diaries and EEG remain the main measures.','There is no blood test yet that tracks the disease.','—'],
+    ['a_reg','dravet','collects data on','E',.8,'Orphanet (sample)','2025','Registry scope includes Dravet syndrome.','This registry holds information about Dravet syndrome.',''],
+    ['a_bio','dravet','is not yet validated for','U',.2,'PubMed, ClinicalTrials.gov (searched)','2025','No validated fluid biomarker that tracks progression was found. Seizure diaries and EEG remain the main measures.','There is no blood test yet that tracks the disease.',''],
     ['a_mouse','dravet','models','E',.88,'PubMed','2023','Scn1a+/- mice reproduce temperature-sensitive seizures and premature death.','This mouse develops a disease like Dravet syndrome.','Strain background strongly affects severity.'],
-    ['a_mouse','m_inter','is used to study','E',.85,'PubMed','2023','Primary model for interneuron studies.','Scientists use this mouse to study brake cells.','—'],
+    ['a_mouse','m_inter','is used to study','E',.85,'PubMed','2023','Primary model for interneuron studies.','Scientists use this mouse to study brake cells.',''],
     ['a_ipsc','dravet','models','E',.75,'PubMed','2023','Patient iPSC-derived interneurons show reduced excitability in several reports.','Cells from patients show the same weakness in a dish.','Findings vary between labs and differentiation protocols.'],
     ['a_ipsc','d_scn2a','could be adapted to model','H',.4,'Inferred','2025','Same cell platform, different gene.','The same cell method might be used for SCN2A.','Only useful if the SCN2A variants studied act in the same direction.']
   ],
@@ -853,18 +852,18 @@ const fromGid=g=>{const [k,id]=g.split(':');return {ds:DATA[k],n:DATA[k].byId[id
 const INDEX=[];
 Object.values(DATA).forEach(ds=>{
   ds.nodes.forEach(n=>INDEX.push({ds:ds.key,id:n.id,label:n.label,kind:TYPES[n.t].label,t:n.t}));
-  ds.aliases.forEach(a=>INDEX.push({ds:ds.key,id:ds.root,label:a,kind:'Also known as · '+ds.name,t:'disease',alias:true}));
+  ds.aliases.forEach(a=>INDEX.push({ds:ds.key,id:ds.root,label:a,kind:'Also known as '+ds.name,t:'disease',alias:true}));
 });
 function searchIdx(q){q=q.trim().toLowerCase(); if(!q) return [];
   return INDEX.map(it=>{const l=it.label.toLowerCase(); const p=l.startsWith(q)?0:l.includes(q)?1:9; return [p,it]}).filter(x=>x[0]<9).sort((a,b)=>a[0]-b[0]||a[1].label.length-b[1].label.length).slice(0,8).map(x=>x[1]);}
 
 /* ---------- helpers ---------- */
 const stPill=s=>`<span class="st ${s}">${STATUS[s]}</span>`;
-const confHtml=c=>`<span class="conf"><span class="bar"><i style="width:${Math.round(c*100)}%"></i></span>${Math.round(c*100)}% · ${c>=.8?'High':c>=.55?'Moderate':'Low'}</span>`;
+const confHtml=c=>`<span class="conf"><span class="bar"><i style="width:${Math.round(c*100)}%"></i></span>${Math.round(c*100)}% (${c>=.8?'high':c>=.55?'moderate':'low'})</span>`;
 const dot=t=>`<span class="dot" style="background:${TYPES[t].c}"></span>`;
 function srcLinks(src){
   const parts=[]; Object.keys(SRC_URL).forEach(k=>{ if(src.includes(k) && !(k==='PMC'&&!/\bPMC\b/.test(src))) parts.push(`<a href="${SRC_URL[k]}" target="_blank" rel="noopener">${k} ↗</a>`)});
-  return parts.join(' · ');
+  return parts.join('&ensp;');
 }
 function edgesOf(ds,id){return ds.edges.filter(e=>e.s===id||e.t===id)}
 function rootEdge(ds,id){return ds.edges.find(e=>(e.s===id&&e.t===ds.root)||(e.t===id&&e.s===ds.root))||edgesOf(ds,id)[0]}
@@ -885,12 +884,12 @@ function openDrawer(ds,e){
       <p class="why-plain">${esc(e.plain)}</p>
       <div class="kv">
         <div class="k">Relationship</div><div>${esc(sentence(ds,e))}</div>
-        <div class="k">Type</div><div>${STATUS[e.status]}${e.share?` · shared ${esc(e.share)}`:''}</div>
+        <div class="k">Type</div><div>${STATUS[e.status]}${e.share?`, shared ${esc(e.share)}`:''}</div>
         <div class="k">Supporting evidence</div><div>${esc(e.ev)}</div>
         <div class="k">Source</div><div>${esc(e.src)}</div>
         <div class="k">Confidence</div><div>${confHtml(e.conf)}</div>
         <div class="k">Date</div><div class="num">${esc(e.date)}</div>
-        <div class="k">Contradictory evidence</div><div class="${e.contra&&e.contra!=='—'?'':'muted'}">${esc(e.contra&&e.contra!=='—'?e.contra:'None recorded.')}</div>
+        <div class="k">Contradictory evidence</div><div class="${e.contra?'':'muted'}">${esc(e.contra?e.contra:'None recorded.')}</div>
       </div>
       <div style="font-size:13px"><span class="eyebrow" style="display:block;margin-bottom:6px">Inspect original evidence</span>${srcLinks(e.src)||'<span style="color:var(--ink-3)">Inferred link. No single original record.</span>'}</div>
       ${e.status!=='E'?`<p style="font-size:13px;color:var(--ink-3)">This is ${e.status==='H'?'a hypothesis built from connected evidence':'an open question'}. It is not established clinical evidence.</p>`:''}
@@ -956,10 +955,10 @@ function readerWhy(ds,n){
       <div class="k">Evidence</div><div>${esc(e.ev)}</div>
       <div class="k">Source</div><div>${esc(e.src)}</div>
       <div class="k">Confidence</div><div>${confHtml(e.conf)}</div>
-      <div class="k">Contradictory evidence</div><div class="${e.contra&&e.contra!=='—'?'':'muted'}">${esc(e.contra&&e.contra!=='—'?e.contra:'None recorded.')}</div>
+      <div class="k">Contradictory evidence</div><div class="${e.contra?'':'muted'}">${esc(e.contra?e.contra:'None recorded.')}</div>
     </div>
     <div class="why-foot">
-      <details class="sci" style="flex:1 1 100%"><summary>Scientific detail</summary><div><p><b>${esc(n.label)}</b> (${TYPES[n.t].label}). ${esc(n.sci)}</p><p style="margin-top:6px">Recorded ${esc(e.date)} · ${esc(e.src)}</p></div></details>
+      <details class="sci" style="flex:1 1 100%"><summary>Scientific detail</summary><div><p><b>${esc(n.label)}</b> (${TYPES[n.t].label}). ${esc(n.sci)}</p><p style="margin-top:6px">Recorded ${esc(e.date)} from ${esc(e.src)}</p></div></details>
       <button type="button" data-open-edge="${e.i}">Inspect original evidence</button>
     </div>
   </div>`;
@@ -1080,22 +1079,22 @@ function renderDetail(){
   const ds=DATA[curRes.ds], n=ds.byId[curRes.sel], es=edgesOf(ds,n.id).sort((a,b)=>b.conf-a.conf);
   $('#detail').innerHTML=`<div class="tt">${dot(n.t)}${TYPES[n.t].label}</div><div class="nm">${esc(n.label)}</div>
     <p>${esc(n.plain)}</p>${n.sci?`<p style="font-size:13px">${esc(n.sci)}</p>`:''}
-    <div class="eyebrow" style="margin-top:6px">Connections · ${es.length}</div>
-    <div class="conn-list">${es.map(e=>{const o=ds.byId[other(e,n.id)];return `<button class="conn" data-edge="${e.i}"><span class="cn">${dot(o.t)}<span style="min-width:0">${esc(o.label)}</span></span>${stPill(e.status)}<span class="cr">${esc(e.s===n.id?e.rel+' →':'← '+e.rel)} · ${Math.round(e.conf*100)}% · ${esc(e.src)}</span></button>`}).join('')}</div>`;
+    <div class="eyebrow" style="margin-top:6px">Connections (${es.length})</div>
+    <div class="conn-list">${es.map(e=>{const o=ds.byId[other(e,n.id)];return `<button class="conn" data-edge="${e.i}"><span class="cn">${dot(o.t)}<span style="min-width:0">${esc(o.label)}</span></span>${stPill(e.status)}<span class="cr">${esc(e.s===n.id?e.rel+' →':'← '+e.rel)} ${Math.round(e.conf*100)}%, ${esc(e.src)}</span></button>`}).join('')}</div>`;
 }
 function renderDash(){
   const ds=DATA[curRes.ds], root=ds.root;
   const row=(e,n,meta)=>`<button class="row" data-edge="${e.i}"><span class="rn">${dot(n.t)}<span style="min-width:0">${esc(n.label)}</span></span>${stPill(e.status)}<span class="rm">${meta}</span></button>`;
-  const mech=ds.nodes.filter(n=>n.t==='mechanism').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,`${esc(e.rel)} · ${confHtml(e.conf)}`)}).join('');
+  const mech=ds.nodes.filter(n=>n.t==='mechanism').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,`${esc(e.rel)}&ensp;${confHtml(e.conf)}`)}).join('');
   const overlap=ds.edges.filter(e=>e.share).map(e=>{const n=ds.byId[other(e,root)];
     const tags=['pathway','variant effect','mechanism','phenotype'].map(t=>`<span class="${t===e.share?'on':''}">${t}</span>`).join('');
     return row(e,n,`<span class="share-tags">${tags}</span><span style="display:block;margin-top:6px">${esc(e.ev)}</span>`)}).join('');
   const research=ds.nodes.filter(n=>n.t==='publication'||n.t==='study'||n.cat==='registry'||n.cat==='model').map(n=>{const e=rootEdge(ds,n.id);
-    const lab={publication:'Publication',nhs:'Natural history study',clinical:'Clinical trials',registry:'Registry',model:'Research model'}[n.cat]||TYPES[n.t].label;return row(e,n,`${lab} · ${esc(e.src)}`)}).join('');
-  const people=ds.nodes.filter(n=>n.t==='researcher'||n.t==='org').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,`${esc(e.rel)} · ${esc(e.src)}`)}).join('');
+    const lab={publication:'Publication',nhs:'Natural history study',clinical:'Clinical trials',registry:'Registry',model:'Research model'}[n.cat]||TYPES[n.t].label;return row(e,n,`${lab}, ${esc(e.src)}`)}).join('');
+  const people=ds.nodes.filter(n=>n.t==='researcher'||n.t==='org').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,`${esc(e.rel)}, ${esc(e.src)}`)}).join('');
   const assets=ds.nodes.filter(n=>n.t==='asset').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,esc(ds.reuse[n.id]||''))}).join('');
   const all=[...ds.edges].sort((a,b)=>b.conf-a.conf);
-  const tr=e=>`<tr data-edge="${e.i}" tabindex="0"><td>${esc(ds.byId[e.s].label)} <span style="color:var(--night-ink-2)">→ ${esc(e.rel)} →</span> ${esc(ds.byId[e.t].label)}</td><td>${stPill(e.status)}</td><td>${esc(e.src)}</td><td class="num">${Math.round(e.conf*100)}%</td><td class="num">${esc(e.date)}</td><td>${esc(e.ev)}</td><td>${esc(e.contra&&e.contra!=='—'?e.contra:'None recorded')}</td></tr>`;
+  const tr=e=>`<tr data-edge="${e.i}" tabindex="0"><td>${esc(ds.byId[e.s].label)} <span style="color:var(--night-ink-2)">→ ${esc(e.rel)} →</span> ${esc(ds.byId[e.t].label)}</td><td>${stPill(e.status)}</td><td>${esc(e.src)}</td><td class="num">${Math.round(e.conf*100)}%</td><td class="num">${esc(e.date)}</td><td>${esc(e.ev)}</td><td>${esc(e.contra&&e.contra!==''?e.contra:'None recorded')}</td></tr>`;
   $('#dash').innerHTML=`
     <div class="panel p4"><h4>Related mechanisms</h4><p class="sub">Mechanisms connected to ${esc(ds.name)}.</p><div class="rows">${mech}</div></div>
     <div class="panel p8"><h4>Mechanistic overlap</h4><p class="sub">Diseases sharing a pathway, variant effect, biological mechanism or phenotype.</p><div class="rows">${overlap}</div></div>
@@ -1130,11 +1129,11 @@ $('#resTries').addEventListener('click',e=>{const b=e.target.closest('[data-q]')
 
 /* ---------- JOURNEY ---------- */
 const J=[
-  {k:'Disease',t:'Leigh syndrome',s:'E',c:.94,lead:'The starting point: a diagnosis with dozens of possible genetic causes and no approved therapy that changes the course of the disease.',why:'Everything that follows is anchored to a confirmed diagnosis and, where known, its genetic cause.',rests:'Clinical diagnostic criteria and gene panels (OMIM, Orphanet).',breaks:'If the genetic cause is unknown, later steps narrow less precisely.',src:'OMIM · Orphanet'},
-  {k:'Mechanism',t:'ATP synthase dysfunction (MT-ATP6)',s:'E',c:.93,lead:'For families with an MT-ATP6 change, the disease runs through one specific failure: the final step that makes ATP.',why:'Naming the mechanism, not just the gene, is what lets us look across disease boundaries.',rests:'MT-ATP6 encodes subunit a of ATP synthase; pathogenic variants reduce ATP synthesis (ClinVar, PubMed).',breaks:'Only applies to the MT-ATP6 subgroup, not all Leigh syndrome.',src:'ClinVar · PubMed'},
-  {k:'Related community',t:'NARP and MT-ATP6 families',s:'E',c:.87,lead:'The same variant, m.8993T>G, causes NARP when fewer mitochondria carry it. A second community has been working on the same biology.',why:'Two groups who rarely meet share a cause. Their data, samples and questions can be pooled.',rests:'NARP and MILS form a clinical spectrum driven by heteroplasmy (OMIM, review literature).',breaks:'Clinical courses differ a lot. Findings in milder NARP may not transfer to Leigh syndrome.',src:'OMIM · PubMed'},
-  {k:'Existing asset',t:'Registry and MT-ATP6 iPSC neuron lines',s:'H',c:.6,lead:'A mitochondrial registry already covers both conditions, and a lab already holds patient-derived neurons across heteroplasmy levels.',why:'Reusing assets that exist skips the slowest part of a new study: building cohorts and models from scratch.',rests:'Registry scope and lab asset listings (sample records modeled on Orphanet and NIH RePORTER).',breaks:'Consent may not cover the new use. Heteroplasmy may not be recorded. Lines may not be shareable.',src:'Orphanet · NIH RePORTER (sample)'},
-  {k:'Collaborator',t:'Lab B with Clinic C',s:'U',c:.35,lead:'The lab holding the cell lines and the clinic running the natural history study are the people who could act.',why:'An asset is only useful if its owner can and wants to collaborate.',rests:'Both are linked to the same mechanism and study in the sample index.',breaks:'Willingness, capacity, funding and agreements are all unknown until someone asks.',src:'NIH RePORTER · ClinicalTrials.gov (sample)'},
+  {k:'Disease',t:'Leigh syndrome',s:'E',c:.94,lead:'The starting point: a diagnosis with dozens of possible genetic causes and no approved therapy that changes the course of the disease.',why:'Everything that follows is anchored to a confirmed diagnosis and, where known, its genetic cause.',rests:'Clinical diagnostic criteria and gene panels (OMIM, Orphanet).',breaks:'If the genetic cause is unknown, later steps narrow less precisely.',src:'OMIM, Orphanet'},
+  {k:'Mechanism',t:'ATP synthase dysfunction (MT-ATP6)',s:'E',c:.93,lead:'For families with an MT-ATP6 change, the disease runs through one specific failure: the final step that makes ATP.',why:'Naming the mechanism, not just the gene, is what lets us look across disease boundaries.',rests:'MT-ATP6 encodes subunit a of ATP synthase; pathogenic variants reduce ATP synthesis (ClinVar, PubMed).',breaks:'Only applies to the MT-ATP6 subgroup, not all Leigh syndrome.',src:'ClinVar, PubMed'},
+  {k:'Related community',t:'NARP and MT-ATP6 families',s:'E',c:.87,lead:'The same variant, m.8993T>G, causes NARP when fewer mitochondria carry it. A second community has been working on the same biology.',why:'Two groups who rarely meet share a cause. Their data, samples and questions can be pooled.',rests:'NARP and MILS form a clinical spectrum driven by heteroplasmy (OMIM, review literature).',breaks:'Clinical courses differ a lot. Findings in milder NARP may not transfer to Leigh syndrome.',src:'OMIM, PubMed'},
+  {k:'Existing asset',t:'Registry and MT-ATP6 iPSC neuron lines',s:'H',c:.6,lead:'A mitochondrial registry already covers both conditions, and a lab already holds patient-derived neurons across heteroplasmy levels.',why:'Reusing assets that exist skips the slowest part of a new study: building cohorts and models from scratch.',rests:'Registry scope and lab asset listings (sample records modeled on Orphanet and NIH RePORTER).',breaks:'Consent may not cover the new use. Heteroplasmy may not be recorded. Lines may not be shareable.',src:'Orphanet, NIH RePORTER (sample)'},
+  {k:'Collaborator',t:'Lab B with Clinic C',s:'U',c:.35,lead:'The lab holding the cell lines and the clinic running the natural history study are the people who could act.',why:'An asset is only useful if its owner can and wants to collaborate.',rests:'Both are linked to the same mechanism and study in the sample index.',breaks:'Willingness, capacity, funding and agreements are all unknown until someone asks.',src:'NIH RePORTER, ClinicalTrials.gov (sample)'},
   {k:'Next experiment',t:'Test GDF-15 across MILS and NARP',s:'H',c:.5,lead:'Measure GDF-15 in matched iPSC neurons and in registry participants across both conditions, and see whether it tracks heteroplasmy and severity.',why:'A shared, validated biomarker is a milestone every future treatment trial in this group would need.',rests:'GDF-15 is elevated in many mitochondrial diseases (PubMed).',breaks:'GDF-15 is less sensitive in children and some subtypes. It may not track progression in brain-predominant disease.',src:'PubMed'}
 ];
 let jSel=0;
@@ -1152,7 +1151,7 @@ function renderJourney(){
   $('#jlineSvg').innerHTML=l;
   const s=J[jSel];
   $('#jpanel').setAttribute('aria-labelledby','jtab'+jSel);
-  $('#jpanel').innerHTML=`<div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Step ${jSel+1} of 6 · ${s.k}</span>${stPill(s.s)}</div>
+  $('#jpanel').innerHTML=`<div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Step ${jSel+1} of 6: ${s.k}</span>${stPill(s.s)}</div>
     <h3 style="margin-top:14px">${esc(s.t)}</h3><p class="lead">${esc(s.lead)}</p>
     <div style="margin-top:22px;display:flex;gap:18px;flex-wrap:wrap;align-items:center"><span style="color:var(--night-ink-2)">${confHtml(s.c)}</span><span class="mono" style="color:var(--night-ink-2);letter-spacing:.04em;text-transform:none">${esc(s.src)}</span></div>
     <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
@@ -1172,27 +1171,27 @@ const blues=['#5B8CFF','#6C98FF','#7FA5FF','#93B3FF','#A8C1FF','#BDD0FF'];
 function renderRace(){
   let h='';
   // axis
-  for(let m=0;m<=36;m+=6){const x=xs(m);h+=`<line x1="${x}" y1="40" x2="${x}" y2="262" stroke="var(--night-rule)" stroke-width="1"/><text x="${x}" y="284" fill="var(--night-ink-2)" font-size="12" text-anchor="${m===0?'start':m===36?'end':'middle'}" style="font-family:var(--f-mono)">${m===0?'0':m+' mo'}</text>`}
+  for(let m=0;m<=36;m+=6){const x=xs(m);h+=`<line x1="${x}" y1="40" x2="${x}" y2="262" stroke="var(--night-rule)" stroke-width="1"/><text x="${x}" y="284" fill="var(--night-ink-2)" font-size="12" text-anchor="${m===0?'start':m===36?'end':'middle'}" style="font-family:var(--f-body)">${m===0?'0':m+' months'}</text>`}
   // Today lane
   h+=`<text x="${X0}" y="30" fill="var(--night-ink)" font-size="14" font-weight="600">Today</text><text x="${X0+56}" y="30" fill="var(--night-ink-2)" font-size="13">one research decision</text>`;
   let t=0; TODAY.forEach(([l,d],i)=>{const x=xs(t),w=xs(t+d)-x; h+=`<rect x="${x+1}" y="48" width="${w-2}" height="54" rx="3" fill="${greys[i]}"><title>${l}: about ${d} months (assumption)</title></rect>`;
-    if(w>l.length*7+20) h+=`<text x="${x+10}" y="72" fill="#E5EBF1" font-size="12.5">${l}</text><text x="${x+10}" y="90" fill="#AEBBCB" font-size="11.5" style="font-family:var(--f-mono)">~${d} mo</text>`; t+=d;});
+    if(w>l.length*7+20) h+=`<text x="${x+10}" y="72" fill="#E5EBF1" font-size="12.5">${l}</text><text x="${x+10}" y="90" fill="#AEBBCB" font-size="11.5" style="font-family:var(--f-body)">${d} months</text>`; else if(w>70) h+=`<text x="${x+10}" y="90" fill="#AEBBCB" font-size="11.5" style="font-family:var(--f-body)">${d} months<title>${l}</title></text>`; t+=d;});
   h+=`<g class="decision" data-lane="t" data-m="36"><path d="M${xs(36)} 40 l7 7 l-7 7 l-7 -7z" fill="#E5EBF1"/></g>`;
   // One Mission lane
   h+=`<text x="${X0}" y="148" fill="var(--night-ink)" font-size="14" font-weight="600">One Mission</text><text x="${X0+102}" y="148" fill="var(--night-ink-2)" font-size="13">ten decision cycles in the same time</text>`;
   const cyc=OM.reduce((a,b)=>a+b[1],0);
   for(let c=0;c<10;c++){ let m=c*cyc;
-    OM.forEach(([l,d],i)=>{const x=xs(m),w=xs(m+d)-x; h+=`<rect x="${x}" y="166" width="${Math.max(w-.6,1)}" height="54" fill="${blues[i]}" opacity="${c===0?1:.72}"><title>Cycle ${c+1} · ${l}: about ${Math.round(d*30)} days (assumption)</title></rect>`; m+=d;});
+    OM.forEach(([l,d],i)=>{const x=xs(m),w=xs(m+d)-x; h+=`<rect x="${x}" y="166" width="${Math.max(w-.6,1)}" height="54" fill="${blues[i]}" opacity="${c===0?1:.72}"><title>Cycle ${c+1}, ${l}: about ${Math.round(d*30)} days (assumption)</title></rect>`; m+=d;});
     h+=`<g class="decision" data-lane="o" data-m="${((c+1)*cyc).toFixed(2)}"><path d="M${xs((c+1)*cyc)} 158 l6 6 l-6 6 l-6 -6z" fill="#E5EBF1"/></g>`;
     if(c<9) h+=`<line x1="${xs((c+1)*cyc)}" y1="166" x2="${xs((c+1)*cyc)}" y2="220" stroke="var(--night)" stroke-width="2"/>`;
   }
   // callout for cycle 1
-  h+=`<path d="M${xs(0)} 228 v10 h${xs(cyc)-xs(0)} v-10" fill="none" stroke="var(--night-ink-2)" stroke-width="1"/><text x="${xs(0)}" y="254" fill="var(--night-ink-2)" font-size="12">One cycle ≈ ${cyc.toFixed(1)} months: disease → evidence → connection → existing asset → collaborator → shared action</text>`;
+  h+=`<path d="M${xs(0)} 228 v10 h${xs(cyc)-xs(0)} v-10" fill="none" stroke="var(--night-ink-2)" stroke-width="1"/><text x="${xs(0)}" y="254" fill="var(--night-ink-2)" font-size="12">One cycle takes about ${cyc.toFixed(1)} months: disease → evidence → connection → existing asset → collaborator → shared action</text>`;
   h+=`<line id="playhead" x1="${xs(36)}" y1="40" x2="${xs(36)}" y2="226" stroke="#E5EBF1" stroke-width="1.5" opacity="0"/>`;
   $('#raceSvg').innerHTML=h;
   // flows
-  $('#flowToday').innerHTML=TODAY.map(([l,d],i)=>`<li><i style="background:${greys[i]}"></i><span>${l}</span><span class="m">~${d} mo</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Next research decision</span><span class="m">month ${TOTAL}</span></li>`;
-  $('#flowOM').innerHTML=OM.map(([l,d],i)=>`<li><i style="background:${blues[i]}"></i><span>${l}</span><span class="m">~${Math.round(d*30)} days</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Next research decision</span><span class="m">month ${cyc.toFixed(1)}</span></li>`;
+  $('#flowToday').innerHTML=TODAY.map(([l,d],i)=>`<li><i style="background:${greys[i]}"></i><span>${l}</span><span class="m">about ${d} months</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Next research decision</span><span class="m">month ${TOTAL}</span></li>`;
+  $('#flowOM').innerHTML=OM.map(([l,d],i)=>`<li><i style="background:${blues[i]}"></i><span>${l}</span><span class="m">about ${Math.round(d*30)} days</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Next research decision</span><span class="m">month ${cyc.toFixed(1)}</span></li>`;
 }
 let raf=0;
 function play(){
@@ -1214,7 +1213,7 @@ const VAL=[
   ['Can the identified researchers or organizations collaborate?','U','Nobody has been asked. Capacity, funding and willingness are unknown.'],
   ['Can this route meaningfully shorten the next treatment milestone?','H','This is the central claim. It can only be answered by running the route and timing it.']
 ];
-$('#vlist').innerHTML=VAL.map((v,i)=>`<li><span class="n">0${i+1}</span><span class="q">${v[0]}</span>${stPill(v[1])}<span class="d">${v[2]}</span></li>`).join('');
+$('#vlist').innerHTML=VAL.map((v,i)=>`<li><span class="n">${i+1}</span><span class="q">${v[0]}</span>${stPill(v[1])}<span class="d">${v[2]}</span></li>`).join('');
 
 /* ---------- TRUST ---------- */
 const CHAIN=[['leigh',6],['leigh',14],['dravet',12],['dravet',30]];
@@ -1222,7 +1221,7 @@ $('#chain').innerHTML=CHAIN.map(([k,i])=>{const ds=DATA[k],e=ds.edges[i];return 
 $('#chain').addEventListener('click',e=>{const b=e.target.closest('.chain-row'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
 
 const ALLN=[]; Object.values(DATA).forEach(ds=>ds.nodes.forEach(n=>{ if(['disease','gene','mechanism','asset','variant'].includes(n.t)) ALLN.push({g:gid(ds,n.id),label:n.label,ds:ds.name,t:n.t})}));
-const opt=ALLN.map(n=>`<option value="${n.g}">${esc(n.label)} · ${esc(n.ds)}</option>`).join('');
+const opt=ALLN.map(n=>`<option value="${n.g}">${esc(n.label)} (${esc(n.ds)})</option>`).join('');
 $('#rFrom').innerHTML=opt; $('#rTo').innerHTML=opt;
 function findRoute(a,b,withHyp){
   const A=fromGid(a),B=fromGid(b); if(A.ds!==B.ds) return null;
@@ -1239,7 +1238,7 @@ function renderRoute(){
   if(a===b){out.innerHTML='<p style="color:var(--ink-3)">Choose two different entities.</p>';return}
   const r=findRoute(a,b,h);
   if(r){ const ds=r.ds; const hasH=r.path.some(p=>p.e.status==='H');
-    let html=`<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"><span class="eyebrow">Route found · ${r.path.length} step${r.path.length>1?'s':''}</span>${stPill(hasH?'H':'E')}</div><ol class="hops">`;
+    let html=`<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"><span class="eyebrow">Route found: ${r.path.length} step${r.path.length>1?'s':''}</span>${stPill(hasH?'H':'E')}</div><ol class="hops">`;
     let cur=r.start;
     r.path.forEach(p=>{const n=ds.byId[cur]; html+=`<li class="hop ${p.e.status}"><span class="rail"><i style="background:${TYPES[n.t].c};box-shadow:0 0 0 1px var(--ink-3)"></i></span><div><div class="nlab">${esc(n.label)}</div><button class="elink" data-k="${ds.key}" data-i="${p.e.i}"><span class="mono" style="font-size:11px">${esc(p.e.src)}</span><span>→</span><span class="relx">${esc(p.e.rel)}</span><span>→</span>${confHtml(p.e.conf)}</button></div></li>`; cur=other(p.e,cur)});
     const last=ds.byId[cur]; html+=`<li class="hop"><span class="rail"><i style="background:${TYPES[last.t].c};box-shadow:0 0 0 1px var(--ink-3)"></i></span><div><div class="nlab">${esc(last.label)}</div></div></li></ol>`;
@@ -1269,7 +1268,7 @@ $('#routeOut').addEventListener('click',e=>{const b=e.target.closest('.elink'); 
 $('#commGrid').innerHTML=Object.values(DATA).map(ds=>{
   const orgs=ds.nodes.filter(n=>n.t==='org').sort((a,b)=>(a.cat==='org'?0:1)-(b.cat==='org'?0:1));
   return `<div class="comm-col"><h3>${esc(ds.name)}<span>${orgs.length} communities</span></h3>${orgs.map(n=>{const e=rootEdge(ds,n.id);
-    return `<button class="comm" data-k="${ds.key}" data-i="${e.i}"><span class="cname">${esc(n.label.replace(' (sample)',''))}</span>${stPill(e.status)}<span class="ckind">${n.cat==='org'?'Patient organization':'Related community'} · sample</span><span class="cdesc">${esc(n.plain)}</span><span class="cwhy">${esc(e.plain)}</span></button>`}).join('')}</div>`}).join('');
+    return `<button class="comm" data-k="${ds.key}" data-i="${e.i}"><span class="cname">${esc(n.label.replace(' (sample)',''))}</span>${stPill(e.status)}<span class="ckind">${n.cat==='org'?'Patient organization':'Related community'} (sample)</span><span class="cdesc">${esc(n.plain)}</span><span class="cwhy">${esc(e.plain)}</span></button>`}).join('')}</div>`}).join('');
 $('#commGrid').addEventListener('click',e=>{const b=e.target.closest('.comm'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
 
 /* ---------- SOURCES ---------- */
