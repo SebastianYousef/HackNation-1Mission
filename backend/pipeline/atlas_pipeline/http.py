@@ -132,13 +132,22 @@ def _cache_path(ns: str, key: str, ext: str = "json") -> Path:
     return RAW / "http_cache" / ns / f"{hashlib.sha1(key.encode()).hexdigest()}.{ext}"
 
 
+# credentials / contact params that do not change the answer: left out of the cache key so keyed and
+# keyless runs (and different machines) share one cache. Without them the key is exactly as before.
+_UNKEYED_PARAMS = frozenset({"api_key", "email"})
+
+
+def _cache_key(url: str, params: dict | None) -> str:
+    return url + "?" + json.dumps({k: v for k, v in (params or {}).items() if k not in _UNKEYED_PARAMS},
+                                  sort_keys=True)
+
+
 def get_text(url: str, params: dict | None = None, ns: str = "misc", headers: dict | None = None,
              refresh: bool = False, validate: Callable[[str], object] | None = None) -> str:
     """validate(body) runs before the body is cached; if it raises, nothing is cached (and it propagates).
     It also runs on a cache hit: a cached body that fails it (one cached before the check existed) is
     refetched instead of being served forever."""
-    key = url + "?" + json.dumps(params or {}, sort_keys=True)
-    p = _cache_path(ns, key, "txt")
+    p = _cache_path(ns, _cache_key(url, params), "txt")
     if p.exists() and not (refresh or REFRESH):
         body = p.read_text()
         try:

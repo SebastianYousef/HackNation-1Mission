@@ -94,6 +94,22 @@ def test_invalid_cached_body_is_refetched(monkeypatch):
     assert http.json.loads(p.read_text()) == {"ok": True}
 
 
+def test_cache_key_ignores_api_key_and_email(monkeypatch):
+    calls = []
+
+    def handler(req):
+        calls.append(str(req.url))
+        return httpx.Response(200, json={"n": len(calls)})
+    monkeypatch.setattr(http, "_client", lambda: httpx.Client(transport=httpx.MockTransport(handler)))
+    url, base = "https://example.org/shared.fcgi", {"db": "pubmed", "term": "CLN5"}
+    assert http.get_json(url, base, ns="test") == {"n": 1}
+    # a keyed run (another machine) reuses the keyless answer, and the cache key never holds the secret
+    assert http.get_json(url, base | {"api_key": "SECRET123", "email": "a@b.c"}, ns="test") == {"n": 1}
+    assert len(calls) == 1
+    assert http._cache_key(url, base | {"api_key": "SECRET123"}) == url + "?" + http.json.dumps(base, sort_keys=True)
+    assert http.get_json(url, base | {"term": "CLN6"}, ns="test") == {"n": 2}  # other params still key
+
+
 def test_ctgov_condition_statuses():
     idx = NameIndex()
     idx.add({"id": "MONDO:0019262", "type": "disease", "label": "juvenile neuronal ceroid lipofuscinosis",
