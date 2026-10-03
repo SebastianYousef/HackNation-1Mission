@@ -55,17 +55,18 @@ def run(g: Graph) -> dict[str, list[str]]:
 
     clusters, members, out = [], [], {}
     used: set[str] = set()
-    for comm in sorted(comms, key=len, reverse=True):
+    # every tie is broken by id so ids/labels do not depend on set order (PYTHONHASHSEED)
+    for comm in sorted(comms, key=lambda c: (-len(c), min(c))):
         if len(comm) < 2:
             continue
         ph = Counter(t for d in comm for t in pheno[d])
         me = Counter(m for d in comm for m in mech[d])
         # informative = frequent inside the cluster AND specific (high IC)
         top_ph = sorted((t for t, c in ph.items() if c >= 2 and t in g.nodes),
-                        key=lambda t: -(ph[t] * (g.nodes[t]["attrs"].get("ic") or 0)))[:6]
-        top_me = [m for m, c in me.most_common(6) if c >= 2]
+                        key=lambda t: (-(ph[t] * (g.nodes[t]["attrs"].get("ic") or 0)), t))[:6]
+        top_me = [m for m, c in sorted(me.items(), key=lambda kv: (-kv[1], kv[0]))[:6] if c >= 2]
         anchor = g.nodes[top_me[0]]["label"] if top_me else (g.nodes[top_ph[0]]["label"] if top_ph else None)
-        hub = max(comm, key=lambda d: sum(strength[d].get(o, 0) for o in comm))
+        hub = max(sorted(comm), key=lambda d: sum(strength[d].get(o, 0) for o in comm))
         label = anchor or g.nodes[hub]["label"]
         cid = "CL:" + slug(label, 40)
         while cid in used:
@@ -78,7 +79,7 @@ def run(g: Graph) -> dict[str, list[str]]:
             "id": cid, "label": f"{label} cluster", "method": method, "size": len(comm),
             "summary": f"{len(comm)} diseases (e.g. {ex}) grouped by shared informative symptoms and pathways.",
             "attrs": {"cohesion": cohesion, "top_phenotypes": top_ph, "top_mechanisms": top_me, "hub": hub}})
-        for d in comm:
+        for d in sorted(comm):
             tot = sum(strength[d].values()) or 1.0
             members.append({"cluster_id": cid, "node_id": d,
                             "membership": round(sum(strength[d].get(o, 0) for o in comm) / tot, 3)})

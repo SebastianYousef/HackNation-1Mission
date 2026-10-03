@@ -25,7 +25,7 @@ def run(g: Graph) -> None:
         if n is not None and n > maxg:
             continue
         gene = g.nodes[e["src"]]["label"]
-        for d in gene_dis.get(e["src"], ()):
+        for d in sorted(gene_dis.get(e["src"], ())):
             w.edge("disease_involves_mechanism", d, e["dst"], status="inferred", score=0.7, label="involves",
                    attrs={"via_genes": [gene]},
                    evidence=dict(source_type="computed", source_name="Atlas analytics", source_ref=e["id"],
