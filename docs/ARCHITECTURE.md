@@ -171,7 +171,7 @@ The free-tier cloud options below are the fallback, and the reference for a mult
 | L7 LB | Oracle Cloud Always Free **Flexible Load Balancer** (10 Mbps), or HAProxy on a VM | Render / Cloud Run built-in L7 |
 | API + worker + web + Redis | Oracle Always Free VMs (Ampere A1) in a **private subnet**, running `infra/docker-compose.yml` | Render free web service / Cloud Run |
 | Postgres | Managed Postgres free tier with pg_trgm + pgvector (via its pooler), or the compose `db` service | same |
-| Public URL during the hackathon | `cloudflared tunnel --url http://localhost:80` (free, instant HTTPS) | Lovable publish (`*.lovable.app`) + public API |
+| Public URL during the hackathon | `cloudflared tunnel --url https://localhost:443 --no-tls-verify` (free, instant HTTPS; `http://localhost:80` only 301s to https) | Lovable publish (`*.lovable.app`) + public API |
 
 Verify the current Always Free limits when signing up; Oracle sign-up needs a card, so start that at hour 0. Managed free-tier Postgres projects (e.g. Supabase) may pause after a week of inactivity, so keep one active through judging if you use it. The brief also accepts "easy to run locally": `make up` starts the whole stack (L4 → L7 ×2 → API ×3 → Redis/Postgres → web) with Docker Compose.
 
