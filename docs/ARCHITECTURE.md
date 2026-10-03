@@ -72,7 +72,7 @@ What happens when a user opens `https://atlas.example/d/MONDO:0016295`:
 | Resource | Budget |
 |---|---|
 | DB connections | replicas × WEB_CONCURRENCY × pool_size ≤ Postgres `max_connections`, or the pooler's client limit if one is in front (use pool_size = 5) |
-| OpenAI | per-IP and global rate limits in Redis; explanations cached forever per (audience, edge_ids) |
+| OpenAI | per-IP rate limits in Redis; complete explanations cached in Postgres per (audience, edge_ids) until the next data load (`load` clears the `explanations` table); outreach drafts are not cached |
 | Bright Data | only in the worker tier; scale workers independently of API replicas |
 
 ## 4. Data model (in Postgres, see `backend/db/migrations/`)
@@ -133,8 +133,9 @@ The brief: *"If you want to win the challenge track prizes, you need to leverage
 |---|---|---|---|---|---|
 | 1 | **Extract** | offline, **once** (Batch API) | abstract → JSON claims `{subject, relation, object, stance, quote}` | ~500–1,500 slice abstracts; cheap model; cached by PMID | Structured Outputs schema; **the quote must be an exact substring of the abstract, or the claim is dropped**; speculative wording → `hypothesis` |
 | 2 | **Reconcile** | offline, only leftovers | pick the right id among ≤ 5 candidates for names that xref/synonym matching couldn't resolve | tens to hundreds of names | the LLM may only choose from the given candidates or "none"; logged with method `llm:<model>` |
-| 3 | **Explain** | live `POST /explain` (+ precomputed for demo paths) | path edges + their evidence → plain-language steps, each citing one `edge_id` | demo paths precomputed; live calls cached forever per (audience, edge_ids); rate-limited | only the given evidence goes into the prompt; cited ids are validated against the input; the cache makes the demo independent of the API |
-| (opt.) | Explain | offline | `plain_summary`, `headline`, `why`/`differences` in views; outreach draft | a few dozen calls | same rules; template fallback without a key |
+| 3 | **Explain** | live `POST /explain` (nothing is precomputed) | path edges + their evidence → plain-language steps, each citing one `edge_id` | live calls cached per (audience, edge_ids) until the next data load; rate-limited | only the given evidence goes into the prompt; cited ids are validated against the input; without `OPENAI_API_KEY` it returns 503 `upstream_unavailable` (TODO(decision API-01): a keyless fallback is pending) |
+| (opt.) | Explain | offline | `plain_summary`, `headline`, `why`/`differences` in views | a few dozen calls | same rules; template fallback without a key |
+| (opt.) | Explain | live `POST /outreach-draft` | evidence → a cited message draft | on demand, not cached; rate-limited | citations validated against the input; 503 without a key, no template fallback |
 
 **Deliberately not LLM:**
 - search (trigram + synonyms)

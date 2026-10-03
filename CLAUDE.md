@@ -123,7 +123,7 @@ To change the landing page, edit `frontend/landing.html` here, push, and redeplo
 - `curated.yaml` holds the hand-curated NCL facts: patient groups (e.g. the Gray Foundation for CLN6), `ATLAS:mech-*` mechanisms (e.g. `ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes`, `-subunit-c-storage`, `-lysosomal-bmp-synthesis`), assets (DEM-CHILD registry, natural history studies, CLN5/CLN3/CLN6 animal and cell models) and therapies. Re-run `--verify` after adding quotes. PubMed quotes use NCBI efetch URLs, because pubmed.ncbi.nlm.nih.gov shows scripts a cookie wall.
 - Frontend prototype prompt with verified real demo ids: `frontend/PROTOTYPE_PROMPT.md`.
 - `.env` has only the Bright Data **Scraping Browser** credentials:
-  - `/explain` and `/outreach-draft` use template fallbacks (no `OPENAI_API_KEY`).
+  - No `OPENAI_API_KEY`, so `/explain` and `/outreach-draft` return 503 `upstream_unavailable`; there is no template fallback. TODO(decision API-01): a keyless fallback for `/explain` is pending.
   - Gap-search jobs fail with "BRIGHTDATA_API_KEY missing" (SERP key).
   - Extract, reconcile and `brightdata_orgs` have not run on the server.
 - The team frontend app is not deployed yet (`FRONTEND_REPO` empty), so only the landing page and the API are public.

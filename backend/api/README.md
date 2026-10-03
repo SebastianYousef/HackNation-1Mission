@@ -33,12 +33,12 @@ In mixed mode the ETag / cache key combines the fixture version and the DB `data
 - **AI** (`POST /explain`, `/outreach-draft`):
   - Uses OpenAI Structured Outputs (`OPENAI_MODEL`).
   - The prompt contains only the edges and evidence loaded through `api_edge` for the requested `edge_ids`, fenced in an `<evidence>` block the model is told to treat as data, never instructions (quotes and scraped page text are untrusted).
-  - Explain: the server drops any step that cites an edge outside the request and fills `status` and `confidence` from the DB. No valid step left → 502. Only explanations with a step for every requested edge are cached (`explanations` table, key `sha1(audience|edge_ids)`).
+  - Explain: the server drops any step that cites an edge outside the request and fills `status` and `confidence` from the DB. No valid step left → 502. Only explanations with a step for every requested edge are cached (`explanations` table, key `sha1(audience|edge_ids)`), and only until the next pipeline `load`, which clears that table. Outreach drafts are never cached.
   - Outreach: citations must name an input edge. A sentence whose `[n]` markers all lack a valid citation is dropped, dangling markers are stripped, and `citations` lists only numbers the body still shows. No grounded marker left → 502. Marker-free sentences (greeting, ask, sign-off) are kept.
   - URLs and e-mail addresses the model writes are replaced with `[link removed]` unless they appear in the prompt input.
   - Budget: OpenAI client timeout 12 s, 1 retry, hard deadline 24 s (below the LB's 30 s), timeout → 503.
   - Rate limit: `AI_RATE_LIMIT_PER_MINUTE` (10) per client IP, counted in Redis. The client IP is the X-Forwarded-For entry `TRUSTED_PROXY_HOPS` (default 1) from the right, i.e. the address our own L7 appended; client-supplied entries to its left are ignored. `TRUSTED_PROXY_HOPS=0` ignores XFF and uses the socket peer (API exposed directly). The same limit (separate buckets) applies to `/gap-search` and `/submissions`.
-  - Without `OPENAI_API_KEY` these endpoints return 503.
+  - Without `OPENAI_API_KEY` these endpoints return 503 `upstream_unavailable` when DB-backed (fixtures mode serves the canned files instead); there is no template fallback. TODO(decision API-01): a keyless fallback for `/explain` is pending.
 - **Jobs:**
   - `POST /gap-search` returns 202 `{job_id}` and pushes the job onto the Redis list `atlas:jobs` (503 if Redis is down).
   - `python -m atlas_api.worker` takes it with BRPOP, runs three Google searches through Bright Data (`jobs.brightdata_serp`: `POST https://api.brightdata.com/request {zone, url, format:"raw"}` with `brd_json=1`; verified live with a Web Unlocker zone, see the docstring), and stores the `JobStatus` at `job:<id>` (TTL `JOB_TTL_SECONDS`, 1 h; `running` only 120 s, so a job whose worker died expires instead of spinning). Leads are unverified web results and always carry the disclaimer.
