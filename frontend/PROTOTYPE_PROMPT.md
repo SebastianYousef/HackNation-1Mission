@@ -67,12 +67,12 @@ f) /plan = landing-2 "Plan your first step": "Your disease" (search-as-you-type,
 - "Contribute evidence" dialog → POST /submissions.
 - landing-2's 10× section can live on /about as-is (it is an illustrative model and says so).
 
-## 5. Real-data facts to design for (verified against the live API)
+## 5. Real-data facts to design for (checked against the live API; exact counts change with every data load, so read them from the API and never hard-code them)
 - Labels are lower-case MONDO names ("neuronal ceroid lipofuscinosis 5"); show them as given (sentence case at most).
-- Many nodes have summary: null and several lists are empty. assets is now filled for the NCLs: CLN5 has 6 (all `direct`: sheep/dog/mouse/iPSC models, DEM-CHILD registry, Neurogene natural history), CLN3/CLN2/CLN6 have 6 each (mix of `direct` and `adaptable` with what_differs), the NCL umbrella 2; most other diseases still have none. Every section needs a graceful Unknown/empty state; never render "null"/"undefined".
+- Many nodes have summary: null and several lists are empty. assets is filled for the main NCLs (CLN5: sheep/dog/mouse/iPSC models, DEM-CHILD registry, Neurogene natural history; CLN2/CLN3/CLN6 and the NCL umbrella too; some, e.g. Kufs type, carry `adaptable` assets with what_differs); most other diseases still have none. Every section needs a graceful Unknown/empty state; never render "null"/"undefined".
 - "batten" → juvenile NCL (MONDO:0019262), BDFA, BDSRA, the Batten Disease Clinical Research Consortium grant.
-- Hero CLN5 (MONDO:0009745): no approved treatment, no exact patient group, 6 related communities with 4 groups, 8 connections, 8 trials, 8 researchers, 4 next steps, 3 gaps, a caution.
-- CLN3 (MONDO:0008767): 1 exact group (Beyond Batten Disease Foundation) + the CLN2 counterexample caution. CLN2 (MONDO:0008769): approved treatment exists. NCL umbrella (MONDO:0016295): 3 groups (BDFA, BDSRA, NCL-Stiftung).
+- Hero CLN5 (MONDO:0009745): no approved treatment (the note names an investigational gene therapy), no exact patient group, several related communities with groups, plus connections, trials, researchers, next steps, gaps and at least one caution.
+- CLN3 (MONDO:0008767): exact groups (incl. Beyond Batten Disease Foundation) + the CLN2 counterexample caution. CLN2 (MONDO:0008769): approved treatment exists. NCL umbrella (MONDO:0016295): several exact groups (incl. BDFA, BDSRA, NCL-Stiftung).
 - Kufs type (MONDO:0008768): coverage.has_supported_route === false (the honest "Unknown" state).
 - Mechanism views exist only for some mechanisms; always handle 404. Curated ones that return 200: ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes (CLN6/CLN8), ATLAS:mech-subunit-c-storage (CLN5/CLN2/juvenile NCL), ATLAS:mech-lysosomal-bmp-synthesis (CLN5/CLN3).
 - CLN6 (MONDO:0011144) now has an exact patient group: Charlotte & Gwenyth Gray Foundation.
@@ -90,7 +90,7 @@ f) /plan = landing-2 "Plan your first step": "Your disease" (search-as-you-type,
 6. /d/MONDO:0008767 shows the amber CLN2 caution; the Reader/Researcher switch changes the detail level everywhere.
 7. /d/MONDO:0008768 opens with the validation/Unknown section first, phrased kindly.
 8. /plan?d=MONDO:0009745&stage=diagnosed produces a real plan; a disease with no data gives the fallback plan.
-9. /d/MONDO:0000000 shows a friendly Unknown state; ?mock=1 still works on every route; no sample data is left anywhere.
+9. /d/MONDO:0000000 shows a friendly Unknown state; ?mock=1 still works on every route with the mock fixture ids (e.g. /d/MONDO:MOCK0005; real ids 404 in mock mode and must show the same Unknown state); no sample data is left anywhere.
 Report which acceptance items pass, and anything in the contract that blocked you (write it to CONTRACT_REQUESTS.md, don't patch around it).
 ```
 
