@@ -323,6 +323,21 @@ table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-body);font-s
 @media (max-width:860px){.validate{grid-template-columns:1fr;gap:28px}}
 @media (max-width:520px){.vlist li{grid-template-columns:28px minmax(0,1fr)}.vlist li .st{grid-column:2;justify-self:start}}
 
+.ms-card{margin:0 0 28px;padding:24px;border:1px solid var(--night-rule);border-radius:var(--r);background:var(--night);max-width:880px}
+.ms-card h3{font-size:clamp(22px,2.4vw,28px);margin:10px 0 10px}
+.ms-card p{color:var(--night-ink-2);font-size:15px;max-width:72ch}
+.ms-card .ms-why{margin-top:10px;color:var(--night-ink)}
+.flow li span small{display:block;font-size:13px;line-height:1.45;color:var(--night-ink-2);margin-top:4px}
+.flow li span small.ms-refs{color:#B9C8FF}
+.flow li{align-items:start}
+.ms-assume{margin-top:56px}
+.ms-assume h3{font-size:clamp(26px,3vw,36px);margin:12px 0 20px}
+.ms-assume ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.ms-assume li{background:var(--night);border:1px solid var(--night-rule);border-radius:var(--r);padding:20px;display:grid;gap:8px;align-content:start}
+.ms-assume li p{font-size:14px;color:var(--night-ink-2)}
+.ms-assume li p b{color:var(--night-ink);font-weight:600}
+.ms-assume .ms-claim{font-size:16px;color:var(--night-ink);font-weight:500}
+
 /* COMMUNITIES */
 .comm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
 @media (max-width:860px){.comm-grid{grid-template-columns:1fr;gap:36px}}
@@ -662,10 +677,11 @@ footer p{max-width:70ch}
 <section class="night band tenx" id="tenx" aria-labelledby="tenxTitle">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow">The 10× question</div>
-      <h2 id="tenxTitle">Can we move one meaningful step toward treatment 10× faster?</h2>
-      <p class="lede">Today, reaching the next research decision means rediscovering what already exists. If the knowledge, assets and people were already connected, the same decision could be reached in a fraction of the time. In the span of one decision today, the connected route could complete ten.</p>
+      <div class="eyebrow">The 10× moonshot</div>
+      <h2 id="tenxTitle">Can CLN5 and CLN6 families get to a shared natural history study 10 times faster?</h2>
+      <p class="lede">In our illustrative model, a small family group spends about 3 years finding out what already exists, who to ask and whether another community&#x27;s study fits, before anyone decides to launch a shared study. The Atlas already lists the registries, studies, groups and researchers for CLN5 and CLN6 disease, each with its source, so we think that groundwork could take about 3 to 4 months. The speed-up comes from discovery and preparation, not from biology, ethics review or regulation.</p>
     </div>
+    <div class="ms-card" id="msMilestone"><div class="eyebrow">The milestone</div><h3>Agree to launch a shared natural history study for CLN5 and CLN6 families</h3><p>The milestone is reached when the partners agree to launch: who takes part, which existing registry or study it builds on, and what data it collects. Ethics review, contracts and enrolment come after and are not part of the 10× claim.</p><p class="ms-why">Before a therapy can be tested, researchers need to know how a disease unfolds without treatment. The two disease-specific natural history studies the Atlas lists have each followed one disease on its own: 37 people in the Neurogene CLN5 study and 30 in the Nationwide Children&#x27;s CLN6 study, as listed on ClinicalTrials.gov. A shared study built on registries that already exist could give future trials a clearer baseline and give families a way to take part now.</p></div>
     <div class="race">
       <div class="race-top">
         <button class="btn btn-ghost" id="playBtn" style="padding:8px 16px;font-size:14px">▶ Replay the timeline</button>
@@ -675,13 +691,15 @@ footer p{max-width:70ch}
           <span>Month <b id="cMonth">36</b></span>
         </div>
       </div>
-      <div class="race-svg"><svg id="raceSvg" viewBox="0 0 1000 300" role="img" aria-label="Timeline comparing one research decision today with ten decision cycles on the connected route over 36 months"></svg></div>
-      <div class="race-note"><span class="st H">Hypothesis</span>&nbsp; Illustrative model. Durations are assumptions for discussion, not measurements. The 10× figure is the claim this project sets out to test.</div>
+      <div class="race-svg"><svg id="raceSvg" viewBox="0 0 1000 300" role="img" aria-label="Illustrative timeline: about 36 months to agree on a shared natural history study today, against about 3.6 months per cycle on the connected route"></svg></div>
+      <div class="race-note"><span class="st H">Hypothesis</span>&nbsp; Illustrative model. Step lengths are assumptions for discussion, not measurements, and the 10× figure is the hypothesis this project sets out to test. The registries, studies, groups and mechanisms named here come from the live Atlas with their sources. A link in the Atlas is a reason to look closer, not clinical proof.</div>
     </div>
     <div class="flows">
       <div class="flow"><h4>Today</h4><ol id="flowToday"></ol></div>
       <div class="flow"><h4>One Mission</h4><ol id="flowOM"></ol></div>
     </div>
+
+    <div class="ms-assume" id="msAssumptions"><div class="eyebrow">Where the time goes</div><h3>The assumptions behind 10×</h3><ol><li><p class="ms-claim">Most of today&#x27;s 3 years goes into finding and judging, not into science.</p><p><b>Why we think so.</b> This is our working estimate, not a measurement. Our plan assumes related communities and assets are found by word of mouth and cold outreach, often over months to more than a year. The challenge brief describes groups rebuilding assets they cannot find, and says that judging diseases one at a time takes a scout months per mechanism.</p><p><b>How to test it.</b> Interview patient organisation leaders who have set up a study and time each phase they went through.</p></li><li><p class="ms-claim">The building blocks already exist and can be found in public sources.</p><p><b>Why we think so.</b> From public records alone the Atlas found a recruiting registry that lists both CLN5 and CLN6, a natural history study for each disease, a family register and sheep models for both, each with a source you can open. Coverage still depends on what public sources hold.</p><p><b>How to test it.</b> Ask NCL clinicians and patient groups what we missed, and measure how much of their list the Atlas already holds.</p></li><li><p class="ms-claim">Building on an existing registry is faster than designing a new study.</p><p><b>Why we think so.</b> DEM-CHILD is one registered natural history study for all NCL forms, including CLN5 and CLN6, run from the Hamburg NCL clinic, and a published paper has already used its records of 15 children with CLN5. Data fields and outcome measures may not need to be invented again.</p><p><b>How to test it.</b> Ask the DEM-CHILD team whether a shared CLN5 and CLN6 effort fits their current consent and data access, and how long joining would take.</p></li><li><p class="ms-claim">Similar symptoms and course are enough for a shared observational study, even though the mechanisms differ.</p><p><b>Why we think so.</b> Both diseases build up subunit c and share informative symptoms. A natural history study measures how symptoms change over time, not whether a drug works, so we expect the mechanism difference to matter less here than it would for a shared trial.</p><p><b>How to test it.</b> Have NCL clinicians review whether the same outcome measures and visit schedule work for both diseases.</p></li><li><p class="ms-claim">Expert time can be focused on a short checklist instead of open-ended reading.</p><p><b>Why we think so.</b> Every link in the Atlas carries a status and a source, and the Atlas lists the questions that need review, so an expert checks a handful of points rather than starting from a blank page.</p><p><b>How to test it.</b> Time an expert reviewing the Atlas checklist against the same review done from scratch, and record where they disagree with the Atlas.</p></li><li><p class="ms-claim">A sourced proposal gets answered sooner than a cold email.</p><p><b>Why we think so.</b> A message that names the shared registry, the shared biology and its limits gives the reader a concrete reason to reply. This is untested.</p><p><b>How to test it.</b> Run a pilot with one real patient organisation and track reply rates and time to a first meeting.</p></li><li><p class="ms-claim">The speed-up ends at the decision to launch.</p><p><b>Why we think so.</b> Ethics review, contracts, enrolment and the biology itself do not get faster because information is easier to find, so we leave them out of the 10× claim.</p><p><b>How to test it.</b> Track the time after the decision separately in any pilot, so the claim cannot quietly grow.</p></li></ol></div>
 
     <div class="validate">
       <div>
@@ -1319,8 +1337,8 @@ $('#jpanel').addEventListener('click',e=>{const b=e.target.closest('[data-j]'); 
 $('#jtrack').addEventListener('keydown',e=>{ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft'&&e.key!=='ArrowDown'&&e.key!=='ArrowUp') return; e.preventDefault(); jSel=(jSel+(e.key==='ArrowRight'||e.key==='ArrowDown'?1:5))%6; renderJourney(); $('#jtab'+jSel).focus(); });
 
 /* ---------- 10x ---------- */
-const TODAY=[['Scattered knowledge',4],['Manual research',8],['Cold outreach',5],['Rebuilding existing assets',12],['Slow collaboration',7]];
-const OM=[['Disease',.2],['Evidence',.8],['Connection',.6],['Existing asset',.8],['Collaborator',.7],['Shared action',.5]];
+const TODAY=[["Finding out what already exists", 6, "Parents search by gene name, ask at conferences and wait for word of mouth. Registries and studies sit inside trial records and papers filed under other disease names, so many of them are easy to miss."], ["Judging what applies to both diseases", 8, "Someone has to read the biology and ask scarce experts whether CLN5 and CLN6 are alike enough to study together, and where they differ."], ["Finding the right partners", 6, "Cold emails go to clinics, companies and other family groups. Many go unanswered, and each reply leads to another name to chase."], ["Designing the study from scratch", 10, "Without knowing what others built, the group drafts its own data fields, outcome measures and consent, often repeating work an existing registry has already done."], ["Agreeing to work together", 6, "Rounds of meetings on scope, data sharing and who leads, ending in a decision to launch."]];
+const OM=[["Disease", 0.2, "Start from CLN5 disease: confirm the diagnosis, see that no treatment is approved yet and that it belongs to the NCL family. One search gives a stable disease id, the treatment status with its source and the family it belongs to, so nobody has to piece this together from scattered pages.", ["neuronal ceroid lipofuscinosis 5", "neuronal ceroid lipofuscinosis", "NGN-101 (AAV9 CLN5 gene therapy, Neurogene), investigational"]], ["Evidence", 0.8, "Read what CLN5 and CLN6 share and where they differ, and hand the open questions to an expert. Weeks of reading become a short, sourced list: both diseases build up subunit c of mitochondrial ATP synthase, while CLN5 is a soluble lysosomal protein and CLN6 works in ER-to-Golgi transport. One 2022 study also links CLN5 to that same transport step. The Atlas flags the difference as a caution, so the expert starts from the right question.", ["lysosomal storage of mitochondrial ATP synthase subunit c, CLN5", "lysosomal storage of mitochondrial ATP synthase subunit c, CLN6", "Soluble lysosomal protein/enzyme deficiency, CLN5", "ER-to-Golgi transfer of lysosomal enzymes (CLN6-CLN8 EGRESS complex), CLN6"]], ["Connection", 0.6, "Choose the partner community and the groups that already serve these families. The Atlas shows CLN6 as a related disease with overlapping symptoms and names the groups around it: BDSRA for the whole NCL family and the Gray Foundation for CLN6. It also says plainly that it found no group for exactly CLN5, which is a reason to partner.", ["CLN5 is similar to CLN6: shared informative symptoms (inferred link)", "Batten Disease Support, Research, and Advocacy Foundation (BDSRA)", "Charlotte & Gwenyth Gray Foundation to Cure Batten Disease"]], ["Existing asset", 0.8, "Find registries, studies and models to build on instead of starting from zero. Finding them takes minutes instead of months of emailing, because the Atlas already lists the DEM-CHILD international NCL registry with its source. It lists both CLN5 and CLN6 and is recruiting, according to ClinicalTrials.gov. Next to it are the two single-disease natural history studies, the BDSRA family register and two sheep models that one 2023 study already compared side by side. The rest of this step goes into checking whether each one fits.", ["DEM-CHILD NCL Patient Database (international NCL registry, NCT04613089), covers CLN5", "DEM-CHILD NCL Patient Database (international NCL registry, NCT04613089), covers CLN6", "Neurogene CLN5 natural history and outcome measure study (NCT03822650)", "CLN6 disease natural history study (NCT03285425)"]], ["Collaborator", 0.7, "Identify the teams who run these assets and the researchers who already work across both diseases. Each asset links to who maintains it, so the first email goes to the right team. Sara E Mole publishes on both CLN5 and CLN6, and Lincoln University has described keeping both sheep flocks, so they could help bridge the two communities.", ["University Medical Center Hamburg-Eppendorf (UKE), NCL Specialty Clinic", "Neurogene Inc.", "Nationwide Children's Hospital", "Sara E Mole, publishes on CLN5"]], ["Shared action", 0.5, "Send a sourced proposal and meet to decide whether to launch the shared study. The proposal is drafted from the cited links above, so partners can check every claim. It carries the open questions with it, starting with the one the Atlas marks as needing review: do findings from CLN5 transfer to CLN6?", ["Next step: explore reusing the CLN6 disease natural history study (NCT03285425)", "Next step: test whether CLN6 and CLN5 share the mechanism (needs review)"]]];
 const TOTAL=36, X0=24, X1=976, xs=m=>X0+(X1-X0)*m/TOTAL;
 const greys=['#2A3746','#334354','#3C4F63','#465B72','#506780'];
 const blues=['#5B8CFF','#6C98FF','#7FA5FF','#93B3FF','#A8C1FF','#BDD0FF'];
@@ -1329,12 +1347,12 @@ function renderRace(){
   // axis
   for(let m=0;m<=36;m+=6){const x=xs(m);h+=`<line x1="${x}" y1="40" x2="${x}" y2="262" stroke="var(--night-rule)" stroke-width="1"/><text x="${x}" y="284" fill="var(--night-ink-2)" font-size="12" text-anchor="${m===0?'start':m===36?'end':'middle'}" style="font-family:var(--f-body)">${m===0?'0':m+' months'}</text>`}
   // Today lane
-  h+=`<text x="${X0}" y="30" fill="var(--night-ink)" font-size="14" font-weight="600">Today</text><text x="${X0+56}" y="30" fill="var(--night-ink-2)" font-size="13">one research decision</text>`;
+  h+=`<text x="${X0}" y="30" fill="var(--night-ink)" font-size="14" font-weight="600">Today</text><text x="${X0+56}" y="30" fill="var(--night-ink-2)" font-size="13">one decision to launch a shared study</text>`;
   let t=0; TODAY.forEach(([l,d],i)=>{const x=xs(t),w=xs(t+d)-x; h+=`<rect x="${x+1}" y="48" width="${w-2}" height="54" rx="3" fill="${greys[i]}"><title>${l}: about ${d} months (assumption)</title></rect>`;
-    if(w>l.length*7+20) h+=`<text x="${x+10}" y="72" fill="#E5EBF1" font-size="12.5">${l}</text><text x="${x+10}" y="90" fill="#AEBBCB" font-size="11.5" style="font-family:var(--f-body)">${d} months</text>`; t+=d;});
+    if(w>l.length*7+20) h+=`<text x="${x+10}" y="72" fill="#E5EBF1" font-size="12.5">${l}</text><text x="${x+10}" y="90" fill="#AEBBCB" font-size="11.5" style="font-family:var(--f-body)">${d} months</text>`; else if(w>70) h+=`<text x="${x+10}" y="90" fill="#AEBBCB" font-size="11.5" style="font-family:var(--f-body)">${d} months<title>${l}</title></text>`; t+=d;});
   h+=`<g class="decision" data-lane="t" data-m="36"><path d="M${xs(36)} 40 l7 7 l-7 7 l-7 -7z" fill="#E5EBF1"/></g>`;
   // One Mission lane
-  h+=`<text x="${X0}" y="148" fill="var(--night-ink)" font-size="14" font-weight="600">One Mission</text><text x="${X0+102}" y="148" fill="var(--night-ink-2)" font-size="13">ten decision cycles in the same time</text>`;
+  h+=`<text x="${X0}" y="148" fill="var(--night-ink)" font-size="14" font-weight="600">One Mission</text><text x="${X0+102}" y="148" fill="var(--night-ink-2)" font-size="13">about ten such cycles in the same time</text>`;
   const cyc=OM.reduce((a,b)=>a+b[1],0);
   for(let c=0;c<10;c++){ let m=c*cyc;
     OM.forEach(([l,d],i)=>{const x=xs(m),w=xs(m+d)-x; h+=`<rect x="${x}" y="166" width="${Math.max(w-.6,1)}" height="54" fill="${blues[i]}" opacity="${c===0?1:.72}"><title>Cycle ${c+1}, ${l}: about ${Math.round(d*30)} days (assumption)</title></rect>`; m+=d;});
@@ -1346,8 +1364,8 @@ function renderRace(){
   h+=`<line id="playhead" x1="${xs(36)}" y1="40" x2="${xs(36)}" y2="226" stroke="#E5EBF1" stroke-width="1.5" opacity="0"/>`;
   $('#raceSvg').innerHTML=h;
   // flows
-  $('#flowToday').innerHTML=TODAY.map(([l,d],i)=>`<li><i style="background:${greys[i]}"></i><span>${l}</span><span class="m">about ${d} months</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Next research decision</span><span class="m">month ${TOTAL}</span></li>`;
-  $('#flowOM').innerHTML=OM.map(([l,d],i)=>`<li><i style="background:${blues[i]}"></i><span>${l}</span><span class="m">about ${Math.round(d*30)} days</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Next research decision</span><span class="m">month ${cyc.toFixed(1)}</span></li>`;
+  $('#flowToday').innerHTML=TODAY.map(([l,d,w],i)=>`<li><i style="background:${greys[i]}"></i><span>${l}<small class="ms-w">${esc(w||'')}</small></span><span class="m">about ${d} months</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Decision to launch the shared study</span><span class="m">month ${TOTAL}</span></li>`;
+  $('#flowOM').innerHTML=OM.map(([l,d,w,refs],i)=>`<li><i style="background:${blues[i]}"></i><span>${l}<small class="ms-w">${esc(w||'')}</small>${(refs&&refs.length)?`<small class="ms-refs">From the live Atlas: ${refs.map(esc).join('; ')}</small>`:''}</span><span class="m">about ${Math.round(d*30)} days</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Decision to launch the shared study</span><span class="m">month ${cyc.toFixed(1)}</span></li>`;
 }
 let raf=0;
 function play(){
@@ -1362,13 +1380,7 @@ function play(){
 }
 $('#playBtn').addEventListener('click',play);
 
-const VAL=[
-  ['Is the biological connection valid?','E','Partly. MT-ATP6 variants are documented in both MILS and NARP. Whether shared biology means shared biomarker behavior is untested.'],
-  ['Can the existing research asset be reused?','H','Registry and cell lines exist. Consent terms, data fields and sharing agreements have not been checked.'],
-  ['Are the relevant patient populations comparable?','U','Age, severity and heteroplasmy differ between groups. Comparability needs data we do not yet have.'],
-  ['Can the identified researchers or organizations collaborate?','U','Nobody has been asked. Capacity, funding and willingness are unknown.'],
-  ['Can this route meaningfully shorten the next treatment milestone?','H','This is the central claim. It can only be answered by running the route and timing it.']
-];
+const VAL=[["Is the link between CLN5 and CLN6 strong enough for a shared study?", "E", "Partly. Published sources document subunit c storage in both. Their mechanisms largely differ: CLN5 is a soluble lysosomal protein and CLN6 works in ER-to-Golgi transport, although one 2022 study links CLN5 to that step too. Whether the difference matters for an observational study needs expert review."], ["Can the existing registry and studies be reused?", "H", "DEM-CHILD lists CLN5 and CLN6 and is recruiting, according to ClinicalTrials.gov. The Neurogene CLN5 study is completed and the CLN6 study is active but not recruiting. Consent terms, data fields and access have not been checked."], ["Are CLN5 and CLN6 families comparable?", "U", "Age at onset, speed of decline and the mix of symptoms may differ. We have not compared them on patient data."], ["Will the groups and teams take part?", "U", "Nobody has been asked. UKE Hamburg, Nationwide Children's Hospital, Neurogene, BDSRA and the Gray Foundation are named in sources, but capacity, funding and willingness are unknown."], ["Does this route reach the decision to launch 10 times faster?", "H", "This is the central claim. It can only be answered by running the route with one real patient organisation and timing each step."]];
 $('#vlist').innerHTML=VAL.map((v,i)=>`<li><span class="n">${i+1}</span><span class="q">${v[0]}</span>${stPill(v[1])}<span class="d">${v[2]}</span></li>`).join('');
 
 /* ---------- TRUST ---------- */
