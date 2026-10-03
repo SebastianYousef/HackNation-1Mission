@@ -110,8 +110,10 @@ def org_card(ix: Index, e: dict) -> dict:
 
 
 def groups_for(ix: Index, d: str) -> list[dict]:
+    # unverified web leads (status hypothesis, attrs.unverified) are not presented as groups; gap search lists them
     es = [e for e in ix.src_of(d, "organization_serves_disease")
-          if ix.g.nodes[e["src"]].get("subtype") in GROUP_SUBTYPES]
+          if ix.g.nodes[e["src"]].get("subtype") in GROUP_SUBTYPES and e["status"] != "hypothesis"
+          and not (ix.g.nodes[e["src"]].get("attrs") or {}).get("unverified")]
     return [org_card(ix, e) for e in sorted(es, key=lambda e: (-e["confidence"], e["src"]))]
 
 
@@ -136,21 +138,52 @@ def trial_card(ix: Index, e: dict, relevance: str, note: str | None) -> dict:
     return {"node": brief(g, t["id"]), "nct_id": a.get("nct_id") or t["id"], "phase": a.get("phase"),
             "overall_status": a.get("overall_status"),
             "intervention": ", ".join(g.nodes[x["dst"]]["label"] for x in ivs) or a.get("intervention"),
-            "conditions": [brief(g, x["dst"]) for x in ix.dst_of(t["id"], "trial_studies_disease")][:5],
+            "conditions": [brief(g, x["dst"]) for x in ix.dst_of(t["id"], "trial_studies_disease")
+                           if x["status"] != "hypothesis"][:5],
             "relevance": relevance, "eligibility_note": note,
             "url": t.get("url") or f"https://clinicaltrials.gov/study/{a.get('nct_id') or t['id']}",
             "edge_ids": [e["id"]] + [x["id"] for x in ivs]}
 
 
-def asset_card(ix: Index, aid: str, d: str, related: set[str], family: dict[str, list[str]] | None = None) -> dict:
-    """family = {broader disease: subtype edge ids}: an asset built for d's broader family is adaptable."""
-    g, family = ix.g, family or {}
-    cov_es = sorted(ix.dst_of(aid, "asset_covers_disease"), key=lambda x: x["dst"])
-    own_es = sorted(ix.src_of(aid, "organization_maintains_asset"), key=lambda x: x["src"])
+def unconfirmed_trial_note(ix: Index, e: dict, label: str) -> str:
+    """Eligibility note for a 'hypothesis' trial_studies_disease link (CT.gov synonym or title match):
+    the registry does not list d as a condition, so the card never claims it is a same-disease trial."""
+    evs = sorted(ix.g.evidence.get(e["id"], []), key=lambda v: v.get("id") or "")
+    cond = next((v for v in evs if (v.get("method") or "").endswith((":synonym", ":abbrev"))), None)
+    if cond:
+        name = (cond.get("quote") or "").removeprefix("Condition:").strip()
+        kind = "an abbreviation" if cond["method"].endswith(":abbrev") else "a synonym"
+        how = f"ClinicalTrials.gov lists the condition \"{name}\", which matches {label} only as {kind}"
+    elif any((v.get("method") or "").endswith("title_match") for v in evs):
+        how = f"ClinicalTrials.gov does not list {label} as a condition; only the study title names it"
+    else:
+        how = f"the link to {label} is not confirmed by the registry"
+    return f"Unconfirmed match: {how}. Check with the study team that it enrols {label}."
+
+
+def quoted_mechanisms(ix: Index, d: str) -> dict[str, dict]:
+    """d's mechanisms backed by a curated database or a verbatim quote (e.g. ATLAS:mech-* from curated.yaml),
+    not gene -> pathway propagation: mechanism id -> disease_involves_mechanism edge."""
+    return {e["dst"]: e for e in sorted(ix.dst_of(d, "disease_involves_mechanism"), key=lambda e: e["dst"])
+            if e["status"] in ("curated", "literature")}
+
+
+def asset_card(ix: Index, aid: str, d: str, related: set[str], family: dict[str, list[str]] | None = None,
+               mates: dict[str, tuple[str, list[str]]] | None = None) -> dict:
+    """family = {broader disease: subtype edge ids}: an asset built for d's broader family is adaptable.
+    mates = {disease: (quoted mechanism shared with d, its two disease_involves_mechanism edge ids)}: an asset
+    built only for such a disease is reference material (it does not model d), cited through the mechanism.
+    'hypothesis' cover links (no verbatim source) are ignored."""
+    g, family, mates = ix.g, family or {}, mates or {}
+    cov_es = sorted((x for x in ix.dst_of(aid, "asset_covers_disease") if x["status"] != "hypothesis"),
+                    key=lambda x: x["dst"])
+    own_es = sorted((x for x in ix.src_of(aid, "organization_maintains_asset") if x["status"] != "hypothesis"),
+                    key=lambda x: x["src"])
     covers = [x["dst"] for x in cov_es]
     owner = own_es[0]["src"] if own_es else None
     label = g.nodes[d]["label"]
     fam = [c for c in covers if c in family]
+    mate = next((c for c in covers if c in mates), None)
     reuse = "direct" if d in covers else ("adaptable" if fam or related & set(covers) else "reference_only")
     if reuse == "direct":
         differs, review = [], []
@@ -161,8 +194,12 @@ def asset_card(ix: Index, aid: str, d: str, related: set[str], family: dict[str,
         differs = [f"Built for {', '.join(g.nodes[c]['label'] for c in covers[:3])}, not {label}"]
         review = [f"Do eligibility criteria and outcome measures fit {label} patients?",
                   "Does the owner accept families with a related diagnosis?"]
+    if reuse == "reference_only" and mate:
+        differs.append(f"{g.nodes[mate]['label']} shares {g.nodes[mates[mate][0]]['label']} with {label}, "
+                       "but it is a different disease")
+        review = [f"Does it reproduce anything specific to {label}, or only the shared mechanism?"]
     eids = [x["id"] for x in cov_es] + [x["id"] for x in own_es] + \
-        sorted({x for c in fam for x in family[c]})
+        sorted({x for c in fam for x in family[c]}) + (mates[mate][1] if reuse == "reference_only" and mate else [])
     return {"node": brief(g, aid), "asset_kind": g.nodes[aid].get("subtype") or "registry",
             "owner": brief(g, owner) if owner else None, "covers": [brief(g, c) for c in covers[:6]],
             "reusability": reuse, "what_differs": differs, "needs_review": review, "edge_ids": eids}
@@ -190,16 +227,55 @@ def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plink
     # disease's families, not d's: it does not pull extra communities, gaps or experiments into d's view
     own_tx = {e["id"] for _, e in allsims if (e.get("attrs") or {}).get("caution_kind") == "approved_therapy"
               and (e.get("attrs") or {}).get("therapy_for") == d}
-    # top 5 plus every counterexample: a look-alike with a different mechanism must always be visible
-    sims = allsims[:5] + [x for x in allsims[5:] if (x[1].get("attrs") or {}).get("caution") and x[1]["id"] not in own_tx]
-    related = {o for o, _ in sims}
+    qmech_d = quoted_mechanisms(ix, d)
+    # top 5 plus every counterexample (a look-alike with a different mechanism must always be visible) plus up
+    # to 3 look-alikes that share a quoted mechanism with d (the explainable kind of similarity)
+    mech_sims = [x for x in allsims[5:] if set(quoted_mechanisms(ix, x[0])) & set(qmech_d)
+                 and not (x[1].get("attrs") or {}).get("caution")][:3]
+    sims = allsims[:5] + [x for x in allsims[5:] if (x[1].get("attrs") or {}).get("caution") and x[1]["id"] not in own_tx] \
+        + mech_sims
     family = dict(ix.ancestors(d))   # broader disease -> subtype edge ids leading there
+    partners = {o for o, e in allsims if (e.get("attrs") or {}).get("caution")}
+    # assets of a top look-alike are "adaptable"; a counterexample's are not, and a mechanism-mate's are reference
+    related = {o for o, _ in sims} - {o for o, _ in mech_sims} - partners
+    # diseases sharing a quoted mechanism with d, other than d's broader family and d's own subtypes:
+    # {disease: (mechanism, [both edge ids])}
+    mates: dict[str, tuple[str, list[str]]] = {}
+    for m, e in qmech_d.items():
+        for x in sorted(ix.src_of(m, "disease_involves_mechanism"), key=lambda x: x["src"]):
+            if x["status"] in ("curated", "literature") and x["src"] != d and x["src"] not in family \
+                    and d not in dict(ix.ancestors(x["src"])):
+                mates.setdefault(x["src"], (m, [e["id"], x["id"]]))
 
-    tx = ix.src_of(d, "intervention_treats_disease")
-    approved = [e for e in tx if (e.get("attrs") or {}).get("approval") == "approved"]
-    has_tx = True if approved else (False if tx else None)
-    tx_note = (f"Approved: {', '.join(g.nodes[e['src']]['label'] for e in approved)}" if approved else
-               "No approved treatment found in the sources we checked." if tx is not None else "")
+    # treatment status: only a quoted (curated / literature) 'approved' link makes it true. Investigational
+    # therapies and unquoted claims are listed, never counted; an approval for d's broader diagnosis is
+    # reported as such (unknown for d itself), never transferred from a look-alike.
+    tx = sorted(ix.src_of(d, "intervention_treats_disease"), key=lambda e: e["src"])
+    approval = lambda e: (e.get("attrs") or {}).get("approval")  # noqa: E731
+    approved = [e for e in tx if e["status"] != "hypothesis" and approval(e) == "approved"]
+    trying = [e for e in tx if e["status"] != "hypothesis" and approval(e) != "approved"]
+    unquoted = [e for e in tx if e["status"] == "hypothesis"]
+    fam_tx = [(p, e, chain) for p, chain in family.items()
+              for e in sorted(ix.src_of(p, "intervention_treats_disease"), key=lambda e: e["src"])
+              if e["status"] != "hypothesis" and approval(e) == "approved"]
+    has_tx = True if approved else (None if fam_tx else (False if trying else None))
+    names = lambda es: ", ".join(g.nodes[e["src"]]["label"] for e in es)  # noqa: E731
+    notes = []
+    if approved:
+        notes.append(f"Approved: {names(approved)}.")
+    elif fam_tx:
+        p0 = g.nodes[fam_tx[0][0]]["label"]
+        notes.append(f"Approved for {p0}, the broader diagnosis that includes {label}: "
+                     f"{names([e for _, e, _ in fam_tx])}. Whether the approval covers {label} must be checked.")
+    else:
+        notes.append("No approved treatment found in the sources we checked.")
+    if trying:
+        notes.append(f"Investigational, not approved: {names(trying)}.")
+    if unquoted:
+        notes.append(f"Unconfirmed claims (no verbatim source yet): {names(unquoted)}.")
+    tx_note = " ".join(notes)
+    tx_eids = [e["id"] for e in approved + trying + unquoted] + \
+        sorted({x for _, e, chain in fam_tx for x in [e["id"], *chain]})
 
     exact = groups_for(ix, d)
     # groups serving a broader disease (e.g. every NCL) also serve d's families: shown as that family's
@@ -231,18 +307,25 @@ def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plink
         comp = (e.get("attrs") or {}).get("components", {})
         ph = comp.get("phenotype")   # absent = not scored (too few annotated symptoms), not "low"
         mech_o = {x["dst"] for x in ix.dst_of(o, "disease_involves_mechanism") if x["status"] != "hypothesis"}
+        qmech_o = set(quoted_mechanisms(ix, o))
         gene_o = {x["src"] for x in ix.src_of(o, "gene_associated_with_disease")}
+        lab = lambda xs, n: ", ".join(g.nodes[x]["label"] for x in sorted(xs)[:n])  # noqa: E731
         why = []
         if gene_d & gene_o:
-            why.append("the same gene (" + ", ".join(g.nodes[x]["label"] for x in sorted(gene_d & gene_o)) + ")")
-        if mech_d & mech_o:
-            why.append("pathways (" + ", ".join(g.nodes[x]["label"] for x in sorted(mech_d & mech_o)[:2]) + ")")
+            why.append("the same gene (" + lab(gene_d & gene_o, 9) + ")")
+        shared_q = qmech_o & set(qmech_d)
+        if shared_q:   # hand-checked mechanism first, propagated pathways after
+            why.append("a documented disease mechanism (" + lab(shared_q, 2) + ")")
+        if (mech_d & mech_o) - shared_q:
+            why.append("pathways (" + lab((mech_d & mech_o) - shared_q, 1 if shared_q else 2) + ")")
         if ph is not None and ph >= 0.2:
             why.append("an overlapping pattern of informative symptoms")
         diffs = []
         if gene_o - gene_d:
-            diffs.append("Different gene: " + ", ".join(g.nodes[x]["label"] for x in sorted(gene_o - gene_d)[:3]))
-        if mech_o and mech_d and not (mech_o & mech_d):
+            diffs.append("Different gene: " + lab(gene_o - gene_d, 3))
+        if qmech_o and qmech_d and qmech_o - mech_d:
+            diffs.append(f"Documented for {g.nodes[o]['label']} but not known for {label}: " + lab(qmech_o - mech_d, 2))
+        elif mech_o and mech_d and not (mech_o & mech_d):
             diffs.append("No shared known pathway")
         if ph is None:
             diffs.append("Too few symptoms recorded to compare them")
@@ -257,26 +340,44 @@ def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plink
     my_paths = [p for p in paths if p["from_id"] == d]
     connections = []
     for kind in ("patient_group", "related_disease", "asset", "researcher", "trial", "intervention"):
-        connections += [path_json(g, p) for p in my_paths if p["kind"] == kind][:2]
+        ps = [p for p in my_paths if p["kind"] == kind]
+        pick = ps[:2]
+        # a related disease reached through a documented mechanism is the explainable route: always show one,
+        # preferring one without a caution (CLN5 -> soluble deficiency -> CLN1 over CLN5 -> SCMAS storage -> CLN2)
+        via_mech = [p for p in ps if (p.get("attrs") or {}).get("bridge") == "shared_mechanism"]
+        mech_pick = next((p for p in via_mech if not (p.get("attrs") or {}).get("caution")), via_mech[0]) \
+            if via_mech else None
+        if kind == "related_disease" and mech_pick and mech_pick not in pick:
+            pick = ps[:1] + [mech_pick]
+        connections += [path_json(g, p) for p in pick]
 
-    asset_ids = sorted({e["src"] for x in {d} | related | set(family) for e in ix.src_of(x, "asset_covers_disease")})
-    assets = sorted((asset_card(ix, a, d, related, family) for a in asset_ids),
+    asset_ids = sorted({e["src"] for x in {d} | related | set(family) | set(mates)
+                        for e in ix.src_of(x, "asset_covers_disease") if e["status"] != "hypothesis"})
+    assets = sorted((asset_card(ix, a, d, related, family, mates) for a in asset_ids),
                     key=lambda c: (REUSE.index(c["reusability"]), c["node"]["id"]))[:6]
 
     # an interventional trial that studies a counterexample (e.g. CLN2 enzyme replacement for CLN5) is never
     # suggested unless it also studies d itself; registries and natural-history studies stay
-    # (same rules as analytics/paths.py)
-    partners = {o for o, e in allsims if (e.get("attrs") or {}).get("caution")}
+    # (same rules as analytics/paths.py). 'hypothesis' trial links (CT.gov synonym / title matches) are never
+    # shown as same-disease trials: d's own are labelled unconfirmed, other diseases' are left out.
+    confirmed = lambda es: [e for e in es if e["status"] != "hypothesis"]  # noqa: E731
     genes_of = lambda x: {e["src"] for e in ix.src_of(x, "gene_associated_with_disease") if e["status"] != "hypothesis"}  # noqa: E731
-    conds = lambda e: {x["dst"] for x in ix.dst_of(e["src"], "trial_studies_disease") if x["status"] != "hypothesis"}  # noqa: E731
+    # what a trial names: its confirmed conditions plus what its tested interventions treat (a CLN2 enzyme
+    # replacement trial whose CT.gov condition links are all 'hypothesis' still names CLN2), as in paths.py
+    conds = lambda e: {x["dst"] for x in ix.dst_of(e["src"], "trial_studies_disease") if x["status"] != "hypothesis"} | {  # noqa: E731
+        x["dst"] for iv in ix.dst_of(e["src"], "trial_tests_intervention") if iv["status"] != "hypothesis"
+        for x in ix.dst_of(iv["dst"], "intervention_treats_disease") if x["status"] != "hypothesis"}
     therapy = lambda e: g.nodes[e["src"]].get("subtype") == "interventional"  # noqa: E731
     ok = lambda e: not counterexample_therapy(d, conds(e), therapy(e), partners)  # noqa: E731
     # filed under d's broader family but naming only other subtypes (CLN2 gene therapy under "late infantile NCL")
     for_d_family = lambda e: ok(e) and not other_subtype_therapy(  # noqa: E731
         d, conds(e), therapy(e), [genes_of(x) for x in conds(e)], genes_of(d))
-    trials = [trial_card(ix, e, "same_disease", None) for e in ix.src_of(d, "trial_studies_disease")]
+    own = sorted(ix.src_of(d, "trial_studies_disease"), key=lambda e: (STATUS_RANK.index(e["status"]), e["src"]))
+    trials = [trial_card(ix, e, "same_disease", None) for e in confirmed(own)]
+    trials += [trial_card(ix, e, "related_disease", unconfirmed_trial_note(ix, e, label))
+               for e in own if e["status"] == "hypothesis" and for_d_family(e)]
     for p, chain in family.items():
-        for e in [e for e in ix.src_of(p, "trial_studies_disease") if for_d_family(e)][:3]:
+        for e in [e for e in confirmed(ix.src_of(p, "trial_studies_disease")) if for_d_family(e)][:3]:
             pl = g.nodes[p]["label"]
             c = trial_card(ix, e, "related_disease",
                            f"Tests a therapy in {pl}, the broader group that includes {label}, without naming {label}; "
@@ -287,7 +388,7 @@ def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plink
     for o, _ in sims:
         if o not in partners:
             trials += [trial_card(ix, e, "related_disease", f"Studies {g.nodes[o]['label']}; check eligibility for {label}.")
-                       for e in ix.src_of(o, "trial_studies_disease") if ok(e)]
+                       for e in confirmed(ix.src_of(o, "trial_studies_disease")) if ok(e)]
     seen, uniq = set(), []
     for t in trials:
         if t["node"]["id"] not in seen:
@@ -354,9 +455,13 @@ def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plink
     # cautions about a transfer *to* d (not about d's own approved therapy reaching the other disease)
     transfer = [c for c in sim_comms if c["caution"] and c["similarity_edge_id"] not in own_tx]
     for c in transfer[:1]:
-        step("validate_experiment", f"Test whether {label} and {c['disease']['label']} share the mechanism",
-             c["caution"], None, "needs_review", ["Expert review of the mechanism difference"], "this_quarter",
-             [c["similarity_edge_id"]])
+        kind = (g.edges[c["similarity_edge_id"]].get("attrs") or {}).get("caution_kind")
+        step("validate_experiment",
+             f"Ask experts whether findings from {c['disease']['label']} apply to {label}" if kind == "approved_therapy"
+             else f"Test whether {label} and {c['disease']['label']} share the mechanism",
+             c["caution"], None, "needs_review",
+             ["Expert review: the approval does not cover " + label] if kind == "approved_therapy" else
+             ["Expert review of the mechanism difference"], "this_quarter", [c["similarity_edge_id"]])
 
     cov = []
     for name, f in COVERAGE_FILES.items():
@@ -365,12 +470,13 @@ def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plink
                     "result_count": (c or {}).get("result_count"), "checked_at": (c or {}).get("checked_at")})
     for name in ("HPO", "Orphanet", "MONDO"):
         cov.append({"name": name, "checked": True, "query": d, "result_count": None, "checked_at": None})
-    # supported = a group, asset, trial or researcher linked to exactly d by curated or corroborated evidence.
+    # supported = a group, asset, trial or researcher linked to exactly d by curated or corroborated evidence
+    # (a 'direct' asset card on one quoted source is shown, but does not count on its own).
     # Family-wide groups (umbrella), look-alikes and same-gene siblings are shown but are leads for d only
     # by extension, so they do not count.
     strong = lambda e: e["status"] in ("curated", "literature") and e["confidence"] >= SUPPORTED_MIN_CONF  # noqa: E731
     supported = any(strong(g.edges[o["edge_id"]]) for o in exact) \
-        or any(a["reusability"] == "direct" for a in assets) \
+        or any(strong(e) for x in asset_ids for e in ix.dst_of(x, "asset_covers_disease") if e["dst"] == d) \
         or any(strong(e) for e in ix.src_of(d, "trial_studies_disease")) \
         or any(strong(e) for e in ix.src_of(d, "person_studies"))
     gaps = []
@@ -378,7 +484,7 @@ def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plink
         gaps.append({"question": f"Who is actively working on {label}?",
                      "why_it_matters": f"Nothing in our sources links a group, study, asset or researcher to exactly "
                                        f"{label} with curated or independently confirmed evidence; the leads shown "
-                                       "come through related diseases.",
+                                       "rest on a single source or come through related diseases.",
                      "what_would_resolve": "Ask the clinicians who diagnose it; check registries and conference "
                                            "abstracts; contribute any group, study or researcher you know."})
     if not exact:
@@ -396,15 +502,17 @@ def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plink
                      "why_it_matters": c["caution"],
                      "what_would_resolve": "Compare the disrupted step in cell or animal models."})
 
-    facts = {"disease": label, "approved_treatment": has_tx, "exact_groups": len(exact),
+    facts = {"disease": label, "approved_treatment": has_tx, "treatment_note": tx_note, "exact_groups": len(exact),
              "related": [c["disease"]["label"] for c in sim_comms[:3]], "description": dn.get("description")}
+    tx_head = ("An approved treatment exists" if has_tx else
+               f"A treatment is approved for the broader {g.nodes[fam_tx[0][0]]['label']}" if fam_tx else
+               "No approved treatment found yet")
     hl, _ = llm.rephrase("headline+plain_summary for a family's disease page", facts, Headline, lambda: Headline(
-        headline=(f"{'No approved treatment found yet' if not has_tx else 'An approved treatment exists'}"
-                  f" — {label} is connected to {len(sim_comms)} related diseases"),
+        headline=f"{tx_head}. {label[:1].upper() + label[1:]} is connected to {len(sim_comms)} related diseases",
         plain_summary=dn.get("plain_summary") or dn.get("description") or
         f"{label} is a rare disease in the lysosomal storage group."))
     return {"disease": full(g, d), "headline": hl.headline, "plain_summary": hl.plain_summary,
-            "treatment_status": {"has_approved_treatment": has_tx, "note": tx_note, "edge_ids": [e["id"] for e in tx]},
+            "treatment_status": {"has_approved_treatment": has_tx, "note": tx_note, "edge_ids": tx_eids},
             "exact_groups": exact, "related_communities": communities, "connections": connections,
             "assets": assets, "trials": trials, "researchers": researchers, "shared_people": shared,
             "next_steps": steps, "coverage": {"has_supported_route": supported, "sources": cov, "gaps": gaps}}
@@ -415,20 +523,29 @@ def mechanism_view(ix: Index, m: str, clusters: list[dict], members: list[dict],
     g = ix.g
     cl_of = {x["node_id"]: x["cluster_id"] for x in members}
     cl = {c["id"]: c for c in clusters}
+    # quoted links (curated / literature) first, then propagated ones
     dis = sorted((e for e in ix.src_of(m, "disease_involves_mechanism") if e["status"] != "hypothesis"),
-                 key=lambda e: (-e["confidence"], e["src"]))
+                 key=lambda e: (STATUS_RANK.index(e["status"]), -e["confidence"], e["src"]))
+    approved_of = lambda x: [y for y in ix.src_of(x, "intervention_treats_disease") if y["status"] != "hypothesis"  # noqa: E731
+                             and (y.get("attrs") or {}).get("approval") == "approved"]
     ranked = []
     for e in dis:
         d = e["src"]
-        approved = any((x.get("attrs") or {}).get("approval") == "approved"
-                       for x in ix.src_of(d, "intervention_treats_disease"))
+        tx = [x for x in ix.src_of(d, "intervention_treats_disease") if x["status"] != "hypothesis"]
+        approved = any((x.get("attrs") or {}).get("approval") == "approved" for x in tx)
+        trying = sorted(g.nodes[x["src"]]["label"] for x in tx if (x.get("attrs") or {}).get("approval") != "approved")
+        fam = next((p for p, _ in ix.ancestors(d) if approved_of(p)), None)
         c = cl.get(cl_of.get(d, ""))
         ranked.append({"disease": brief(g, d), "score": e["confidence"], "status": e["status"],
                        "evidence_edge_ids": [e["id"]], "cluster": {"id": c["id"], "label": c["label"]} if c else None,
                        "groups": groups_for(ix, d)[:3],
                        "assets": [asset_card(ix, a, d, set()) for a in
-                                  sorted({x["src"] for x in ix.src_of(d, "asset_covers_disease")})][:3],
-                       "unmet_need": None if approved else "No approved therapy found in our sources"})
+                                  sorted({x["src"] for x in ix.src_of(d, "asset_covers_disease")
+                                          if x["status"] != "hypothesis"})][:3],
+                       "unmet_need": None if approved else
+                       (f"No approved therapy for this form in our sources; one is approved for the broader "
+                        f"{g.nodes[fam]['label']}" if fam else "No approved therapy found in our sources") +
+                       (f" (investigational: {', '.join(trying)})" if trying else "")})
     by_cl = defaultdict(list)
     for r in ranked:
         if r["cluster"]:
@@ -439,7 +556,7 @@ def mechanism_view(ix: Index, m: str, clusters: list[dict], members: list[dict],
     trials, seen = [], set()   # top-ranked diseases first, one card per trial
     for r in ranked[:20]:
         for e in sorted(ix.src_of(r["disease"]["id"], "trial_studies_disease"), key=lambda e: e["src"]):
-            if e["src"] not in seen:
+            if e["status"] != "hypothesis" and e["src"] not in seen:
                 seen.add(e["src"])
                 trials.append(trial_card(ix, e, "shared_mechanism", None))
     trials = trials[:8]
@@ -448,15 +565,16 @@ def mechanism_view(ix: Index, m: str, clusters: list[dict], members: list[dict],
             "headline": f"{label}: {len(ranked)} diseases in the atlas share this mechanism",
             "plain_summary": g.nodes[m].get("plain_summary") or g.nodes[m].get("description") or
             f"{label} is a biological process that is disrupted in several rare diseases.",
-            "genes": [brief(g, x) for x in sorted({e["src"] for e in ix.src_of(m, "gene_in_mechanism")})][:30],
+            "genes": [brief(g, x) for x in sorted({e["src"] for e in ix.src_of(m, "gene_in_mechanism")
+                                                   if e["status"] != "hypothesis"})][:30],
             "diseases": ranked[:30],
             "clusters": [{"cluster": {k: cl[c][k] for k in ("id", "label", "summary", "method", "size", "attrs")},
                           "disease_ids": ds, "score": round(len(ds) / max(1, len(ranked)), 3)}
                          for c, ds in sorted(by_cl.items(), key=lambda x: (-len(x[1]), x[0]))],
             "researchers": [person_card(ix, pid, dm) for pid, dm in people[:8]],
             "trials": trials,
-            "interventions": [brief(g, x) for x in
-                              sorted({e["src"] for e in ix.src_of(m, "intervention_targets_mechanism")})]}
+            "interventions": [brief(g, x) for x in sorted({e["src"] for e in ix.src_of(m, "intervention_targets_mechanism")
+                                                           if e["status"] != "hypothesis"})]}
 
 
 def run() -> None:
@@ -471,9 +589,9 @@ def run() -> None:
                                   for d in focus]
     min_d = int(slice_config().views.get("mechanism_min_diseases", 2))
     fset = set(focus)
+    linked = lambda m: {e["src"] for e in ix.src_of(m, "disease_involves_mechanism") if e["status"] != "hypothesis"}  # noqa: E731
     mechs = [m["id"] for m in sorted(g.by_type("mechanism"), key=lambda n: n["id"])
-             if len({e["src"] for e in ix.src_of(m["id"], "disease_involves_mechanism")}) >= min_d
-             and fset & {e["src"] for e in ix.src_of(m["id"], "disease_involves_mechanism")}]
+             if len(linked(m["id"])) >= min_d and fset & linked(m["id"])]
     rows += [{"kind": "mechanism", "key": m, "payload": mechanism_view(ix, m, clusters, members, plinks)}
              for m in mechs]
     write_jsonl("views.jsonl", rows)

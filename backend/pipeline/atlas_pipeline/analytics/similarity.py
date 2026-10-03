@@ -5,7 +5,13 @@
 Phenotype is only scored when both diseases have >= min_phenotypes direct annotations; otherwise
 components.phenotype is omitted (not 0: "not measured" is not "weak overlap") and contributes nothing.
 Counterexamples -> attrs.caution (+ attrs.caution_kind), when
-  * phenotypically close but mechanistically different (both mechanisms known): "mechanism", or
+  * phenotypically close but mechanistically different: "mechanism". When both diseases have a quoted
+    mechanism (curated / literature disease_involves_mechanism, e.g. ATLAS:mech-* from curated.yaml), the
+    Jaccard over the quoted ones must be <= caution.max_quoted_mechanism (default 0.34): CLN5 {soluble
+    protein, SCMAS storage} vs CLN6A {transmembrane protein, ER-Golgi trafficking, SCMAS storage} = 0.25 is a
+    caution (a shared downstream storage product does not make the defect the same), CLN5 vs CLN1 {soluble
+    protein} = 0.5 is not. Otherwise the Jaccard over all known mechanisms must be <= caution.max_mechanism,
+    or
   * one disease has an approved therapy and the other does not, and they share no gene and are not
     subtype/parent of each other (CLN2 enzyme replacement vs CLN5): "approved_therapy", with
     attrs.therapy_for = the disease that has the therapy (the caution only applies in that direction).
@@ -51,6 +57,10 @@ def run(g: Graph, ic: dict[str, float], w: GraphWriter) -> None:
     anc = hpo_ancestors()
     direct = _targets(g, "disease_has_phenotype", from_src=True)
     mech = _targets(g, "disease_involves_mechanism", from_src=True)
+    qmech: dict[str, set[str]] = defaultdict(set)   # quoted mechanisms (curated / literature, not propagation)
+    for e in g.edges_of("disease_involves_mechanism"):
+        if e["status"] in ("curated", "literature"):
+            qmech[e["src"]].add(e["dst"])
     genes = _targets(g, "gene_associated_with_disease", from_src=False)
     diseases = sorted(n["id"] for n in g.by_type("disease"))
     approved: dict[str, list[str]] = defaultdict(list)   # disease -> approved intervention labels
@@ -108,16 +118,25 @@ def run(g: Graph, ic: dict[str, float], w: GraphWriter) -> None:
         if shared_ge:
             parts.append("shared genes: " + ", ".join(g.nodes[x]["label"] for x in shared_ge))
         attrs: dict = {"components": comp}
-        if comp.get("phenotype") is not None and comp["phenotype"] >= caut["min_phenotype"] \
-                and comp["mechanism"] <= caut["max_mechanism"] and mech[a] and mech[b]:
+        quoted_both = bool(qmech[a]) and bool(qmech[b])
+        differ = _jaccard(qmech[a], qmech[b]) <= caut.get("max_quoted_mechanism", 0.34) if quoted_both else \
+            comp["mechanism"] <= caut["max_mechanism"] and bool(mech[a]) and bool(mech[b])
+        if comp.get("phenotype") is not None and comp["phenotype"] >= caut["min_phenotype"] and differ:
             attrs["caution_kind"] = "mechanism"
-            attrs["caution"] = (f"{la} and {lb} look alike clinically but act through different known pathways; "
-                                "findings or therapies from one may not transfer to the other.")
+            if quoted_both:
+                ma, mb = (", ".join(sorted(g.nodes[m]["label"] for m in qmech[x])) for x in (a, b))
+                how = "largely different" if qmech[a] & qmech[b] else "different"
+                attrs["caution"] = (f"{la} ({ma}) and {lb} ({mb}) look alike clinically but act through {how} "
+                                    "mechanisms; findings or therapies from one may not transfer to the other.")
+            else:
+                attrs["caution"] = (f"{la} and {lb} look alike clinically but act through different known "
+                                    "pathways; findings or therapies from one may not transfer to the other.")
         elif bool(approved[a]) != bool(approved[b]) and not genes[a] & genes[b] and not lineage(a, b):
             (x, lx), (y, ly) = ((a, la), (b, lb)) if approved[a] else ((b, lb), (a, la))
             attrs.update(caution_kind="approved_therapy", therapy_for=x)
             attrs["caution"] = (f"{lx} has an approved therapy ({', '.join(sorted(approved[x]))}); it is approved "
-                                f"for {lx} only, and whether it helps {ly} is untested.")
+                                f"for {lx} only, our sources show no test in {ly}, and whether it helps {ly} "
+                                "must be checked.")
         n_caution += "caution" in attrs
         w.edge("disease_similar_to", a, b, status="inferred", score=round(s, 4), label="similar to", attrs=attrs,
                evidence=dict(source_type="computed", source_name="Atlas analytics", source_ref=None,

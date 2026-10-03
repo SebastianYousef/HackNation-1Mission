@@ -37,17 +37,19 @@ What happens when a user opens `https://atlas.example/d/MONDO:0016295`:
 2. **L3 (IP).** Packets are routed to `203.0.113.10`. Cloud firewall / security list: only TCP 80/443 are allowed in.
 3. **L4 LB (TCP).** It sees only the 5-tuple (src IP, src port, dst IP, dst port, protocol), not HTTP.
    - It picks an L7 node with `balance source` (hash of the client IP), so one client keeps hitting the same L7 node. This is cheap L4 affinity that keeps TLS sessions warm.
-   - It does **TLS passthrough** (it never decrypts) and prepends a **PROXY protocol v2** header, so the L7 layer still knows the real client IP.
-   - It health-checks the L7 nodes with TCP connects and removes dead ones in seconds.
+   - It does **TLS passthrough** (it never decrypts) and prepends a **PROXY protocol v2** header (`send-proxy-v2`), so the L7 layer still knows the real client IP even though the TCP source is now the L4. The L7 binds with `accept-proxy`.
+   - It health-checks the L7 nodes with `GET /healthz` on their monitor port 8404 every 2 s (sent without a PROXY header) and removes a dead node after 2 failures, about 4 s.
    - Why have it? It is the scale-out point for the L7 tier: we can run 2..n L7 nodes behind one IP. It is also what cloud providers give you as a "Network Load Balancer".
 4. **L7 LB (HTTP).** It terminates TLS (holds the certificate) and parses HTTP. Then it:
-   - **Routes by path:** `/api/*` → `api` pool, `/healthz` is blocked from outside, everything else → `web` pool (static SPA, with fallback to `index.html`).
-   - **Balances** the `api` pool with `leastconn`. AI endpoints are slow, so least-connections beats round-robin.
-   - **Health-checks** each API replica on `GET /readyz` every 2 s. A replica that fails 3 checks is removed. During a deploy a replica's `/readyz` returns 503 first, so it is **drained** gracefully.
-   - **Sets headers:** `X-Forwarded-For` (the real client IP, recovered from PROXY protocol), `X-Forwarded-Proto`, and `X-Request-Id`.
-   - **Rate-limits** per client IP with a stick-table (e.g. 20 req/s overall, plus a tighter app-level limit on `/api/v1/explain`, which costs OpenAI money).
+   - **Routes by path:** `/api/*` → `api` pool, `/healthz` and `/readyz` are blocked from outside (JSON 404), everything else → `web` pool (static SPA, with fallback to `index.html`).
+   - **Balances** the `api` pool with `roundrobin`. Replicas are identical and stateless, and `leastconn` is a one-line swap if slow AI calls ever make the load uneven.
+   - **Health-checks** each API replica on `GET /readyz` every 2 s (`fall 2 rise 2 slowstart 10s`). `/readyz` returns 503 only while the replica is **draining** (after SIGTERM, so a deploy drains gracefully) or when its **database** is unreachable. Redis is shared by every replica, and the app fails open without it, so a Redis outage is reported as `200` with `"degraded": {"redis": true}` and does not empty the whole pool.
+   - **Sets headers:** it *replaces* `X-Forwarded-For` with exactly one entry, the real client IP from the PROXY header (no appending, so a client-sent value never reaches the API). It also overwrites `X-Forwarded-Proto: https` and adds `X-Request-Id` if absent.
+   - **Rate-limits** per client IP with a stick-table (200 requests per 10 s, about 20 req/s overall). The app adds a tighter Redis-backed limit on the AI, gap-search and submission endpoints, which cost money.
+   - **Answers its own errors in the contract's shape:** 429 (rate limit), 404 (ops routes), and 502/503/504 (no replica up, reset, or slower than `timeout server 30s`) all come back as `ApiError` JSON with the request id, never as an HAProxy HTML page.
    - **Sticky sessions:** supported (`cookie SERVERID insert indirect nocache`) but **off**, see §3.
 5. **API replica (application).** A private IP like `10.0.1.11:8000`, reachable only from the LB subnet.
+   - Takes the client IP for rate limits and logs from the `X-Forwarded-For` entry `TRUSTED_PROXY_HOPS` hops from the right (1 behind our L7). Uvicorn runs with `--no-proxy-headers`, so no header can rewrite the peer address or scheme. The app builds no absolute URLs (`redirect_slashes=False`, relative `Location`), so it doesn't need `X-Forwarded-Proto`. Details: `infra/README.md`, "Client IP and forwarded headers".
    - Validates params, checks the Redis cache (`dataset_version + URL`), and on a miss calls one SQL function (`select api_action_view($1)`).
    - Returns JSON with `ETag`, `Cache-Control`, `X-Request-Id` and **`X-Served-By: api-2`**, which makes the load balancing visible in the UI's debug footer.
 6. **Postgres.** Reached through the Supabase **transaction pooler** (port 6543), so many replicas share a bounded number of DB connections.

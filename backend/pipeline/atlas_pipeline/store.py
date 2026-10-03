@@ -129,6 +129,11 @@ class GraphWriter:
         return eid
 
     def close(self) -> dict[str, int]:
+        quoted = {v["edge_id"] for v in self.evidence.values()
+                  if v["stance"] == "supports" and (v.get("quote") or "").strip()}
+        unquoted = sum(e["status"] == "literature" and e["id"] not in quoted for e in self.edges.values())
+        if unquoted:  # graph.load_graph downgrades these to 'hypothesis'; flag it at the source
+            log.warning("[%s] %d literature edges have no quoted supporting evidence", self.stage, unquoted)
         counts = {
             "nodes": write_jsonl(f"{self.stage}.nodes.jsonl", self.nodes.values()),
             "edges": write_jsonl(f"{self.stage}.edges.jsonl", self.edges.values()),

@@ -8,7 +8,7 @@ from collections import Counter
 
 from .analytics.paths import path_strength
 from .config import INTERIM, slice_config
-from .graph import Graph, load_graph
+from .graph import Graph, has_quoted_support, load_graph
 from .llm import usage
 from .models import EDGE_STATUSES, EDGE_TYPES, NODE_TYPES, PATH_KINDS, SOURCE_TYPES, STANCES, now_iso
 from .store import read_json, read_jsonl
@@ -64,6 +64,9 @@ def validate(g: Graph, clusters: list[dict], members: list[dict], paths: list[di
             errs.append(f"edge {e['id']}: confidence {e['confidence']}")
         if not g.evidence.get(e["id"]):
             errs.append(f"edge {e['id']}: no evidence")
+        elif e["status"] == "literature" and not has_quoted_support(g.evidence[e["id"]]):
+            # graph.load_graph downgrades these to 'hypothesis'; reaching here means something re-upgraded one
+            errs.append(f"edge {e['id']}: literature without a quoted (non-scraped) supporting evidence row")
         for v in g.evidence.get(e["id"], []):
             if v["stance"] not in STANCES or v["source_type"] not in SOURCE_TYPES:
                 errs.append(f"evidence {v['id']}: bad stance/source_type")

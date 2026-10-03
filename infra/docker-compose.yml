@@ -26,6 +26,11 @@ x-api-env: &api-env
   CORS_ORIGINS: ${CORS_ORIGINS:-https://*.lovable.app,https://*.lovableproject.com}
   OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
   LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  # Client IP = X-Forwarded-For entry this many hops from the right. The L7 replaces that
+  # header with exactly one entry (the PROXY-protocol source), so this stack needs 1.
+  # Fixed on purpose: a TRUSTED_PROXY_HOPS=0 in backend/.env (right for a bare `make
+  # api-dev`) must not leak in here, or every client would share the L7's rate-limit bucket.
+  TRUSTED_PROXY_HOPS: "1"
   # INSTANCE_ID defaults to the container hostname -> distinct per replica (X-Served-By)
 
 services:

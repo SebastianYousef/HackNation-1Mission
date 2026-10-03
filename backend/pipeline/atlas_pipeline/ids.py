@@ -24,7 +24,8 @@ _OBO_URL = re.compile(r"^https?://purl\.obolibrary\.org/obo/([A-Za-z]+)_(\w+)$")
 
 
 def normalize_curie(s: str | None) -> str | None:
-    """'Orphanet:558' -> 'ORPHA:558', 'MIM:256730' -> 'OMIM:256730', 'HP_0001250' -> 'HP:0001250'."""
+    """'Orphanet:558' -> 'ORPHA:558', 'MIM:256730' -> 'OMIM:256730', 'HP_0001250' -> 'HP:0001250',
+    'MONDO:MONDO:0008769' -> 'MONDO:0008769'."""
     if not s:
         return None
     s = s.strip()
@@ -39,8 +40,9 @@ def normalize_curie(s: str | None) -> str | None:
         return s
     pfx, local = s.split(":", 1)
     pfx = _PREFIX.get(pfx.lower(), pfx)
-    if pfx == "HGNC" and local.startswith("HGNC:"):
-        local = local[5:]
+    # doubled prefix ('MONDO:MONDO:0008769', 'HGNC:HGNC:2073', 'Orphanet:ORPHA:558'): drop the inner one
+    while ":" in local and _PREFIX.get(local.split(":", 1)[0].lower(), local.split(":", 1)[0]) == pfx:
+        local = local.split(":", 1)[1]
     return f"{pfx}:{local.strip()}"
 
 
@@ -79,6 +81,11 @@ def person_id(last: str, first: str | None) -> str:
 
 def org_id(name: str) -> str:
     return f"ORG:{slug(name)}"
+
+
+def asset_id(name: str) -> str:
+    """ASSET:<slug(name)>, e.g. asset_id('BDSRA Natural History Registry'); web leads use '<host> registry'."""
+    return f"ASSET:{slug(name)}"
 
 
 def mech_id(name: str) -> str:

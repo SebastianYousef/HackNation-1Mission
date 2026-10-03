@@ -4,6 +4,10 @@ Rules:
  * nodes merge by id; first stage in STAGE_ORDER wins for label/type; synonyms/xrefs union; attrs fill.
  * edges merge by id; status = strongest; attrs fill; evidence = union (dedup by evidence id).
  * edge confidence is recomputed here from status + evidence (confidence.py).
+ * quote guardrail: a 'literature' edge needs >= 1 'supports' evidence row with a non-empty verbatim
+   quote that is not a web scrape (method scrape:*, e.g. Bright Data leads). One without is downgraded
+   to 'hypothesis' (counted in `downgraded`, logged) instead of failing the load; load.validate then
+   re-checks the invariant on the final graph.
  * edges whose endpoints are missing are dropped (counted in `dropped`), and so are edges without
    evidence and literature/hypothesis edges with no 'supports' row (their text evidence argues against them).
 """
@@ -29,6 +33,7 @@ class Graph:
     edges: dict[str, dict] = field(default_factory=dict)
     evidence: dict[str, list[dict]] = field(default_factory=lambda: defaultdict(list))  # edge_id -> rows
     dropped: int = 0
+    downgraded: int = 0    # literature -> hypothesis by the quote guardrail
 
     # ---- helpers used by analytics / views -------------------------------------------------
     def by_type(self, t: str) -> list[dict]:
@@ -43,6 +48,18 @@ class Graph:
 
     def edges_of(self, type_: str) -> list[dict]:
         return [e for e in self.edges.values() if e["type"] == type_]
+
+
+# evidence methods that may never back a 'literature' claim: web scrapes are unverified leads (the
+# brightdata_orgs stage writes them as hypothesis-only), so their quotes do not satisfy the guardrail
+NON_LITERATURE_METHODS = ("scrape:",)
+
+
+def has_quoted_support(evidence: list[dict] | None) -> bool:
+    """True if some 'supports' row from a stage that may assert literature carries a non-empty quote
+    (what 'literature' status requires). Scraped rows (method scrape:*) never count."""
+    return any(v["stance"] == "supports" and (v.get("quote") or "").strip()
+               and not str(v.get("method") or "").startswith(NON_LITERATURE_METHODS) for v in evidence or [])
 
 
 def _stages_present(exclude: set[str]) -> list[str]:
@@ -95,6 +112,16 @@ def load_graph(exclude: set[str] | None = None) -> Graph:
                 continue
             seen.add(v["id"])
             g.evidence[v["edge_id"]].append(v)
+    # quote guardrail: 'literature' without a quoted supporting row is not literature
+    downgraded_by: dict[str, int] = defaultdict(int)
+    for e in g.edges.values():
+        if e["status"] == "literature" and not has_quoted_support(g.evidence.get(e["id"])):
+            e["status"] = "hypothesis"
+            g.downgraded += 1
+            downgraded_by[e["type"]] += 1
+    if g.downgraded:
+        log.warning("graph: %d literature edges have no quoted supporting evidence -> hypothesis (%s)",
+                    g.downgraded, dict(downgraded_by))
     # drop dangling edges, edges without evidence, and text-derived edges nothing supports
     for eid in list(g.edges):
         e = g.edges[eid]
@@ -111,6 +138,6 @@ def load_graph(exclude: set[str] | None = None) -> Graph:
             g.evidence[eid] = list(uniq.values())
     for e in g.edges.values():
         e["confidence"] = edge_confidence(e["status"], g.evidence[e["id"]], e.get("score"))
-    log.info("graph: %d nodes, %d edges, %d evidence, %d dropped (stages: %s)", len(g.nodes), len(g.edges),
-             sum(len(v) for v in g.evidence.values()), g.dropped, ",".join(stages))
+    log.info("graph: %d nodes, %d edges, %d evidence, %d dropped, %d downgraded (stages: %s)", len(g.nodes),
+             len(g.edges), sum(len(v) for v in g.evidence.values()), g.dropped, g.downgraded, ",".join(stages))
     return g

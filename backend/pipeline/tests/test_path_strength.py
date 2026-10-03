@@ -23,8 +23,11 @@ def graph() -> Graph:
                                         ("E:b", "MONDO:2", "HP:1", "literature", 0.7)]:
         g.edges[eid] = {"id": eid, "src": src, "dst": dst, "type": "disease_has_phenotype",
                         "status": status, "confidence": conf, "attrs": {}}
+        # a literature edge needs a quoted supporting row (load.validate rejects it otherwise)
         g.evidence[eid] = [{"id": f"V:{eid}", "edge_id": eid, "stance": "supports",
-                            "source_type": "database", "source_name": "HPO"}]
+                            "source_type": "database" if status == "curated" else "publication",
+                            "source_name": "HPO" if status == "curated" else "PubMed",
+                            "quote": None if status == "curated" else f"{src} has {dst}."}]
     return g
 
 

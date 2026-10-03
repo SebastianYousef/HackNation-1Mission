@@ -41,14 +41,46 @@ The stack is two tiers of load balancers in front of N stateless API replicas. S
 | **L7 (application)** | `l7` | The LB reads HTTP. Path routing: `/api/*` → api pool, everything else → web pool. `/healthz` and `/readyz` are blocked from outside. It replaces any client-sent `X-Forwarded-For` with exactly one entry, the real client IP (from the PROXY header, or the edge's last hop on `:8081`), and adds `X-Forwarded-Proto`, `X-Request-Id` (if the client didn't send one) and `X-LB-L7` (which L7 node answered). Rate limit: more than 200 req/10 s per client IP gets a 429 with the ApiError JSON body. Errors the LB generates itself (502/503/504: no replica up, replica reset or slower than `timeout server 30s`) also get an ApiError JSON body (`upstream_unavailable`) with the request id. Cookie stickiness is available but off (see below). |
 | **App** | `api` | Uvicorn runs with `--no-proxy-headers`, so `request.client.host` is the socket peer (the L7). The app takes the client IP for logs and rate limits from the rightmost `X-Forwarded-For` entry (`TRUSTED_PROXY_HOPS=1`), which only the L7 writes, so clients can't choose their rate-limit bucket. Every response carries `X-Served-By` (replica hostname) and the propagated `X-Request-Id`, so one request can be traced through every hop's logs. |
 
+## Client IP and forwarded headers, hop by hop
+The client's address survives two proxies without the API ever trusting a header a client could have written:
+
+| Hop | Client address comes from | Header handling |
+|---|---|---|
+| client → `l4` | TCP source address | none (TCP only, TLS passthrough) |
+| `l4` → `l7` | **PROXY protocol v2** header that `l4` prepends (`send-proxy-v2` on every `server-template` line). `l7` binds `:8080`, `:8443` and `:8081` with `accept-proxy`, so `src` is the real client. Health checks go to `:8404` without a PROXY header. | none |
+| edge → `l4:8081` → `l7` (Tailscale Funnel / cloudflared, see `deploy/gpu-server`) | The PROXY source is the tunnel (127.0.0.1), so on `:8081` only, `l7` takes the rightmost `X-Forwarded-For` entry the edge appended (`set-src hdr_ip(x-forwarded-for,-1)`) | the edge already terminated TLS |
+| `l7` → `api` | `l7` **replaces** `X-Forwarded-For` with exactly one entry, `%[src]` (no `option forwardfor`, which would append to whatever the client sent). It overwrites `X-Forwarded-Proto: https`, `X-Forwarded-Port`, and sets `X-Request-Id` if absent. | client-sent `X-Forwarded-For` / `X-Forwarded-Proto` never reach the API |
+| inside `api` | `routes.client_ip()`: the `X-Forwarded-For` entry `TRUSTED_PROXY_HOPS` hops from the right, validated as an IP (anything else falls back to the socket peer, so garbage never becomes a Redis key) | uvicorn `--no-proxy-headers`: no header rewrites `request.client` or the scheme |
+
+**`TRUSTED_PROXY_HOPS`** = the number of proxies between the client and the API that each append one `X-Forwarded-For` entry. It is pinned to `"1"` in `docker-compose.yml` (the L7), and is not read from `backend/.env`, so a `TRUSTED_PROXY_HOPS=0` meant for a bare `make api-dev` can't make every client share the L7's rate-limit bucket. Use `0` only when clients connect to uvicorn directly. Raise it if you put another appending proxy (a CDN, a cloud L7) in front of `l7`, or use the platform's hop count on Cloud Run or Render.
+
+**Why `--no-proxy-headers` and not `--proxy-headers`:** the app builds no absolute URLs. It sets `redirect_slashes=False`, so `/api/v1/meta/` is a 404 ApiError, not a 307 to an absolute `http://` URL, and its only `Location` header (`POST /gap-search` → `/api/v1/jobs/{id}`) is relative. The scheme uvicorn sees (`http`, from the L7) therefore never reaches a client, and nothing needs `X-Forwarded-Proto`. If the app ever needs absolute URLs, switch the image to `--proxy-headers` with `FORWARDED_ALLOW_IPS` set to the L7's private subnet only. Never use `'*'`, because uvicorn would then rewrite `request.client` from a header for any peer. `infra/scripts/check-configs.sh` fails if the image drops `--no-proxy-headers`, if it sets forwarded-allow-ips, or if compose stops pinning `TRUSTED_PROXY_HOPS` or publishes the api port.
+
+## Errors the load balancer generates itself
+Every error body follows the contract's `ApiError` shape (`{"error":{"code","message","request_id"}}`, `Content-Type: application/json`), so the frontend never has to parse an HAProxy HTML page. The request id is JSON-escaped (`json(utf8s)`), and for 502/503/504 it is kept in `txn.rid` and echoed in an `X-Request-Id` header.
+
+| Status | `code` | When |
+|---|---|---|
+| 404 | `not_found` | `/healthz` or `/readyz` requested from outside (replica probes stay internal) |
+| 429 | `rate_limited` | more than 200 requests per 10 s from one client IP (`Retry-After: 10`) |
+| 502 | `upstream_unavailable` | a replica reset the connection or sent an invalid response |
+| 503 | `upstream_unavailable` | no replica is UP (all failing `/readyz`, or none started yet) |
+| 504 | `upstream_unavailable` | a replica took longer than `timeout server 30s`. The API caps its own OpenAI calls below 25 s and answers with its own 503 first, so in practice this means a hung replica. |
+
+`local-native.cfg` uses the same bodies. The API's own errors (including 413 for bodies over `MAX_BODY_BYTES`, 64 KiB) come from the app.
+
 ## Health checks and draining
 - **L4 → L7:** `GET /healthz` on the L7 monitor port 8404, every 2 s. Two failures mark the node DOWN; two passes mark it UP again. These checks are sent without a PROXY header (`check port` disables it).
-- **L7 → api:** `GET /readyz` every 2 s with `fall 2 rise 2 slowstart 10s`. `/readyz` returns 503 if Postgres or Redis is unreachable, so the LB sends no traffic to a replica that can't serve.
+- **L7 → api:** `GET /readyz` every 2 s with `fall 2 rise 2 slowstart 10s`. `/readyz` returns **503 only when the replica is draining or its data source is down** (Postgres in `DATA_MODE=db`/mixed, the fixtures directory in `DATA_MODE=fixtures`), so the LB sends no traffic to a replica that can't serve.
+  - **Redis is not a readiness condition.** It is shared by every replica, so failing on it would pull the *whole* pool out of the LB at once. The app fails open without it (no response cache, rate limits not enforced). A Redis outage shows up as `200` with `"degraded": {"redis": true}`. Only gap search (`POST /api/v1/gap-search` and polling `GET /api/v1/jobs/{id}`) needs Redis: the POST answers its own 503 `upstream_unavailable` ("job queue unavailable") while Redis is down, and job status lives only in Redis, so polling a job answers 404 `not_found` until Redis is back. Watch `degraded` in monitoring, not the LB state.
+  - Body: `{"ready": true, "instance": "<hostname>", "checks": {"accepting": true, "db": true}, "degraded": {"redis": false}}` (`checks.fixtures` instead of `checks.db` in fixtures mode, `degraded` is `{}` without `REDIS_URL`). It is always `Cache-Control: no-store`.
+- **Worker:** no HTTP server, so compose disables the image's `/healthz` healthcheck for it (`healthcheck: disable: true`). `restart: unless-stopped` covers crashes.
 - **Draining on deploy or scale-down:**
   1. Docker/Kubernetes sends SIGTERM.
   2. The API flips `/readyz` to 503 straight away and keeps serving for `SHUTDOWN_GRACE_SECONDS` (5 s in compose).
   3. HAProxy marks the replica DOWN after 2 failed checks (about 4 s) and stops sending it new requests.
-  4. Uvicorn shuts down gracefully, finishing in-flight requests (`--timeout-graceful-shutdown 20`, `stop_grace_period: 30s`).
+  4. Uvicorn shuts down gracefully, finishing in-flight requests (`--timeout-graceful-shutdown 20`, `stop_grace_period: 30s`, which must stay above 5 s + 20 s).
+  5. **Workers** get `stop_grace_period: 60s`. On SIGTERM a worker takes no new job, and the running gap search gets time to finish rather than being SIGKILLed and left `running` in Redis. If one is killed anyway, the API's `running` status expires after 120 s and polls get a 404 instead of hanging for an hour. Keep the API's total Bright Data budget per job below 60 s.
 
   Result: no failed requests. This was measured natively (`make lb-native`): HAProxy logged *"api-2 is DOWN, reason: Layer7 wrong status, code: 503"* before the process exited, and the next requests all went to api-1 and api-3.
 
@@ -95,15 +127,11 @@ Keep that number below the limit of the Supabase **transaction pooler** (Supavis
 | `api.Dockerfile` | Multi-stage, non-root (uid 10001), `uvicorn --no-proxy-headers --workers $WEB_CONCURRENCY`; also used for the worker (compose disables the HTTP healthcheck there and gives it `stop_grace_period: 60s` to finish a running job) |
 | `scripts/gen-dev-cert.sh` | Self-signed `localhost` cert → `certs/dev.pem` (gitignored) |
 | `scripts/lb-native.sh` | `make lb-native`: 3 replicas + native HAProxy, round robin, then a graceful drain |
+| `scripts/check-configs.sh` | Offline checks: `haproxy -c` on all three configs (l7 with a throwaway cert), plus the client-IP trust rules above |
 
 **Frontend build for `web`:** run `npm run build` in the Lovable repo, then either copy `dist/` to `<repo>/frontend-dist/` or `export WEB_DIST=/abs/path/to/dist` before `make up`. If the frontend is hosted on Lovable instead, `web` is only needed for a single-origin demo. The API's CORS setting already allows `*.lovable.app`.
 
-**Validating configs without Docker:** `haproxy -c -f infra/haproxy/l4.cfg`. For `l7.cfg` the cert path must exist, so check a copy with the path rewritten:
-```bash
-infra/scripts/gen-dev-cert.sh
-sed "s#/usr/local/etc/haproxy/certs/#$PWD/infra/certs/#" infra/haproxy/l7.cfg > /tmp/l7.cfg && haproxy -c -f /tmp/l7.cfg
-```
-The `resolvers docker` section (127.0.0.11) passes `-c` as is, because `init-addr none` delays resolution to runtime.
+**Validating configs without Docker:** `infra/scripts/check-configs.sh`. It needs `haproxy` and `openssl` on PATH. Set `PYTHON=` to an interpreter with PyYAML to also check that the api port is not published. It runs `haproxy -c` on all three configs. `l7.cfg` is checked as a copy whose cert path points at a throwaway cert, because the real path only exists inside the container. The `resolvers docker` section (127.0.0.11) passes `-c` as is, because `init-addr none` delays resolution to runtime.
 
 ## Production on a free tier
 
@@ -132,7 +160,7 @@ The tunnel prints an `https://<random>.trycloudflare.com` URL. Set the frontend'
 
 ## What was verified on the dev machine
 This machine cannot run containers (user namespaces are blocked), so `docker compose up` itself has **not** been run. What has been verified:
-- `docker compose config -q` passes, and `haproxy -c` (HAProxy 3.4) passes on all three configs.
+- `docker compose config -q` passed on an earlier revision. It has not been re-run since, because this machine has no Docker, and `docker-compose.yml` has changed since then (`TRUSTED_PROXY_HOPS`). The current compose file passes `PYTHON=backend/api/.venv/bin/python infra/scripts/check-configs.sh`, which parses it with PyYAML. The system `python3` here has no PyYAML, so without `PYTHON=` the port check is skipped. `haproxy -c` (HAProxy 3.4) passes on all three configs.
 - **Native end-to-end with the real `l4.cfg` and `l7.cfg`**, with Docker DNS swapped for static `127.0.0.1` servers. Curl → L4 (tcp, `send-proxy-v2`) → L7 (`accept-proxy`, TLS, HTTP/2) → 3 uvicorn replicas showed:
   - round robin `api-1 → api-2 → api-3`
   - `X-Request-Id` generated, or the client's value kept

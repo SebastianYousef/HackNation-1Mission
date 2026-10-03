@@ -1,5 +1,11 @@
 """disease_involves_mechanism by propagation: disease <-[gene_associated_with_disease]- gene
--[gene_in_mechanism]-> pathway, for pathways with <= analytics.max_pathway_genes genes."""
+-[gene_in_mechanism]-> pathway, for pathways with <= analytics.max_pathway_genes genes.
+
+Database gene -> pathway links (status curated, e.g. Reactome TAS) always propagate. A hand-curated mechanism
+(ATLAS:mech-* from curated.yaml, literature gene links) lists its diseases explicitly with quotes, so its gene
+links propagate only through a gene of one of those quoted diseases: CLN5 gene -> soluble lysosomal protein
+deficiency reaches the CLN5 subtypes because CLN5 disease is quoted there, but CLN5 interacting with the
+CLN6-CLN8 EGRESS complex does not make CLN5 disease an ER-to-Golgi trafficking defect."""
 from __future__ import annotations
 
 import logging
@@ -18,8 +24,18 @@ def run(g: Graph) -> None:
     for e in g.edges_of("gene_associated_with_disease"):
         if e["status"] == "curated":
             gene_dis[e["src"]].add(e["dst"])
+    dis_genes = defaultdict(set)   # disease -> genes (any non-hypothesis association)
+    for e in g.edges_of("gene_associated_with_disease"):
+        if e["status"] != "hypothesis":
+            dis_genes[e["dst"]].add(e["src"])
+    vouched = defaultdict(set)     # hand-curated mechanism -> genes of its quoted diseases
+    for e in g.edges_of("disease_involves_mechanism"):
+        if e["status"] in ("curated", "literature"):
+            vouched[e["dst"]] |= dis_genes[e["src"]]
     w = GraphWriter("mechanisms")
     for e in g.edges_of("gene_in_mechanism"):
+        if e["status"] == "hypothesis" or (e["status"] != "curated" and e["src"] not in vouched[e["dst"]]):
+            continue
         m = g.nodes[e["dst"]]
         n = (m.get("attrs") or {}).get("n_genes")
         if n is not None and n > maxg:
