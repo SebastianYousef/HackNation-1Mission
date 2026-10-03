@@ -342,12 +342,26 @@ def test_outreach_body_is_grounded(fixtures_dir, monkeypatch):
 def test_ground_body_citation_styles():
     from atlas_api.ai import ground_body
     # Marker after the full stop must not glue the next (invented) sentence onto a cited one.
-    assert ground_body("Fact A.[1] Invented B [2]. Ok.", {1}) == ("Fact A [1]. Ok.", {1})
+    assert ground_body("Fact A.[1] Invented B [2]. Ok?", {1}) == ("Fact A [1]. Ok?", {1})
     assert ground_body("Fact A. [1] Invented B [2].", {1}) == ("Fact A [1].", {1})
     # Grouped and ranged markers count as markers.
     assert ground_body("Fact A [1]. Invented B [2, 3].", {1}) == ("Fact A [1].", {1})
     assert ground_body("Fact A [1]. Invented B [2-3].", {1}) == ("Fact A [1].", {1})
     assert ground_body("Fact A [1, 4]. C [2\u20133].", {1, 3}) == ("Fact A [1]. C [3].", {1, 3})
+
+
+def test_ground_body_drops_uncited_statements():
+    from atlas_api.ai import ground_body
+    body = ("Dear Dr. Lee,\n\nCLN5 is linked to CLN5 [1]. Drug X cures CLN5 in most children. "
+            "Would you be open to a short call?\n\nThank you!\nKind regards,\nMaria")
+    assert ground_body(body, {1}) == ("Dear Dr. Lee,\n\nCLN5 is linked to CLN5 [1]. Would you be open to a "
+                                      "short call?\n\nKind regards,\nMaria", {1})
+    # A claim glued onto a question after an initial ("X.") is not a request to talk.
+    assert ground_body("Fact [1]. Made by firm X. Can we talk?", {1}) == ("Fact [1].", {1})
+    # A long unpunctuated line (e.g. a bullet) is not a greeting or sign-off.
+    assert ground_body("Hi,\n- drug X reverses CLN5 symptoms in nearly every treated child so far\nFact [1].",
+                       {1}) == ("Hi,\n\nFact [1].", {1})
+    assert ground_body("J. Doe et al. found it [1].\n  Invented.", {1}) == ("J. Doe et al. found it [1].", {1})
 
 
 async def _aret(v):
