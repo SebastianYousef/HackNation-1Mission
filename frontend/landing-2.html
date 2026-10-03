@@ -448,6 +448,79 @@ footer p{max-width:70ch}
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
 }
+
+/* ONE MISSION GUIDE: floating voice and text guide (og-) */
+#og-root{--og-acc:#9DB4FF;--og-acc-2:#B9C8FF;font-family:var(--f-body)}
+#og-root :focus-visible{outline:2px solid #9DB4FF;outline-offset:2px;border-radius:6px}
+.og-sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.og-orb{position:fixed;z-index:56;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));width:56px;height:56px;padding:0;border:0;border-radius:50%;background:transparent;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
+.og-orb .og-glow{position:absolute;inset:-6px;border-radius:50%;background:radial-gradient(circle,rgba(157,180,255,.55) 0%,rgba(157,180,255,.18) 45%,rgba(157,180,255,0) 70%);opacity:.7;animation:og-breathe 4.8s ease-in-out infinite;pointer-events:none}
+.og-orb .og-core{position:relative;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 34% 30%,#DCE4FF 0%,#B9C8FF 24%,#6D86E6 62%,#2B3E86 100%);box-shadow:0 0 0 1px rgba(185,200,255,.45),0 14px 32px -12px rgba(20,34,90,.75),inset 0 -6px 14px rgba(8,13,19,.28);color:var(--night);transition:transform .25s ease,box-shadow .25s ease}
+.og-orb:hover .og-core{transform:translateY(-1px) scale(1.03)}
+.og-orb.og-voice .og-glow{animation:none;opacity:calc(.55 + var(--og-lvl,0) * .45);transform:scale(calc(1 + var(--og-lvl,0) * .55));transition:transform .08s linear,opacity .08s linear}
+.og-orb.og-voice .og-core{transform:scale(calc(1 + var(--og-lvl,0) * .12));transition:transform .08s linear}
+.og-orb.og-voice.og-speaking .og-core{box-shadow:0 0 0 2px #B9C8FF,0 14px 32px -12px rgba(20,34,90,.75)}
+@keyframes og-breathe{0%,100%{transform:scale(.94);opacity:.5}50%{transform:scale(1.12);opacity:.9}}
+.og-hint{position:fixed;z-index:56;right:calc(max(20px,env(safe-area-inset-right,0px)) + 68px);bottom:calc(max(20px,env(safe-area-inset-bottom,0px)) + 14px);padding:6px 12px;border-radius:999px;background:var(--night-2);color:var(--night-ink);border:1px solid var(--night-rule);font-size:13px;font-weight:500;white-space:nowrap;box-shadow:0 10px 24px -14px rgba(0,0,0,.6);pointer-events:none;opacity:0;transform:translateX(6px);transition:opacity .5s ease,transform .5s ease}
+.og-hint.og-show{opacity:1;transform:none}
+.og-panel{position:fixed;z-index:58;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(max(20px,env(safe-area-inset-bottom,0px)) + 68px);width:min(360px,calc(100vw - 32px));max-height:70vh;display:flex;flex-direction:column;background:var(--night-2);color:var(--night-ink);border:1px solid var(--night-rule);border-radius:14px;box-shadow:0 30px 70px -28px rgba(0,0,0,.7);overflow:hidden;animation:og-in .22s ease}
+.og-panel[hidden]{display:none}
+@keyframes og-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.og-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 16px 12px 18px;border-bottom:1px solid var(--night-rule)}
+#og-root .og-title{font-family:var(--f-display);font-weight:400;font-size:22px;line-height:1.15;letter-spacing:-.01em;margin:0;color:var(--night-ink)}
+.og-status{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:13px;color:var(--night-ink-2);font-weight:500}
+.og-status i{width:7px;height:7px;border-radius:50%;background:#9DB4FF;flex:none}
+.og-status.og-busy i{animation:og-pulse 1.1s ease-in-out infinite}
+.og-status.og-tool i{background:var(--ev-n)}
+.og-status.og-err i{background:var(--hy-n)}
+@keyframes og-pulse{0%,100%{opacity:.35}50%{opacity:1}}
+.og-iconbtn{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--night-rule);background:transparent;color:var(--night-ink-2)}
+.og-iconbtn:hover{color:var(--night-ink);border-color:var(--night-ink-2)}
+.og-log{flex:1 1 auto;min-height:120px;overflow-y:auto;overscroll-behavior:contain;padding:16px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--night-rule) transparent}
+.og-msg{max-width:88%;padding:9px 13px;border-radius:14px;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+.og-msg.og-guide{align-self:flex-start;background:var(--night-3);border-bottom-left-radius:4px;color:var(--night-ink)}
+.og-msg.og-me{align-self:flex-end;background:rgba(157,180,255,.16);border:1px solid rgba(157,180,255,.28);border-bottom-right-radius:4px;color:var(--night-ink)}
+.og-msg.og-streaming::after{content:"";display:inline-block;width:6px;height:6px;margin-left:6px;border-radius:50%;background:#9DB4FF;vertical-align:middle;animation:og-pulse 1s ease-in-out infinite}
+.og-note{align-self:center;max-width:92%;text-align:center;font-size:13px;color:var(--night-ink-2);padding:2px 8px}
+.og-error{align-self:stretch;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:10px 12px;border:1px solid color-mix(in srgb,var(--hy-n) 40%,transparent);border-radius:10px;background:color-mix(in srgb,var(--hy-n) 8%,transparent);font-size:14px;color:var(--night-ink)}
+.og-error button{border:1px solid var(--night-rule);background:var(--night);color:var(--night-ink);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600}
+.og-error button:hover{border-color:var(--night-ink-2)}
+.og-form{display:flex;gap:8px;padding:12px 14px 10px;border-top:1px solid var(--night-rule)}
+.og-form input{flex:1 1 auto;min-width:0;font:inherit;font-size:16px;padding:10px 14px;border-radius:999px;border:1px solid var(--night-rule);background:var(--night);color:var(--night-ink)}
+.og-form input::placeholder{color:var(--night-ink-2)}
+.og-form input:focus{outline:none;border-color:#9DB4FF;box-shadow:0 0 0 3px rgba(157,180,255,.18)}
+.og-send{flex:none;width:42px;height:42px;border-radius:50%;border:0;display:grid;place-items:center;background:#B9C8FF;color:var(--night)}
+.og-send:hover{background:#CCD8FF}
+.og-send:disabled{opacity:.5;cursor:default}
+.og-foot{display:flex;align-items:center;gap:12px;padding:0 14px 14px}
+.og-talk{flex:none;display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 10px;border-radius:999px;border:1px solid var(--night-rule);background:transparent;color:var(--night-ink);font-size:13px;font-weight:600}
+.og-talk:hover{border-color:var(--night-ink-2)}
+.og-talk[aria-pressed="true"]{background:#B9C8FF;border-color:#B9C8FF;color:var(--night)}
+.og-talk:disabled{opacity:.6;cursor:default}
+.og-foot p{font-size:12px;line-height:1.4;color:var(--night-ink-2)}
+.og-layer{position:absolute;top:0;left:0;width:0;height:0;z-index:30}
+.og-xp{position:absolute;display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 9px;border-radius:999px;font-size:12.5px;font-weight:600;line-height:1.5;white-space:nowrap;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);box-shadow:0 6px 16px -10px rgba(0,0,0,.35);transform:translate(-100%,3px);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease,border-color .15s ease,color .15s ease}
+.og-xp.og-n{border-color:var(--night-rule);background:var(--night-2);color:var(--night-ink)}
+.og-xp:hover{color:var(--ink);border-color:var(--ink-3)}
+.og-xp.og-n:hover{color:#fff;border-color:var(--night-ink-2)}
+.og-xp.og-on,.og-xp:focus-visible,.og-touch .og-xp{opacity:1;pointer-events:auto;transform:translate(-100%,0)}
+.og-touch .og-xp{opacity:.92}
+.og-xp[hidden]{display:none}
+.og-sel{position:fixed;z-index:72;display:inline-flex;align-items:center;gap:6px;padding:6px 12px 6px 10px;border-radius:999px;border:1px solid var(--night-rule);background:var(--night);color:var(--night-ink);font-size:13px;font-weight:600;box-shadow:0 12px 28px -12px rgba(0,0,0,.6);animation:og-in .15s ease}
+.og-sel[hidden]{display:none}
+.og-sel:hover{border-color:var(--night-ink-2)}
+@media (max-width:560px){
+  .og-orb{width:52px;height:52px;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px))}
+  .og-orb .og-core{width:52px;height:52px}
+  .og-hint{right:calc(max(16px,env(safe-area-inset-right,0px)) + 62px);bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 12px)}
+  .og-panel{left:0;right:0;bottom:0;width:100%;max-height:78vh;max-height:78dvh;border-radius:16px 16px 0 0;border-left:0;border-right:0;border-bottom:0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .og-panel::before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--night-rule);margin:8px auto 0}
+  html.og-open .og-orb,html.og-open .og-hint{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  .og-orb .og-glow{opacity:.7;transform:none}
+  .og-orb.og-voice .og-glow,.og-orb.og-voice .og-core{transform:none}
+}
 </style>
 
 <header class="nav" id="top">
@@ -1449,6 +1522,620 @@ $('#rFrom').value='leigh:leigh'; $('#rTo').value='leigh:d_narp'; renderRoute();
 try{ const m=localStorage.getItem('om-mode'); if(m==='researcher') setMode('researcher'); }catch(e){}
 const _set=setMode; setMode=function(m,s){_set(m,s); try{localStorage.setItem('om-mode',m)}catch(e){}};
 if(location.hash==='#researcher') setMode('researcher');
+})();
+</script>
+<!-- ONE MISSION GUIDE (og-) -->
+<div id="og-root">
+  <div class="og-layer" id="og-layer"></div>
+  <button class="og-sel" id="og-sel" type="button" hidden aria-label="Explain the selected text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Explain</button>
+  <div class="og-hint" id="og-hint" aria-hidden="true">Ask the guide</div>
+  <button class="og-orb" id="og-orb" type="button" aria-label="Ask the One Mission guide" aria-expanded="false" aria-controls="og-panel">
+    <span class="og-glow" aria-hidden="true"></span>
+    <span class="og-core" aria-hidden="true"><svg width="26" height="14" viewBox="0 0 26 14"><circle cx="4" cy="7" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><line x1="7.5" y1="7" x2="18.5" y2="7" stroke="currentColor" stroke-width="1.6"/><circle cx="22" cy="7" r="3.2" fill="currentColor"/></svg></span>
+  </button>
+  <div class="og-panel" id="og-panel" role="dialog" aria-modal="false" aria-labelledby="og-title" aria-describedby="og-foot-note" hidden>
+    <div class="og-head">
+      <div>
+        <h2 class="og-title" id="og-title">One Mission guide</h2>
+        <p class="og-status" id="og-status"><i aria-hidden="true"></i><span id="og-status-text">Ready</span></p>
+      </div>
+      <button class="og-iconbtn" id="og-close" type="button" aria-label="Close the guide"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="og-log" id="og-log" tabindex="0" aria-label="Conversation with the guide"></div>
+    <p class="og-sr" id="og-live" aria-live="polite" aria-atomic="true"></p>
+    <form class="og-form" id="og-form">
+      <label class="og-sr" for="og-input">Message the guide</label>
+      <input id="og-input" type="text" autocomplete="off" enterkeyhint="send" maxlength="800" placeholder="Ask about the project or the Atlas">
+      <button class="og-send" id="og-send" type="submit" aria-label="Send message"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+    </form>
+    <div class="og-foot">
+      <button class="og-talk" id="og-talk" type="button" aria-pressed="false" aria-label="Talk with the guide by voice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span id="og-talk-label">Talk</span></button>
+      <p id="og-foot-note">Answers come from our concept notes and the live Atlas. Not medical advice.</p>
+    </div>
+  </div>
+</div>
+<script type="module">
+/* One Mission guide: ElevenLabs agent with live Atlas client tools. Public agent id only, never an API key. */
+(() => {
+'use strict';
+try {
+const OG_AGENT_ID = 'agent_7801m41tw0vsfxabzwbe2dp8wh1r';
+const OG_SDK_URL = 'https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm';
+const OG_API = ((location.hostname === '127.0.0.1' || location.hostname === 'localhost') && location.port !== '8077')
+  ? 'http://127.0.0.1:8077/api/v1' : '/api/v1';
+const OG_MAX = 12000;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const root = $('og-root'), orb = $('og-orb'), panel = $('og-panel'), log = $('og-log'), live = $('og-live');
+const form = $('og-form'), input = $('og-input'), talkBtn = $('og-talk'), statusEl = $('og-status'), statusText = $('og-status-text');
+const hint = $('og-hint'), selBtn = $('og-sel'), layer = $('og-layer');
+if (!root || !orb || !panel) return;
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+const clean = s => String(s == null ? '' : s).replace(/\s+/g, ' ').trim();
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const quote = s => clean(s).replace(/"/g, "'");
+
+/* ---------- live Atlas client tools ---------- */
+const NF = { error: 'not found' };
+async function apiGet(path) {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 8000);
+  try {
+    let r;
+    try { r = await fetch(OG_API + path, { signal: ctl.signal, headers: { Accept: 'application/json' } }); }
+    catch (e) { throw new Error('live data unavailable'); }
+    if (r.status === 404) return { __nf: true };
+    if (!r.ok) throw new Error('live data unavailable');
+    try { return await r.json(); } catch (e) { throw new Error('live data unavailable'); }
+  } finally { clearTimeout(timer); }
+}
+const enc = encodeURIComponent;
+const arr = v => Array.isArray(v) ? v : [];
+const need = (p, k) => { const v = p && p[k]; if (v == null || String(v).trim() === '') throw new Error(k + ' is required'); return String(v).trim(); };
+const TOOLS = {
+  async atlas_stats() {
+    const d = await apiGet('/meta'); if (d.__nf) return NF;
+    if (Array.isArray(d.sources)) d.sources = d.sources.slice(0, 25);
+    return d;
+  },
+  async search_atlas(p) {
+    const d = await apiGet('/search?q=' + enc(need(p, 'query')) + '&limit=8'); if (d.__nf) return NF;
+    return arr(d).map(h => ({ id: h.id, type: h.type, label: h.label, match_kind: h.match_kind }));
+  },
+  async disease_overview(p) {
+    const v = await apiGet('/diseases/' + enc(need(p, 'disease_id')) + '/action-view'); if (v.__nf) return NF;
+    const lab = g => g && g.node ? g.node.label : null;
+    return {
+      headline: v.headline, summary: v.plain_summary, treatment: v.treatment_status,
+      groups: arr(v.exact_groups).map(lab),
+      related: arr(v.related_communities).slice(0, 5).map(r => ({ disease: r.disease ? r.disease.label : null, why: r.why, groups: arr(r.groups).map(lab) })),
+      assets: arr(v.assets).slice(0, 8).map(a => ({ label: lab(a), kind: a.asset_kind, reusability: a.reusability })),
+      connections: arr(v.connections).slice(0, 6).map(c => ({ kind: c.kind, to: c.to, status: c.weakest_status ?? null, confidence: c.min_confidence ?? null, edge_ids: arr(c.edges).map(e => e.id) })),
+      gaps: arr(v.coverage && v.coverage.gaps).map(g => g.question).slice(0, 3)
+    };
+  },
+  async node_details(p) { const d = await apiGet('/nodes/' + enc(need(p, 'node_id'))); return d.__nf ? NF : d; },
+  async edge_evidence(p) { const d = await apiGet('/edges/' + enc(need(p, 'edge_id'))); return d.__nf ? NF : d; },
+  async similar_diseases(p) { const d = await apiGet('/diseases/' + enc(need(p, 'disease_id')) + '/similar?limit=5'); return d.__nf ? NF : d; }
+};
+/* keep results valid JSON under ~12k chars by trimming long arrays and strings */
+function fit(obj) {
+  let s = JSON.stringify(obj);
+  if (s.length <= OG_MAX) return s;
+  const shrink = (v, n, m) => Array.isArray(v) ? v.slice(0, n).map(x => shrink(x, n, m))
+    : (v && typeof v === 'object') ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, shrink(x, n, m)]))
+    : (typeof v === 'string' && v.length > m) ? v.slice(0, m) + '...' : v;
+  for (const [n, m] of [[20, 600], [10, 400], [6, 300], [4, 200], [2, 160], [1, 120]]) {
+    s = JSON.stringify(shrink(obj, n, m));
+    if (s.length <= OG_MAX) return s;
+  }
+  return JSON.stringify({ truncated: true, text: s.slice(0, OG_MAX - 200) });
+}
+let toolsRunning = 0;
+const clientTools = {};
+Object.keys(TOOLS).forEach(name => {
+  clientTools[name] = async (params) => {
+    toolsRunning++; renderStatus(); trace('tool', name);
+    try { return fit(await TOOLS[name](params || {})); }
+    finally { toolsRunning = Math.max(0, toolsRunning - 1); if (conv) thinking = true; renderStatus(); }
+  };
+});
+window.OGGuide = { tools: clientTools };
+
+/* ---------- transcript ---------- */
+function fmt(text) {
+  let t = String(text || '').replace(/\s*[\u2014\u00B7]\s*/g, ', ');
+  t = esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  return t;
+}
+function scrollLog() { log.scrollTop = log.scrollHeight; }
+function addMsg(who, text) {
+  const d = document.createElement('div');
+  d.className = 'og-msg ' + (who === 'me' ? 'og-me' : 'og-guide');
+  d.innerHTML = fmt(text);
+  log.appendChild(d); scrollLog();
+  if (who !== 'me') announce(text);
+  return d;
+}
+function addNote(text) {
+  const d = document.createElement('div'); d.className = 'og-note'; d.textContent = text;
+  log.appendChild(d); scrollLog(); announce(text); return d;
+}
+function announce(text) { live.textContent = ''; setTimeout(() => { live.textContent = clean(String(text).replace(/\*\*/g, '')).replace(/\s*[\u2014\u00B7]\s*/g, ', '); }, 30); }
+let errorShown = false;
+function showError(retry) {
+  log.querySelectorAll('.og-error').forEach(e => e.remove());
+  const d = document.createElement('div'); d.className = 'og-error';
+  d.innerHTML = '<span>I can’t connect right now. Please try again in a moment.</span><button type="button">Try again</button>';
+  d.querySelector('button').addEventListener('click', () => { d.remove(); errorShown = false; renderStatus(); try { retry && retry(); } catch (e) {} });
+  log.appendChild(d); scrollLog(); announce('I can’t connect right now. Please try again in a moment.');
+  errorShown = true; renderStatus();
+}
+function clearError() { log.querySelectorAll('.og-error').forEach(e => e.remove()); errorShown = false; }
+
+/* ---------- status ---------- */
+let conv = null, convKind = null, starting = null, startingKind = null, sid = 0;
+let connecting = false, thinking = false, agentMode = 'listening';
+function renderStatus() {
+  let s = 'Ready', cls = '';
+  if (toolsRunning > 0) { s = 'Checking the live Atlas'; cls = 'og-busy og-tool'; }
+  else if (connecting) { s = 'Connecting'; cls = 'og-busy'; }
+  else if (errorShown && !conv) { s = 'Offline'; cls = 'og-err'; }
+  else if (conv && convKind === 'voice') { s = agentMode === 'speaking' ? 'Speaking' : (thinking ? 'Thinking' : 'Listening'); cls = agentMode === 'speaking' ? '' : (thinking ? 'og-busy' : ''); }
+  else if (thinking) { s = 'Thinking'; cls = 'og-busy'; }
+  if (statusText.textContent !== s) statusText.textContent = s;
+  statusEl.className = 'og-status ' + cls;
+  orb.classList.toggle('og-voice', !!(conv && convKind === 'voice'));
+  orb.classList.toggle('og-speaking', !!(conv && convKind === 'voice' && agentMode === 'speaking'));
+}
+
+/* ---------- SDK and sessions ---------- */
+let SDK = null, sdkP = null;
+function loadSDK() {
+  if (SDK) return Promise.resolve(SDK);
+  if (!sdkP) sdkP = import(OG_SDK_URL).then(m => { SDK = m; return m; }).catch(e => { sdkP = null; throw e; });
+  return sdkP;
+}
+function prefetch() { loadSDK().catch(() => {}); }
+const isOpen = c => { try { return !!c && (typeof c.isOpen === 'function' ? c.isOpen() : true); } catch (e) { return false; } };
+const sentEcho = [];
+let streamOpen = false, lastFinal = null;
+let curStream = null, lastStreamed = null, lastUser = '', lastGuide = '', carry = '';
+
+const evlog = [];
+function trace(kind, data) { evlog.push([Date.now() % 100000, kind, data]); if (evlog.length > 300) evlog.shift(); }
+window.OGGuide.trace = evlog;
+function callbacks(my, onFirst) {
+  const mine = () => my === sid;
+  return {
+    onConnect() { if (!mine()) return; renderStatus(); },
+    onStatusChange({ status } = {}) { if (!mine()) return; connecting = status === 'connecting'; renderStatus(); },
+    onModeChange({ mode } = {}) { if (!mine()) return; agentMode = mode === 'speaking' ? 'speaking' : 'listening'; if (agentMode === 'speaking') thinking = false; renderStatus(); },
+    onAgentChatResponsePart(p) {
+      if (!mine() || !p) return;
+      trace('part', p.type + ':' + String(p.text || '').slice(0, 40));
+      try {
+        if (p.type === 'start') { streamOpen = true; curStream = null; }
+        else if (p.type === 'delta') {
+          if (!streamOpen || !p.text) return;
+          if (!curStream) { curStream = document.createElement('div'); curStream.className = 'og-msg og-guide og-streaming'; curStream._raw = ''; log.appendChild(curStream); }
+          curStream._raw += p.text; curStream.innerHTML = fmt(curStream._raw); scrollLog(); thinking = false; renderStatus();
+        } else if (p.type === 'stop') { streamOpen = false; if (curStream) { curStream.classList.remove('og-streaming'); lastStreamed = curStream; curStream = null; } }
+      } catch (e) {}
+    },
+    onMessage(m) {
+      if (!mine() || !m) return;
+      trace('msg', (m.role || m.source) + ':' + String(m.message || '').slice(0, 40));
+      const text = String(m.message || '');
+      const role = m.role || (m.source === 'user' ? 'user' : 'agent');
+      if (role === 'user') {
+        const i = sentEcho.indexOf(text);
+        if (i >= 0) { sentEcho.splice(i, 1); return; }
+        if (/^(EXPLAIN|CONTEXT):/.test(text) || !clean(text)) return;
+        lastUser = text; addMsg('me', text); return;
+      }
+      thinking = false; onFirst && onFirst();
+      const target = curStream || (lastStreamed && !lastStreamed._final ? lastStreamed : null);
+      if (!target && lastFinal && lastFinal._text === text && document.contains(lastFinal)) { renderStatus(); return; }
+      let el = target;
+      if (el) { el.classList.remove('og-streaming'); el.innerHTML = fmt(text); announce(text); scrollLog(); }
+      else el = addMsg('guide', text);
+      el._final = true; el._text = text; lastFinal = el;
+      if (target === curStream) { curStream = null; streamOpen = false; }
+      lastStreamed = null;
+      lastGuide = text; renderStatus();
+    },
+    onDisconnect(details) {
+      if (!mine()) return;
+      const wasVoice = convKind === 'voice';
+      conv = null; convKind = null; thinking = false; agentMode = 'listening'; toolsRunning = 0; connecting = false;
+      if (curStream) { curStream.classList.remove('og-streaming'); curStream = null; } streamOpen = false;
+      setTalk(false); stopLevels();
+      const reason = details && details.reason;
+      if (reason === 'error') showError(() => ensureSession(wasVoice ? 'voice' : 'text').catch(handleStartError));
+      else if (reason === 'agent') addNote('The conversation ended. Send a message whenever you want to pick it up again.');
+      renderStatus();
+    },
+    onError() { if (!mine()) return; if (!conv) { connecting = false; renderStatus(); } }
+  };
+}
+
+function modeLabel() {
+  const b = document.querySelector('.seg button[aria-pressed="true"]');
+  return clean(b ? b.textContent : 'Reader') || 'Reader';
+}
+function ctx(text) { try { if (isOpen(conv)) conv.sendContextualUpdate('CONTEXT: ' + text); } catch (e) {} }
+let sentMode = null;
+function sendStartContext() {
+  sentMode = modeLabel(); ctx('visitor mode is ' + sentMode);
+  if (topSection) { ctx('visitor is viewing section ' + topSection); lastSecSent = topSection; lastSecAt = Date.now(); }
+  if (carry) { ctx(carry); carry = ''; }
+}
+
+class MicError extends Error {}
+async function startSession(kind, firstMessage) {
+  if (starting) {
+    if (startingKind === kind) return starting;
+    try { await starting; } catch (e) {}
+    if (isOpen(conv) && convKind === kind) return conv;
+    await endConv();
+  }
+  startingKind = kind;
+  starting = (async () => {
+    const my = ++sid;
+    connecting = true; clearError(); renderStatus();
+    const mod = await loadSDK();
+    const Conversation = mod.Conversation || (mod.default && mod.default.Conversation);
+    if (!Conversation) throw new Error('sdk');
+    if (kind === 'voice') {
+      try {
+        const s = await navigator.mediaDevices.getUserMedia({ audio: true });
+        s.getTracks().forEach(t => t.stop());
+      } catch (e) { throw new MicError('mic'); }
+    }
+    let first; const firstP = new Promise(r => { first = r; });
+    const opts = Object.assign({ agentId: OG_AGENT_ID, clientTools }, callbacks(my, () => first()));
+    if (kind === 'text') opts.textOnly = true;
+    if (firstMessage) opts.overrides = { agent: { firstMessage } };
+    const c = await Conversation.startSession(opts);
+    if (my !== sid) { try { await c.endSession(); } catch (e) {} throw new Error('superseded'); }
+    conv = c; convKind = kind; connecting = false; agentMode = 'listening'; renderStatus();
+    if (kind === 'voice') startLevels();
+    await Promise.race([firstP, wait(4000)]);
+    sendStartContext();
+    return c;
+  })();
+  try { return await starting; }
+  finally { starting = null; startingKind = null; connecting = false; renderStatus(); }
+}
+async function ensureSession(kind, firstMessage) {
+  if (isOpen(conv)) return conv;
+  if (conv) await endConv();
+  return startSession(kind || 'text', firstMessage);
+}
+async function endConv() {
+  const c = conv; sid++; conv = null; convKind = null; thinking = false; agentMode = 'listening'; toolsRunning = 0;
+  if (curStream) { curStream.classList.remove('og-streaming'); curStream = null; } streamOpen = false;
+  stopLevels(); renderStatus();
+  if (c) { try { await c.endSession(); } catch (e) {} }
+}
+function handleStartError(e) {
+  connecting = false; renderStatus();
+  if (e instanceof MicError) { setTalk(false); addNote('I couldn’t use your microphone, so let’s keep going by text. You can allow microphone access and press Talk again.'); return true; }
+  if (e && e.message === 'superseded') return true;
+  return false;
+}
+
+/* ---------- sending ---------- */
+async function send(wire, display, opts) {
+  opts = opts || {};
+  if (!opts.retry) { addMsg('me', display || wire); }
+  if (!/^(EXPLAIN|CONTEXT):/.test(wire)) lastUser = wire;
+  try {
+    const c = await ensureSession(opts.kind || 'text', opts.ack || 'One moment.');
+    if (opts.ctx) ctx(opts.ctx);
+    thinking = true; renderStatus();
+    sentEcho.push(wire); if (sentEcho.length > 20) sentEcho.shift();
+    c.sendUserMessage(wire);
+  } catch (e) {
+    thinking = false;
+    if (handleStartError(e)) return;
+    showError(() => send(wire, display, Object.assign({}, opts, { retry: true })));
+  }
+}
+form.addEventListener('submit', ev => {
+  ev.preventDefault();
+  const v = input.value.trim(); if (!v) return;
+  input.value = '';
+  send(v, v, { kind: convKind || 'text' });
+});
+let lastActivity = 0;
+input.addEventListener('input', () => {
+  const now = Date.now();
+  if (now - lastActivity < 1200) return; lastActivity = now;
+  try { if (isOpen(conv) && typeof conv.sendUserActivity === 'function') conv.sendUserActivity(); } catch (e) {}
+});
+
+/* ---------- voice toggle ---------- */
+function setTalk(on) { talkBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); $('og-talk-label').textContent = on ? 'Talking' : 'Talk'; }
+function summary() {
+  if (!lastUser && !lastGuide) return '';
+  const cut = s => clean(s).slice(0, 500);
+  return 'continuing the same visit in a new session. The visitor last said: "' + cut(lastUser) + '". You last replied: "' + cut(lastGuide) + '".';
+}
+let talkBusy = false;
+talkBtn.addEventListener('click', async () => {
+  if (talkBusy) return; talkBusy = true; talkBtn.disabled = true;
+  try {
+    if (conv && convKind === 'voice') {
+      carry = summary(); await endConv(); setTalk(false);
+      addNote('Voice is off. We can keep chatting here.');
+      return;
+    }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { addNote('Voice is not available in this browser, so let’s keep going by text.'); return; }
+    carry = summary(); setTalk(true);
+    if (conv) await endConv();
+    try { await startSession('voice', carry ? 'I’m listening. Go ahead.' : 'Hi, I’m the One Mission guide. What would you like to know?'); addNote('Voice is on. Speak whenever you are ready.'); }
+    catch (e) { setTalk(false); if (!handleStartError(e)) showError(() => talkBtn.click()); }
+  } finally { talkBusy = false; talkBtn.disabled = false; }
+});
+
+/* ---------- orb levels (voice) ---------- */
+let raf = 0, smooth = 0;
+function levelTick() {
+  raf = 0;
+  if (!conv || convKind !== 'voice') { orb.style.setProperty('--og-lvl', '0'); return; }
+  let lvl = 0;
+  try {
+    if (agentMode === 'speaking') {
+      if (typeof conv.getOutputByteFrequencyData === 'function') {
+        const d = conv.getOutputByteFrequencyData();
+        if (d && d.length) { const n = Math.min(d.length, 48); let s = 0; for (let i = 0; i < n; i++) s += d[i]; lvl = s / n / 255 * 1.8; }
+      }
+      if (!lvl && typeof conv.getOutputVolume === 'function') lvl = conv.getOutputVolume() * 1.6;
+    } else {
+      if (typeof conv.getInputByteFrequencyData === 'function') {
+        const d = conv.getInputByteFrequencyData();
+        if (d && d.length) { const n = Math.min(d.length, 48); let s = 0; for (let i = 0; i < n; i++) s += d[i]; lvl = s / n / 255 * 0.8; }
+      } else if (typeof conv.getInputVolume === 'function') lvl = conv.getInputVolume() * 0.6;
+    }
+  } catch (e) { lvl = 0; }
+  smooth = smooth * 0.7 + Math.min(1, lvl) * 0.3;
+  orb.style.setProperty('--og-lvl', smooth.toFixed(3));
+  raf = requestAnimationFrame(levelTick);
+}
+function startLevels() { if (reduced || raf) return; raf = requestAnimationFrame(levelTick); }
+function stopLevels() { if (raf) cancelAnimationFrame(raf); raf = 0; smooth = 0; orb.style.setProperty('--og-lvl', '0'); }
+
+/* ---------- panel open / close ---------- */
+let returnFocus = null, welcomed = false, idleTimer = 0;
+function openPanel(opener) {
+  clearTimeout(idleTimer);
+  if (!panel.hidden) return;
+  returnFocus = opener || document.activeElement || orb;
+  panel.hidden = false; orb.setAttribute('aria-expanded', 'true'); document.documentElement.classList.add('og-open');
+  hideHint(); prefetch();
+  if (!welcomed) { welcomed = true; addMsg('guide', 'Hi, I’m the One Mission guide. Ask me anything about the project or the live Atlas. You can also select text on the page, or use an Explain button, and I will walk you through it.'); }
+  setTimeout(() => { try { input.focus({ preventScroll: true }); } catch (e) {} }, 30);
+  renderStatus();
+}
+function closePanel() {
+  if (panel.hidden) return;
+  panel.hidden = true; orb.setAttribute('aria-expanded', 'false'); document.documentElement.classList.remove('og-open');
+  if (conv && convKind === 'voice') { carry = summary(); endConv(); setTalk(false); }
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { if (panel.hidden && conv) { carry = summary(); endConv(); } }, 120000);
+  const f = returnFocus && document.contains(returnFocus) && returnFocus !== document.body ? returnFocus : orb;
+  try { f.focus({ preventScroll: true }); } catch (e) {}
+}
+orb.addEventListener('click', () => { panel.hidden ? openPanel(orb) : closePanel(); });
+orb.addEventListener('pointerenter', prefetch, { once: true });
+orb.addEventListener('focus', prefetch, { once: true });
+$('og-close').addEventListener('click', closePanel);
+window.addEventListener('keydown', ev => {
+  if (ev.key !== 'Escape') return;
+  if (!selBtn.hidden) { hideSel(); }
+  if (panel.hidden) return;
+  const dr = document.getElementById('drawerRoot');
+  if (dr && dr.innerHTML.trim()) return; /* let the evidence drawer close first */
+  const nl = document.getElementById('navLinks');
+  if (nl && !nl.hidden && !panel.contains(document.activeElement)) return;
+  closePanel();
+}, true);
+
+/* first-visit hint */
+function hideHint() { hint.classList.remove('og-show'); }
+if (!store.get('og-hinted')) {
+  store.set('og-hinted', '1');
+  setTimeout(() => { if (panel.hidden) hint.classList.add('og-show'); setTimeout(hideHint, 6000); }, 1200);
+}
+
+/* ---------- explain ---------- */
+const TARGETS = [
+  { key: 'hero', el: () => document.querySelector('section.hero'), id: 'heroTitle', head: () => document.getElementById('heroTitle') },
+  { key: 'atlas', el: () => $('atlas'), id: 'atlas', head: () => { const rv = $('researcherView'); return (rv && !rv.hidden ? rv : $('readerView') || document).querySelector('h2'); } },
+  { key: 'journey', el: () => $('journey'), id: 'journey', head: () => $('journeyTitle') },
+  { key: 'jpanel', el: () => $('jpanel'), id: 'jpanel', head: () => $('jpanel') && $('jpanel').querySelector('h3'), sub: true },
+  { key: 'tenx', el: () => $('tenx'), id: 'tenx', head: () => $('tenxTitle') },
+  { key: 'vlist', el: () => $('vlist'), id: 'vlist', head: () => document.querySelector('#tenx .validate h3'), sub: true },
+  { key: 'communities', el: () => $('communities'), id: 'communities', head: () => $('commTitle') },
+  { key: 'plans', el: () => $('plans'), id: 'plans', head: () => $('plansTitle') },
+  { key: 'evidence', el: () => $('evidence'), id: 'evidence', head: () => $('evTitle') },
+  { key: 'sources', el: () => $('sources'), id: 'sources', head: () => $('srcTitle') },
+  { key: 'about', el: () => $('about'), id: 'about', head: () => $('ctaTitle') }
+];
+function explainSection(t, opener) {
+  trace('explainSection', t.id + ' ' + (new Error().stack || '').split('\n').slice(1, 6).join(' | '));
+  const h = t.head && t.head();
+  const heading = quote(h ? h.textContent : t.id);
+  const host = t.el();
+  const lede = host && (t.sub ? host : host.querySelector('.lede, h2 + p, h3 + p'));
+  const extra = lede ? quote(lede.textContent).slice(0, 600) : '';
+  openPanel(opener);
+  send('EXPLAIN: section #' + t.id + ', heading "' + heading + '"', 'Explain “' + heading + '”',
+    { kind: convKind || 'text', ack: 'Happy to explain.', ctx: extra ? 'the section #' + t.id + ' on the page currently reads: "' + extra + '"' : '' });
+}
+function sectionFor(el) {
+  if (!el || !el.closest) return '';
+  const sub = el.closest('#vlist,#jpanel,#readerView,#researcherView,#drawerRoot,#navLinks');
+  if (sub && !(sub.id === 'readerView' || sub.id === 'researcherView') ) return '#' + sub.id;
+  if (el.closest('section.hero')) return '#heroTitle';
+  if (sub) return '#' + sub.id;
+  const s = el.closest('section[id]'); if (s) return '#' + s.id;
+  if (el.closest('footer')) return 'footer';
+  if (el.closest('header')) return '#top';
+  return '';
+}
+function explainText(text, el, opener) {
+  trace('explainText', String(text).slice(0, 40));
+  const t = clean(text); if (!t) return;
+  const sec = sectionFor(el);
+  const word = /^[\p{L}\p{N}][\p{L}\p{N}'’.>\-]*$/u.test(t) && t.length <= 40;
+  const q = quote(t);
+  const wire = word ? 'EXPLAIN: word "' + q + '"' + (sec ? ' (in section ' + sec + ')' : '')
+                    : 'EXPLAIN: ' + (sec ? 'section ' + sec + ', ' : '') + 'text "' + q + '"';
+  const short = t.length > 90 ? t.slice(0, 88).replace(/\s+\S*$/, '') + '...' : t;
+  openPanel(opener);
+  send(wire, 'Explain “' + short + '”', { kind: convKind || 'text', ack: 'Happy to explain.' });
+}
+
+/* explain pills, positioned in a document-level layer so page markup and layout stay untouched */
+const touch = matchMedia('(hover: none)');
+const applyTouch = () => root.classList.toggle('og-touch', touch.matches);
+applyTouch(); try { touch.addEventListener('change', () => { applyTouch(); placePills(); }); } catch (e) {}
+const pills = [];
+TARGETS.forEach(t => {
+  const el = t.el(); if (!el) return;
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'og-xp' + (el.closest('.night') ? ' og-n' : '');
+  b.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/></svg>Explain';
+  b.addEventListener('click', () => explainSection(t, b));
+  b.addEventListener('focus', () => { const h = t.head && t.head(); b.setAttribute('aria-label', 'Explain this section: ' + clean(h ? h.textContent : t.id)); });
+  { const h0 = t.head && t.head(); b.setAttribute('aria-label', 'Explain this section: ' + clean(h0 ? h0.textContent : t.id)); }
+  layer.appendChild(b);
+  pills.push({ t, el, b });
+});
+function anchorFor(p) {
+  const r = p.el.getBoundingClientRect();
+  if (!r.height) return null;
+  const sx = window.scrollX, sy = window.scrollY;
+  if (p.t.key === 'vlist') {
+    if (innerWidth <= 860) { const eb = document.querySelector('#tenx .validate .eyebrow'); if (eb) { const er = eb.getBoundingClientRect(); return { x: r.right + sx, y: er.top + sy + er.height / 2 - 13 }; } }
+    return { x: r.right + sx, y: r.top + sy - 40 };
+  }
+  if (p.t.key === 'jpanel') return { x: r.right + sx, y: r.top + sy - 38 };
+  const w = p.el.querySelector('.wrap') || p.el;
+  const wr = w.getBoundingClientRect(), pr = parseFloat(getComputedStyle(w).paddingRight) || 0;
+  const pt = parseFloat(getComputedStyle(p.el).paddingTop) || 0;
+  const off = Math.max(12, Math.min(32, pt / 2 - 13));
+  return { x: wr.right - pr + sx, y: r.top + sy + off };
+}
+let placeQueued = false;
+function placePills() {
+  placeQueued = false;
+  pills.forEach(p => {
+    const a = anchorFor(p);
+    if (!a) { p.b.hidden = true; return; }
+    p.b.hidden = false; p.b.style.left = Math.round(a.x) + 'px'; p.b.style.top = Math.round(a.y) + 'px';
+  });
+}
+const queuePlace = () => { if (!placeQueued) { placeQueued = true; requestAnimationFrame(placePills); } };
+placePills();
+addEventListener('resize', queuePlace, { passive: true });
+addEventListener('load', queuePlace);
+try { new ResizeObserver(queuePlace).observe(document.body); } catch (e) {}
+try { new MutationObserver(queuePlace).observe(document.querySelector('main') || document.body, { attributes: true, attributeFilter: ['hidden'], subtree: true }); } catch (e) {}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(queuePlace).catch(() => {});
+let hoverSet = new Set();
+function setHover(target) {
+  const next = new Set();
+  pills.forEach(p => { if (target && (p.el.contains(target) || p.b === target)) next.add(p); });
+  pills.forEach(p => p.b.classList.toggle('og-on', next.has(p)));
+  hoverSet = next;
+}
+document.addEventListener('pointerover', ev => {
+  if (ev.pointerType === 'touch') return;
+  const t = ev.target; if (!t || !t.closest) return;
+  const pill = t.closest('.og-xp');
+  if (pill) { const p = pills.find(x => x.b === pill); if (p) setHover(p.el); return; }
+  if (root.contains(t)) return;
+  setHover(t);
+}, { passive: true });
+document.addEventListener('focusin', ev => { const t = ev.target; if (t && !root.contains(t)) setHover(t); });
+document.documentElement.addEventListener('pointerleave', () => setHover(null));
+
+/* text selection and double-click */
+let selState = null;
+function hideSel() { selBtn.hidden = true; selState = null; }
+function updateSel() {
+  try {
+    const s = window.getSelection();
+    if (!s || s.isCollapsed || !s.rangeCount) { hideSel(); return; }
+    const ae = document.activeElement;
+    if (ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable)) { hideSel(); return; }
+    const txt = clean(s.toString());
+    if (!txt || txt.length > 400) { hideSel(); return; }
+    const r = s.getRangeAt(0);
+    const n = r.commonAncestorContainer; const el = n.nodeType === 1 ? n : n.parentElement;
+    if (!el || root.contains(el) || el.closest('input,textarea,select,[contenteditable="true"]')) { hideSel(); return; }
+    const rects = r.getClientRects(); const last = rects.length ? rects[rects.length - 1] : r.getBoundingClientRect();
+    if (!last || (!last.width && !last.height)) { hideSel(); return; }
+    selState = { txt, el };
+    selBtn.hidden = false;
+    const bw = selBtn.offsetWidth || 90, bh = selBtn.offsetHeight || 30;
+    let x = last.right - bw / 2, y = last.bottom + 8;
+    if (y + bh > innerHeight - 8) { const f = rects.length ? rects[0] : last; y = f.top - bh - 8; }
+    x = Math.max(8, Math.min(innerWidth - bw - 8, x)); y = Math.max(8, Math.min(innerHeight - bh - 8, y));
+    selBtn.style.left = Math.round(x) + 'px'; selBtn.style.top = Math.round(y) + 'px';
+  } catch (e) { hideSel(); }
+}
+let selTimer = 0;
+document.addEventListener('selectionchange', () => { clearTimeout(selTimer); selTimer = setTimeout(updateSel, 220); });
+document.addEventListener('dblclick', ev => { if (root.contains(ev.target)) return; clearTimeout(selTimer); setTimeout(updateSel, 0); });
+addEventListener('scroll', () => { if (!selBtn.hidden) hideSel(); }, { passive: true });
+selBtn.addEventListener('pointerdown', ev => ev.preventDefault());
+selBtn.addEventListener('mousedown', ev => ev.preventDefault());
+selBtn.addEventListener('click', () => {
+  const st = selState; if (!st) return;
+  hideSel();
+  try { window.getSelection().removeAllRanges(); } catch (e) {}
+  explainText(st.txt, st.el, orb);
+});
+
+/* ---------- context: reader / researcher mode and section in view ---------- */
+document.addEventListener('click', ev => {
+  const t = ev.target && ev.target.closest && ev.target.closest('.seg button, .role, [data-mode]');
+  if (!t || root.contains(t)) return;
+  setTimeout(() => { const m = modeLabel(); if (m !== sentMode && isOpen(conv)) { sentMode = m; ctx('visitor mode is ' + m); } }, 0);
+});
+let topSection = '', lastSecSent = '', lastSecAt = 0, secTimer = 0;
+const vis = new Map();
+const secList = TARGETS.filter(t => !t.sub).map(t => ({ t, el: t.el() })).filter(x => x.el);
+function pickTop() {
+  let best = null, bh = 0;
+  secList.forEach(x => { const h = vis.get(x.el) || 0; if (h > bh) { bh = h; best = x; } });
+  topSection = best ? '#' + best.t.id : '';
+  scheduleSecCtx();
+}
+function scheduleSecCtx() {
+  if (!isOpen(conv) || !topSection || topSection === lastSecSent) return;
+  const due = lastSecAt + 8000 - Date.now();
+  clearTimeout(secTimer);
+  if (due <= 0) { lastSecSent = topSection; lastSecAt = Date.now(); ctx('visitor is viewing section ' + topSection); }
+  else secTimer = setTimeout(scheduleSecCtx, due + 50);
+}
+try {
+  const io = new IntersectionObserver(es => { es.forEach(e => vis.set(e.target, e.isIntersecting ? e.intersectionRect.height : 0)); pickTop(); }, { threshold: [0, .1, .2, .35, .5, .65, .8, 1] });
+  secList.forEach(x => io.observe(x.el));
+} catch (e) {}
+
+/* ---------- cleanup ---------- */
+addEventListener('pagehide', () => { const c = conv; conv = null; sid++; stopLevels(); if (c) { try { Promise.resolve(c.endSession()).catch(() => {}); } catch (e) {} } });
+} catch (e) { /* the guide must never break the page */ }
 })();
 </script>
 </body></html>
