@@ -267,6 +267,8 @@ console.log(`fixtures: ${rels.length} files (${nodesById.size} nodes, ${edgesByI
 console.log(`type check: ${typeResult}`);
 if (errors.length) {
   console.error(`\n${errors.length} problem(s):\n  ${errors.join("\n  ")}`);
-  process.exit(1);
+  // exitCode, not process.exit(): exit() can drop buffered output when stderr is a pipe
+  process.exitCode = 1;
+} else {
+  console.log("integrity: ok\nALL FIXTURES VALID");
 }
-console.log("integrity: ok\nALL FIXTURES VALID");
