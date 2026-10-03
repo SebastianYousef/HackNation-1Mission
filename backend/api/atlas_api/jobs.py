@@ -47,27 +47,70 @@ async def load(store: Store, job_id: str) -> dict | None:
 
 # ---- Bright Data SERP ---------------------------------------------------------
 
-async def brightdata_serp(settings: Settings, query: str, client: httpx.AsyncClient) -> list[dict[str, Any]]:
-    """One Google search through the Bright Data SERP API -> [{title, url, snippet}].
+BRIGHTDATA_REQUEST_URL = "https://api.brightdata.com/request"
+# Per request: connect 10 s, then 35 s for the rest. The whole search (3 queries in
+# parallel) is capped by GAP_SEARCH_DEADLINE_SECONDS so a job always ends inside the
+# worker's 60 s stop_grace_period (infra/docker-compose.yml) and well before
+# RUNNING_TTL_SECONDS: a SIGTERMed worker finishes its job instead of leaving it "running".
+SERP_TIMEOUT = httpx.Timeout(35, connect=10)
+GAP_SEARCH_DEADLINE_SECONDS = 50.0
+_BRD_ERROR_HEADERS = ("x-brd-error", "x-brd-err-code", "x-brd-err-msg")
 
-    TODO(verify): request format follows Bright Data's "Direct API access" docs as we
-    understood them: POST https://api.brightdata.com/request with Bearer API key,
-    body {zone, url, format:"raw"}, and `brd_json=1` on the Google URL to get parsed JSON
-    with an `organic` array of {title, link, description}. Check the zone name and the
-    response shape against the dashboard/playground before the demo.
+
+class UpstreamError(RuntimeError):
+    """Web search failed upstream. str(exc) is safe to show in JobStatus.error."""
+
+
+async def brightdata_serp(settings: Settings, query: str, client: httpx.AsyncClient) -> list[dict[str, Any]]:
+    """One Google search through Bright Data -> [{title, url, snippet}].
+
+    Verified 2026-10-03 against the live API: POST https://api.brightdata.com/request with
+    `Authorization: Bearer <BRIGHTDATA_API_KEY>` and body {zone, url, format: "raw"}, where
+    url is a Google search URL with `brd_json=1`. The answer is Google's results parsed to
+    JSON; `organic` is a list of {title, link, description, ...} and may be absent or empty.
+    The zone is BRIGHTDATA_SERP_ZONE: a SERP API zone works, and so does a Web Unlocker zone
+    (e.g. "mcp_unlocker"). Do not send Google's `num` param: Bright Data rejects it
+    (x-brd-serp-warn). Bright Data answers HTTP 200 even when it fails: the error is in the
+    x-brd-error / x-brd-err-code / x-brd-err-msg headers and the body is empty (seen live:
+    "redirect location was rejected"). An unknown zone is an HTTP 400 with a plain-text
+    reason. Every failure raises UpstreamError with a message that never contains the API key.
     """
-    google = f"https://www.google.com/search?q={quote_plus(query)}&hl=en&num=10&brd_json=1"
-    resp = await client.post(
-        "https://api.brightdata.com/request",
-        headers={"Authorization": f"Bearer {settings.brightdata_api_key}"},
-        json={"zone": settings.brightdata_serp_zone, "url": google, "format": "raw"},
-        timeout=45,
-    )
-    resp.raise_for_status()
-    data = resp.json()
-    return [{"title": o.get("title") or "", "url": o.get("link") or o.get("url") or "",
-             "snippet": o.get("description") or o.get("snippet") or ""}
-            for o in data.get("organic", []) if o.get("link") or o.get("url")]
+    google = f"https://www.google.com/search?q={quote_plus(query)}&hl=en&brd_json=1"
+    try:
+        resp = await client.post(
+            BRIGHTDATA_REQUEST_URL,
+            headers={"Authorization": f"Bearer {settings.brightdata_api_key}"},
+            json={"zone": settings.brightdata_serp_zone, "url": google, "format": "raw"},
+            timeout=SERP_TIMEOUT,
+        )
+    except httpx.TimeoutException as exc:
+        raise UpstreamError("web search timed out (Bright Data)") from exc
+    except httpx.HTTPError as exc:
+        raise UpstreamError(f"web search request failed (Bright Data): {type(exc).__name__}") from exc
+    brd = {h: resp.headers[h].strip() for h in _BRD_ERROR_HEADERS if resp.headers.get(h, "").strip()}
+    if brd:
+        code = brd.get("x-brd-err-code", "")
+        msg = brd.get("x-brd-err-msg") or brd.get("x-brd-error", "")
+        detail = f"{code}: {msg}" if code and msg and msg != code else (code or msg)
+        raise UpstreamError(f"web search failed (Bright Data {detail[:200]})")
+    if resp.status_code >= 400:  # e.g. 400 with a short plain-text reason for an unknown zone
+        reason = " ".join(resp.text.split())[:150]
+        if settings.brightdata_api_key:
+            reason = reason.replace(settings.brightdata_api_key, "***")
+        raise UpstreamError(f"web search failed (Bright Data HTTP {resp.status_code}"
+                            + (f": {reason})" if reason else ")"))
+    if not resp.content.strip():
+        raise UpstreamError("web search failed (Bright Data returned an empty response)")
+    try:
+        data = resp.json()
+    except ValueError as exc:
+        raise UpstreamError("web search failed (Bright Data returned non-JSON; check the zone and brd_json=1)") from exc
+    organic = data.get("organic") if isinstance(data, dict) else None
+    if not isinstance(organic, list):
+        return []
+    return [{"title": str(o.get("title") or ""), "url": str(o.get("link") or o.get("url") or ""),
+             "snippet": str(o.get("description") or o.get("snippet") or "")}
+            for o in organic if isinstance(o, dict) and (o.get("link") or o.get("url"))]
 
 
 _KINDS = [
@@ -91,7 +134,19 @@ async def run_gap_search(settings: Settings, store: Store, job_id: str, disease_
         queries = [f'"{label}" patient organization', f'"{label}" patient registry',
                    f'"{label}" natural history study']
         async with httpx.AsyncClient() as client:
-            pages = await asyncio.gather(*(brightdata_serp(settings, q, client) for q in queries))
+            try:
+                results = await asyncio.wait_for(
+                    asyncio.gather(*(brightdata_serp(settings, q, client) for q in queries),
+                                   return_exceptions=True),
+                    GAP_SEARCH_DEADLINE_SECONDS)
+            except TimeoutError as exc:
+                raise UpstreamError(f"web search timed out after {GAP_SEARCH_DEADLINE_SECONDS:.0f}s") from exc
+        pages = [r for r in results if not isinstance(r, BaseException)]
+        if not pages:  # every query failed: report the first reason
+            raise next(r for r in results if isinstance(r, BaseException))
+        for r in results:
+            if isinstance(r, BaseException):
+                log.warning("gap-search %s: one query failed, keeping the others: %s", job_id, r)
         seen: set[str] = set()
         leads = []
         for hit in (h for page in pages for h in page):
@@ -102,4 +157,5 @@ async def run_gap_search(settings: Settings, store: Store, job_id: str, disease_
         await save(store, settings, status(job_id, "done", {"leads": leads[:25], "disclaimer": DISCLAIMER}))
     except Exception as exc:
         log.warning("gap-search %s for %s failed: %s", job_id, disease_id, exc)
-        await save(store, settings, status(job_id, "failed", error=str(exc)[:300]))
+        msg = str(exc) if isinstance(exc, RuntimeError) and str(exc) else "web search failed"
+        await save(store, settings, status(job_id, "failed", error=msg[:300]))

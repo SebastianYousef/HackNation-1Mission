@@ -122,7 +122,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             await db.close()
         await app.state.store.close()
 
-    app = FastAPI(title="Rare Disease Atlas API", version="1.0.0", lifespan=lifespan,
+    # redirect_slashes=False: the image runs uvicorn with --no-proxy-headers (client_ip()
+    # reads XFF itself), so request.url.scheme is "http" behind the TLS LB and Starlette's
+    # trailing-slash 307 would send https browsers to an absolute http:// Location. No
+    # contract path ends in "/", so "/meta/" is simply a 404 ApiError instead.
+    app = FastAPI(title="Rare Disease Atlas API", version="1.0.0", lifespan=lifespan, redirect_slashes=False,
                   docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url=None)
     app.state.settings = s
     app.state.instance_id = s.instance_id

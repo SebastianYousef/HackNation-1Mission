@@ -411,3 +411,104 @@ def test_worker_survives_bad_payloads(fixtures_dir):
         return await jobs.load(store, "job_x"), await jobs.load(store, "job_y")
     x, y = asyncio.run(run())
     assert x["state"] == "failed" and y["state"] == "failed"
+
+
+def _serp(handler):
+    """Run brightdata_serp against a mocked Bright Data endpoint."""
+    import asyncio
+
+    import httpx
+
+    from atlas_api import jobs
+    from atlas_api.config import Settings
+    s = Settings(_env_file=None, brightdata_api_key="test-key", brightdata_serp_zone="zone_x")
+    seen: list[httpx.Request] = []
+
+    def record(req: httpx.Request) -> httpx.Response:
+        seen.append(req)
+        return handler(req)
+
+    async def run():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(record)) as c:
+            return await jobs.brightdata_serp(s, '"CLN5 disease" registry', c)
+    return asyncio.run(run()), seen
+
+
+def test_brightdata_serp_error_headers_raise_upstream_error():
+    import httpx
+
+    from atlas_api import jobs
+    # Bright Data's failure shape: HTTP 200, empty body, the reason in x-brd-* headers.
+    bad = httpx.Response(200, content=b"", headers={"x-brd-error": "zone not found",
+                                                     "x-brd-err-code": "client_10100",
+                                                     "x-brd-err-msg": "Zone zone_x not found"})
+    with pytest.raises(jobs.UpstreamError) as e:
+        _serp(lambda req: bad)
+    msg = str(e.value)
+    assert "client_10100" in msg and "Zone zone_x not found" in msg and "test-key" not in msg
+    for resp in (httpx.Response(200, content=b""), httpx.Response(200, content=b"<html>"),
+                 httpx.Response(502, content=b"")):
+        with pytest.raises(jobs.UpstreamError):
+            _serp(lambda req, r=resp: r)
+    with pytest.raises(jobs.UpstreamError) as e:
+        _serp(lambda req: httpx.Response(400, text="zone not found\n(key test-key)"))
+    assert str(e.value) == "web search failed (Bright Data HTTP 400: zone not found (key ***))"
+
+
+def test_brightdata_serp_request_and_parsing():
+    import json
+
+    import httpx
+    body = {"organic": [{"title": "CLN5 Registry", "link": "https://x.org/r", "description": "d"},
+                        {"title": "no link"}, "junk"]}
+    leads, seen = _serp(lambda req: httpx.Response(200, json=body))
+    assert leads == [{"title": "CLN5 Registry", "url": "https://x.org/r", "snippet": "d"}]
+    sent = json.loads(seen[0].content)
+    assert sent["zone"] == "zone_x" and sent["format"] == "raw"
+    assert "brd_json=1" in sent["url"] and "num=" not in sent["url"]
+    assert seen[0].headers["authorization"] == "Bearer test-key"
+    assert _serp(lambda req: httpx.Response(200, json={"general": {}}))[0] == []  # no organic
+    assert _serp(lambda req: httpx.Response(200, json={"organic": []}))[0] == []
+
+
+def test_gap_search_job_failure_modes(monkeypatch):
+    import asyncio
+
+    from atlas_api import jobs
+    from atlas_api.cache import Store
+    from atlas_api.config import Settings
+    s, store = Settings(_env_file=None, brightdata_api_key="k"), Store(None)
+    calls = {"n": 0}
+
+    async def partly_failing(settings, query, client):
+        calls["n"] += 1
+        if "registry" in query:
+            raise jobs.UpstreamError("web search failed (Bright Data client_10100: bad zone)")
+        return [{"title": "CLN5 Foundation", "url": f"https://x.org/{calls['n']}", "snippet": ""}]
+
+    async def all_failing(settings, query, client):
+        raise jobs.UpstreamError("web search failed (Bright Data client_10100: bad zone)")
+
+    async def slow(settings, query, client):
+        await asyncio.sleep(5)
+        return []
+
+    async def run(fake, job_id):
+        monkeypatch.setattr(jobs, "brightdata_serp", fake)
+        await jobs.run_gap_search(s, store, job_id, "MONDO:1", "CLN5 disease")
+        return await jobs.load(store, job_id)
+
+    ok = asyncio.run(run(partly_failing, "job_a"))
+    assert ok["state"] == "done" and len(ok["result"]["leads"]) == 2
+    assert ok["result"]["disclaimer"] == jobs.DISCLAIMER
+    failed = asyncio.run(run(all_failing, "job_b"))
+    assert failed["state"] == "failed" and "client_10100" in failed["error"]
+    monkeypatch.setattr(jobs, "GAP_SEARCH_DEADLINE_SECONDS", 0.05)
+    late = asyncio.run(run(slow, "job_c"))
+    assert late["state"] == "failed" and "timed out" in late["error"]
+
+
+def test_trailing_slash_is_404_not_absolute_redirect(client):
+    r = client.get(f"{V1}/meta/", headers={"X-Forwarded-Proto": "https"}, follow_redirects=False)
+    assert r.status_code == 404 and "location" not in r.headers
+    assert r.json()["error"]["code"] == "not_found"
