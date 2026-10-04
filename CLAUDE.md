@@ -128,6 +128,9 @@ To change the landing page, edit `frontend/landing.html` here, push, and redeplo
   - Extract, reconcile and `brightdata_orgs` have not run on the server.
 - The team frontend app is not deployed yet (`FRONTEND_REPO` empty), so only the landing page and the API are public.
 
+## Trigger word: `återgå`
+If a user message is exactly `återgå` (nothing else), read `docs/RESUME.md` and carry out the paused work it describes, in order, without asking again. It lists the branches, the rules and the acceptance checks.
+
 ## Demo-critical facts
 - Slice: lysosomal storage diseases, deep on the NCLs (Batten). The hero is an NCL subtype without approved therapy, picked at hour 1 (fixtures use CLN5). The counterexample is CLN2 enzyme replacement (soluble enzyme) vs. membrane-protein subtypes.
 - The demo journey and the 1-minute script are in `docs/PLAN.md`. Every edge on the demo path must be checked by a human before the data freeze (hour 16).
