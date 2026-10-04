@@ -88,6 +88,19 @@ p{margin:0}
 .nav-links[hidden]{display:none}
 /* the hidden attribute always hides, even on elements whose class sets display (chips, rows, buttons) */
 [hidden]{display:none!important}
+/* welcome state: nothing is chosen until the visitor picks a disease */
+.om-welcome{display:grid;gap:14px;padding:24px;border:1px dashed var(--rule);border-radius:var(--r);max-width:760px}
+.om-welcome .ow-t{font-family:var(--f-display);font-size:clamp(24px,2.6vw,30px);line-height:1.2}
+.om-welcome p{color:var(--ink-2);font-size:15px;max-width:62ch}
+.om-ex{display:flex;flex-wrap:wrap;gap:8px}
+.om-ex button{border:1px solid var(--rule);background:var(--paper);border-radius:999px;padding:8px 14px;font-size:14px;min-height:40px;cursor:pointer}
+.om-ex button:hover,.om-ex button:focus-visible{border-color:var(--accent)}
+.night .om-welcome{border-color:var(--night-rule)} .night .om-welcome p{color:var(--night-ink-2)}
+.night .om-ex button{background:var(--night-2);border-color:var(--night-rule);color:var(--night-ink)}
+.om-choose{display:none;margin:0 0 24px}
+html[data-welcome] .om-choose{display:block}
+html[data-welcome] [data-needs-ds]{display:none!important}
+
 .nav-links a{display:flex;justify-content:space-between;align-items:center;gap:12px;text-decoration:none;color:var(--night-ink);font-size:15px;padding:11px 12px;border-radius:4px}
 .nav-links a:hover,.nav-links a:focus-visible{background:var(--night-3)}
 .nav-links a small{font-family:var(--f-body);font-size:12px;letter-spacing:.005em;color:var(--night-ink-2);font-weight:500}
@@ -4031,11 +4044,18 @@ function renderSources(ds){
     const by={}; items.forEach(i=>(by[ev_catOf(i.name)]=by[ev_catOf(i.name)]||[]).push(i));
     const cols=cats.filter(c=>c!=='Other'||by.Other);
     grid.classList.toggle('ev-five',cols.length>4);
+    /* compact: the sources checked for this disease always show; the rest of each column folds away.
+       "Other" (individual papers and pages behind single facts) starts folded completely. */
     grid.innerHTML=cols.map(c=>{ const l=(by[c]||[]).sort((a,b)=>(a.kind==='check'?0:1)-(b.kind==='check'?0:1));
-      return `<div class="src-col"><h4>${esc(c)}</h4>${l.length?`<ul>${l.map(ev_srcItem).join('')}</ul>`:'<p class="ev-note">None listed yet.</p>'}</div>`; }).join('');
+      if(!l.length) return `<div class="src-col"><h4>${esc(c)}</h4><p class="ev-note">None listed yet.</p></div>`;
+      const keep=c==='Other'?0:Math.max(l.filter(i=>i.kind==='check').length,3), extra=l.length-keep;
+      const lis=l.map((i,k)=>k<keep?ev_srcItem(i):ev_srcItem(i).replace(/^<li\b/,'<li hidden data-src-x'));
+      const lead=c==='Other'&&extra?`<p class="ev-note">${esc(extra)} individual papers, trial records and pages, each behind a single fact.</p>`:'';
+      const btn=extra>0?`<button type="button" class="linkbtn" data-src-more aria-expanded="false" data-n="${extra}">${c==='Other'?'Show them':`Show ${extra} more`}</button>`:'';
+      return `<div class="src-col"><h4>${esc(c)}</h4>${lead}<ul>${lis.join('')}</ul>${btn}</div>`; }).join('');
   }
   if(note){
-    if(!ds) note.textContent='Checking the sources for the entry you are viewing…';
+    if(!ds) note.textContent='The sources the Atlas draws on. Pick a disease to see which ones were checked for it.';
     else if(ds.missing) note.textContent=`Nothing was checked for ${ds.id}: it is not in the Atlas. These are the sources the Atlas draws on.`;
     else if(checks.length){ const n=checks.filter(c=>c.checked).length;
       note.textContent=`Checked for ${ds.name}: ${n} of ${checks.length} sources searched. The rest are sources the Atlas draws on across all diseases.`; }
@@ -4043,6 +4063,12 @@ function renderSources(ds){
   }
 }
 
+
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-src-more]'); if(!b) return;
+  const open=b.getAttribute('aria-expanded')!=='true', col=b.closest('.src-col');
+  col.querySelectorAll('[data-src-x]').forEach(li=>li.hidden=!open);
+  b.setAttribute('aria-expanded',open); b.textContent=open?'Show fewer':(b.textContent.startsWith('Show them')||b.dataset.other?'Show them':`Show ${b.dataset.n} more`);
+  if(b.textContent==='Show fewer'&&col.querySelector('h4').textContent==='Other') b.dataset.other='1'; });
 /* =====================================================================
    COVERAGE LINES + LIVE TAG (from /meta)
    ===================================================================== */
@@ -4208,12 +4234,33 @@ if(API_OVERRIDE){
   document.body.prepend(b);
 }
 
+/* ---------- welcome: no disease is pre-selected ---------- */
+/* The page used to open on CLN5. Now nothing is chosen until the visitor searches or picks an example;
+   every section that shows one disease explains that and offers the same examples. ?d=<id> still deep-links. */
+const OM_EXAMPLES=['CLN5 disease','Batten disease','Leigh syndrome','Dravet syndrome'];
+const omExButtons=()=>`<div class="om-ex">${OM_EXAMPLES.map(q=>`<button type="button" data-om-ex="${esc(q)}">${esc(q)}</button>`).join('')}</div>`;
+function omWelcome(){
+  document.documentElement.dataset.welcome='1';
+  const card=`<div class="om-welcome"><div class="ow-t">Start with a disease, gene or symptom</div><p>Search above or pick an example. Everything on this page then follows the disease you choose, with a source behind every link.</p></div>`;
+  if($('#readerOut')) $('#readerOut').innerHTML=card;
+  if($('#detail')) $('#detail').innerHTML=`<p class="rs-muted">Search a disease, gene or mechanism to see its connections.</p>${omExButtons()}`;
+  ['#jpaths','#jtrack','#jpanel','#validateOut','#commGrid','#commExtra','#chain','#routeForm','#routeOut'].forEach(sel=>{ const el=$(sel); if(el) el.setAttribute('data-needs-ds',''); });
+  const notes={journey:'its connected journey',communities:'the groups and families around it',evidence:'how each of its connections is supported'};
+  Object.entries(notes).forEach(([id,what])=>{ const sec=$('#'+id); if(!sec||sec.querySelector('.om-choose')) return;
+    const head=sec.querySelector('.sec-head')||sec.querySelector('.wrap'); const d=document.createElement('div'); d.className='om-choose';
+    d.innerHTML=`<p style="margin:0 0 10px;color:inherit;opacity:.85">Choose a disease to see ${what}.</p>${omExButtons()}`;
+    head.insertAdjacentElement(head.classList.contains('sec-head')?'afterend':'afterbegin',d); });
+}
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-om-ex]'); if(!b) return;
+  const q=b.dataset.omEx; if(typeof sr_readerGo==='function'){ sr_readerGo(q); } $('#atlas').scrollIntoView({behavior:reduced?'auto':'smooth'}); });
+onDs(ds=>{ if(ds) delete document.documentElement.dataset.welcome; });
+
 /* ---------- init ---------- */
 renderRace();
 updateDebug();
 api.meta().then(m=>{ cur.meta=m; updateDebug(); _metaSubs.forEach(fn=>safeCall(fn,m)); }).catch(err=>{ apiFail('The Atlas is not answering',err); updateDebug(); });
 try{ const m=localStorage.getItem('om-mode'); setMode(location.hash==='#researcher'?'researcher':m==='researcher'?'researcher':'reader'); }catch(e){ setMode('reader'); }
-selectEntity(QS.get('d')||DEFAULT_DISEASE,{push:!!QS.get('d')});
+if(QS.get('d')) selectEntity(QS.get('d'),{push:true}); else omWelcome();
 if(QS.get('edge')) openEdge(QS.get('edge'));
 
 })();
