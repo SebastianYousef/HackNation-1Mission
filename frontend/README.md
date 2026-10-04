@@ -1,10 +1,14 @@
 # Frontend: setup and playbook
 
-The frontend lives in **its own repo** (e.g. `HackNation-1Mission-web`). That separation is exactly what we want: the two teams share only `contract/`.
+The frontend lives in **its own repo**. That separation is exactly what we want: the two teams share only `contract/`.
+
+**The team's actual app** is the team's fork (see root `CLAUDE.md`, rule 6, and `FRONTEND_REPO`/`FRONTEND_REF` on the server). To work on it, clone that repo and branch and run `./scripts/sync-contract.sh <path-to-the-clone>`. The setup below describes starting a fresh frontend repo; `HackNation-1Mission-web` there is only an example name.
 
 This folder holds the frontend's half of the bridge:
 - `FRONTEND_SPEC.md` is the binding spec, copied to the web repo root.
 - `CLAUDE.md` is for Claude Code sessions inside the web repo.
+- `PROTOTYPE_PROMPT.md` is a one-message prompt that ports `landing-2.html` into the app on live data.
+- `landing.html` is the public landing page served at `/`; `landing-2.html` is currently an identical copy. Neither is synced into the web repo.
 - This README covers setup and the prompt sequence.
 
 ## Setup (hour 0, ~20 min, one frontend person)
@@ -33,7 +37,7 @@ This folder holds the frontend's half of the bridge:
 Send these in order. Each one is self-contained and refers to `FRONTEND_SPEC.md`.
 
 **Prompt 1: skeleton and API layer**
-> Read `FRONTEND_SPEC.md` carefully; it's binding. Set up the app shell: routes `/`, `/search`, `/d/:id`, `/m/:id`, `/n/:id`, `/c/:id`, `/explore/:id`, a top bar with the global search box and a Family/Expert toggle, the honesty footer, and the collapsible debug footer. Create `src/config.ts` and the `src/api/` layer exactly as specified (HttpAtlasApi, MockAtlasApi reading `src/mocks/fixtures` via import.meta.glob, react-query hooks, ApiError). Do not touch `src/contract/` or `src/mocks/fixtures/`. Do not enable any backend. Default to mock mode when `VITE_API_BASE` is unset.
+> Read `FRONTEND_SPEC.md` carefully; it's binding. Set up the app shell: routes `/app` (Home; `/` is the landing page on the server, so redirect `/` → `/app` in dev), `/search`, `/d/:id`, `/m/:id`, `/n/:id`, `/c/:id`, `/explore/:id`, a top bar with the global search box and a Family/Expert toggle, the honesty footer, and the collapsible debug footer. Create `src/config.ts` and the `src/api/` layer exactly as specified (HttpAtlasApi, MockAtlasApi reading `src/mocks/fixtures` via import.meta.glob, react-query hooks, ApiError). Do not touch `src/contract/` or `src/mocks/fixtures/`. Do not enable any backend. Follow the `src/config.ts` snippet exactly: an unset `VITE_API_BASE` means same origin (production), not mock mode; mock mode is only `VITE_DATA_MODE=mock` or `?mock=1`.
 
 **Prompt 2: visual language**
 > Implement `src/lib/encoding.ts` (status → color/line style/label, node type → icon/hue) and the primitives StatusChip, ConfidenceDots, NodeIcon, EmptyState exactly per section 5 of `FRONTEND_SPEC.md`. Then the global EvidenceDrawer (URL param `?edge=`), using `useEdge`, with Supporting/Contradicting/Context tabs.

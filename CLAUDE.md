@@ -14,8 +14,10 @@ Read before non-trivial work: `docs/PLAN.md` (roles, timeline, scope decisions),
 | `backend/pipeline/` | Offline ETL: ingest → extract (OpenAI) → reconcile → analytics → views → load | B1 |
 | `backend/scripts/check_contract.py` | Verifies a running API against the contract | B2 |
 | `infra/` | Docker Compose stack: L4 HAProxy → L7 HAProxy ×2 → API ×N, worker, web (nginx), Redis, Postgres | B2 |
-| `frontend/` | Not app code: the frontend's half of the bridge (`FRONTEND_SPEC.md`, `CLAUDE.md`, playbook) synced into the frontend repo, plus `landing.html` (the public landing page, served at `/`) | F1 + F2 |
+| `frontend/` | Not app code: the frontend's half of the bridge (`FRONTEND_SPEC.md` and `CLAUDE.md` are synced into the frontend repo; `README.md` playbook, `PROTOTYPE_PROMPT.md`), plus `landing.html` (the public landing page, served at `/`) and `landing-2.html` (currently an identical copy) | F1 + F2 |
 | `scripts/sync-contract.sh` | Copies contract + fixtures + frontend spec into the frontend repo | anyone |
+| `docs/` | `brief.pdf` (the challenge), `PLAN.md` (roles, timeline), `ARCHITECTURE.md` | — |
+| `Makefile` | Root targets (`make help`): API dev/test, contract check, migrations, compose stack | — |
 | `deploy/gpu-server/` | Older Tailscale-Funnel deploy kit (needs root). **Superseded** by the live deployment below | — |
 
 ## Non-negotiable rules
@@ -119,12 +121,12 @@ That is the exact command that produced the current dataset. It deliberately pas
 To change the landing page, edit `frontend/landing.html` here, push, and redeploy.
 
 ### Current state (2026-10-03)
-- Real dataset loaded with the hardened pipeline (dataset `2026-10-04a+20261003.213735`): 3,108 nodes, 10,142 edges (7,339 curated, 1,221 literature, 1,524 inferred, 58 hypothesis), 11,512 evidence rows, 979 paths, 61 views (39 action + 22 mechanism).
+- Real dataset loaded with the hardened pipeline. For the current dataset version and counts (nodes by type, edges, evidence, clusters, focus diseases) see `GET /api/v1/meta`; they change with every load, so they are not kept here.
 - `check_contract.py` passes (OK, 0 violations). Path strength has one rule: `analytics/paths.py` (`path_strength`) takes the weakest edge, lowered by `attrs.status_cap`/`confidence_cap`, and stores it in `paths.weakest_status/min_confidence` (migration 0004). `/paths` and the views serve that value. The checker accepts the edge minimum, or the cap when one is set, and never anything stronger.
-- `curated.yaml` now has 11 assets (DEM-CHILD registry, natural history studies, CLN5/CLN3/CLN6 animal and cell models), 3 mechanisms (`ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes`, `-subunit-c-storage`, `-lysosomal-bmp-synthesis`) and the Gray Foundation (CLN6). All 43 quotes pass `--verify`. PubMed quotes use NCBI efetch URLs, because pubmed.ncbi.nlm.nih.gov shows scripts a cookie wall.
+- `curated.yaml` holds the hand-curated NCL facts: patient groups (e.g. the Gray Foundation for CLN6), `ATLAS:mech-*` mechanisms (e.g. `ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes`, `-subunit-c-storage`, `-lysosomal-bmp-synthesis`), assets (DEM-CHILD registry, natural history studies, CLN5/CLN3/CLN6 animal and cell models) and therapies. Re-run `--verify` after adding quotes. PubMed quotes use NCBI efetch URLs, because pubmed.ncbi.nlm.nih.gov shows scripts a cookie wall.
 - Frontend prototype prompt with verified real demo ids: `frontend/PROTOTYPE_PROMPT.md`.
 - `.env` has only the Bright Data **Scraping Browser** credentials:
-  - `/explain` and `/outreach-draft` use template fallbacks (no `OPENAI_API_KEY`).
+  - No `OPENAI_API_KEY`, so `/explain` and `/outreach-draft` return 503 `upstream_unavailable`; there is no template fallback. TODO(decision API-01): a keyless fallback for `/explain` is pending.
   - Gap-search jobs fail with "BRIGHTDATA_API_KEY missing" (SERP key).
   - Extract, reconcile and `brightdata_orgs` have not run on the server.
 - The team frontend app is not deployed yet (`FRONTEND_REPO` empty), so only the landing page and the API are public.

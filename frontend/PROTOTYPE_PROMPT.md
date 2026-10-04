@@ -58,7 +58,7 @@ c) /d/:id from GET /diseases/{id}/action-view (404 → /n/:id). Build it from la
    6. "Every connection needs evidence" (landing-2 evidence table): rows = the disease's paths from GET /paths?from=<id> (From / To / Source / Relationship / Confidence; the "Include hypotheses" toggle filters inferred/hypothesis). Selecting a row opens the drawer.
    7. Data sources band: coverage.sources (name, checked, result_count) plus /meta sources.
 d) Evidence drawer (?edge=): GET /edges/{id}. "source — label → target" (both clickable), mapped chip + sub-label, confidence, sources, contradiction chip. Tabs Supporting / Contradicting / Context. Each row: verbatim quote, source_name linked to url (PMID:x → https://pubmed.ncbi.nlm.nih.gov/x/), source_ref, date, method badge (llm:* → "Extracted by GPT", algorithm:* → "Computed by the Atlas"). Esc closes. Explain button for the single edge.
-e) Explanation panel: headline, numbered steps, each with its mapped chip linking to its edge_id, uncertainties as an Unknown-styled box, what_to_check_next. Label "Explained by GPT · every sentence cited" when model is non-null, else "Template explanation · every sentence cited" (be honest: the backend may run without an OpenAI key).
+e) Explanation panel: headline, numbered steps, each with its mapped chip linking to its edge_id, uncertainties as an Unknown-styled box, what_to_check_next. Label "Explained by GPT · every sentence cited" when model is non-null, else "Template explanation · every sentence cited". Today a server without an OpenAI key answers POST /explain and /outreach-draft with 503 upstream_unavailable (there is no template fallback yet; TODO(decision API-01)), so show a calm "Explanations are unavailable right now" state, never a crash.
 f) /plan = landing-2 "Plan your first step": "Your disease" (search-as-you-type, diseases only) + "Where are you now?" (Just diagnosed / Living with it for a while / Leading a patient group) → "Create my plan →". Build the cards from the disease's action view, keeping landing-2's card kinds and copy: Care (static advice), Community (exact_groups / related groups with website + contact), Research (trials, recruiting first; registries from assets when present), Collaboration (researchers), Shared action (the first viable next_step, labeled as a hypothesis to test together). Order by stage: diagnosed → Care, Community first; living with it → Research first; leading a group → Collaboration, Shared action and gaps first. If has_supported_route is false or the disease has no action view, use landing-2's fallback plan (genetic testing / look for an organization / search studies / "Help put your disease on the map"). Every card that rests on data shows its chip and opens its evidence. "Draft a message" on Community/Collaboration cards → POST /outreach-draft {disease_id, target_id, edge_ids} in a dialog with a copy button.
 
 ## 4. Then, if time remains
@@ -67,12 +67,12 @@ f) /plan = landing-2 "Plan your first step": "Your disease" (search-as-you-type,
 - "Contribute evidence" dialog → POST /submissions.
 - landing-2's 10× section can live on /about as-is (it is an illustrative model and says so).
 
-## 5. Real-data facts to design for (verified against the live API)
+## 5. Real-data facts to design for (checked against the live API; exact counts change with every data load, so read them from the API and never hard-code them)
 - Labels are lower-case MONDO names ("neuronal ceroid lipofuscinosis 5"); show them as given (sentence case at most).
-- Many nodes have summary: null and several lists are empty. assets is now filled for the NCLs: CLN5 has 6 (all `direct`: sheep/dog/mouse/iPSC models, DEM-CHILD registry, Neurogene natural history), CLN3/CLN2/CLN6 have 6 each (mix of `direct` and `adaptable` with what_differs), the NCL umbrella 2; most other diseases still have none. Every section needs a graceful Unknown/empty state; never render "null"/"undefined".
+- Many nodes have summary: null and several lists are empty. assets is filled for the main NCLs (CLN5: sheep/dog/mouse/iPSC models, DEM-CHILD registry, Neurogene natural history; CLN2/CLN3/CLN6 and the NCL umbrella too; some, e.g. Kufs type, carry `adaptable` assets with what_differs); most other diseases still have none. Every section needs a graceful Unknown/empty state; never render "null"/"undefined".
 - "batten" → juvenile NCL (MONDO:0019262), BDFA, BDSRA, the Batten Disease Clinical Research Consortium grant.
-- Hero CLN5 (MONDO:0009745): no approved treatment, no exact patient group, 6 related communities with 4 groups, 8 connections, 8 trials, 8 researchers, 4 next steps, 3 gaps, a caution.
-- CLN3 (MONDO:0008767): 1 exact group (Beyond Batten Disease Foundation) + the CLN2 counterexample caution. CLN2 (MONDO:0008769): approved treatment exists. NCL umbrella (MONDO:0016295): 3 groups (BDFA, BDSRA, NCL-Stiftung).
+- Hero CLN5 (MONDO:0009745): no approved treatment (the note names an investigational gene therapy), no exact patient group, several related communities with groups, plus connections, trials, researchers, next steps, gaps and at least one caution.
+- CLN3 (MONDO:0008767): exact groups (incl. Beyond Batten Disease Foundation) + the CLN2 counterexample caution. CLN2 (MONDO:0008769): approved treatment exists. NCL umbrella (MONDO:0016295): several exact groups (incl. BDFA, BDSRA, NCL-Stiftung).
 - Kufs type (MONDO:0008768): coverage.has_supported_route === false (the honest "Unknown" state).
 - Mechanism views exist only for some mechanisms; always handle 404. Curated ones that return 200: ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes (CLN6/CLN8), ATLAS:mech-subunit-c-storage (CLN5/CLN2/juvenile NCL), ATLAS:mech-lysosomal-bmp-synthesis (CLN5/CLN3).
 - CLN6 (MONDO:0011144) now has an exact patient group: Charlotte & Gwenyth Gray Foundation.
@@ -86,11 +86,11 @@ f) /plan = landing-2 "Plan your first step": "Your disease" (search-as-you-type,
 2. Search "batten" → grouped results with "matched: batten disease" on juvenile NCL.
 3. /d/MONDO:0009745 renders header, graph, journey, communities (honest empty state + related groups), validation, evidence table and sources.
 4. Any line or row opens the drawer with real quotes and sources; Esc closes; ?edge= links are shareable.
-5. "Explain in plain language" returns cited steps (or the honest template label).
+5. "Explain in plain language" returns cited steps, or the calm "unavailable" state on a 503.
 6. /d/MONDO:0008767 shows the amber CLN2 caution; the Reader/Researcher switch changes the detail level everywhere.
 7. /d/MONDO:0008768 opens with the validation/Unknown section first, phrased kindly.
 8. /plan?d=MONDO:0009745&stage=diagnosed produces a real plan; a disease with no data gives the fallback plan.
-9. /d/MONDO:0000000 shows a friendly Unknown state; ?mock=1 still works on every route; no sample data is left anywhere.
+9. /d/MONDO:0000000 shows a friendly Unknown state; ?mock=1 still works on every route with the mock fixture ids (e.g. /d/MONDO:MOCK0005; real ids 404 in mock mode and must show the same Unknown state); no sample data is left anywhere.
 Report which acceptance items pass, and anything in the contract that blocked you (write it to CONTRACT_REQUESTS.md, don't patch around it).
 ```
 

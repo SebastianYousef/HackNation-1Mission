@@ -36,7 +36,8 @@ export const DATA_MODE: "http" | "mock" =
   new URLSearchParams(location.search).get("mock") === "1" || import.meta.env.VITE_DATA_MODE === "mock" ? "mock" : "http";
 ```
 - Production: the site and the API share one origin. The L7 load balancer routes `/api/*` to the API servers, so `API_BASE = ""`.
-- Development: `VITE_API_BASE` = the backend team's public dev URL (they will give it to you). If unset, use mock mode.
+- Development: `VITE_API_BASE` = the backend team's public dev URL (they will give it to you).
+- An unset `VITE_API_BASE` does **not** mean mock mode. It means `API_BASE = ""` (same origin), which is exactly what the production build needs. Mock mode is chosen only by `VITE_DATA_MODE=mock` or `?mock=1`, as in the snippet above. In a dev or preview environment with no backend URL yet, set `VITE_DATA_MODE=mock`.
 - Appending `?mock=1` to any URL forces mock mode. That's useful when the backend is down.
 
 ### API layer (`src/api/`)
@@ -95,9 +96,11 @@ A missing fixture means throwing `ApiError(404, "not_found")`, exactly like the 
 
 ## 4. Screens and routes
 
+`/` on the deployed origin is the team's static landing page, **not** this app. The app's home route is **`/app`**; every home, logo or "back to start" link goes to `/app`. In Lovable preview and local dev, redirect `/` → `/app`.
+
 | Route | Screen | Persona |
 |---|---|---|
-| `/` | **Home.** One big search box ("Search a disease, gene, symptom or mechanism"), three entry chips: *"My family just got a diagnosis"*, *"I lead a patient group"*, *"I research a mechanism"*, and the dataset/coverage line from `/meta`. | all |
+| `/app` | **Home.** One big search box ("Search a disease, gene, symptom or mechanism"), three entry chips: *"My family just got a diagnosis"*, *"I lead a patient group"*, *"I research a mechanism"*, and the dataset/coverage line from `/meta`. | all |
 | `/search?q=` | Results grouped by type, with synonym matches explained. | all |
 | `/d/:id` | **Disease action view** (from `ActionView`), detailed below. | Maria, Devon |
 | `/m/:id` | **Mechanism view.** "Every gene name this mechanism hides under", ranked diseases with groups/assets/unmet need, researchers, trials, interventions. | Priya, Dr. Osei |

@@ -10,7 +10,7 @@
                                    │  MONDO HPO HGNC Orphanet ClinVar Reactome PubMed CT.gov RePORTER Bright Data      │  │
                                    └───────────────────────────────────────────────────────────────────────────────────┼──┘
                                                                                                                         ▼
- Browser ──DNS──► 203.0.113.10 ──► [L4 LB] ──TCP+PROXY v2──► [L7 LB ×2] ──HTTP──► [API ×N] ──SQL──► Postgres (Supabase)
+ Browser ──DNS──► 203.0.113.10 ──► [L4 LB] ──TCP+PROXY v2──► [L7 LB ×2] ──HTTP──► [API ×N] ──SQL──► Postgres
   (React SPA)       public IP       TCP:443      10.0.0.0/24       TLS end,  /api/* ─► 10.0.1.x:8000  │      api_* functions
                                     src-IP hash                    routing   /*     ─► [web] nginx     ├──► Redis (cache, rate
                                                                    health    (static dist/)            │     limits, job queue)
@@ -26,7 +26,7 @@
 | API replicas | Backend (B2) | FastAPI + uvicorn, psycopg3 pool | **none: stateless** |
 | Worker(s) | Backend (B2) | Python, consumes Redis queue | none |
 | Cache / queue | Backend (B2) | Redis | ephemeral |
-| Database | Backend (B1+B2) | Postgres 16+ with pg_trgm and pgvector (Supabase free tier) | **all durable state** |
+| Database | Backend (B1+B2) | Postgres 16+ with pg_trgm and pgvector (self-hosted; the Supabase free tier was the original plan and is not used) | **all durable state** |
 | Pipeline | Backend (B1) | Python 3.13: pandas, networkx/igraph+leidenalg, openai | files in `data/` |
 
 ## 2. The request path, layer by layer
@@ -52,7 +52,7 @@ What happens when a user opens `https://atlas.example/d/MONDO:0016295`:
    - Takes the client IP for rate limits and logs from the `X-Forwarded-For` entry `TRUSTED_PROXY_HOPS` hops from the right (1 behind our L7). Uvicorn runs with `--no-proxy-headers`, so no header can rewrite the peer address or scheme. The app builds no absolute URLs (`redirect_slashes=False`, relative `Location`), so it doesn't need `X-Forwarded-Proto`. Details: `infra/README.md`, "Client IP and forwarded headers".
    - Validates params, checks the Redis cache (`dataset_version + URL`), and on a miss calls one SQL function (`select api_action_view($1)`).
    - Returns JSON with `ETag`, `Cache-Control`, `X-Request-Id` and **`X-Served-By: api-2`**, which makes the load balancing visible in the UI's debug footer.
-6. **Postgres.** Reached through the Supabase **transaction pooler** (port 6543), so many replicas share a bounded number of DB connections.
+6. **Postgres.** Reached directly, or through a **transaction pooler** (PgBouncer, Supavisor) so many replicas share a bounded number of DB connections. The API disables server-side prepared statements, so either works.
 
 ## 3. Horizontal scaling and why sessions are not sticky
 
@@ -71,8 +71,8 @@ What happens when a user opens `https://atlas.example/d/MONDO:0016295`:
 
 | Resource | Budget |
 |---|---|
-| DB connections | replicas × pool_size ≤ pooler limit (Supabase free tier pooler handles ~200 clients; use pool_size = 5) |
-| OpenAI | per-IP and global rate limits in Redis; explanations cached forever per (audience, edge_ids) |
+| DB connections | replicas × WEB_CONCURRENCY × pool_size ≤ Postgres `max_connections`, or the pooler's client limit if one is in front (use pool_size = 5) |
+| OpenAI | per-IP rate limits in Redis; complete explanations cached in Postgres per (audience, edge_ids) until the next data load (`load` clears the `explanations` table); outreach drafts are not cached |
 | Bright Data | only in the worker tier; scale workers independently of API replicas |
 
 ## 4. Data model (in Postgres, see `backend/db/migrations/`)
@@ -88,10 +88,10 @@ Property graph in relational tables:
 
 | status | produced by | default confidence | UI |
 |---|---|---|---|
-| `curated` | curated DBs: HPO, Orphanet, MONDO, ClinVar, ClinicalTrials.gov, RePORTER | 0.9 | solid slate |
-| `literature` | OpenAI extraction from abstracts, with the verbatim quote | 0.5 + 0.1 per independent PMID, max 0.85, −0.15 per contradiction | solid blue |
+| `curated` | curated DBs: HPO, Orphanet, MONDO, ClinVar, Reactome; registry facts from ClinicalTrials.gov and NIH RePORTER (trial tests intervention, grant funds PI, PI affiliation) | 0.9 | solid slate |
+| `literature` | text with a verbatim quote: OpenAI extraction from abstracts, PubMed, `curated.yaml` facts, and our string match of a CT.gov condition or a RePORTER grant to a slice disease | 0.5 + 0.1 per independent PMID, max 0.85, −0.15 per contradiction | solid blue |
 | `inferred` | our analytics (similarity, clustering) | calibrated score | dashed violet |
-| `hypothesis` | atlas-proposed links and speculative claims | ≤ 0.4 | dotted amber |
+| `hypothesis` | atlas-proposed links and speculative claims; weaker CT.gov matches (synonym or title only) and Bright Data leads | ≤ 0.4 | dotted amber |
 
 A path is only as strong as its weakest edge (`weakest_status`, `min_confidence` in `/paths`).
 
@@ -133,8 +133,9 @@ The brief: *"If you want to win the challenge track prizes, you need to leverage
 |---|---|---|---|---|---|
 | 1 | **Extract** | offline, **once** (Batch API) | abstract → JSON claims `{subject, relation, object, stance, quote}` | ~500–1,500 slice abstracts; cheap model; cached by PMID | Structured Outputs schema; **the quote must be an exact substring of the abstract, or the claim is dropped**; speculative wording → `hypothesis` |
 | 2 | **Reconcile** | offline, only leftovers | pick the right id among ≤ 5 candidates for names that xref/synonym matching couldn't resolve | tens to hundreds of names | the LLM may only choose from the given candidates or "none"; logged with method `llm:<model>` |
-| 3 | **Explain** | live `POST /explain` (+ precomputed for demo paths) | path edges + their evidence → plain-language steps, each citing one `edge_id` | demo paths precomputed; live calls cached forever per (audience, edge_ids); rate-limited | only the given evidence goes into the prompt; cited ids are validated against the input; the cache makes the demo independent of the API |
-| (opt.) | Explain | offline | `plain_summary`, `headline`, `why`/`differences` in views; outreach draft | a few dozen calls | same rules; template fallback without a key |
+| 3 | **Explain** | live `POST /explain` (nothing is precomputed) | path edges + their evidence → plain-language steps, each citing one `edge_id` | live calls cached per (audience, edge_ids) until the next data load; rate-limited | only the given evidence goes into the prompt; cited ids are validated against the input; without `OPENAI_API_KEY` it returns 503 `upstream_unavailable` (TODO(decision API-01): a keyless fallback is pending) |
+| (opt.) | Explain | offline | `plain_summary`, `headline`, `why`/`differences` in views | a few dozen calls | same rules; template fallback without a key |
+| (opt.) | Explain | live `POST /outreach-draft` | evidence → a cited message draft | on demand, not cached; rate-limited | citations validated against the input; 503 without a key, no template fallback |
 
 **Deliberately not LLM:**
 - search (trigram + synonyms)
@@ -170,17 +171,17 @@ The free-tier cloud options below are the fallback, and the reference for a mult
 | L4 LB | Oracle Cloud Always Free **Network Load Balancer** | (none) |
 | L7 LB | Oracle Cloud Always Free **Flexible Load Balancer** (10 Mbps), or HAProxy on a VM | Render / Cloud Run built-in L7 |
 | API + worker + web + Redis | Oracle Always Free VMs (Ampere A1) in a **private subnet**, running `infra/docker-compose.yml` | Render free web service / Cloud Run |
-| Postgres | Supabase free tier (via pooler) | same |
-| Public URL during the hackathon | `cloudflared tunnel --url http://localhost:80` (free, instant HTTPS) | `?mock=1` snapshot mode |
+| Postgres | Managed Postgres free tier with pg_trgm + pgvector (via its pooler), or the compose `db` service | same |
+| Public URL during the hackathon | `cloudflared tunnel --url https://localhost:443 --no-tls-verify` (free, instant HTTPS; `http://localhost:80` only 301s to https) | `?mock=1` snapshot mode |
 
-Verify the current Always Free limits when signing up; Oracle sign-up needs a card, so start that at hour 0. Supabase free projects pause after a week of inactivity, so keep the project active through judging. The brief also accepts "easy to run locally": `make up` starts the whole stack (L4 → L7 ×2 → API ×3 → Redis/Postgres → web) with Docker Compose.
+Verify the current Always Free limits when signing up; Oracle sign-up needs a card, so start that at hour 0. Managed free-tier Postgres projects (e.g. Supabase) may pause after a week of inactivity, so keep one active through judging if you use it. The brief also accepts "easy to run locally": `make up` starts the whole stack (L4 → L7 ×2 → API ×3 → Redis/Postgres → web) with Docker Compose.
 
 Network layout (prod):
 ```
 VCN 10.0.0.0/16
  ├─ public subnet  10.0.0.0/24   NLB (203.0.113.10)  ─►  L7 LB nodes 10.0.0.21, 10.0.0.22
  └─ private subnet 10.0.1.0/24   app VMs 10.0.1.11, 10.0.1.12  (api ×N, worker, web, redis)
-     security list: ingress 8000/8080 only from 10.0.0.0/24; egress 443 (Supabase, OpenAI, Bright Data)
+     security list: ingress 8000/8080 only from 10.0.0.0/24; egress 443 (OpenAI, Bright Data, managed Postgres if used)
 ```
 
 ## 9. Key decisions and why
@@ -188,7 +189,7 @@ VCN 10.0.0.0/16
 | Decision | Why |
 |---|---|
 | Precompute the graph, paths and composite views offline | The demo must be fast and deterministic; LLM and scrape failures cannot break it |
-| Postgres instead of a graph DB | One store for graph + search + vectors + cache tables; small slice; the SQL functions are the data-access layer; Supabase free tier |
+| Postgres instead of a graph DB | One store for graph + search + vectors + cache tables; small slice; the SQL functions are the data-access layer |
 | REST contract, not direct DB access from the browser | Total decoupling; enables the LB/scaling story; secrets stay server-side; fixtures make the frontend independent |
 | Stateless API + Redis | Horizontal scaling without sticky sessions; jobs survive replica death |
 | Status on every edge + contradicting evidence in the API | Directly targets the "Evidence integrity" and "Graph quality" judging criteria |

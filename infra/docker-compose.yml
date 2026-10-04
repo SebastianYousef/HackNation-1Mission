@@ -9,7 +9,8 @@
 #   docker compose up -d --scale api=5   # horizontal scaling (`make scale N=5`)
 #
 # Secrets/overrides come from ../backend/.env (optional). Set DATABASE_URL there
-# to use Supabase instead of the local `db` service (then the db container is idle).
+# to use an external Postgres instead of the local `db` service (then the db
+# container is idle).
 # The ${VAR:-default} values below are interpolated by compose, which reads only the
 # shell and --env-file: `make up` passes --env-file ../backend/.env for you; plain
 # `docker compose` from infra/ needs `--env-file ../backend/.env` too, or those
@@ -111,7 +112,8 @@ services:
               "--maxmemory-policy", "volatile-lru"]
     restart: unless-stopped
 
-  # Local only. Production uses Supabase (DATABASE_URL -> transaction pooler, port 6543).
+  # Bundled Postgres (pgvector/pg16). No deployment uses Supabase; point DATABASE_URL
+  # at another Postgres 16+ (pg_trgm + pgvector) to bypass this service.
   db:
     image: pgvector/pgvector:pg16
     environment:
