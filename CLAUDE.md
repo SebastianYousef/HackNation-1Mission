@@ -62,7 +62,7 @@ Everything runs on a friend's Linux PC, reached as **`ssh laqueinux`** (user `se
 - Never print or commit `~/atlas/atlas.env` or `~/app/backend/.env`.
 
 ```
-Internet ─► https://<random>.trycloudflare.com ─► cloudflared (systemd --user: atlas-tunnel)
+Internet ─► https://negligent-easiness-follicle.ngrok-free.dev ─► ngrok (systemd --user: atlas-ngrok)
              ─► nginx "web" 127.0.0.1:8080 ─┬─ /          → frontend/landing.html
                                             ├─ /api/*     → api 127.0.0.1:8000 (1 replica) ─► db (pgvector/pg16) + redis
                                             └─ other paths → team SPA build (falls back to landing.html until deployed)
@@ -86,7 +86,7 @@ Containers run in **rootless Docker** (`~/bin`, managed with `systemctl --user d
 | `~/atlas/backup.sh`, `~/atlas/backups/` | `pg_dump` backups (keeps 14). Runs daily at 04:00 via `atlas-backup.timer` |
 | `~/atlas/migrations.applied` | Migration files already applied. `redeploy.sh` applies any new `backend/db/migrations/*.sql` once. |
 | `~/atlas/pipeline-data/` | Pipeline `data/` dir (raw download cache, interim, snapshot) |
-| `~/.local/bin/cloudflared`, `~/.config/systemd/user/atlas-tunnel.service` | The public tunnel |
+| `~/bin/ngrok`, `~/.config/systemd/user/atlas-ngrok.service` | The public tunnel: a free static ngrok domain, the same URL after restarts. Browsers see an ngrok notice once; API clients send `ngrok-skip-browser-warning: 1`. The old cloudflared quick tunnel (`atlas-tunnel.service`) is stopped and disabled. |
 
 ### Day-to-day commands (run from a laptop)
 ```bash
@@ -95,13 +95,13 @@ ssh laqueinux bash ~/app/deploy/autodeploy/install.sh     # one-time: install th
 ssh laqueinux 'systemctl --user list-timers atlas-autodeploy.timer; tail -20 ~/atlas/autodeploy/autodeploy.log'   # auto-deploy status
 ssh laqueinux '~/atlas/dc ps'                             # status
 ssh laqueinux '~/atlas/dc logs -f --tail 100 api worker'  # logs (also: db, redis, web)
-ssh laqueinux "journalctl --user -u atlas-tunnel -o cat | grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' | tail -1"   # current public URL
+ssh laqueinux 'systemctl --user status atlas-ngrok --no-pager'   # public tunnel (URL is fixed: https://negligent-easiness-follicle.ngrok-free.dev)
 ssh laqueinux ~/atlas/backup.sh                           # backup now → ~/atlas/backups/atlas-<ts>.dump
 scp laqueinux:atlas/backups/<file>.dump .                 # copy a backup off the machine
 # restore: ssh laqueinux '~/atlas/dc exec -T db pg_restore -U atlas -d atlas --clean --if-exists' < <file>.dump
 ssh laqueinux curl -s ifconfig.me                         # public IP, for the Bright Data allowlist (home line, can change)
 ```
-- The **public URL changes** whenever the tunnel or the machine restarts. Re-run the command above and update the frontend's API base if needed. A stable URL needs a named Cloudflare tunnel, which requires an account and a domain: `cloudflared tunnel login && cloudflared tunnel create atlas && cloudflared tunnel route dns atlas <host>`, then set `ExecStart=… tunnel run --url http://127.0.0.1:8080 atlas` in the unit.
+- The **public URL is fixed** (free static ngrok domain), so the page's `LIVE_API` fallback and the README link stay valid across restarts. The GitHub Pages mirror (https://sebastianyousef.github.io/HackNation-1Mission/) reads the same API.
 - **New secrets** (e.g. `OPENAI_API_KEY`, `BRIGHTDATA_API_KEY`): add them to `~/app/backend/.env` on the server, then run `redeploy.sh`.
 - **Never** run `docker compose up` in `~/app/infra` directly. It would try to start the HAProxy tier on ports 80/443. Always use `~/atlas/dc`.
 

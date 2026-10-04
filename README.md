@@ -4,6 +4,12 @@
 
 A patient-group leader types her child's disease into one search box. The Atlas follows it through an **evidence-cited knowledge graph**: shared mechanism → related disease → the patient group working on it → an existing registry or study → a concrete, sourced next step. Every connection shows where it comes from, how sure we are, and what contradicts it. When no supported route exists, the Atlas says so and names the question to test next.
 
+## Try it live
+
+- **Website:** https://negligent-easiness-follicle.ngrok-free.dev (the first visit shows an ngrok notice; click *Visit Site*)
+- **Mirror:** https://sebastianyousef.github.io/HackNation-1Mission/ (the same page on GitHub Pages, reading the same live API)
+- **API:** https://negligent-easiness-follicle.ngrok-free.dev/api/v1/meta (API docs at `/api/docs`). Scripts and `curl` should send the header `ngrok-skip-browser-warning: 1`.
+
 ## How it works
 
 ```
