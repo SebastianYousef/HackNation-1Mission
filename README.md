@@ -32,15 +32,24 @@ cp backend/.env.example backend/.env       # add OPENAI_API_KEY etc. (optional f
 make up                                    # L4 → L7×2 → API×3 + worker + web + Redis + Postgres
 make lb-demo                               # watch requests spread across replicas (X-Served-By)
 make scale N=5                             # horizontal scaling
+make down                                  # stop the stack
 ```
+`make up` needs Docker Compose. The bundled Postgres applies `backend/db/migrations` on first start. The API serves the mock fixtures until you set `DATA_MODE=db` in `backend/.env` and load the dataset (next section). The `web` tier serves a built frontend from `frontend-dist/` (or `WEB_DIST`), see [`infra/README.md`](infra/README.md). `make help` lists all targets.
+
 API only, on mock data: `make api-dev` → http://localhost:8000/api/v1/meta
 
 ## Reproduce the dataset
 
 ```bash
-cd backend/pipeline && make all            # ingest → extract → reconcile → analytics → views → load
+cd backend/pipeline
+cp ../.env.example .env                    # set DATABASE_URL, e.g. postgresql://atlas:atlas@localhost:5432/atlas for `make up`
+make all                                   # ingest → extract → reconcile → analytics → views → load
 ```
-See [`backend/pipeline/README.md`](backend/pipeline/README.md) for sources, environment variables and the stage outputs.
+`make all` loads into the Postgres at `DATABASE_URL`, which must already have the schema (`make up` does that, or `make db-migrate DATABASE_URL=...` from the repo root). The API keys are optional: without `OPENAI_API_KEY`, extract and reconcile use only cached results, and without Bright Data credentials that stage is skipped. Downloads are cached in `backend/pipeline/data/`. See [`backend/pipeline/README.md`](backend/pipeline/README.md) for sources, environment variables and the stage outputs.
+
+## Offline demo (`?mock=1`)
+
+The team frontend app (its own repo) has a mock client: `?mock=1` on any route serves the fixtures bundled into the build from `src/mocks/fixtures`, so it needs no API. By default those are the mock fixtures in `contract/fixtures` (copied by `scripts/sync-contract.sh`). For the demo on real data, run `ATLAS_API_BASE=http://localhost:8000 make snapshot` in `backend/pipeline` and copy `data/snapshot/` into the frontend's `src/mocks/fixtures` (run `sync-contract.sh` first, since it replaces that folder). The landing page `frontend/landing.html` has no mock mode; it reads the live API and says so when the API is not reachable.
 
 ## Repository layout
 

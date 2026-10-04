@@ -33,8 +33,10 @@ site runs or enrols into it ('join our patient registry').
 
 Bright Data answers HTTP 200 even on failure, with the reason in the x-brd-error / x-brd-err-code /
 x-brd-err-msg headers and an empty body; Google's `num` param is rejected (x-brd-serp-warn), so it is
-not sent. Verified against the live API on 2026-10-03 (zone mcp_unlocker, brd_json=1 -> JSON with an
-`organic` list of {title, link, description, rank}; an unknown zone gives HTTP 400). Every request is
+not sent. The search format was verified against the live API on 2026-10-03 (zone mcp_unlocker, brd_json=1 ->
+JSON with an `organic` list of {title, link, description, rank}; an unknown zone gives HTTP 400). Not yet run
+live with a result: this version's registry and gene-named queries and the Web Unlocker page fetch
+(unlocker_fetch); the 2026-10-04 run was rejected with client_10030 and used cached searches. Every request is
 handled on its own: a failed search or visit is logged and that disease gets coverage result_count null.
 A search is sent at most twice (emit's loop; brightdata_request itself does not retry), so a failing
 disease costs at most 2 billed requests.
