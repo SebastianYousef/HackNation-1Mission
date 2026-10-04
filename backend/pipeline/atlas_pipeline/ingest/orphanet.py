@@ -10,10 +10,15 @@ Implemented:
     Status: "Assessed" -> curated; "Not yet assessed" -> literature if Orphanet cites PMIDs, else hypothesis
             (evidence method algorithm:orphanet_not_yet_assessed instead of curated).
     "Candidate gene tested in" / "Biomarker tested in" rows assert no association and are skipped.
+  https://www.orphadata.com/data/xml/en_product9_prev.xml  epidemiology per disorder
+    Disorder/OrphaCode -> ORPHA:<code> -> MONDO (same xref map) -> node patch attrs.prevalence: a list of
+    {type, class, qualification, mean, geographic, validation, source, pmids} (absent fields omitted), one per
+    Prevalence record; validated records first, then worldwide ones. `mean` is Orphanet's ValMoy as given
+    (0 / empty = not stated, so omitted); read it together with `qualification` (a value, or a case/family count).
+    This is a node attribute, not an edge, so it carries no edge status or evidence rows.
 Not needed / stubbed:
   https://www.orphadata.com/data/xml/en_product4.xml   HPO phenotypes per disorder — already contained in
       phenotype.hpoa (ORPHA:* rows), so we do not parse it twice.
-  https://www.orphadata.com/data/xml/en_product9_prev.xml  prevalence -> disease attrs.prevalence  (TODO)
 """
 from __future__ import annotations
 
@@ -23,12 +28,13 @@ import xml.etree.ElementTree as ET
 
 from ..config import RAW
 from ..http import download as dl, retrieved_at
-from ..store import GraphWriter, read_json
+from ..store import GraphWriter, read_json, write_node_patches
 from . import hgnc
 
 log = logging.getLogger(__name__)
-URLS = {"en_product6.xml": "https://www.orphadata.com/data/xml/en_product6.xml"}
-PREVALENCE_URL = "https://www.orphadata.com/data/xml/en_product9_prev.xml"  # TODO parse -> attrs.prevalence
+PREVALENCE_URL = "https://www.orphadata.com/data/xml/en_product9_prev.xml"
+URLS = {"en_product6.xml": "https://www.orphadata.com/data/xml/en_product6.xml",
+        "en_product9_prev.xml": PREVALENCE_URL}
 
 
 def download() -> None:
@@ -78,4 +84,47 @@ def emit() -> None:
                        label="causes" if causal else "associated with",
                        attrs={"orphanet_association": atype, "orphanet_status": status}, evidence=evs)
         el.clear()
+    prev_path = RAW / "orphanet" / "en_product9_prev.xml"
+    prev = parse_prevalence(prev_path, x2m, diseases) if prev_path.exists() else {}
+    write_node_patches("orphanet", ({"id": m, "attrs": {"prevalence": recs}} for m, recs in sorted(prev.items())))
+    log.info("[orphanet] prevalence for %d diseases", len(prev))
     g.close()
+
+
+def _prevalence_record(p: ET.Element) -> dict:
+    mean = None
+    try:
+        mean = float(p.findtext("ValMoy") or "") or None  # 0.0 means "no mean value given"
+    except ValueError:
+        pass
+    source = (p.findtext("Source") or "").strip()
+    rec = {"type": p.findtext("PrevalenceType/Name"), "class": p.findtext("PrevalenceClass/Name"),
+           "qualification": p.findtext("PrevalenceQualification/Name"), "mean": mean,
+           "geographic": p.findtext("PrevalenceGeographic/Name"),
+           "validation": p.findtext("PrevalenceValidationStatus/Name"),
+           "source": source[:300] or None,
+           "pmids": [f"PMID:{x}" for x in dict.fromkeys(re.findall(r"(\d+)\[PMID\]", source))]}
+    return {k: v for k, v in rec.items() if v not in (None, "", [])}
+
+
+def _prevalence_rank(r: dict) -> tuple[bool, bool]:
+    return (r.get("validation", "").lower() != "validated", r.get("geographic", "").lower() != "worldwide")
+
+
+def parse_prevalence(path, x2m: dict[str, str], diseases: set[str]) -> dict[str, list[dict]]:
+    """en_product9_prev.xml -> {mondo_id: [prevalence record, ...]} for slice diseases (see module doc)."""
+    out: dict[str, list[dict]] = {}
+    for _, el in ET.iterparse(path, events=("end",)):
+        if el.tag != "Disorder":
+            continue
+        mondo = x2m.get(f"ORPHA:{el.findtext('OrphaCode')}")
+        if mondo in diseases:
+            recs = out.setdefault(mondo, [])
+            for p in el.iter("Prevalence"):
+                r = _prevalence_record(p)
+                if r and r not in recs:  # several ORPHA codes can map to one MONDO id
+                    recs.append(r)
+        el.clear()
+    for recs in out.values():
+        recs.sort(key=_prevalence_rank)  # stable: Orphanet's order within each rank
+    return {m: recs for m, recs in out.items() if recs}
