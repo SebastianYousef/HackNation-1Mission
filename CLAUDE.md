@@ -133,10 +133,10 @@ To change the landing page, edit `frontend/landing.html` here and push to `main`
 - `curated.yaml` holds the hand-curated NCL facts: patient groups (e.g. the Gray Foundation for CLN6), `ATLAS:mech-*` mechanisms (e.g. `ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes`, `-subunit-c-storage`, `-lysosomal-bmp-synthesis`), assets (DEM-CHILD registry, natural history studies, CLN5/CLN3/CLN6 animal and cell models) and therapies. Re-run `--verify` after adding quotes. PubMed quotes use NCBI efetch URLs, because pubmed.ncbi.nlm.nih.gov shows scripts a cookie wall.
 - Frontend prototype prompt with verified real demo ids: `frontend/PROTOTYPE_PROMPT.md` (ports `frontend/landing.html`, the only landing page).
 - Demo-path evidence review: the automated pre-check for #13 is done; a human sign-off is still open (researcher edges marked `literature` but derived by algorithm, no contradicting evidence on the CLN5 path).
-- `.env` has only the Bright Data **Scraping Browser** credentials:
-  - No `OPENAI_API_KEY`, so `/explain` and `/outreach-draft` return 503 `upstream_unavailable`; there is no template fallback. TODO(decision API-01): a keyless fallback for `/explain` is pending.
-  - Gap-search jobs fail with "BRIGHTDATA_API_KEY missing" (SERP key).
-  - Extract, reconcile and `brightdata_orgs` have not run on the server.
+- Server `.env` has `OPENAI_API_KEY`, `BRIGHTDATA_API_KEY` (SERP), the Scraping Browser credentials and `OPENAI_BUDGET_USD=7` (2026-10-04). `/explain` and `/outreach-draft` answer live (checked uncached on a Leigh syndrome path).
+- Extract, reconcile and `brightdata_orgs` were started on the server on 2026-10-04 (`~/atlas/run-ai-stages.sh`, log `~/atlas/pipeline-run-*.log`, backup taken first). `GET /api/v1/meta` shows whether that dataset is live.
+- Researcher-published studies (contract v1.1.0, `/researcher-studies`, migration 0007) are live: the backend half of PR #18. Its `landing.html` half is not merged; it overlaps the studies hub, communities and journey log restored in 29246c6.
+- Auto-deploy timer and GitHub Pages are both on (#15, #17 closed).
 - The team frontend app is not deployed yet (`FRONTEND_REPO` empty), so only the landing page and the API are public.
 
 ## Trigger word: `återgå`
