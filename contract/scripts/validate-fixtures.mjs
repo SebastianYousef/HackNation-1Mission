@@ -144,9 +144,22 @@ function checkPath(rel, p, where) {
   if (!isDeepStrictEqual(p.nodes.map((x) => x.id), p.node_ids)) err(rel, `${where}: nodes order != node_ids`);
   if (!isDeepStrictEqual(p.edges.map((x) => x.id), p.edge_ids)) err(rel, `${where}: edges order != edge_ids`);
   p.edge_ids.forEach((eid, i) => { if (!connects(eid, p.node_ids[i], p.node_ids[i + 1])) err(rel, `${where}: ${eid} does not connect ${p.node_ids[i]} and ${p.node_ids[i + 1]}`); });
-  const st = p.edges.map((e) => e.status).sort((a, b) => RANK.indexOf(b) - RANK.indexOf(a))[0];
-  if (st !== p.weakest_status) err(rel, `${where}: weakest_status should be ${st}`);
-  if (Math.min(...p.edges.map((e) => e.confidence)) !== p.min_confidence) err(rel, `${where}: min_confidence wrong`);
+  // A path is never stronger than its weakest edge. It equals the edge minimum unless an honesty cap
+  // (attrs.status_cap / attrs.confidence_cap, migration 0004) lowers it; then it equals the cap.
+  // Same rule as check_contract.py check_path (and analytics/paths.py path_strength).
+  if (!p.edges.length) return;
+  const attrs = p.attrs ?? {};
+  const edgeSt = p.edges.map((e) => e.status).sort((a, b) => RANK.indexOf(b) - RANK.indexOf(a))[0];
+  const sCap = RANK.includes(attrs.status_cap) ? attrs.status_cap : null;
+  const wantSt = sCap && RANK.indexOf(sCap) > RANK.indexOf(edgeSt) ? sCap : edgeSt;
+  if (RANK.indexOf(p.weakest_status) < RANK.indexOf(edgeSt)) err(rel, `${where}: weakest_status is stronger than the weakest edge status (${edgeSt})`);
+  else if (p.weakest_status !== wantSt) err(rel, `${where}: weakest_status should be ${wantSt} (${sCap ? "status_cap" : "weakest edge status"})`);
+  // tolerance: the database stores confidence as float4 (exported snapshots)
+  const edgeConf = Math.min(...p.edges.map((e) => e.confidence));
+  const cCap = typeof attrs.confidence_cap === "number" ? attrs.confidence_cap : null;
+  const wantConf = cCap !== null ? Math.min(edgeConf, cCap) : edgeConf;
+  if (p.min_confidence > edgeConf + 1e-6) err(rel, `${where}: min_confidence is above the minimum edge confidence (${edgeConf})`);
+  else if (Math.abs(p.min_confidence - wantConf) > 1e-6) err(rel, `${where}: min_confidence should be ${wantConf} (${cCap !== null ? "confidence_cap" : "minimum edge confidence"})`);
 }
 for (const r of byDir("paths")) fixtures[r].forEach((p, i) => checkPath(r, p, `$[${i}]`));
 for (const r of byDir("action-view")) fixtures[r].connections.forEach((p, i) => checkPath(r, p, `$.connections[${i}]`));
@@ -254,6 +267,8 @@ console.log(`fixtures: ${rels.length} files (${nodesById.size} nodes, ${edgesByI
 console.log(`type check: ${typeResult}`);
 if (errors.length) {
   console.error(`\n${errors.length} problem(s):\n  ${errors.join("\n  ")}`);
-  process.exit(1);
+  // exitCode, not process.exit(): exit() can drop buffered output when stderr is a pipe
+  process.exitCode = 1;
+} else {
+  console.log("integrity: ok\nALL FIXTURES VALID");
 }
-console.log("integrity: ok\nALL FIXTURES VALID");
