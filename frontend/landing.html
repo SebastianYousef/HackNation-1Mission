@@ -1094,6 +1094,164 @@ footer .debug span{display:block;margin-top:6px;word-break:break-all}
 .st-step{display:inline-flex;margin-left:4px;font-family:var(--f-body);font-size:12px;letter-spacing:.005em;color:var(--ink-3);padding:2px 6px;border:1px solid var(--rule);border-radius:999px;line-height:1.5;vertical-align:middle;white-space:nowrap}
 .night .st-step,.res .st-step{color:var(--night-ink-2);border-color:var(--night-rule)}
 
+/* ===== clinical studies hub (sh_) + Atlas studies panel (as_) ===== */
+.studies{background:var(--paper)}
+#studies{scroll-margin-top:64px}
+.sh-live{font-size:14px;color:var(--ink-3);min-height:1.5em}
+.sh-phases{border:1px solid var(--rule);border-radius:var(--r);background:var(--paper-2);margin-bottom:24px}
+.sh-phases>summary{cursor:pointer;padding:14px 18px;font-weight:600;font-size:15px;list-style-position:inside}
+.sh-phases[open]>summary{border-bottom:1px solid var(--rule)}
+.sh-ladder{list-style:none;margin:0;padding:16px 18px 4px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+.sh-ladder li{display:grid;gap:4px;align-content:start;padding-left:12px;border-left:2px solid var(--rule);font-size:14px;color:var(--ink-2)}
+.sh-ladder b{color:var(--ink);font-size:15px}
+.sh-phases .sh-fine{padding:8px 18px 16px;margin:0}
+@media (max-width:900px){.sh-ladder{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.sh-ladder{grid-template-columns:1fr}}
+.sh-panel{display:grid;gap:14px;padding:20px 22px;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper);margin-bottom:20px}
+.sh-panel-h h3{font-size:22px}
+.sh-panel-h p{margin-top:4px;font-size:13px;color:var(--ink-3)}
+.sh-row,.sh-filters{display:flex;flex-wrap:wrap;gap:14px 16px;align-items:flex-end}
+.sh-filters{margin-bottom:20px}
+.sh-f{display:grid;gap:6px;font-size:13px;color:var(--ink-3);font-weight:500;flex:1 1 160px;min-width:0}
+.sh-f-wide{flex:2 1 260px}
+.sh-f-age{flex:1 1 180px}
+.sh-f-btn{flex:0 0 auto}
+.sh-f small{font-size:12px;color:var(--ink-3);font-weight:400}
+.sh-f input,.sh-f select,.cm-form input,.cm-form select,.cm-form textarea,.jl-form input,.jl-form select,.jl-form textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:11px 12px;width:100%;min-width:0}
+.sh-f input:focus,.sh-f select:focus,.cm-form :is(input,select,textarea):focus,.jl-form :is(input,select,textarea):focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
+.sh-search{position:relative;display:block}
+.sh-age{display:flex;gap:8px}
+.sh-age input{flex:1 1 auto}
+.sh-age select{flex:0 0 auto;width:auto}
+.sh-f-btn .btn{padding:12px 18px;font-size:15px}
+.sh-active{font-size:14px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.sh-active:empty{display:none}
+.sh-clear{border:1px solid var(--rule);background:none;border-radius:999px;padding:3px 12px;font-size:13px;color:var(--ink-2)}
+.sh-clear:hover{border-color:var(--ink-3);color:var(--ink)}
+.sh-count{font-size:14px;color:var(--ink-3);margin-bottom:12px;min-height:1.5em}
+.sh-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:860px){.sh-list{grid-template-columns:1fr}}
+.sh-card{display:grid;gap:10px;align-content:start;padding:20px;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper);min-width:0}
+.sh-card.is-open{border-color:color-mix(in srgb,var(--ev) 45%,var(--rule))}
+.sh-top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:13px;color:var(--ink-3)}
+.sh-stat{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid var(--rule);color:var(--ink-2);white-space:nowrap}
+.sh-stat.s-open{color:var(--ev);border-color:color-mix(in srgb,var(--ev) 40%,transparent);background:color-mix(in srgb,var(--ev) 10%,transparent)}
+.sh-stat.s-soon{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+.sh-t{font-family:var(--f-body);font-size:17px;font-weight:600;line-height:1.35;letter-spacing:0;overflow-wrap:anywhere}
+.sh-meta{font-size:14px;color:var(--ink-2)}
+.sh-why{display:grid;gap:6px;padding:10px 12px;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent);border-radius:0 var(--r) var(--r) 0;font-size:14px}
+.sh-why b{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.sh-why ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.sh-why li button{border:0;background:none;padding:0;vertical-align:middle}
+.sh-why .sh-note{font-size:13px;color:var(--ink-3)}
+.sh-how{border-top:1px solid var(--rule);padding-top:8px}
+.sh-how>summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--accent)}
+.sh-how ol{margin:10px 0 0;padding-left:20px;display:grid;gap:6px;font-size:14px;color:var(--ink-2)}
+.sh-dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;margin:0;font-size:13.5px;border-top:1px solid var(--rule);padding-top:10px}
+.sh-dl dt{color:var(--ink-3)}
+.sh-dl dd{margin:0;color:var(--ink);overflow-wrap:anywhere}
+@media (max-width:420px){.sh-dl{grid-template-columns:1fr}.sh-dl dd{margin-bottom:6px}}
+.sh-acts{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:2px}
+.sh-acts .btn{padding:10px 16px;font-size:14px}
+.sh-acts a{color:var(--accent);font-weight:600;font-size:14px}
+.sh-more{display:flex;justify-content:center;margin-top:20px}
+.sh-more .btn{border:1px solid var(--rule);color:var(--ink)}
+.sh-more .btn:hover{border-color:var(--ink-3)}
+.sh-fine{margin-top:20px;font-size:13px;color:var(--ink-3);max-width:75ch}
+.sh-empty{grid-column:1/-1;display:grid;gap:8px;justify-items:start;padding:20px;border:1px dashed var(--un);border-radius:var(--r);font-size:14px;color:var(--ink-2)}
+.sh-prog{grid-column:1/-1;display:flex;gap:10px;align-items:center;font-size:14px;color:var(--ink-2)}
+/* fit check dialog */
+.fit-q{display:grid;gap:8px;border:0;margin:0;padding:0;min-width:0}
+.fit-q legend{font-weight:600;font-size:15px;margin-bottom:6px;padding:0}
+.fit-q .fit-hint{font-size:13px;color:var(--ink-3)}
+.fit-opts{display:flex;flex-wrap:wrap;gap:8px}
+.fit-opts label{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:1px solid var(--rule);border-radius:999px;font-size:14px;cursor:pointer}
+.fit-opts label:has(input:checked){border-color:var(--ink);background:var(--paper-2)}
+.fit-opts input{accent-color:var(--ink);margin:0}
+.fit-age{display:flex;gap:8px;max-width:260px}
+.fit-res{display:grid;gap:10px}
+.fit-res h4{margin:0;font-family:var(--f-display);font-weight:400;font-size:22px;line-height:1.25}
+.fit-res ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
+.fit-res .fit-ok{color:var(--ev)}
+.fit-res .fit-ask{color:var(--hy)}
+.fit-res .fit-no{color:var(--ink-2)}
+.fit-note{font-size:13px;color:var(--ink-3);padding:10px 12px;border:1px solid var(--rule);border-radius:var(--r)}
+/* Atlas: studies beside the result */
+.rd-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:40px;align-items:start}
+@media (min-width:1180px){.rd-layout:has(.as-panel:not([hidden])){grid-template-columns:minmax(0,1fr) 300px}}
+.as-panel{display:grid;gap:12px;padding:18px;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper-2);min-width:0}
+@media (min-width:1180px){#readerView .as-panel{position:sticky;top:84px}}
+#researcherView .as-panel{margin-top:24px}
+.as-panel h3{font-size:20px}
+.as-panel .as-sub{font-size:13px;color:var(--ink-3)}
+.as-list{list-style:none;margin:0;padding:0;display:grid}
+.as-list li{display:grid;gap:4px;padding:10px 0;border-top:1px solid var(--rule);font-size:14px}
+.as-list .as-t{font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.as-list .as-m{font-size:12.5px;color:var(--ink-3)}
+.as-panel .linkbtn{justify-self:start}
+@media (min-width:900px) and (max-width:1179px){#researcherView .as-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:0 20px}}
+
+/* ===== communities additions (cm_) ===== */
+.cm-pick{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-end;margin-bottom:clamp(32px,4vw,48px)}
+.cm-pick .sh-f{flex:0 1 460px}
+.cm-pick .cm-cur{font-size:14px;color:var(--ink-3)}
+.cm-wide-h{grid-column:1/-1;display:grid;gap:6px;margin-top:8px}
+.cm-wide-h h3{font-size:26px}
+.cm-wide-h p{font-size:14px;color:var(--ink-2);max-width:70ch}
+.cm-start{margin-top:clamp(40px,5vw,56px);padding:22px 24px;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper)}
+.cm-start h3{font-size:24px}
+.cm-start>p{margin-top:6px;font-size:14px;color:var(--ink-2);max-width:70ch}
+.cm-check{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:0}
+.cm-check li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;padding:12px 0;border-top:1px solid var(--rule);font-size:15px}
+.cm-check input{width:18px;height:18px;margin:3px 0 0;accent-color:var(--ev)}
+.cm-check small{display:block;font-size:13px;color:var(--ink-3)}
+.cm-form{display:grid;gap:14px;margin-top:clamp(40px,5vw,56px);padding:22px 24px;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper)}
+.cm-form h3{font-size:24px}
+.cm-form .cm-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:640px){.cm-form .cm-row{grid-template-columns:1fr}}
+.cm-form label{display:grid;gap:6px;font-size:13px;color:var(--ink-3);font-weight:500}
+.cm-form textarea{min-height:96px;resize:vertical;line-height:1.5}
+.cm-form .cm-kind{display:flex;flex-wrap:wrap;gap:8px;border:0;padding:0;margin:0}
+.cm-form .cm-kind legend{font-size:13px;color:var(--ink-3);font-weight:500;margin-bottom:6px;padding:0}
+.cm-form .cm-kind label{display:inline-flex;flex:0 0 auto;white-space:nowrap;flex-direction:row;gap:8px;align-items:center;padding:8px 12px;border:1px solid var(--rule);border-radius:999px;font-size:14px;color:var(--ink);cursor:pointer}
+.cm-form .cm-kind label:has(input:checked){border-color:var(--ink);background:var(--paper-2)}
+.cm-form .btn{justify-self:start;padding:12px 18px;font-size:15px}
+.cm-msg{font-size:14px;color:var(--ink-2)}
+.cm-msg:empty{display:none}
+.cm-err{color:#D9534F}
+.cp-bridge-more{font-size:13px;color:var(--ink-3);padding-top:10px}
+
+/* ===== plans additions: why line + my journey log (jl_) ===== */
+.pstep .pwhy{grid-column:2;font-size:14px;color:var(--ink-3);max-width:66ch;margin-top:2px}
+.pstep .pwhy b{font-weight:600;color:var(--ink-2)}
+.jl{display:grid;gap:14px;margin-top:clamp(40px,5vw,56px);padding:22px 24px;border:1px solid var(--rule);border-radius:var(--r);background:var(--paper)}
+.jl-head{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;align-items:baseline}
+.jl-head h3{font-size:26px}
+.jl-priv{font-size:13px;color:var(--ink-3);max-width:70ch}
+.jl-form{display:grid;grid-template-columns:170px 200px minmax(0,1fr) auto;gap:12px;align-items:end}
+.jl-form label{display:grid;gap:6px;font-size:13px;color:var(--ink-3);font-weight:500;min-width:0}
+.jl-form textarea{min-height:46px;height:46px;resize:vertical;line-height:1.4}
+.jl-form .btn{padding:12px 18px;font-size:15px}
+@media (max-width:900px){.jl-form{grid-template-columns:1fr 1fr}.jl-form .jl-note,.jl-form .jl-btns{grid-column:1/-1}}
+@media (max-width:480px){.jl-form{grid-template-columns:1fr}}
+.jl-btns{display:flex;gap:8px;flex-wrap:wrap}
+.jl-cancel[hidden],.jl-foot [hidden]{display:none!important}
+.jl-cancel{border:1px solid var(--rule)!important;color:var(--ink)!important}
+.jl-list{list-style:none;margin:0;padding:0;display:grid}
+.jl-list li{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:6px 16px;align-items:start;padding:12px 0;border-top:1px solid var(--rule);font-size:15px}
+.jl-date{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums;padding-top:2px}
+.jl-tag{display:inline-block;margin-right:8px;font-size:12px;font-weight:600;color:var(--ink-2);padding:1px 8px;border:1px solid var(--rule);border-radius:999px;vertical-align:1px}
+.jl-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.jl-acts{display:flex;gap:12px}
+.jl-acts button{border:0;background:none;padding:0;font-size:13px;color:var(--ink-3);text-decoration:underline;text-underline-offset:3px}
+.jl-acts button:hover{color:var(--ink)}
+@media (max-width:560px){.jl-list li{grid-template-columns:minmax(0,1fr) auto}.jl-date{grid-column:1/-1}}
+.jl-empty{font-size:14px;color:var(--ink-3)}
+.jl-foot{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.jl-foot .linkbtn{font-size:14px}
+#heroTitle:focus{outline:none}
+#heroTitle:focus-visible{outline:2px solid #9DB4FF;outline-offset:6px}
+
 </style>
 
 <a class="skip" href="#atlas">Skip to the Atlas</a>
@@ -1108,6 +1266,7 @@ footer .debug span{display:block;margin-top:6px;word-break:break-all}
       <button type="button" class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="navLinks" aria-haspopup="true"><span class="bars" aria-hidden="true"><i></i><i></i></span><span class="lbl">Menu</span></button>
       <nav class="nav-links" id="navLinks" aria-label="Main" hidden>
         <a href="#atlas">Atlas <small>Search</small></a>
+        <a href="#studies">Clinical studies <small>Take part</small></a>
         <a href="#journey">Journey <small>Step by step</small></a>
         <a href="#communities">Communities <small>Patient groups</small></a>
         <a href="#plans" class="hl">Plans <small>Your first step</small></a>
@@ -1180,7 +1339,7 @@ footer .debug span{display:block;margin-top:6px;word-break:break-all}
         </div>
         <p class="coverage-line" id="coverageReader" aria-live="polite"></p>
       </div>
-      <div id="readerOut"></div>
+      <div class="rd-layout"><div id="readerOut"></div><aside class="as-panel" id="atlasStudies" aria-labelledby="asTitle" hidden></aside></div>
     </div>
 
     <div id="researcherView" hidden>
@@ -1218,6 +1377,86 @@ footer .debug span{display:block;margin-top:6px;word-break:break-all}
         <div class="dash" id="dash"></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- CLINICAL STUDIES HUB -->
+<section class="band studies" id="studies" aria-labelledby="shTitle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Clinical studies</div>
+      <h2 id="shTitle">Studies you could take part in.</h2>
+      <p class="lede">Every clinical study the Atlas holds, taken from ClinicalTrials.gov. Studies that are recruiting come first. Tell us the diagnosis and age, and we show which studies could be relevant and why.</p>
+      <p class="sh-live" id="shLive" aria-live="polite"></p>
+    </div>
+
+    <details class="sh-phases" id="shPhases">
+      <summary>What do study phases mean?</summary>
+      <ol class="sh-ladder">
+        <li><b>Phase 1</b><span>Is it safe, and what dose? Usually a small group of people.</span></li>
+        <li><b>Phase 2</b><span>Does it seem to work, and what are the side effects? A larger group.</span></li>
+        <li><b>Phase 3</b><span>Does it work better than the usual care? Many people, often in several countries.</span></li>
+        <li><b>Phase 4</b><span>The treatment is already approved. The study follows how it works in daily life.</span></li>
+        <li><b>No phase</b><span>Observational and natural history studies follow people over time without a study treatment. They help researchers learn how a disease changes.</span></li>
+      </ol>
+      <p class="sh-fine">An early phase is not a worse study: it is an earlier question. Taking part is always voluntary, and you can stop at any time.</p>
+    </details>
+
+    <form class="sh-panel" id="shMatch" autocomplete="off" novalidate>
+      <div class="sh-panel-h">
+        <h3>Show studies for my situation</h3>
+        <p>Optional. Nothing you type here leaves this page except the disease search.</p>
+      </div>
+      <div class="sh-row">
+        <label class="sh-f sh-f-wide" for="shDisease">Diagnosis
+          <span class="sh-search"><input id="shDisease" type="search" placeholder="e.g. Dravet syndrome or CLN5 disease" aria-describedby="shDiseaseHint"></span>
+          <small id="shDiseaseHint">Pick a disease from the list.</small>
+        </label>
+        <label class="sh-f sh-f-age" for="shAge">Age of the person
+          <span class="sh-age"><input id="shAge" type="number" inputmode="decimal" min="0" max="120" step="1" placeholder="e.g. 7"><select id="shAgeUnit" aria-label="Age unit"><option value="y">years</option><option value="m">months</option></select></span>
+        </label>
+        <div class="sh-f sh-f-btn"><button type="submit" class="btn btn-primary on-paper">Show studies <span class="arr">→</span></button></div>
+      </div>
+      <p class="sh-active" id="shActive" aria-live="polite"></p>
+    </form>
+
+    <div class="sh-filters" role="group" aria-label="Filter the studies">
+      <label class="sh-f" for="shStatus">Status
+        <select id="shStatus">
+          <option value="all">All studies</option>
+          <option value="open">Open to new people</option>
+          <option value="recruiting">Recruiting now</option>
+          <option value="soon">Starting soon</option>
+          <option value="invite">By invitation only</option>
+          <option value="running">Running, not recruiting</option>
+          <option value="done">Finished</option>
+          <option value="stopped">Stopped, paused or withdrawn</option>
+          <option value="unknown">Status not updated</option>
+        </select></label>
+      <label class="sh-f" for="shPhase">Phase
+        <select id="shPhase">
+          <option value="all">Any phase</option>
+          <option value="1">Phase 1 or early phase 1</option>
+          <option value="2">Phase 2</option>
+          <option value="3">Phase 3</option>
+          <option value="4">Phase 4</option>
+          <option value="none">No phase</option>
+        </select></label>
+      <label class="sh-f" for="shType">Type
+        <select id="shType">
+          <option value="all">Any type</option>
+          <option value="interventional">Tests a treatment</option>
+          <option value="observational">Observes, no study treatment</option>
+          <option value="expanded_access">Expanded access</option>
+        </select></label>
+      <label class="sh-f sh-f-wide" for="shText">Search the studies
+        <input id="shText" type="search" placeholder="Words in the title, sponsor, treatment or NCT number"></label>
+    </div>
+
+    <p class="sh-count" id="shCount" role="status"></p>
+    <div class="sh-list" id="shList"></div>
+    <div class="sh-more" id="shMore"></div>
+    <p class="sh-fine">Study details come from ClinicalTrials.gov as stored in the Atlas and can be out of date. The official page is always the source to trust. This is not medical advice: only the study team can say who can take part.</p>
   </div>
 </section>
 
@@ -1298,9 +1537,32 @@ footer .debug span{display:block;margin-top:6px;word-break:break-all}
       <h2 id="commTitle">The people already on the path.</h2>
       <p class="lede">Patient organizations and family communities hold knowledge no database has: lived experience, registries, samples and the trust to bring families into research. One Mission shows which communities connect to a disease, and why, including related communities that share a gene or mechanism.</p>
     </div>
+    <div class="cm-pick">
+      <label class="sh-f" for="cmDisease">Choose a diagnosis
+        <span class="sh-search"><input id="cmDisease" type="search" placeholder="Search a disease, e.g. Leigh syndrome"></span></label>
+      <p class="cm-cur" id="cmCur" aria-live="polite"></p>
+    </div>
     <div class="comm-grid" id="commGrid"></div>
     <div class="comm-extra" id="commExtra"></div>
+    <div id="cmStart"></div>
     <p style="margin-top:28px;font-size:13px;color:var(--ink-3);max-width:70ch">Select a group to see why it is connected and how strong the evidence is.</p>
+    <form class="cm-form" id="cmForm" novalidate>
+      <div><h3>Add or correct a group</h3><p class="cm-msg" style="margin-top:6px">No account needed. What you send goes to a review queue, and nothing changes in the Atlas until someone has checked it. Please do not include private health details.</p></div>
+      <fieldset class="cm-kind"><legend>What would you like to do?</legend>
+        <label><input type="radio" name="kind" value="missing_group" checked> Add a missing group</label>
+        <label><input type="radio" name="kind" value="correction"> Correct a listed group</label>
+      </fieldset>
+      <div class="cm-row">
+        <label>Name of the group (required)<input name="group" type="text" maxlength="200" required aria-describedby="cmErr"></label>
+        <label>Website (optional)<input name="url" type="url" inputmode="url" placeholder="https://"></label>
+      </div>
+      <label><span id="cmNoteLbl">What should we know? (optional)</span><textarea name="note" maxlength="1500" placeholder="For example which diagnosis it serves, or what is wrong in the listing"></textarea></label>
+      <label>How can we reach you? (optional)<input name="contact" type="text" autocomplete="email" placeholder="Email or website"></label>
+      <p class="cm-msg" id="cmAbout"></p>
+      <p class="cm-msg cm-err" id="cmErr" aria-live="polite"></p>
+      <button type="submit" class="btn btn-primary on-paper">Send for review</button>
+      <p class="cm-msg" id="cmDone" role="status"></p>
+    </form>
   </div>
 </section>
 
@@ -1330,6 +1592,21 @@ footer .debug span{display:block;margin-top:6px;word-break:break-all}
         <div class="saved" id="savedPlans"></div>
       </div>
       <div class="plan-out" id="planOut" aria-live="polite"></div>
+    </div>
+    <div class="jl" id="journeyLog">
+      <div class="jl-head"><h3 id="jlTitle">My journey</h3>
+        <p class="jl-priv">A private log of appointments, results and contacts. It is saved only in this browser on this device and is never sent to One Mission or anyone else. Clearing your browser data deletes it, so export a copy to keep.</p></div>
+      <form class="jl-form" id="jlForm" aria-labelledby="jlTitle" novalidate>
+        <label for="jlDate">Date<input id="jlDate" name="date" type="date" required></label>
+        <label for="jlTag">Tag<select id="jlTag" name="tag">
+          <option>Appointment</option><option>Test or result</option><option>Treatment</option><option>Study</option><option>Contact</option><option>Question</option><option>Note</option>
+        </select></label>
+        <label class="jl-note" for="jlNote">Note<textarea id="jlNote" name="note" maxlength="2000" placeholder="What happened, or what to ask next time" required></textarea></label>
+        <div class="jl-btns"><button type="submit" class="btn btn-primary on-paper" id="jlSave">Add to my journey</button><button type="button" class="btn jl-cancel" id="jlCancel" hidden>Cancel</button></div>
+      </form>
+      <p class="cm-msg cm-err" id="jlErr" aria-live="polite"></p>
+      <ul class="jl-list" id="jlList" aria-label="My journey entries"></ul>
+      <div class="jl-foot"><button type="button" class="linkbtn" id="jlExport">Export as text</button><span class="cm-msg" id="jlStatus" role="status"></span></div>
     </div>
   </div>
 </section>
@@ -1433,20 +1710,34 @@ const QS=new URLSearchParams(location.search);
 
 /* ---------- config ----------
    Production: this page is served by our server next to the API, so API_BASE is "" (same origin).
-   Preview (file://, localhost, lovable): use LIVE_API, or ?api=<http(s) url> for this tab only.
-   ?api= is ignored on any other host, is kept in sessionStorage (never localStorage), and shows a banner. */
+   Preview (file://, localhost, lovable): use LIVE_API, or ?api=<http(s) base> for this tab only
+   (the base may end in /api/v1). ?api= is ignored on any other host, is kept in sessionStorage
+   (never localStorage), and shows a banner.
+   Fallback: if the page's own API answers with a network error or a 5xx, the page switches once
+   to the public team API (LIVE_API) for the rest of the visit. The guide bubble uses the same base. */
 const LIVE_API='https://gtk-devon-cycles-euro.trycloudflare.com';
 const IS_PREVIEW=location.protocol==='file:'||/^(localhost|127\.\d+\.\d+\.\d+|0\.0\.0\.0|\[::1\])$/.test(location.hostname)||/(^|\.)(lovable\.app|lovableproject\.com)$/.test(location.hostname);
 let API_OVERRIDE=null;
-const API_BASE=(()=>{
+let API_BASE=(()=>{
   if(!IS_PREVIEW) return '';
   try{ localStorage.removeItem('om-api') }catch(e){}            // drop overrides remembered by older builds
-  const ok=u=>{ try{ const x=new URL(u); return /^https?:$/.test(x.protocol)?x.origin:null }catch(e){ return null } };
+  const ok=u=>{ try{ const x=new URL(u); return /^https?:$/.test(x.protocol)?(x.origin+x.pathname.replace(/\/+$/,'').replace(/\/api\/v1$/,'')):null }catch(e){ return null } };
   const q=QS.get('api');
   if(q!=null){ const o=q?ok(q):null; try{ o?sessionStorage.setItem('om-api',o):sessionStorage.removeItem('om-api') }catch(e){} if(o&&o!==LIVE_API){ API_OVERRIDE=o; return o; } return LIVE_API; }
   try{ const s=ok(sessionStorage.getItem('om-api')||''); if(s&&s!==LIVE_API){ API_OVERRIDE=s; return s; } }catch(e){}
   return LIVE_API;
 })();
+let API_SWITCHED=false;
+/** Switch once to the public team API. Returns true when the switch happened now. */
+function apiFallback(){
+  if(API_SWITCHED||API_BASE===LIVE_API) return false;
+  API_SWITCHED=true; API_BASE=LIVE_API;
+  try{ console.info('[one-mission] the page API did not answer; using the public team API') }catch(e){}
+  const bn=document.querySelector('.api-banner span'); if(bn) bn.textContent='The preview Atlas did not answer, so this page now uses the public team Atlas.';
+  return true;
+}
+/* Shared with the guide bubble (module script below): one base, one fallback. */
+window.OM_API={base:()=>API_BASE+'/api/v1',fallback:()=>{ apiFallback(); return API_BASE+'/api/v1'; },live:LIVE_API+'/api/v1'};
 const DEFAULT_DISEASE='MONDO:0009745';            // CLN5 disease: no approved treatment, the demo hero
 
 /* ---------- API client ---------- */
@@ -1455,14 +1746,20 @@ class ApiError extends Error{
 }
 const net={servedBy:null,requestId:null,ok:null};
 const _cache=new Map();
-async function http(method,path,{params,body,timeout=20000}={}){
-  let url=`${API_BASE}/api/v1${path}`;
+async function http(method,path,{params,body,timeout=20000}={},retried=false){
+  const base=API_BASE;                                   // requests in flight during a switch retry on the new base
+  let url=`${base}/api/v1${path}`;
   if(params){ const sp=new URLSearchParams(); Object.entries(params).forEach(([k,v])=>{ if(v==null||v==='') return; sp.set(k,Array.isArray(v)?v.join(','):String(v)) }); const s=sp.toString(); if(s) url+='?'+s; }
   const ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),timeout);
   let res;
   try{ res=await fetch(url,{method,headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,signal:ctl.signal}); }
-  catch(err){ net.ok=false; updateDebug(); throw new ApiError(0,'network',err.name==='AbortError'?'The Atlas took too long to answer.':'Could not reach the Atlas.',null) }
+  catch(err){
+    clearTimeout(timer);
+    if(!retried&&err.name!=='AbortError'&&(base!==API_BASE||apiFallback())) return http(method,path,{params,body,timeout},true);
+    net.ok=false; updateDebug(); throw new ApiError(0,'network',err.name==='AbortError'?'The Atlas took too long to answer.':'Could not reach the Atlas.',null) }
   finally{ clearTimeout(timer) }
+  // 5xx on a read means the server is unwell; a 5xx on a POST (e.g. /explain without a key) is a feature that is off.
+  if(res.status>=500&&method==='GET'&&!retried&&(base!==API_BASE||apiFallback())) return http(method,path,{params,body,timeout},true);
   net.servedBy=res.headers.get('X-Served-By')||net.servedBy; net.requestId=res.headers.get('X-Request-Id')||net.requestId; net.ok=true; updateDebug();
   let data=null; try{ data=await res.json() }catch(e){}
   if(!res.ok){ const er=(data&&data.error)||{}; throw new ApiError(res.status,er.code||'internal',er.message||('HTTP '+res.status),er.request_id||net.requestId) }
@@ -3016,6 +3313,379 @@ $('#researcherView').addEventListener('click',ev=>{
   if(mb){ const w=$('#researcherView .graph-wrap'), on=!w.classList.contains('rs-map'); w.classList.toggle('rs-map',on); mb.textContent=on?'Show list':'Show map'; }
 });
 
+/* ===== studies ===== */
+/* =====================================================================
+   CLINICAL STUDIES HUB (#studies) + "Studies for this disease" beside the Atlas result.
+   There is no list endpoint: trial ids come from /search?q=NCT00..NCT07 (type trial), details from
+   /nodes/{id}. Matching a disease uses /nodes/{id}/neighborhood (trial_studies_disease, disease_subtype_of)
+   and the disease's action view. Everything shown is live; only the explanatory copy is static.
+   Private helpers are prefixed sh_ (hub) and as_ (Atlas panel).
+   ===================================================================== */
+const SH_STATUS={RECRUITING:'Recruiting now',NOT_YET_RECRUITING:'Starting soon',ENROLLING_BY_INVITATION:'By invitation only',
+  ACTIVE_NOT_RECRUITING:'Running, not recruiting',COMPLETED:'Finished',TERMINATED:'Stopped early',WITHDRAWN:'Withdrawn before it started',
+  SUSPENDED:'Paused',UNKNOWN:'Status not updated',AVAILABLE:'Expanded access available',NO_LONGER_AVAILABLE:'Expanded access closed',
+  TEMPORARILY_NOT_AVAILABLE:'Expanded access paused',APPROVED_FOR_MARKETING:'Now approved for use'};
+const SH_RANK={RECRUITING:0,NOT_YET_RECRUITING:1,ENROLLING_BY_INVITATION:2,AVAILABLE:3,ACTIVE_NOT_RECRUITING:4,UNKNOWN:5,
+  COMPLETED:6,APPROVED_FOR_MARKETING:6,SUSPENDED:7,TEMPORARILY_NOT_AVAILABLE:7,TERMINATED:8,NO_LONGER_AVAILABLE:8,WITHDRAWN:9};
+const SH_GROUPS={open:['RECRUITING','NOT_YET_RECRUITING','ENROLLING_BY_INVITATION','AVAILABLE'],recruiting:['RECRUITING'],soon:['NOT_YET_RECRUITING'],
+  invite:['ENROLLING_BY_INVITATION'],running:['ACTIVE_NOT_RECRUITING'],done:['COMPLETED','APPROVED_FOR_MARKETING'],
+  stopped:['TERMINATED','WITHDRAWN','SUSPENDED','NO_LONGER_AVAILABLE','TEMPORARILY_NOT_AVAILABLE'],unknown:['UNKNOWN']};
+const SH_TYPE={interventional:'Tests a treatment',observational:'Observes, no study treatment',expanded_access:'Expanded access'};
+const SH_PHASE_WORD={EARLY_PHASE1:'Early phase 1',PHASE1:'Phase 1',PHASE2:'Phase 2',PHASE3:'Phase 3',PHASE4:'Phase 4'};
+const SH_PHASE_PLAIN={EARLY_PHASE1:'a first, very small test in people',PHASE1:'is it safe, and what dose?',PHASE2:'does it seem to work?',
+  PHASE3:'does it work better than usual care?',PHASE4:'follows an approved treatment'};
+const SH_PREFIXES=['NCT00','NCT01','NCT02','NCT03','NCT04','NCT05','NCT06','NCT07'];
+const SH_PAGE=12;
+const sh_ctgov=t=>`https://clinicaltrials.gov/study/${encodeURIComponent(t.nct||t.id)}`;
+const sh_isOpen=t=>t.status==='RECRUITING'||t.status==='NOT_YET_RECRUITING';
+const sh_statWord=s=>SH_STATUS[s]||(s?sentenceCase(String(s).toLowerCase().replace(/_/g,' ')):'Status not listed');
+const sh_statCls=s=>s==='RECRUITING'||s==='AVAILABLE'?'s-open':s==='NOT_YET_RECRUITING'||s==='ENROLLING_BY_INVITATION'?'s-soon':'';
+/** Phase keys from the ClinicalTrials.gov value ("PHASE1,PHASE2", "NA", null). */
+const sh_phases=p=>!p||/^N\/?A$/i.test(p)?[]:String(p).split(',').map(x=>x.trim().toUpperCase()).filter(x=>SH_PHASE_WORD[x]);
+const sh_phaseWord=t=>{ const ps=sh_phases(t.phase); return ps.length?ps.map((x,i)=>i?SH_PHASE_WORD[x].replace(/^Phase /,''):SH_PHASE_WORD[x]).join(' and '):'No phase'; };
+/** "2 Years" / "6 Months" → years (number) or null. */
+function sh_ageYears(v){
+  const m=String(v||'').match(/([\d.]+)\s*(year|month|week|day|hour|minute)/i); if(!m) return null;
+  const n=Number(m[1]), u=m[2].toLowerCase(); if(!isFinite(n)) return null;
+  return u==='year'?n:u==='month'?n/12:u==='week'?n/52.18:u==='day'?n/365.25:0;
+}
+const sh_ageLabel=v=>String(v||'').trim().toLowerCase().replace(/^(\d+(?:\.\d+)?)\s+(\w+)$/,(m,a,b)=>`${a} ${a==='1'?b.replace(/s$/,''):b}`);
+function sh_ageText(t){
+  const mn=t.minAge, mx=t.maxAge;
+  if(mn&&mx) return `Ages ${sh_ageLabel(mn)} to ${sh_ageLabel(mx)}`;
+  if(mn) return `From ${sh_ageLabel(mn)}`;
+  if(mx) return `Up to ${sh_ageLabel(mx)}`;
+  return 'No age limits listed';
+}
+const sh_sexText=s=>s==='FEMALE'?'Women and girls only':s==='MALE'?'Men and boys only':'';
+const sh_fmtYears=y=>{ if(y==null) return ''; if(y<2){ const m=Math.round(y*12); return `${m} ${m===1?'month':'months'}`; } const r=Math.round(y*10)/10; return `${r} ${r===1?'year':'years'}`; };
+
+/** Normalise a NodeFull (trial) into the hub's shape. */
+function sh_norm(n,hit){
+  const a=(n&&n.attrs)||{}, el=a.eligibility||{};
+  const t={id:n.id,label:n.label||(hit&&hit.label)||n.id,subtype:n.subtype||(hit&&hit.subtype)||null,nct:a.nct_id||n.id,
+    status:a.overall_status||null,phase:a.phase||null,sponsor:a.sponsor||null,conditions:Array.isArray(a.conditions)?a.conditions:[],
+    interventions:Array.isArray(a.interventions)?a.interventions:[],enrollment:a.enrollment,start:a.start_date||null,studyType:a.study_type||null,
+    sex:el.sex||null,minAge:el.minimumAge||null,maxAge:el.maximumAge||null,url:safeHttp(n.url)||null,description:n.description||'',partial:!!(n&&n.partial)};
+  t.minY=sh_ageYears(t.minAge); t.maxY=sh_ageYears(t.maxAge);
+  t.hay=[t.label,t.nct,t.sponsor,t.description,...t.conditions,...t.interventions].join(' ').toLowerCase();
+  return t;
+}
+const SH_BY={};                       // id → normalised trial
+const SH_NODE_P={};                   // id → Promise<trial>
+function sh_trial(id,hit){
+  if(SH_BY[id]&&!SH_BY[id].partial) return Promise.resolve(SH_BY[id]);
+  if(!SH_NODE_P[id]) SH_NODE_P[id]=api.node(id).then(r=>(SH_BY[id]=sh_norm(r.node,hit)))
+    .catch(err=>{ delete SH_NODE_P[id]; if(!SH_BY[id]) SH_BY[id]=sh_norm({id,label:hit&&hit.label,subtype:hit&&hit.subtype,partial:true},hit); return SH_BY[id]; });
+  return SH_NODE_P[id];
+}
+/** Run fn over items, n at a time. */
+async function sh_pool(items,n,fn){ let k=0; await Promise.all(Array.from({length:Math.min(n,items.length)},async()=>{ while(k<items.length){ const i=k++; await fn(items[i],i); } })); }
+const sh_sort=ts=>[...ts].sort((a,b)=>(SH_RANK[a.status]??5)-(SH_RANK[b.status]??5)||String(b.start||'').localeCompare(String(a.start||''))||String(a.label).localeCompare(String(b.label)));
+
+/* ---------- hub state ---------- */
+const sh_S={state:'idle',ids:[],done:0,list:[],limit:SH_PAGE,f:{status:'all',phase:'all',type:'all',q:''},
+  match:null,           // {id,label,age (years|null), items: Map id → [{text,edge,status,note}], loading, error}
+  showOutside:false, err:null};
+let sh_loadP=null;
+function sh_load(){
+  if(sh_loadP) return sh_loadP;
+  sh_S.state='loading'; sh_paint();
+  sh_loadP=(async()=>{
+    const res=await Promise.all(SH_PREFIXES.map(q=>api.search(q,{types:['trial'],limit:50}).then(r=>r||[],()=>null)));
+    if(res.every(r=>r===null)) throw new ApiError(0,'network','Could not reach the Atlas.',null);
+    const hits=new Map(); res.forEach(r=>(r||[]).forEach(h=>{ if(h&&h.type==='trial'&&h.id&&!hits.has(h.id)) hits.set(h.id,h); }));
+    sh_S.ids=[...hits.keys()]; sh_S.done=0; sh_paint();
+    let last=0;
+    await sh_pool([...hits.values()],6,async h=>{ await sh_trial(h.id,h); sh_S.done++;
+      if(sh_S.done-last>=60&&!$('#shList').contains(document.activeElement)){ last=sh_S.done; sh_S.list=sh_S.ids.map(id=>SH_BY[id]).filter(Boolean); sh_paint(); } });
+    sh_S.list=sh_S.ids.map(id=>SH_BY[id]).filter(Boolean);
+    sh_S.state='ready'; sh_paint();
+  })().catch(err=>{ sh_loadP=null; sh_S.state='error'; sh_S.err=err; sh_paint(); });
+  return sh_loadP;
+}
+
+/* ---------- disease matching (shared by the hub and the Atlas panel) ---------- */
+const SH_MATCH_P={};
+/** For a disease id: Map trialId → reasons [{text,edge,status,rank,note}], plus the disease label. */
+function sh_matchDisease(id){
+  if(!SH_MATCH_P[id]) SH_MATCH_P[id]=_sh_matchDisease(id).catch(err=>{ delete SH_MATCH_P[id]; throw err; });
+  return SH_MATCH_P[id];
+}
+async function _sh_matchDisease(id){
+  const nbP=api.neighborhood(id,{depth:1,edgeTypes:['trial_studies_disease','disease_subtype_of'],maxNodes:200});
+  const avP=api.actionView(id).catch(e=>is404(e)?null:Promise.reject(e));
+  const nb=await nbP;
+  const lab={}; (nb.nodes||[]).forEach(n=>{ lab[n.id]=n; });
+  const name=sentenceCase((lab[id]&&lab[id].label)||id);
+  const out=new Map();
+  const add=(tid,r)=>{ if(!out.has(tid)) out.set(tid,[]); const rs=out.get(tid); if(!rs.some(x=>x.text===r.text)) rs.push(r); };
+  const parents=[];
+  (nb.edges||[]).forEach(e=>{
+    if(e.type==='trial_studies_disease'&&(e.dst===id||e.src===id)){ const tid=e.src===id?e.dst:e.src;
+      add(tid,{text:`Lists ${name} among the conditions it studies`,edge:e.id,status:st(e.status),raw:e.status,rank:0}); }
+    else if(e.type==='disease_subtype_of'&&e.src===id&&lab[e.dst]) parents.push({node:lab[e.dst],edge:e});
+  });
+  // the wider family: trials for the parent disease(s) may enrol this diagnosis too
+  const pres=await Promise.all(parents.slice(0,3).map(p=>api.neighborhood(p.node.id,{depth:1,edgeTypes:['trial_studies_disease'],maxNodes:200}).then(r=>({p,r}),()=>null)));
+  pres.filter(Boolean).forEach(({p,r})=>(r.edges||[]).forEach(e=>{
+    if(e.type!=='trial_studies_disease') return;
+    const tid=e.src===p.node.id?e.dst:e.src; if(!/^NCT/i.test(tid)&&!(r.nodes||[]).some(n=>n.id===tid&&n.type==='trial')) return;
+    add(tid,{text:`Studies ${sentenceCase(p.node.label)}, the wider group that ${name} belongs to`,edge:e.id,status:st(e.status),raw:e.status,rank:1,
+      note:'Ask the study team whether it includes this exact diagnosis.'});
+  }));
+  let av=null; try{ av=await avP; }catch(e){}
+  const REL={related_disease:'Studies a disease related to',shared_mechanism:'Studies a disease that shares a mechanism with'};
+  ((av&&av.trials)||[]).forEach(t=>{
+    const tid=t.node&&t.node.id; if(!tid) return;
+    if(t.relevance==='same_disease'){ if(!out.has(tid)) add(tid,{text:`Studies ${name}`,edge:(t.edge_ids||[])[0]||null,status:null,rank:0,note:t.eligibility_note||''}); else if(t.eligibility_note) out.get(tid)[0].note=t.eligibility_note; return; }
+    add(tid,{text:`${REL[t.relevance]||'Connected to'} ${name}`,edge:(t.edge_ids||[])[0]||null,status:null,rank:2,note:t.eligibility_note||''});
+  });
+  return {id,name,items:out};
+}
+/** Age check against a trial's listed limits: 'in' | 'out' | 'unknown'. */
+function sh_ageFit(t,y){
+  if(y==null) return 'unknown';
+  if(t.minY==null&&t.maxY==null) return 'unknown';
+  if(t.minY!=null&&y<t.minY-1e-6) return 'out';
+  if(t.maxY!=null&&y>t.maxY+1/12) return 'out';   // "up to 18 years" includes 18 years and some months
+  return 'in';
+}
+
+/* ---------- rendering ---------- */
+function sh_reasonsHtml(reasons,t){
+  const age=sh_S.match&&sh_S.match.age;
+  const items=(reasons||[]).slice().sort((a,b)=>a.rank-b.rank).map(r=>{
+    const pill=r.edge?(r.status?`<button type="button" data-edge-id="${esc(r.edge)}" aria-label="See the evidence for this link">${stPill(r.status,r.raw)}</button>`:`<button type="button" class="linkbtn" data-edge-id="${esc(r.edge)}">See the evidence</button>`):'';
+    return `<li>${esc(r.text)} ${pill}${r.note?`<div class="sh-note">${esc(r.note)}</div>`:''}</li>`; });
+  if(age!=null){ const f=sh_ageFit(t,age);
+    items.push(`<li>${f==='in'?`${esc(sh_ageText(t))}, which includes ${esc(sh_fmtYears(age))}`:f==='out'?`${esc(sh_ageText(t))}, so ${esc(sh_fmtYears(age))} is outside the listed range`:`${esc(sh_ageText(t))}, so the study team decides about age`}</li>`); }
+  return items.length?`<div class="sh-why"><b>Why this study is shown</b><ul>${items.join('')}</ul></div>`:'';
+}
+function sh_card(t,reasons){
+  const ex=isExpert(), open=sh_isOpen(t), sex=sh_sexText(t.sex);
+  const meta=[sh_ageText(t),sex].filter(Boolean).join('. ');
+  const phases=sh_phases(t.phase);
+  const phaseTxt=phases.length?(ex?sh_phaseWord(t):`${sh_phaseWord(t)}: ${SH_PHASE_PLAIN[phases[phases.length-1]]}`):'No phase';
+  const how=`<details class="sh-how"><summary>How to take part</summary><ol>
+      <li>Open the official page on <a href="${esc(sh_ctgov(t))}" target="_blank" rel="noopener">ClinicalTrials.gov ↗</a> and read who can join and where it runs.</li>
+      <li>Bring the page to your doctor and ask whether the study could suit you or your child.</li>
+      <li>Contact the study team listed on the page. Ask if they are still enrolling and which site is closest.</li>
+      <li>Ask what taking part involves: visits, travel, costs covered and what happens when the study ends.</li>
+    </ol></details>`;
+  const dl=`<dl class="sh-dl">
+      <dt>NCT number</dt><dd>${esc(t.nct)}</dd>
+      <dt>Sponsor</dt><dd>${esc(t.sponsor||'Not listed')}</dd>
+      <dt>Study type</dt><dd>${esc(t.studyType?sentenceCase(t.studyType.toLowerCase().replace(/_/g,' ')):'Not listed')}${t.phase?`, ${esc(sh_phaseWord(t))}`:''}</dd>
+      <dt>Intervention</dt><dd>${t.interventions.length?esc(t.interventions.join('; ')):'None listed'}</dd>
+      <dt>Conditions</dt><dd>${t.conditions.length?esc(t.conditions.join('; ')):'None listed'}</dd>
+      <dt>Eligibility</dt><dd>${esc(sh_ageText(t))}${t.sex?`, sex: ${esc(t.sex.toLowerCase())}`:''}</dd>
+      ${t.enrollment!=null?`<dt>Enrolment</dt><dd>${esc(fmtNum(t.enrollment))}</dd>`:''}
+      ${t.start?`<dt>Start</dt><dd>${esc(fmtDate(t.start))}</dd>`:''}
+    </dl>`;
+  return `<article class="sh-card${open?' is-open':''}" id="sh-${esc(t.id)}">
+    <div class="sh-top"><span class="sh-stat ${sh_statCls(t.status)}">${esc(sh_statWord(t.status))}</span><span>${esc(phaseTxt)}</span><span>${esc(SH_TYPE[t.subtype]||'')}</span></div>
+    <h3 class="sh-t">${esc(t.label)}</h3>
+    ${t.partial?'<p class="sh-meta">Details could not be loaded just now. The official page has them.</p>':`<p class="sh-meta">${esc(meta)}${!ex&&t.sponsor?`. Run by ${esc(t.sponsor)}`:''}</p>`}
+    ${reasons?sh_reasonsHtml(reasons,t):''}
+    ${ex?dl:how}
+    <div class="sh-acts">${open&&!t.partial?`<button type="button" class="btn btn-primary on-paper" data-sh-fit="${esc(t.id)}">Check if this could fit</button>`:''}<a href="${esc(sh_ctgov(t))}" target="_blank" rel="noopener">Official page${ex?'':' on ClinicalTrials.gov'} ↗</a></div>
+  </article>`;
+}
+function sh_filtered(){
+  const f=sh_S.f, m=sh_S.match, q=f.q.trim().toLowerCase();
+  let ts=sh_S.list;
+  if(m&&m.items){ const extra=[...m.items.keys()].filter(id=>!sh_S.list.some(t=>t.id===id)).map(id=>SH_BY[id]).filter(Boolean); ts=[...ts,...extra].filter(t=>m.items.has(t.id)); }
+  if(f.status!=='all') ts=ts.filter(t=>(SH_GROUPS[f.status]||[]).includes(t.status));
+  if(f.phase!=='all') ts=ts.filter(t=>{ const ps=sh_phases(t.phase); if(f.phase==='none') return !ps.length; if(f.phase==='1') return ps.includes('PHASE1')||ps.includes('EARLY_PHASE1'); return ps.includes('PHASE'+f.phase); });
+  if(f.type!=='all') ts=ts.filter(t=>t.subtype===f.type);
+  if(q) ts=ts.filter(t=>q.split(/\s+/).every(w=>t.hay.includes(w)));
+  let outside=[];
+  if(m&&m.age!=null){ outside=ts.filter(t=>sh_ageFit(t,m.age)==='out'); if(!sh_S.showOutside) ts=ts.filter(t=>sh_ageFit(t,m.age)!=='out'); }
+  if(m&&m.items) ts=ts.slice().sort((a,b)=>(SH_RANK[a.status]??5)-(SH_RANK[b.status]??5)||Math.min(...m.items.get(a.id).map(r=>r.rank))-Math.min(...m.items.get(b.id).map(r=>r.rank)));
+  else ts=sh_sort(ts);
+  return {ts,outside};
+}
+function sh_live(){
+  const el=$('#shLive'); if(!el) return;
+  if(sh_S.state!=='ready'){ el.textContent=''; return; }
+  const all=sh_S.list, rec=all.filter(t=>t.status==='RECRUITING').length, soon=all.filter(t=>t.status==='NOT_YET_RECRUITING').length;
+  el.textContent=`${fmtNum(all.length)} studies in the Atlas: ${fmtNum(rec)} recruiting now and ${fmtNum(soon)} starting soon.`;
+}
+function sh_paint(){
+  const list=$('#shList'), more=$('#shMore'), cnt=$('#shCount'); if(!list) return;
+  sh_live(); sh_paintActive();
+  if(sh_S.state==='idle'){ list.innerHTML=''; cnt.textContent=''; more.innerHTML=''; return; }
+  if(sh_S.state==='error'){
+    list.innerHTML=`<div class="sh-empty">${unknownBox('The studies could not be loaded','The Atlas did not answer just now. Nothing is wrong on your side.')}<button type="button" class="btn btn-primary on-paper" data-sh-retry>Try again</button></div>`;
+    cnt.textContent=''; more.innerHTML=''; return; }
+  const m=sh_S.match;
+  if(m&&m.loading){ list.innerHTML=`<div class="sh-prog" role="status"><span class="cp-spin" aria-hidden="true"></span>Looking for studies connected to ${esc(m.label)}...</div>`; cnt.textContent=''; more.innerHTML=''; return; }
+  if(sh_S.state==='loading'&&!sh_S.list.length&&!(m&&m.items)){
+    list.innerHTML=`<div class="sh-prog" role="status"><span class="cp-spin" aria-hidden="true"></span>${sh_S.ids.length?`Loading study details: ${fmtNum(sh_S.done)} of ${fmtNum(sh_S.ids.length)}`:'Finding every study in the Atlas...'}</div>`+
+      `<div class="sh-card">${skel(4)}</div><div class="sh-card">${skel(4)}</div>`;
+    cnt.textContent=''; more.innerHTML=''; return; }
+  const {ts,outside}=sh_filtered();
+  const shown=ts.slice(0,sh_S.limit);
+  const loadingNote=sh_S.state==='loading'&&!(m&&m.items)?` Still loading ${fmtNum(sh_S.ids.length-sh_S.done)} more.`:'';
+  cnt.textContent=m&&m.items?`${fmtNum(ts.length)} ${ts.length===1?'study':'studies'} connected to ${m.label}${m.age!=null?` for age ${sh_fmtYears(m.age)}`:''}, recruiting first.${loadingNote}`
+    :`Showing ${fmtNum(shown.length)} of ${fmtNum(ts.length)} ${ts.length===1?'study':'studies'}, recruiting first.${loadingNote}`;
+  if(!ts.length){
+    const why=m&&m.items?(m.items.size?`None of the ${fmtNum(m.items.size)} studies connected to ${esc(m.label)} match these filters${m.age!=null&&outside.length&&!sh_S.showOutside?' and this age':''}.`:`We found no study connected to exactly ${esc(m.label)} in the Atlas yet. New studies appear often: it is worth checking <a href="https://clinicaltrials.gov/search?cond=${encodeURIComponent(m.label)}" target="_blank" rel="noopener">ClinicalTrials.gov ↗</a> directly.`):'No study matches these filters.';
+    list.innerHTML=`<div class="sh-empty"><p>${why}</p>${outside.length&&!sh_S.showOutside?`<button type="button" class="sh-clear" data-sh-outside>Show ${fmtNum(outside.length)} outside the age range</button>`:''}<button type="button" class="sh-clear" data-sh-reset>Clear all filters</button></div>`;
+    more.innerHTML=''; return; }
+  list.innerHTML=shown.map(t=>sh_card(t,m&&m.items?m.items.get(t.id):null)).join('');
+  more.innerHTML=[ts.length>shown.length?`<button type="button" class="btn" data-sh-more>Show ${fmtNum(Math.min(SH_PAGE,ts.length-shown.length))} more</button>`:'',
+    m&&m.age!=null&&outside.length?`<button type="button" class="sh-clear" data-sh-outside aria-pressed="${sh_S.showOutside}">${sh_S.showOutside?`Hide the ${fmtNum(outside.length)} outside the age range`:`Also show ${fmtNum(outside.length)} outside the age range`}</button>`:''].join(' ');
+}
+function sh_paintActive(){
+  const el=$('#shActive'); if(!el) return;
+  const m=sh_S.match;
+  if(!m){ el.innerHTML=''; return; }
+  el.innerHTML=`<span>Showing studies for <b>${esc(m.label)}</b>${m.age!=null?`, age ${esc(sh_fmtYears(m.age))}`:''}. Each card says why it is shown.</span><button type="button" class="sh-clear" data-sh-clear>Show all studies again</button>`;
+}
+
+/* ---------- matching: disease + age ---------- */
+let sh_pick=null;                     // {id,label} chosen in the diagnosis field
+async function sh_applyMatch(d,ageY,{scroll=false}={}){
+  sh_S.limit=SH_PAGE; sh_S.showOutside=false;
+  if(!d){ sh_S.match=null; sh_paint(); return; }
+  const m={id:d.id,label:d.label,age:ageY,loading:true,items:null}; sh_S.match=m; sh_paint();
+  if(scroll) $('#shCount').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+  try{
+    const r=await sh_matchDisease(d.id);
+    if(sh_S.match!==m) return;
+    m.label=r.name||m.label; m.items=r.items;
+    await sh_pool([...r.items.keys()],6,id=>sh_trial(id));       // details for matched studies, even before the full list is in
+  }catch(err){ if(sh_S.match!==m) return; m.items=new Map(); apiFail('Could not match studies to this disease',err); }
+  if(sh_S.match!==m) return;
+  m.loading=false; sh_paint();
+}
+function sh_readAge(){
+  const v=$('#shAge').value.trim(); if(v==='') return null;
+  const n=Number(v.replace(',','.')); if(!isFinite(n)||n<0||n>120) return undefined;
+  return $('#shAgeUnit').value==='m'?n/12:n;
+}
+/** Open the hub filtered to a disease (from the Atlas panel). */
+function sh_openFor(id,label){
+  sh_load();
+  const inp=$('#shDisease'); if(inp) inp.value=label; sh_pick={id,label};
+  sh_applyMatch({id,label},sh_readAge()===undefined?null:sh_readAge());
+  const sec=$('#studies'); if(sec) sec.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+  setTimeout(()=>{ const h=$('#shTitle'); if(h){ h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); } },reduced?0:500);
+}
+
+/* ---------- "Check if this could fit": 3 to 4 questions from the listed eligibility ---------- */
+function sh_openFit(t){
+  const sexQ=t.sex==='FEMALE'||t.sex==='MALE';
+  const conds=t.conditions.slice(0,6);
+  const q=(name,legend,hint,opts)=>`<fieldset class="fit-q"><legend>${legend}</legend>${hint?`<p class="fit-hint">${hint}</p>`:''}<div class="fit-opts">${opts.map(([v,l])=>`<label><input type="radio" name="${name}" value="${v}"> ${esc(l)}</label>`).join('')}</div></fieldset>`;
+  const body=dr_openDialog('Check if this could fit',`
+    <form class="dr-form" id="fitForm" novalidate>
+      <div class="dr-field"><span class="eyebrow">Study</span><div class="dr-subj">${esc(t.label)}</div><span class="dr-mono">${esc(t.nct)}, ${esc(sh_statWord(t.status).toLowerCase())}</span></div>
+      <p class="dr-sub">A few questions based on what the study lists on ClinicalTrials.gov. Your answers stay on this page and are not saved or sent.</p>
+      ${q('dx','1. Is there a diagnosis this study lists?',conds.length?`It lists: ${esc(conds.join('; '))}${t.conditions.length>6?' and more':''}.`:'The study does not list its conditions in the Atlas.',[['yes','Yes'],['unsure','Not sure'],['no','No']])}
+      <fieldset class="fit-q"><legend>2. How old is the person who would take part?</legend><p class="fit-hint">The study lists: ${esc(sh_ageText(t).toLowerCase())}.</p>
+        <div class="fit-age"><input name="age" type="number" inputmode="decimal" min="0" max="120" step="1" aria-label="Age"><select name="unit" aria-label="Age unit"><option value="y">years</option><option value="m">months</option></select></div></fieldset>
+      ${sexQ?q('sex',`3. This study only includes ${t.sex==='FEMALE'?'women and girls':'men and boys'}. Does that apply?`,'',[['yes','Yes'],['no','No']]):''}
+      ${q('travel',`${sexQ?4:3}. Could you travel to a study site?`,'Sites are listed on the official page. Some studies help with travel costs.',[['yes','Yes'],['maybe','Maybe'],['no','Not at the moment']])}
+      <p class="dr-err" id="fitErr" aria-live="polite"></p>
+      <div class="dr-actions"><button type="submit" class="btn btn-primary on-paper">See the result</button></div>
+    </form>`);
+  if(!body) return;
+  const f=$('#fitForm');
+  f.addEventListener('submit',ev=>{
+    ev.preventDefault();
+    const val=n=>{ const x=f.querySelector(`input[name="${n}"]:checked`); return x?x.value:null; };
+    const dx=val('dx'), travel=val('travel'), sex=sexQ?val('sex'):'yes';
+    const av=f.elements.age.value.trim(); const an=av===''?null:Number(av.replace(',','.'));
+    if(!dx||!travel||!sex||an==null||!isFinite(an)||an<0||an>120){ $('#fitErr').textContent='Please answer every question, so the result is useful.'; return; }
+    const y=f.elements.unit.value==='m'?an/12:an, af=sh_ageFit(t,y);
+    const ok=[], ask=[], no=[];
+    if(dx==='yes') ok.push('The diagnosis is one the study lists.'); else if(dx==='unsure') ask.push('Ask your doctor whether the diagnosis matches one the study lists.'); else no.push('The study lists other conditions than this diagnosis.');
+    if(af==='in') ok.push(`The age, ${sh_fmtYears(y)}, is inside the listed range (${sh_ageText(t).toLowerCase()}).`); else if(af==='out') no.push(`The age, ${sh_fmtYears(y)}, is outside the listed range (${sh_ageText(t).toLowerCase()}).`); else ask.push('The study lists no age limits here, so ask the study team.');
+    if(sexQ){ if(sex==='yes') ok.push('The study includes this person’s sex.'); else no.push(`The study only includes ${t.sex==='FEMALE'?'women and girls':'men and boys'}.`); }
+    if(travel==='yes') ok.push('You could travel to a site.'); else if(travel==='maybe') ask.push('Ask the study team where the sites are and whether travel is supported.'); else ask.push('Travel is hard right now. Ask whether some visits can happen closer to home.');
+    const head=no.length?'This study may not fit right now':ask.length?'This study could fit. A few points need checking':'This study could fit, based on what you told us';
+    const lede=no.length?'That is not your fault, and it is common. Other studies, or this one later, may fit better.':'Only the study team can confirm it. Many criteria are not listed here.';
+    body.innerHTML=`<div class="fit-res" role="status">
+      <span class="eyebrow">Your result</span><h4 tabindex="-1" id="fitHead">${esc(head)}</h4><p>${esc(lede)}</p>
+      ${ok.length?`<div><b class="fit-ok">Looks fine</b><ul>${ok.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
+      ${ask.length?`<div><b class="fit-ask">To check</b><ul>${ask.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
+      ${no.length?`<div><b class="fit-no">May not fit</b><ul>${no.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
+      <p class="fit-note">This is not medical advice. It only compares your answers with the few criteria the study lists. Talk to your doctor and the study team before deciding anything.</p>
+      <div class="dr-actions"><a class="btn btn-primary on-paper" href="${esc(sh_ctgov(t))}" target="_blank" rel="noopener">Open the official page ↗</a><button type="button" class="btn" style="border:1px solid var(--rule)" data-dclose>Close</button></div>
+    </div>`;
+    $('#fitHead').focus();
+  });
+}
+
+/* ---------- wiring ---------- */
+(function sh_wire(){
+  const sec=$('#studies'); if(!sec) return;
+  const inp=$('#shDisease');
+  if(inp) wireSearch(inp,h=>{ sh_pick={id:h.id,label:sentenceCase(h.label)}; $('#shDiseaseHint').textContent='Pick a disease from the list.'; },{types:['disease'],limit:8,prefetch:null,
+    onMiss:q=>{ sh_pick=null; $('#shDiseaseHint').textContent=`No disease called “${q}” in the Atlas. Try another name.`; }});
+  if(inp) inp.addEventListener('input',()=>{ if(sh_pick&&inp.value.trim().toLowerCase()!==sh_pick.label.toLowerCase()) sh_pick=null; });
+  $('#shMatch').addEventListener('submit',ev=>{
+    ev.preventDefault(); sh_load();
+    const age=sh_readAge();
+    if(age===undefined){ $('#shActive').innerHTML='<span class="cm-err">Please give an age between 0 and 120.</span>'; $('#shAge').focus(); return; }
+    if(!sh_pick&&inp.value.trim()){ $('#shDiseaseHint').textContent='Choose a disease from the suggestions, so we match the right one.'; inp.focus(); return; }
+    if(!sh_pick&&age!=null){ $('#shDiseaseHint').textContent='Add the diagnosis too: age alone is not enough to match studies.'; inp.focus(); return; }
+    sh_applyMatch(sh_pick,age,{scroll:false});
+  });
+  const onF=()=>{ sh_S.f={status:$('#shStatus').value,phase:$('#shPhase').value,type:$('#shType').value,q:$('#shText').value}; sh_S.limit=SH_PAGE; sh_load(); sh_paint(); };
+  ['#shStatus','#shPhase','#shType'].forEach(s=>$(s).addEventListener('change',onF));
+  let tt=0; $('#shText').addEventListener('input',()=>{ clearTimeout(tt); tt=setTimeout(onF,180); });
+  sec.addEventListener('click',ev=>{
+    const b=ev.target.closest('[data-sh-more],[data-sh-fit],[data-sh-clear],[data-sh-reset],[data-sh-outside],[data-sh-retry]'); if(!b) return;
+    if(b.hasAttribute('data-sh-more')){ const n=sh_S.limit; sh_S.limit+=SH_PAGE; sh_paint(); const c=$$('#shList .sh-card')[n]; if(c){ const h=c.querySelector('h3'); h.setAttribute('tabindex','-1'); h.focus(); } }
+    else if(b.hasAttribute('data-sh-fit')){ const t=SH_BY[b.dataset.shFit]; if(t) sh_openFit(t); }
+    else if(b.hasAttribute('data-sh-clear')){ sh_S.match=null; sh_pick=null; inp.value=''; $('#shAge').value=''; sh_S.limit=SH_PAGE; sh_paint(); inp.focus(); }
+    else if(b.hasAttribute('data-sh-reset')){ sh_S.match=null; sh_pick=null; inp.value=''; $('#shAge').value=''; ['#shStatus','#shPhase','#shType'].forEach(s=>$(s).value='all'); $('#shText').value=''; onF(); }
+    else if(b.hasAttribute('data-sh-outside')){ sh_S.showOutside=!sh_S.showOutside; sh_paint(); }
+    else if(b.hasAttribute('data-sh-retry')){ sh_load(); }
+  });
+  // load when the section comes near (or at once when the page opens on it)
+  if(location.hash==='#studies') sh_load();
+  else if('IntersectionObserver' in window){ const io=new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)){ io.disconnect(); sh_load(); } },{rootMargin:'800px 0px'}); io.observe(sec); }
+  else sh_load();
+  $$('a[href="#studies"]').forEach(a=>a.addEventListener('click',()=>sh_load()));
+  onMode(()=>{ if(sh_S.state!=='idle') sh_paint(); });
+  sh_paint();
+})();
+
+/* ---------- Atlas: compact "Studies for this disease" beside the result ---------- */
+let as_tok=0;
+function as_host(){ return isExpert()?$('#researcherView'):$('#readerView .rd-layout'); }
+function as_place(){ const p=$('#atlasStudies'), h=as_host(); if(p&&h&&p.parentElement!==h) h.appendChild(p); }
+async function as_render(ds){
+  const el=$('#atlasStudies'); if(!el) return;
+  as_place();
+  if(!ds||ds.missing||!ds.isDisease){ el.hidden=true; el.innerHTML=''; return; }
+  const tok=++as_tok;
+  el.hidden=false;
+  el.innerHTML=`<h3 id="asTitle">Studies for this disease</h3>${skel(3)}`;
+  let r;
+  try{ r=await sh_matchDisease(ds.id); await sh_pool([...r.items.keys()],6,id=>sh_trial(id)); }
+  catch(err){ if(tok!==as_tok) return; el.innerHTML=`<h3 id="asTitle">Studies for this disease</h3><p class="as-sub">The studies could not be loaded just now.</p>`; return; }
+  if(tok!==as_tok) return;
+  const ts=sh_sort([...r.items.keys()].map(id=>SH_BY[id]).filter(Boolean));
+  const direct=ts.filter(t=>r.items.get(t.id).some(x=>x.rank===0)), open=ts.filter(sh_isOpen);
+  const top=[...open,...ts.filter(t=>!sh_isOpen(t))].slice(0,isExpert()?6:3);
+  const ex=isExpert();
+  el.innerHTML=`<h3 id="asTitle">Studies for this disease</h3>
+    <p class="as-sub">${ts.length?`${fmtNum(ts.length)} connected to ${esc(ds.name)}: ${fmtNum(open.length)} recruiting or starting soon, ${fmtNum(direct.length)} list it by name.`:`We found no clinical study connected to ${esc(ds.name)} in the Atlas yet.`}</p>
+    ${top.length?`<ul class="as-list">${top.map(t=>{ const why=r.items.get(t.id).slice().sort((a,b)=>a.rank-b.rank)[0];
+      return `<li><span class="sh-stat ${sh_statCls(t.status)}" style="justify-self:start">${esc(sh_statWord(t.status))}</span><span class="as-t">${esc(t.label)}</span><span class="as-m">${esc(why?why.text:'')}${ex?`, ${esc(t.nct)}, ${esc(sh_phaseWord(t))}`:`. ${esc(sh_ageText(t))}`}</span><a class="as-m" href="${esc(sh_ctgov(t))}" target="_blank" rel="noopener">ClinicalTrials.gov ↗</a></li>`; }).join('')}</ul>`:''}
+    <button type="button" class="linkbtn" data-as-open>${ts.length?`See ${ts.length>top.length?`all ${fmtNum(ts.length)}`:'them'} in the studies hub`:'Browse every study in the hub'} →</button>`;
+}
+document.addEventListener('click',ev=>{ const b=ev.target.closest('[data-as-open]'); if(!b||!cur.ds) return; ev.preventDefault(); sh_openFor(cur.ds.id,cur.ds.name); });
+onLoading(()=>{ const el=$('#atlasStudies'); if(el&&!el.hidden) el.innerHTML=`<h3 id="asTitle">Studies for this disease</h3>${skel(3)}`; });
+onDs(ds=>as_render(ds));
+onMode(()=>{ as_place(); if(cur.ds) as_render(cur.ds); });
+
 /* ===== journey ===== */
 /* =====================================================================
    JOURNEY: one connected route (action_view.connections[]) as landing-2's stepper,
@@ -3353,6 +4023,9 @@ const cp_simWord=s=>s==null?'similarity unknown':isExpert()?`similarity ${Number
 /* =====================================================================
    COMMUNITIES
    ===================================================================== */
+/** The communities section follows the Atlas disease until a visitor picks another diagnosis in its own picker. */
+let cp_own=null;
+const cp_cur=()=>cp_own||cur.ds;
 const cp_gap={};          // disease id → {state:'running'|'done'|'failed'|'timeout', leads, disclaimer, error}
 let cp_pollTimer=0, cp_pollFor=null;
 
@@ -3373,12 +4046,12 @@ function cp_orgCard(g,ds,{related=false,extraEdges=[]}={}){
 
 function cp_exactCol(ds,av){
   const gs=av.exact_groups||[];
-  const head=`<h3>For exactly ${esc(ds.name)}<span>${cp_plural(gs.length,'group')}</span></h3>`;
-  if(gs.length) return `<div class="comm-col">${head}${gs.map(g=>cp_orgCard(g,ds)).join('')}</div>`;
-  return `<div class="comm-col">${head}<div class="cp-empty">
+  const head=`<h3>Groups for exactly this diagnosis<span>${cp_plural(gs.length,'group')}</span></h3><p class="cp-sub">${esc(ds.name)}</p>`;
+  if(gs.length) return `<div class="comm-col cp-full">${head}${gs.map(g=>cp_orgCard(g,ds)).join('')}</div>`;
+  return `<div class="comm-col cp-full">${head}<div class="cp-empty">
     <span class="st U">Unknown</span>
-    <p class="cp-empty-t">We found no patient group for exactly this diagnosis yet.</p>
-    <p>That is common for rare diseases. Groups for related diseases often welcome families too, and they are listed alongside. If you know a group we missed, tell us and we will review it.</p>
+    <p class="cp-empty-t">We found no group for exactly ${esc(ds.name)}.</p>
+    <p>That is common for rare diseases. Groups for the wider family often welcome families too, and they are listed below. If you know a group we missed, tell us and we will review it. If none exists, the checklist further down shows how to start one.</p>
     <div class="cacts">${cp_submitBtn(ds.id,ds.name,'missing_group','Tell us about a group')}</div>
   </div></div>`;
 }
@@ -3402,19 +4075,24 @@ function cp_relatedCol(rc,ds){
 }
 
 function cp_bridges(ds,av){
-  const sp=av.shared_people||[];
-  const body=sp.length?sp.map(s=>{ const p=s.person||{}, n=p.node||{}, com=s.communities||[], eid=(s.edge_ids||[])[0];
+  const sp=av.shared_people||[], ex=isExpert(), list=ex?sp:sp.slice(0,3);
+  const body=list.length?list.map(s=>{ const p=s.person||{}, n=p.node||{}, com=s.communities||[], eid=(s.edge_ids||[])[0];
+    if(!ex) return `<div class="comm cp-row"${eid?` data-edge-id="${esc(eid)}"`:''}>
+      ${cp_title(eid,n.label||n.id,`${n.label||n.id}: see the evidence`)}<span class="cchips">${cp_chip(eid,ds)}</span>
+      <span class="cdesc">Works with ${cp_plural(com.length,'of these communities','of these communities')}${com.length?`, such as ${com.slice(0,2).map(c=>cp_name(c.label)).join(' and ')}`:''}</span>
+    </div>`;
     return `<div class="comm cp-row"${eid?` data-edge-id="${esc(eid)}"`:''}>
       ${cp_title(eid,n.label||n.id,`${n.label||n.id}: see the evidence`)}<span class="cchips">${cp_chip(eid,ds)}</span>
-      <span class="ckind">Bridge${isExpert()?`, <span class="cp-id">${esc(n.id)}</span>`:''}</span>
+      <span class="ckind">Connects communities, <span class="cp-id">${esc(n.id)}</span></span>
       <span class="caff">${esc(p.affiliation||'Affiliation not listed')}</span>
-      <span class="cdesc">Active in ${cp_plural(com.length,'community','communities')}: ${com.slice(0,4).map(c=>cp_name(c.label)).join(', ')}${com.length>4?`, and ${com.length-4} more`:''}</span>
-    </div>`}).join('')
+      <span class="cdesc">Active in ${cp_plural(com.length,'community','communities')}: ${com.slice(0,6).map(c=>cp_name(c.label)).join(', ')}${com.length>6?`, and ${com.length-6} more`:''}</span>
+      <span class="cwhy">${cp_plural(p.recent_publications||0,'recent publication')}, ${cp_plural(p.active_grants||0,'active grant')}, ${cp_plural((s.edge_ids||[]).length,'evidence link')}</span>
+      <span class="cacts">${cp_ext(p.contact_url,'Contact')}${cp_draftBtn(ds.id,n.id,(s.edge_ids||[]).slice(0,5),n.label||n.id)}</span>
+    </div>`}).join('')+(!ex&&sp.length>3?`<p class="cp-bridge-more">${sp.length-3} more in the Researcher view.</p>`:'')
     :`<p class="cp-none"><span class="st U">Unknown</span> No one in our sources is active across several of these communities yet.</p>`;
-  return `<div class="comm-col"><h3>Bridges between communities<span>${cp_plural(sp.length,'person','people')}</span></h3>
-    <p class="cp-sub">People who work with several of these communities can carry knowledge between them.</p>${body}</div>`;
+  return `<div class="comm-col"><h3>Researchers who connect communities<span>${cp_plural(sp.length,'person','people')}</span></h3>
+    <p class="cp-sub">People who work with several of these communities can carry knowledge, samples and study ideas between them.</p>${body}</div>`;
 }
-
 function cp_researchers(ds,av){
   const rs=av.researchers||[];
   const body=rs.length?rs.map(p=>{ const n=p.node||{}, w=p.works_on||[], eid=(p.edge_ids||[])[0];
@@ -3463,10 +4141,10 @@ function cp_webHtml(ds){
         :`<p class="cp-status">The web search found nothing new this time.</p>`}
       <button type="button" class="linkbtn" data-cp-gap>Search again</button>`;
   }
-  return `<div class="cp-web" id="cpWeb"><div class="cp-web-h"><div class="eyebrow">Missing a group?</div>
-    <p>We can look on the open web for patient groups, registries or studies our sources have not linked yet. Anything found there is unverified until someone checks it.</p></div>${inner}</div>`;
+  return `<div class="cp-web" id="cpWeb"><div class="cp-web-h"><div class="eyebrow">Unverified leads</div>
+    <p>Missing a group? We can look on the open web for patient groups, registries or studies our sources have not linked yet. Anything found there is kept in this separate list and stays unverified until someone checks it.</p></div>${inner}</div>`;
 }
-function cp_renderWeb(ds){ const el=$('#cpWeb'); if(el&&cur.ds===ds) el.outerHTML=cp_webHtml(ds); }
+function cp_renderWeb(ds){ const el=$('#cpWeb'); if(el&&cp_cur()===ds) el.outerHTML=cp_webHtml(ds); }
 
 function cp_stopPoll(){
   clearTimeout(cp_pollTimer); cp_pollTimer=0;
@@ -3485,7 +4163,7 @@ async function cp_startGap(ds){
   const t0=Date.now();
   const tick=async()=>{
     if(cp_pollFor!==id) return;
-    if(!cur.ds||cur.ds.id!==id){ cp_stopPoll(); delete cp_gap[id]; return; }            // left the disease
+    if(!cp_cur()||cp_cur().id!==id){ cp_stopPoll(); delete cp_gap[id]; return; }            // left the disease
     if(Date.now()-t0>90000){ cp_stopPoll(); cp_gap[id]={state:'timeout'}; cp_renderWeb(ds); return; }
     try{
       const s=await api.job(job.job_id);
@@ -3504,6 +4182,7 @@ async function cp_startGap(ds){
 function renderCommunities(ds){
   const grid=$('#commGrid'), extra=$('#commExtra'), eb=$('#commEyebrow');
   if(!grid) return;
+  cm_renderStart(null); cm_renderCur(ds);
   if(!ds||ds.missing){
     eb.textContent='Communities';
     grid.innerHTML=`<div class="cp-full">${unknownBox('We could not find this in the Atlas',`Nothing is recorded for ${ds&&ds.id?ds.id:'this entry'} yet, so we cannot show communities for it. Try searching for the disease by another name.`)}</div>`;
@@ -3519,7 +4198,9 @@ function renderCommunities(ds){
     grid.innerHTML=`<div class="cp-full">${unknownBox('No community view for this disease yet','The Atlas has not prepared patient groups, studies and researchers for this disease. If you know a group, tell us and we will review it.')}<div class="cacts" style="margin-top:12px">${cp_submitBtn(ds.id,ds.name,'missing_group','Tell us about a group')}</div></div>`;
     extra.innerHTML=`<div class="cp-extra">${cp_webHtml(ds)}</div>`; return;
   }
-  grid.innerHTML=cp_exactCol(ds,av)+(av.related_communities||[]).map(rc=>cp_relatedCol(rc,ds)).join('');
+  const rcs=av.related_communities||[];
+  grid.innerHTML=cp_exactCol(ds,av)+`<div class="cm-wide-h"><h3>Groups for the wider family</h3><p>${rcs.length?`Groups for related or broader diagnoses that often welcome families with ${esc(ds.name)}. Each one says why it is connected and what differs.`:`We found no related community for ${esc(ds.name)} in our sources yet.`}</p></div>`+rcs.map(rc=>cp_relatedCol(rc,ds)).join('');
+  cm_renderStart(ds,av);
   extra.innerHTML=`<div class="cp-extra">${cp_bridges(ds,av)}${cp_researchers(ds,av)}${cp_trials(ds,av)}</div>${cp_webHtml(ds)}`;
   // Chips we could not resolve yet: fetch those edges once, then re-render.
   if(!ds._cpHydrated){
@@ -3527,7 +4208,7 @@ function renderCommunities(ds){
       ...(av.shared_people||[]).map(s=>(s.edge_ids||[])[0]),...(av.researchers||[]).map(p=>(p.edge_ids||[])[0]),...(av.trials||[]).map(t=>(t.edge_ids||[])[0])];
     const miss=cp_missingIds(ids,ds);
     ds._cpHydrated=true;
-    if(miss.length) cp_fetchEdges(miss).then(()=>{ if(cur.ds===ds) renderCommunities(ds); if(cp_curPlan&&cp_curPlan.disease_id===ds.id) cp_renderPlan(cp_curPlan); });
+    if(miss.length) cp_fetchEdges(miss).then(()=>{ if(cp_cur()===ds) renderCommunities(ds); if(cp_curPlan&&cp_curPlan.disease_id===ds.id) cp_renderPlan(cp_curPlan); });
   }
 }
 
@@ -3544,7 +4225,7 @@ function cp_onAction(ev){
     if(a.dataset.url) req.note=`A possible group found on the web (unverified): ${a.dataset.url}`;
     if(typeof openSubmit==='function') openSubmit(req); else toast('Contributions are not available on this page yet.');
   }else if(a.hasAttribute('data-cp-gap')){
-    if(cur.ds&&cur.ds.isDisease) cp_startGap(cur.ds);
+    const c=cp_cur(); if(c&&c.isDisease) cp_startGap(c);
   }
 }
 function cp_onKey(ev){
@@ -3555,8 +4236,74 @@ function cp_onKey(ev){
 ['#communities','#plans'].forEach(s=>{ const el=$(s); if(el){ el.addEventListener('click',cp_onAction); el.addEventListener('keydown',cp_onKey); } });
 
 onLoading(()=>{ cp_stopPoll(); const g=$('#commGrid'); if(g){ g.innerHTML=`<div class="comm-col">${skel(4)}</div><div class="comm-col">${skel(4)}</div>`; $('#commExtra').innerHTML=''; } });
-onDs(ds=>{ if(!ds||ds.missing||cp_pollFor!==ds.id) cp_stopPoll(); renderCommunities(ds); });
-onMode(()=>{ if(cur.ds) renderCommunities(cur.ds); });
+onDs(ds=>{ if(cp_own) return; if(!ds||ds.missing||cp_pollFor!==ds.id) cp_stopPoll(); renderCommunities(ds); });
+onMode(()=>{ const c=cp_cur(); if(c) renderCommunities(c); });
+
+/* ---------- own disease picker ---------- */
+function cm_renderCur(ds){
+  const el=$('#cmCur'); if(!el) return;
+  const ab=$('#cmAbout'); if(ab) ab.textContent=ds&&!ds.missing&&ds.isDisease?`This will be linked to ${ds.name}.`:'';
+  if(!ds||ds.missing){ el.innerHTML=''; return; }
+  el.innerHTML=cp_own?`Showing ${esc(ds.name)}. <button type="button" class="linkbtn" data-cm-follow>Follow the Atlas again</button>`:`Showing ${esc(ds.name)}, the disease open in the Atlas.`;
+}
+(function cm_wirePick(){
+  const inp=$('#cmDisease'); if(!inp) return;
+  wireSearch(inp,h=>{
+    const g=$('#commGrid'); if(g){ g.innerHTML=`<div class="comm-col">${skel(4)}</div><div class="comm-col">${skel(4)}</div>`; $('#commExtra').innerHTML=''; cm_renderStart(null); }
+    cp_stopPoll();
+    return buildDs(h.id).then(ds=>{ cp_own=ds; renderCommunities(ds); }).catch(err=>{ cp_own=null; renderCommunities({missing:true,id:h.id,error:err}); apiFail('Could not load this disease',err); });
+  },{types:['disease'],limit:8,prefetch:id=>api.actionView(id),onMiss:q=>toast(`No disease called \u201c${q}\u201d in the Atlas. Try another name.`)});
+  $('#communities').addEventListener('click',ev=>{ if(!ev.target.closest('[data-cm-follow]')) return; ev.preventDefault(); cp_own=null; inp.value=''; cp_stopPoll(); if(cur.ds) renderCommunities(cur.ds); inp.focus(); });
+})();
+
+/* ---------- "Start the group that is missing": only when no group serves exactly this diagnosis ---------- */
+const CM_START_KEY='om-start-group';
+function cm_startDone(){ try{ const o=JSON.parse(localStorage.getItem(CM_START_KEY)||'{}'); return o&&typeof o==='object'?o:{}; }catch(e){ return {}; } }
+function cm_renderStart(ds,av){
+  const el=$('#cmStart'); if(!el) return;
+  if(!ds||!av||(av.exact_groups||[]).length){ el.innerHTML=''; return; }
+  const name=ds.name, items=[];
+  const wide=[]; (av.related_communities||[]).forEach(rc=>(rc.groups||[]).forEach(g=>{ if(g&&g.node&&!wide.some(w=>w.node.id===g.node.id)) wide.push(g); }));
+  if(wide.length){ const w=wide.slice(0,2);
+    items.push(['wide',`Contact ${w.map(g=>esc(g.node.label)).join(' or ')} and ask whether they would host a network for families with ${esc(name)}.`,
+      `They serve ${[...new Set(w.map(g=>g.for_disease&&g.for_disease.label).filter(Boolean))].map(cp_name).join(' and ')||'a related diagnosis'}, which is connected to ${esc(name)}.`]); }
+  const ppl=[...(av.shared_people||[]).map(x=>x.person&&x.person.node),...(av.researchers||[]).map(x=>x.node)].filter(Boolean).filter((n,i,a)=>a.findIndex(m=>m.id===n.id)===i).slice(0,2);
+  if(ppl.length) items.push(['people',`Ask ${ppl.map(n=>esc(n.label)).join(' or ')} whether they can help you reach other families.`,'Researchers often know families and clinics that do not appear in any directory.']);
+  const regs=(av.assets||[]).filter(a=>a.asset_kind==='registry'||a.asset_kind==='natural_history_study').slice(0,2);
+  if(regs.length) items.push(['reg',`Ask ${regs.map(a=>esc(a.node.label)).join(' or ')} whether they can pass on a message to families.`,'A registry or natural history study is already in touch with people who have this diagnosis.']);
+  items.push(['clinic',`Ask the clinic that made the diagnosis whether they know other families with ${esc(name)}.`,'Many groups start with two or three families who met through the same clinic.']);
+  items.push(['add',`When your group exists, add it with the form below, so families searching for ${esc(name)} can find you.`,'It is reviewed before it appears.']);
+  const done=cm_startDone();
+  el.innerHTML=`<div class="cm-start"><h3>Start the group that is missing</h3>
+    <p>No group for exactly ${esc(name)} is listed. These first steps are built from the people and groups the Atlas connects to it. Ticks are saved only in this browser.</p>
+    <ul class="cm-check">${items.map(([k,t,sub])=>{ const id=`cm-${esc(ds.id)}-${k}`.replace(/[^A-Za-z0-9_-]/g,'_');
+      return `<li><input type="checkbox" id="${id}" data-cm-step="${esc(ds.id+'|'+k)}"${done[ds.id+'|'+k]?' checked':''}><label for="${id}">${t}<small>${esc(sub)}</small></label></li>`; }).join('')}</ul></div>`;
+}
+document.addEventListener('change',ev=>{ const c=ev.target.closest&&ev.target.closest('[data-cm-step]'); if(!c) return;
+  const d=cm_startDone(); if(c.checked) d[c.dataset.cmStep]=true; else delete d[c.dataset.cmStep];
+  try{ localStorage.setItem(CM_START_KEY,JSON.stringify(d)); }catch(e){} });
+
+/* ---------- "Add or correct a group": no account, posts to /submissions (review queue) ---------- */
+(function cm_wireForm(){
+  const f=$('#cmForm'); if(!f) return;
+  f.addEventListener('submit',async ev=>{
+    ev.preventDefault();
+    const err=$('#cmErr'), done=$('#cmDone'); err.textContent=''; done.textContent='';
+    const group=f.elements.group.value.trim(), url=f.elements.url.value.trim(), note=f.elements.note.value.trim(), contact=f.elements.contact.value.trim();
+    const kind=(f.querySelector('input[name=kind]:checked')||{}).value||'missing_group';
+    if(!group){ err.textContent='Please give the name of the group.'; f.elements.group.setAttribute('aria-invalid','true'); f.elements.group.focus(); return; }
+    f.elements.group.removeAttribute('aria-invalid');
+    if(url){ let ok=false; try{ ok=/^https?:$/.test(new URL(url).protocol) }catch(e){} if(!ok){ err.textContent='The website should start with https://'; f.elements.url.focus(); return; } }
+    const c=cp_cur(), dis=c&&!c.missing&&c.isDisease?c:null;
+    const text=`${kind==='correction'?'Correction for the group':'Missing group'}: ${group}${dis?` (for ${dis.name})`:''}.${note?' '+note:''}`.slice(0,2000);
+    const btn=f.querySelector('button[type=submit]'); btn.disabled=true; btn.textContent='Sending...';
+    try{
+      const r=await api.submit({node_id:dis?dis.id:null,kind,url:url||null,note:text,contact:contact||null});
+      f.reset(); done.textContent=`Thank you. It is in the review queue${r&&r.id?` (reference ${r.id})`:''}. Someone will check it against its source before anything changes.`;
+    }catch(e2){ err.textContent=e2&&(e2.status===400||e2.status===422)?'Something in the form needs a fix: '+(e2.message||'please check the fields.'):'It could not be sent just now. Nothing was lost: please try again.'; }
+    finally{ btn.disabled=false; btn.textContent='Send for review'; }
+  });
+})();
 
 /* =====================================================================
    PLANS
@@ -3622,10 +4369,10 @@ const cp_entSt=(e,ds)=>weakestSt([e.edge,e.via].filter(Boolean).map(id=>{ const 
 function cp_agg(ents,ds){ return weakestSt(ents.map(e=>cp_entSt(e,ds))); }
 function cp_fallback(p,why){
   return [
-    {id:'care',kind:'Care',title:'Ask your doctor about genetic testing',body:'A confirmed gene or variant is the key that connects a diagnosis to research, communities and other diseases.',status:null,ents:[],links:[['Find expert centres (Orphanet)','https://www.orpha.net']]},
-    {id:'org',kind:'Community',title:'Look for a patient organization',body:'Directories list groups for thousands of rare diseases, including umbrella groups when none exists yet for yours.',status:null,ents:[],links:[['NORD','https://rarediseases.org'],['Global Genes','https://globalgenes.org'],['EURORDIS','https://www.eurordis.org']]},
-    {id:'trial',kind:'Research',title:'Search for studies and registries',body:'Studies and registries may exist even when information is hard to find.',status:null,ents:[],links:[['Search ClinicalTrials.gov',cp_ctg(p.disease)],['Registries (Orphanet)','https://www.orpha.net']]},
-    {id:'gap',kind:'Open question',title:'Help put your disease on the map',body:why||'One Mission has no supported connections for this disease yet. A confirmed gene, a publication or a patient group adding its knowledge would change that.',status:'U',ents:[],links:[],submit:{node:p.disease_id,label:p.disease,kind:'missing_group',text:'Add what you know'}}
+    {id:'care',kind:'Care',why:'Everything else on this list depends on knowing the exact cause.',title:'Ask your doctor about genetic testing',body:'A confirmed gene or variant is the key that connects a diagnosis to research, communities and other diseases.',status:null,ents:[],links:[['Find expert centres (Orphanet)','https://www.orpha.net']]},
+    {id:'org',kind:'Community',why:'Families who came before you know the practical shortcuts no website lists.',title:'Look for a patient organization',body:'Directories list groups for thousands of rare diseases, including umbrella groups when none exists yet for yours.',status:null,ents:[],links:[['NORD','https://rarediseases.org'],['Global Genes','https://globalgenes.org'],['EURORDIS','https://www.eurordis.org']]},
+    {id:'trial',kind:'Research',why:'A study or registry can give access to new care and helps everyone who comes after.',title:'Search for studies and registries',body:'Studies and registries may exist even when information is hard to find.',status:null,ents:[],links:[['Search ClinicalTrials.gov',cp_ctg(p.disease)],['Registries (Orphanet)','https://www.orpha.net']]},
+    {id:'gap',kind:'Open question',why:'Every confirmed fact you add helps the next family find their way.',title:'Help put your disease on the map',body:why||'One Mission has no supported connections for this disease yet. A confirmed gene, a publication or a patient group adding its knowledge would change that.',status:'U',ents:[],links:[],submit:{node:p.disease_id,label:p.disease,kind:'missing_group',text:'Add what you know'}}
   ];
 }
 function cp_buildSteps(p,av){
@@ -3683,6 +4430,16 @@ function cp_buildSteps(p,av){
     ents:(ns.edge_ids||[]).slice(0,3).map((e,i)=>cp_ent('n'+i,(ns.edge_ids||[]).length>1?`Evidence ${i+1}`:'Evidence',e)),links:[],journey:true,checks:ns.validation_needed||[]}:null;
   // Gaps (Unknown)
   const gaps=((av.coverage&&av.coverage.gaps)||[]).slice(0,3).map((g,i)=>({id:'gap'+i,kind:'Open question',title:sentenceCase(g.question),body:`${g.why_it_matters?sentenceCase(g.why_it_matters)+' ':''}${g.what_would_resolve?'What would answer it: '+g.what_would_resolve:''}`,status:'U',ents:[],links:[],submit:{node:did,label:name,kind:'new_evidence',text:'Contribute what you know'}}));
+  const firstOrg=ex[0]&&ex[0].node?ex[0].node.label:null;
+  care.why='Everything else on this list depends on knowing the exact cause.';
+  org.why=ex.length?`Families who came before you know the practical shortcuts, and ${firstOrg} already serves ${name}.`:`No group for exactly ${name} is listed, so a wider group is the quickest way to other families.`;
+  comm.why=rel.length?`A related community may already have answers, data or studies that apply to ${name}.`:'A related community can still be worth asking about later, as the Atlas grows.';
+  reg.why=regs.length?'It takes little effort, and it lets researchers find you when a study needs people.':`If a registry exists, joining it makes ${name} visible to researchers.`;
+  if(nhs) nhs.why='No treatment can be tested before researchers know how the disease changes over time.';
+  trial.why=other.length?'A study can give access to new care, and it helps everyone who comes after.':'New studies open often, so checking again costs little.';
+  lab.why=rs.length?'Researchers need the questions, samples and participants that families can offer.':'A specialist centre can often introduce you to the right research group.';
+  if(next) next.why='It is the most promising shared action the Atlas found for this disease, and it still needs testing.';
+  gaps.forEach(g=>{ g.why=`Answering this would make the map more complete for everyone with ${name}.`; });
   const order={new:[care,org,comm,reg,nhs,trial],living:[reg,nhs,trial,org,comm,care],leader:[lab,next,...gaps,reg,nhs,comm,trial]}[p.stage]||[care,org,comm,reg,nhs,trial];
   return order.filter(Boolean);
 }
@@ -3727,6 +4484,7 @@ async function cp_renderPlan(p){
   const sub=!p.disease_id?' (no match in the Atlas yet)':!av?(avMissing?' (no action view yet)':' (could not load the Atlas just now)'):av.coverage&&av.coverage.has_supported_route===false?' (no supported route yet)':'';
   out.dataset.plan=p.id;
   out.innerHTML=head(sub,n,d)+`<ol class="psteps">${steps.map(s=>`<li class="pstep ${done[s.id]?'done':''}"><input type="checkbox" id="ps-${esc(s.id)}" data-step="${esc(s.id)}" ${done[s.id]?'checked':''}><div class="pt"><label for="ps-${esc(s.id)}">${esc(s.title)}</label>${s.status?stPill(s.status):'<span class="cp-gen">General advice</span>'}${s.stepRaw&&isExpert()?`<span class="st-step">${esc(STEP_LABEL[s.stepRaw]||s.stepRaw)}</span>`:''}${s.kind&&!(s.status==='U'&&/^unknown$/i.test(s.kind))?`<span class="kind">${esc(s.kind)}</span>`:''}</div>
+      ${s.why?`<p class="pwhy"><b>Why this step:</b> ${esc(s.why)}</p>`:''}
       <p class="pb">${esc(s.body)}</p>
       ${s.caution?`<div class="caution cp-pcaution"><b>Caution</b>${esc(s.caution)}</div>`:''}
       ${s.checks&&s.checks.length?`<div class="cp-checks"><b>To check first</b><ul>${s.checks.map(c=>`<li>${esc(sentenceCase(c))}</li>`).join('')}</ul></div>`:''}
@@ -3785,6 +4543,54 @@ onDs(ds=>{
 });
 onMode(()=>{ if(cp_curPlan) cp_renderPlan(cp_curPlan); });
 cp_renderSaved();
+
+/* ---------- My journey: a private log (date, note, tag), stored only in this browser ---------- */
+const JL_KEY='om-journey';
+let jl_items=(()=>{ try{ const a=JSON.parse(localStorage.getItem(JL_KEY)||'[]'); return Array.isArray(a)?a.filter(x=>x&&x.id&&x.note):[] }catch(e){ return []; } })();
+let jl_edit=null;
+const jl_today=()=>{ const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
+function jl_save(){ try{ localStorage.setItem(JL_KEY,JSON.stringify(jl_items)); return true; }catch(e){ $('#jlErr').textContent='This browser is not saving data (for example in a private window), so the log will be lost when you close the page.'; return false; } }
+const jl_sorted=()=>[...jl_items].sort((a,b)=>String(b.date).localeCompare(String(a.date))||(b.t||0)-(a.t||0));
+const jl_fmt=d=>{ const x=new Date(d+'T12:00:00'); return isNaN(x)?String(d||''):x.toLocaleDateString('en-GB',{year:'numeric',month:'short',day:'numeric'}); };
+function jl_render(){
+  const ul=$('#jlList'); if(!ul) return;
+  const xs=jl_sorted();
+  ul.innerHTML=xs.length?xs.map(x=>`<li><span class="jl-date">${esc(jl_fmt(x.date))}</span><div><span class="jl-tag">${esc(x.tag||'Note')}</span><span class="jl-text">${esc(x.note)}</span></div>
+    <span class="jl-acts"><button type="button" data-jl-edit="${esc(x.id)}" aria-label="Edit the entry from ${esc(jl_fmt(x.date))}">Edit</button><button type="button" data-jl-del="${esc(x.id)}" aria-label="Delete the entry from ${esc(jl_fmt(x.date))}">Delete</button></span></li>`).join('')
+    :'<li class="jl-empty" style="display:block">Nothing logged yet. Add your first entry above.</li>';
+  $('#jlExport').hidden=!xs.length;
+}
+function jl_reset(){ const f=$('#jlForm'); jl_edit=null; f.reset(); f.elements.date.value=jl_today(); $('#jlSave').textContent='Add to my journey'; $('#jlCancel').hidden=true; }
+(function jl_wire(){
+  const f=$('#jlForm'); if(!f) return;
+  f.elements.date.value=jl_today();
+  f.addEventListener('submit',ev=>{
+    ev.preventDefault(); $('#jlErr').textContent='';
+    const date=f.elements.date.value, note=f.elements.note.value.trim(), tag=f.elements.tag.value;
+    if(!date){ $('#jlErr').textContent='Please choose a date.'; f.elements.date.focus(); return; }
+    if(!note){ $('#jlErr').textContent='Please write a short note.'; f.elements.note.focus(); return; }
+    if(jl_edit){ const x=jl_items.find(i=>i.id===jl_edit); if(x) Object.assign(x,{date,note,tag}); $('#jlStatus').textContent='Entry updated.'; }
+    else { jl_items.push({id:'j'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),date,note,tag,t:Date.now()}); $('#jlStatus').textContent='Entry added.'; }
+    jl_save(); jl_reset(); jl_render(); f.elements.note.focus();
+  });
+  $('#jlCancel').addEventListener('click',()=>{ jl_reset(); $('#jlStatus').textContent='Edit cancelled.'; f.elements.note.focus(); });
+  $('#jlList').addEventListener('click',ev=>{
+    const e=ev.target.closest('[data-jl-edit]'), d=ev.target.closest('[data-jl-del]');
+    if(e){ const x=jl_items.find(i=>i.id===e.dataset.jlEdit); if(!x) return; jl_edit=x.id; f.elements.date.value=x.date; f.elements.tag.value=x.tag||'Note'; f.elements.note.value=x.note;
+      $('#jlSave').textContent='Save changes'; $('#jlCancel').hidden=false; f.elements.note.focus(); }
+    if(d){ const x=jl_items.find(i=>i.id===d.dataset.jlDel); if(!x) return;
+      if(!confirm('Delete this entry from your journey? This cannot be undone.')) return;
+      jl_items=jl_items.filter(i=>i.id!==x.id); if(jl_edit===x.id) jl_reset(); jl_save(); jl_render(); $('#jlStatus').textContent='Entry deleted.'; f.elements.note.focus(); }
+  });
+  $('#jlExport').addEventListener('click',()=>{
+    const lines=['My journey','Exported from One Mission on '+jl_fmt(jl_today())+'. This file was made in your browser; nothing was sent anywhere.',''];
+    jl_sorted().slice().reverse().forEach(x=>{ lines.push(`${x.date}  [${x.tag||'Note'}]`); lines.push(x.note); lines.push(''); });
+    const url=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'}));
+    const a=document.createElement('a'); a.href=url; a.download=`my-journey-${jl_today()}.txt`; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000); $('#jlStatus').textContent='Your journey was saved as a text file.';
+  });
+  jl_render();
+})();
 
 /* ===== evidence_sources ===== */
 /* =====================================================================
@@ -4209,6 +5015,16 @@ document.addEventListener('click',e=>{ if(!e.target.closest('.nav-actions')) clo
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!e.defaultPrevented&&!$('#navLinks').hidden){e.preventDefault();closeMenu();menuBtn.focus();} });
 $$('#navLinks a:not([data-mode])').forEach(a=>a.addEventListener('click',closeMenu));
 
+/* ---------- logo: smooth scroll to the very top (instant with reduced motion), focus the hero heading ---------- */
+const wordmark=$('header.nav .wordmark');
+if(wordmark) wordmark.addEventListener('click',ev=>{
+  if(ev.metaKey||ev.ctrlKey||ev.shiftKey||ev.altKey||ev.button) return;
+  ev.preventDefault(); closeMenu();
+  const h=$('#heroTitle'); if(h){ h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); }
+  window.scrollTo({top:0,left:0,behavior:reduced?'instant':'smooth'});
+  if(location.hash) history.replaceState(null,'',location.pathname+location.search);
+});
+
 /* ---------- global delegation: [data-edge-id] opens the evidence drawer, [data-goto] loads an entity ---------- */
 document.addEventListener('click',ev=>{
   const g=ev.target.closest('[data-goto]');
@@ -4302,8 +5118,10 @@ if(QS.get('edge')) openEdge(QS.get('edge'));
 try {
 const OG_AGENT_ID = 'agent_7801m41tw0vsfxabzwbe2dp8wh1r';
 const OG_SDK_URL = 'https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm';
-const OG_API = ((location.hostname === '127.0.0.1' || location.hostname === 'localhost') && location.port !== '8077')
-  ? 'http://127.0.0.1:8077/api/v1' : '/api/v1';
+/* Same API base as the page (honours ?api=), with the same one-time fallback to the public team API. */
+const OG_LIVE = 'https://gtk-devon-cycles-euro.trycloudflare.com/api/v1';
+const ogBase = () => (window.OM_API && window.OM_API.base()) || '/api/v1';
+const ogFallback = () => (window.OM_API && window.OM_API.fallback()) || OG_LIVE;
 const OG_MAX = 12000;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = id => document.getElementById(id);
@@ -4322,13 +5140,18 @@ const quote = s => clean(s).replace(/"/g, "'");
 
 /* ---------- live Atlas client tools ---------- */
 const NF = { error: 'not found' };
-async function apiGet(path) {
+async function apiGet(path, retried) {
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 8000);
   try {
     let r;
-    try { r = await fetch(OG_API + path, { signal: ctl.signal, headers: { Accept: 'application/json' } }); }
-    catch (e) { throw new Error('live data unavailable'); }
+    const base = ogBase();
+    try { r = await fetch(base + path, { signal: ctl.signal, headers: { Accept: 'application/json' } }); }
+    catch (e) {
+      if (!retried && e.name !== 'AbortError' && ogFallback() !== base) return apiGet(path, true);
+      throw new Error('live data unavailable');
+    }
+    if (r.status >= 500 && !retried && ogFallback() !== base) return apiGet(path, true);
     if (r.status === 404) return { __nf: true };
     if (!r.ok) throw new Error('live data unavailable');
     try { return await r.json(); } catch (e) { throw new Error('live data unavailable'); }
@@ -4706,6 +5529,7 @@ if (!store.get('og-hinted')) {
 const TARGETS = [
   { key: 'hero', el: () => document.querySelector('section.hero'), id: 'heroTitle', head: () => document.getElementById('heroTitle') },
   { key: 'atlas', el: () => $('atlas'), id: 'atlas', head: () => { const rv = $('researcherView'); return (rv && !rv.hidden ? rv : $('readerView') || document).querySelector('h2'); } },
+  { key: 'studies', el: () => $('studies'), id: 'studies', head: () => $('shTitle') },
   { key: 'journey', el: () => $('journey'), id: 'journey', head: () => $('journeyTitle') },
   { key: 'jpanel', el: () => $('jpanel'), id: 'jpanel', head: () => $('jpanel') && $('jpanel').querySelector('h3'), sub: true },
   { key: 'tenx', el: () => $('tenx'), id: 'tenx', head: () => $('tenxTitle') },
