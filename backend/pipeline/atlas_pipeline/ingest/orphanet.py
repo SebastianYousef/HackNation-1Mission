@@ -6,7 +6,8 @@ Implemented:
     DisorderGeneAssociation/Gene/Symbol (+ ExternalReference HGNC) -> gene node
     DisorderGeneAssociationType/Name -> attrs.orphanet_association ("Disease-causing germline mutation(s) in")
     DisorderGeneAssociationStatus/Name -> attrs.orphanet_status ("Assessed")
-    SourceOfValidation "12345[PMID]_..." -> evidence rows with source_ref PMID:12345
+    SourceOfValidation "12345[PMID]_..." -> attrs.orphanet_pmids (Orphanet's references, context only). The one
+            evidence row links to the orpha.net disease page: the quote is Orphanet's line, not text from those papers.
     Status: "Assessed" -> curated; "Not yet assessed" -> literature if Orphanet cites PMIDs, else hypothesis
             (evidence method algorithm:orphanet_not_yet_assessed instead of curated).
     "Candidate gene tested in" / "Biomarker tested in" rows assert no association and are skipped.
@@ -35,6 +36,10 @@ log = logging.getLogger(__name__)
 PREVALENCE_URL = "https://www.orphadata.com/data/xml/en_product9_prev.xml"
 URLS = {"en_product6.xml": "https://www.orphadata.com/data/xml/en_product6.xml",
         "en_product9_prev.xml": PREVALENCE_URL}
+
+
+# Orphanet references that are not about the association they are cited for (checked by hand, issue #13).
+WRONG_PMIDS = {"2412666"}  # cited for CLN5; it is a rat study of deprenyl (Brain Res Bull)
 
 
 def download() -> None:
@@ -69,12 +74,11 @@ def emit() -> None:
                 status = a.findtext("DisorderGeneAssociationStatus/Name") or ""
                 if atype.lower().startswith(("candidate gene tested in", "biomarker tested in")):
                     continue
-                pmids = re.findall(r"(\d+)\[PMID\]", a.findtext("SourceOfValidation") or "")
+                pmids = [p for p in dict.fromkeys(re.findall(r"(\d+)\[PMID\]", a.findtext("SourceOfValidation") or ""))
+                         if p not in WRONG_PMIDS]
                 quote = f"{dname} (ORPHA:{code}) — {atype} {sym} [{status}]"
                 evs = [dict(source_type="database", source_name="Orphanet", source_ref=f"ORPHA:{code}",
                             url=f"https://www.orpha.net/en/disease/detail/{code}", quote=quote, retrieved_at=ra)]
-                evs += [dict(source_type="database", source_name="Orphanet", source_ref=f"PMID:{p}",
-                             url=f"https://pubmed.ncbi.nlm.nih.gov/{p}/", quote=quote, retrieved_at=ra) for p in pmids[:3]]
                 causal = "causing" in atype.lower()
                 edge_status = ("curated" if status.lower() != "not yet assessed"
                                else "literature" if pmids else "hypothesis")
@@ -82,7 +86,8 @@ def emit() -> None:
                     evs = [dict(e, method="algorithm:orphanet_not_yet_assessed") for e in evs]
                 g.edge("gene_associated_with_disease", gid, mondo, status=edge_status,
                        label="causes" if causal else "associated with",
-                       attrs={"orphanet_association": atype, "orphanet_status": status}, evidence=evs)
+                       attrs={"orphanet_association": atype, "orphanet_status": status,
+                              **({"orphanet_pmids": [f"PMID:{p}" for p in pmids]} if pmids else {})}, evidence=evs)
         el.clear()
     prev_path = RAW / "orphanet" / "en_product9_prev.xml"
     prev = parse_prevalence(prev_path, x2m, diseases) if prev_path.exists() else {}

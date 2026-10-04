@@ -114,3 +114,48 @@ def test_emit_patches_disease_attrs_prevalence(interim, prev_file):
         assert len(prev) == 3
     finally:
         shutil.rmtree(raw, ignore_errors=True)
+
+
+GENE_XML = """<?xml version="1.0" encoding="UTF-8"?>
+<JDBOR><DisorderList count="1">
+  <Disorder id="1">
+    <OrphaCode>228346</OrphaCode>
+    <Name lang="en">CLN5 disease</Name>
+    <DisorderGeneAssociationList count="1">
+      <DisorderGeneAssociation>
+        <SourceOfValidation>34733232[PMID]_2412666[PMID]_34684815[PMID]_34733232[PMID]</SourceOfValidation>
+        <Gene id="9"><Symbol>CLN5</Symbol><ExternalReferenceList count="1">
+          <ExternalReference id="9"><Source>HGNC</Source><Reference>2076</Reference></ExternalReference>
+        </ExternalReferenceList></Gene>
+        <DisorderGeneAssociationType id="1"><Name lang="en">Disease-causing germline mutation(s) in</Name></DisorderGeneAssociationType>
+        <DisorderGeneAssociationStatus id="1"><Name lang="en">Assessed</Name></DisorderGeneAssociationStatus>
+      </DisorderGeneAssociation>
+    </DisorderGeneAssociationList>
+  </Disorder>
+</DisorderList></JDBOR>
+"""
+
+
+def test_gene_evidence_links_to_orphanet_not_to_the_papers_it_cites(interim, monkeypatch):
+    """Issue #13: the quote is Orphanet's own line, so it must not be shown as a quote from a PubMed paper."""
+    monkeypatch.setattr(orphanet, "retrieved_at", lambda p: "2026-10-04T00:00:00Z")
+    monkeypatch.setattr(orphanet.hgnc, "resolve", lambda k: {"hgnc_id": "HGNC:2076", "symbol": "CLN5"})
+    monkeypatch.setattr(orphanet.hgnc, "gene_node", lambda g, rec: g.node(id=rec["hgnc_id"], type="gene",
+                                                                           label=rec["symbol"]))
+    raw = RAW / "orphanet"
+    raw.mkdir(parents=True, exist_ok=True)
+    try:
+        (raw / "en_product6.xml").write_text(GENE_XML)
+        write_json("slice", {"xref_to_mondo": X2M, "diseases": sorted(DISEASES)})
+        g = GraphWriter("mondo")
+        g.node(id="MONDO:0016295", type="disease", label="CLN5 disease")
+        g.close()
+        orphanet.emit()
+        graph = load_graph()
+        (edge,) = graph.edges_of("gene_associated_with_disease")
+        assert edge["status"] == "curated"
+        assert [(v["source_ref"], v["url"]) for v in graph.evidence[edge["id"]]] == [
+            ("ORPHA:228346", "https://www.orpha.net/en/disease/detail/228346")]
+        assert edge["attrs"]["orphanet_pmids"] == ["PMID:34733232", "PMID:34684815"]  # deduped, wrong one dropped
+    finally:
+        shutil.rmtree(raw, ignore_errors=True)
