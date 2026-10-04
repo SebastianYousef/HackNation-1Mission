@@ -1145,7 +1145,11 @@ function other(e,id){return e.s===id?e.t:e.s}
 function sentence(ds,e){return `${ds.byId[e.s].label} ${e.rel} ${ds.byId[e.t].label}`}
 
 /* ---------- LIVE ATLAS: the Atlas section reads the live database (search, Reader, Researcher, evidence) ---------- */
-const API=((location.hostname==='127.0.0.1'||location.hostname==='localhost')&&location.port!=='8077')?'http://127.0.0.1:8077/api/v1':'/api/v1';
+/* API base: ?api=<base> wins; else same origin (or the local dev API on the static preview). If that API is down
+   (network error or 5xx), switch once to the public team API so live data keeps working wherever the page is hosted. */
+const API_FALLBACK='https://gtk-devon-cycles-euro.trycloudflare.com/api/v1';
+let API=(()=>{try{const q=new URLSearchParams(location.search).get('api'); if(q) return q.replace(/\/$/,'');}catch(e){} return ((location.hostname==='127.0.0.1'||location.hostname==='localhost')&&location.port!=='8077')?'http://127.0.0.1:8077/api/v1':'/api/v1';})();
+window.OM_API=()=>API;
 const enc=encodeURIComponent;
 const LIVE_DEFAULT={id:'MONDO:0009745',type:'disease',label:'neuronal ceroid lipofuscinosis 5'};
 const liveCache=new Map();
@@ -1159,7 +1163,8 @@ function apiGet(path,o){
     try{
       let r;
       try{ r=await fetch(API+path,{signal:ctl.signal,headers:{Accept:'application/json'}}); }
-      catch(e){ const er=new Error(signal&&signal.aborted?'aborted':'network'); er.status=0; throw er; }
+      catch(e){ if(!(signal&&signal.aborted)&&API!==API_FALLBACK){ API=API_FALLBACK; try{ r=await fetch(API+path,{signal:ctl.signal,headers:{Accept:'application/json'}}); }catch(e2){ r=null; } } if(!r){ const er=new Error(signal&&signal.aborted?'aborted':'network'); er.status=0; throw er; } }
+      if(r.status>=500&&API!==API_FALLBACK){ API=API_FALLBACK; try{ r=await fetch(API+path,{signal:ctl.signal,headers:{Accept:'application/json'}}); }catch(e){ const er=new Error('network'); er.status=0; throw er; } }
       if(!r.ok){ const er=new Error(r.status===404?'not_found':'http'); er.status=r.status; throw er; }
       try{ return await r.json(); }catch(e){ const er=new Error('parse'); er.status=r.status; throw er; }
     } finally { clearTimeout(timer); if(signal) signal.removeEventListener('abort',onAbort); }
@@ -2237,7 +2242,9 @@ try {
 const OG_AGENT_ID = 'agent_7801m41tw0vsfxabzwbe2dp8wh1r';
 /* two CDNs; a fresh URL per retry, because the browser remembers a failed module import for the same URL */
 const OG_SDK_URLS = ['https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm', 'https://esm.sh/@elevenlabs/client@1.26.0'];
-const OG_API = (() => {
+const OG_FALLBACK = 'https://gtk-devon-cycles-euro.trycloudflare.com/api/v1';
+let OG_API = (() => {
+  try { const q = new URLSearchParams(location.search).get('api'); if (q) return q.replace(/\/$/, ''); } catch (e) {}
   try {
     const m = document.querySelector('meta[name="og-api"]');
     if (m && m.content) return m.content.replace(/\/$/, '');
@@ -2273,7 +2280,13 @@ async function apiGet(path) {
   try {
     let r;
     try { r = await fetch(OG_API + path, { signal: ctl.signal, headers: { Accept: 'application/json' } }); }
-    catch (e) { throw new Error('live data unavailable'); }
+    catch (e) { r = null; }
+    /* this host's API is down: switch once to the public team API */
+    if ((!r || r.status >= 500) && OG_API !== OG_FALLBACK) {
+      OG_API = OG_FALLBACK;
+      try { r = await fetch(OG_API + path, { signal: ctl.signal, headers: { Accept: 'application/json' } }); } catch (e) { r = null; }
+    }
+    if (!r) throw new Error('live data unavailable');
     if (r.status === 404) return { __nf: true };
     if (!r.ok) throw new Error('live data unavailable');
     try { return await r.json(); } catch (e) { throw new Error('live data unavailable'); }
