@@ -2,12 +2,16 @@
 
 Used for exactly three things, everything else is deterministic:
   1. Extract    structured(...) / batch_*(...)  abstract -> {subject, relation, object, stance, quote}
-  2. Reconcile  pick_candidate(...)             choose one of <=5 given ids or "none" for leftover names
+  2. Reconcile  embed(...)                      name vectors for the top-5 cosine candidates of leftover names
+                pick_candidate(...)             choose one of <=5 given ids or "none" for unclear ones
   3. Explain    rephrase(...)                   plain-language view text from supplied facts only
                                                 (deterministic template fallback without a key)
-No embeddings. Model from OPENAI_MODEL (default gpt-4.1-mini). ATLAS_LLM=off forces templates.
-Every call is cached on disk (data/interim/llm_cache/<ns>/<sha1>.json) so re-runs cost nothing.
+Model from OPENAI_MODEL (default gpt-4.1-mini), embeddings from OPENAI_EMBED_MODEL (default
+text-embedding-3-small). ATLAS_LLM=off forces templates.
+Every call is cached on disk (data/interim/llm_cache/<ns>/<sha1>.json; embeddings in
+data/interim/embedding_cache/<model>.{keys.json,npy}) so re-runs cost nothing.
 Usage counters are persisted to data/interim/openai_usage.json -> dataset_meta('openai_usage').
+Embedding spend is tracked there too and stops at OPENAI_BUDGET_USD (default 7, docs/RESUME.md section 3).
 """
 from __future__ import annotations
 
@@ -15,6 +19,7 @@ import hashlib
 import json
 import logging
 import threading
+from pathlib import Path
 from typing import Any, Callable, TypeVar
 
 from pydantic import BaseModel
@@ -165,6 +170,135 @@ def batch_step(ns: str, system: str, items: list[tuple[str, str]], schema: type[
     state_f.write_text(json.dumps({"batch_id": b.id, "keys": keys, "submitted_at": now_iso()}))
     log.info("submitted batch %s with %d requests", b.id, len(todo))
     return "submitted"
+
+
+# ----------------------------------------------------------------------------- Embeddings (reconcile)
+EMBED_CACHE = INTERIM / "embedding_cache"
+EMBED_DIM = 1536            # nodes.embedding is vector(1536)
+EMBED_BATCH = 256           # inputs per request (the API allows 2048)
+USD_PER_MTOK = {"text-embedding-3-small": 0.02, "text-embedding-3-large": 0.13, "text-embedding-ada-002": 0.10}
+_embed_stopped: str | None = None   # set on insufficient_quota / budget: no more requests this process
+
+
+def embed_model() -> str:
+    return env("OPENAI_EMBED_MODEL", "text-embedding-3-small")
+
+
+def budget_usd() -> float:
+    return float(env("OPENAI_BUDGET_USD", "7"))
+
+
+def spent_usd() -> float:
+    """Estimated spend recorded in openai_usage.json (sections that track `usd`)."""
+    return sum(float(v.get("usd") or 0) for v in usage().values() if isinstance(v, dict))
+
+
+def _add_usage(section: str, **inc: float) -> None:
+    """Add to the cumulative counters of one section (unlike record_usage, which overwrites)."""
+    with _lock:
+        data = json.loads(USAGE_FILE.read_text()) if USAGE_FILE.exists() else {}
+        old = data.get(section) or {}
+        data[section] = {**old, **{k: round(old.get(k, 0) + v, 10) for k, v in inc.items()},
+                         "model": embed_model(), "updated_at": now_iso()}
+        USAGE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        USAGE_FILE.write_text(json.dumps(data, indent=1))
+
+
+class EmbeddingCache:
+    """sha1(text) -> unit vector (float32) for one model, kept as <model>.keys.json + <model>.npy."""
+
+    def __init__(self, model: str) -> None:
+        slug = "".join(ch if ch.isalnum() or ch in "-." else "_" for ch in model)
+        self.keys_f: Path = EMBED_CACHE / f"{slug}.keys.json"
+        self.vecs_f: Path = EMBED_CACHE / f"{slug}.npy"
+        self.vecs: dict[str, Any] = {}
+        self.dirty = False
+        if self.keys_f.exists() and self.vecs_f.exists():
+            import numpy as np
+            keys, mat = json.loads(self.keys_f.read_text()), np.load(self.vecs_f)
+            self.vecs = dict(zip(keys, mat))
+
+    @staticmethod
+    def key(text: str) -> str:
+        return hashlib.sha1(text.encode()).hexdigest()
+
+    def get(self, text: str):
+        return self.vecs.get(self.key(text))
+
+    def put(self, text: str, vec) -> None:
+        import numpy as np
+        v = np.asarray(vec, dtype=np.float32)
+        n = float(np.linalg.norm(v))
+        self.vecs[self.key(text)] = v / n if n else v
+        self.dirty = True
+
+    def save(self) -> None:
+        if not self.dirty:
+            return
+        import numpy as np
+        EMBED_CACHE.mkdir(parents=True, exist_ok=True)
+        keys = list(self.vecs)
+        tmp = self.vecs_f.with_suffix(".tmp.npy")
+        np.save(tmp, np.stack([self.vecs[k] for k in keys]) if keys else np.zeros((0, EMBED_DIM), np.float32))
+        tmp.replace(self.vecs_f)
+        self.keys_f.write_text(json.dumps(keys))
+        self.dirty = False
+
+
+_embed_caches: dict[str, EmbeddingCache] = {}
+
+
+def embedding_cache() -> EmbeddingCache:
+    m = embed_model()
+    if m not in _embed_caches:
+        _embed_caches[m] = EmbeddingCache(m)
+    return _embed_caches[m]
+
+
+def _est_tokens(text: str) -> int:
+    return len(text) // 3 + 1   # conservative for short biomedical names (~4 chars/token in English)
+
+
+def embed(texts: list[str]) -> list[Any]:
+    """Unit vectors (numpy float32) for texts, None where unavailable. Cached per (model, text); only
+    uncached texts are sent, EMBED_BATCH per request. Without a key, after `insufficient_quota` or when the
+    next request would pass OPENAI_BUDGET_USD, the rest stay None (callers keep exact matching)."""
+    global _embed_stopped
+    cache = embedding_cache()
+    todo = list(dict.fromkeys(t for t in texts if t and cache.get(t) is None))
+    if todo and available() and _embed_stopped is None:
+        model = embed_model()
+        price = float(env("OPENAI_EMBED_USD_PER_MTOK", str(USD_PER_MTOK.get(model, 0.13))))
+        kw = {"dimensions": EMBED_DIM} if model.startswith("text-embedding-3") else {}
+        try:
+            for i in range(0, len(todo), EMBED_BATCH):
+                chunk = todo[i:i + EMBED_BATCH]
+                est = sum(map(_est_tokens, chunk)) * price / 1e6
+                if spent_usd() + est > budget_usd():
+                    _embed_stopped = "budget"
+                    log.warning("embeddings: stopping, OPENAI_BUDGET_USD %.2f would be exceeded (spent %.4f)",
+                                budget_usd(), spent_usd())
+                    break
+                try:
+                    resp = client().embeddings.create(model=model, input=chunk, **kw)
+                except Exception as e:
+                    quota = getattr(e, "code", None) == "insufficient_quota" or "insufficient_quota" in str(e)
+                    _embed_stopped = "insufficient_quota" if quota else "error"
+                    log.warning("embeddings: request failed, keeping what is cached (%s)", e)
+                    break
+                for d in resp.data:
+                    cache.put(chunk[d.index], d.embedding)
+                tokens = int(getattr(resp.usage, "total_tokens", None) or getattr(resp.usage, "prompt_tokens", 0))
+                _add_usage("embeddings", requests=1, inputs=len(chunk), tokens=tokens, usd=tokens * price / 1e6)
+        finally:
+            cache.save()
+    return [cache.get(t) if t else None for t in texts]
+
+
+def cached_embeddings(texts: list[str]) -> list[Any]:
+    """Cache lookups only (no API call), e.g. for load filling nodes.embedding."""
+    cache = embedding_cache()
+    return [cache.get(t) if t else None for t in texts]
 
 
 # ----------------------------------------------------------------------------- Reconcile leftovers
