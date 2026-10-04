@@ -120,11 +120,13 @@ That is the exact command that produced the current dataset. It deliberately pas
 
 To change the landing page, edit `frontend/landing.html` here, push, and redeploy.
 
-### Current state (2026-10-03)
+### Current state (2026-10-04)
+- Slice (`backend/pipeline/config/slice.yaml`): lysosomal storage diseases, deep on the NCLs, plus primary mitochondrial disease (incl. Leigh syndrome, `MONDO:0009723`) and developmental and epileptic encephalopathies (incl. Dravet syndrome). Static sources include MedlinePlus Genetics for curated plain summaries. Reconcile tier 3 matches names by embeddings (#12), Orphanet prevalence lands in disease `attrs.prevalence` (#11), and Orphanet gene evidence links to orpha.net with the cited PMIDs kept in `attrs.orphanet_pmids` (daf3cdc). After changing any of this, reload the server's data (below); `GET /api/v1/meta` shows which dataset version is live.
 - Real dataset loaded with the hardened pipeline. For the current dataset version and counts (nodes by type, edges, evidence, clusters, focus diseases) see `GET /api/v1/meta`; they change with every load, so they are not kept here.
 - `check_contract.py` passes (OK, 0 violations). Path strength has one rule: `analytics/paths.py` (`path_strength`) takes the weakest edge, lowered by `attrs.status_cap`/`confidence_cap`, and stores it in `paths.weakest_status/min_confidence` (migration 0004). `/paths` and the views serve that value. The checker accepts the edge minimum, or the cap when one is set, and never anything stronger.
 - `curated.yaml` holds the hand-curated NCL facts: patient groups (e.g. the Gray Foundation for CLN6), `ATLAS:mech-*` mechanisms (e.g. `ATLAS:mech-er-to-golgi-transfer-of-lysosomal-enzymes`, `-subunit-c-storage`, `-lysosomal-bmp-synthesis`), assets (DEM-CHILD registry, natural history studies, CLN5/CLN3/CLN6 animal and cell models) and therapies. Re-run `--verify` after adding quotes. PubMed quotes use NCBI efetch URLs, because pubmed.ncbi.nlm.nih.gov shows scripts a cookie wall.
-- Frontend prototype prompt with verified real demo ids: `frontend/PROTOTYPE_PROMPT.md`.
+- Frontend prototype prompt with verified real demo ids: `frontend/PROTOTYPE_PROMPT.md` (ports `frontend/landing.html`, the only landing page).
+- Demo-path evidence review: the automated pre-check for #13 is done; a human sign-off is still open (researcher edges marked `literature` but derived by algorithm, no contradicting evidence on the CLN5 path).
 - `.env` has only the Bright Data **Scraping Browser** credentials:
   - No `OPENAI_API_KEY`, so `/explain` and `/outreach-draft` return 503 `upstream_unavailable`; there is no template fallback. TODO(decision API-01): a keyless fallback for `/explain` is pending.
   - Gap-search jobs fail with "BRIGHTDATA_API_KEY missing" (SERP key).
