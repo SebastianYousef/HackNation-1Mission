@@ -23,7 +23,7 @@ from .store import read_jsonl
 
 log = logging.getLogger(__name__)
 
-STAGE_ORDER = ["mondo", "hgnc", "hpo", "orphanet", "clinvar", "reactome", "curated", "pubmed",
+STAGE_ORDER = ["mondo", "hgnc", "hpo", "orphanet", "clinvar", "reactome", "curated", "medlineplus", "pubmed",
                "clinicaltrials", "nih_reporter", "brightdata_orgs", "reconcile", "mechanisms", "analytics"]
 
 

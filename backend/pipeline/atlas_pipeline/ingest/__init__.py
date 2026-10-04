@@ -7,7 +7,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
-STATIC = ["mondo", "hgnc", "hpo", "orphanet", "reactome", "clinvar", "curated"]
+STATIC = ["mondo", "hgnc", "hpo", "orphanet", "reactome", "clinvar", "curated", "medlineplus"]
 API = ["pubmed", "clinicaltrials", "nih_reporter", "brightdata_orgs"]
 ALL = STATIC + API
 

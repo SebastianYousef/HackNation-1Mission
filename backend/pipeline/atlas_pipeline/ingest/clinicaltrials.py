@@ -9,7 +9,8 @@ Fields (protocolSection.*):
       hundreds of conditions), so the queried disease is never linked just because the trial came back.
       The condition -> MONDO mapping is our string match, never `curated`:
         condition = a slice disease's id/xref or exact label   -> literature (quote = that condition)
-        condition = a synonym/abbreviation (not an umbrella like "Batten disease") -> hypothesis
+        condition = a synonym/abbreviation (not an umbrella like "Batten disease" or a family's
+                    umbrella_terms in config/slice.yaml)                -> hypothesis
         queried disease named in the title (whole phrase)      -> hypothesis (quote = title)
         otherwise                                              -> no edge
   armsInterventionsModule.interventions[{type,name}] -> intervention nodes ATLAS:int-<slug> + trial_tests_intervention
@@ -33,8 +34,14 @@ from ..reconcile import NameIndex
 
 log = logging.getLogger(__name__)
 API = "https://clinicaltrials.gov/api/v2/studies"
-# sponsors use these as umbrella terms; MONDO files "batten disease" as a synonym of the juvenile form only
+# sponsors use these as umbrella terms; MONDO files "batten disease" as a synonym of the juvenile form only.
+# Each family in config/slice.yaml adds its own (umbrella_terms: "mitochondrial disease", "epilepsy", ...).
 UMBRELLA = {"batten disease", "batten s disease", "batten", "ncl"}
+
+
+def umbrella() -> set[str]:
+    """Normalised umbrella terms: the built-in NCL ones plus every slice family's umbrella_terms."""
+    return UMBRELLA | {norm_name(t) for t in slice_config().umbrella_terms}
 DEGREES = {"MD", "PHD", "DR", "PROF", "MSC", "DO", "MPH", "MBBS", "FRCP", "MS", "RN", "PHARMD"}
 ROLE_WORDS = {"medical", "director", "monitor", "manager", "sponsor", "clinical", "study", "trial", "trials", "team",
               "call", "center", "central", "contact", "information", "development", "research", "program",
@@ -85,7 +92,7 @@ def condition_match(idx: NameIndex, cond: str) -> tuple[str, str, str] | None:
     mid, kind, _ = hit
     if kind in ("xref", "label"):
         return mid, "literature", kind
-    if norm_name(cond) in UMBRELLA:
+    if norm_name(cond) in umbrella():
         return None
     return mid, "hypothesis", kind
 
@@ -102,7 +109,8 @@ def download() -> None:
 
 def _disease_names(d: dict) -> list[str]:
     names = [d["label"]] + list(d.get("synonyms") or []) + list((d.get("attrs") or {}).get("abbreviations") or [])
-    return [x for x in names if len(x.strip()) >= 4 and norm_name(x) not in UMBRELLA]
+    um = umbrella()
+    return [x for x in names if len(x.strip()) >= 4 and norm_name(x) not in um]
 
 
 def emit() -> None:

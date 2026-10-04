@@ -219,6 +219,26 @@ def path_json(g: Graph, p: dict) -> dict:
 
 
 # ---------------------------------------------------------------- ActionView
+def family_label(g: Graph, d: str) -> str | None:
+    """The slice family d belongs to (config/slice.yaml `families[].label`, via slice.json family_of / the MONDO
+    node's attrs.family), e.g. 'lysosomal storage' or 'primary mitochondrial disease'."""
+    sl = read_json("slice", {}) or {}
+    key = (sl.get("family_of") or {}).get(d) or (g.nodes[d].get("attrs") or {}).get("family")
+    return next((f.get("label") for f in sl.get("families") or [] if f.get("key") == key), None)
+
+
+def family_template(ix: "Index", d: str) -> str:
+    """Last-resort summary when no source describes d (template, never LLM): names d's family, else its nearest
+    broader disease in the slice, else says only that it is rare."""
+    g = ix.g
+    label = g.nodes[d]["label"]
+    fam = family_label(g, d)
+    if fam:
+        return f"{label} is a rare disease in the {fam} group."
+    parent = next((g.nodes[p]["label"] for p, _ in ix.ancestors(d, depth=1)), None)
+    return f"{label} is a rare disease, a form of {parent}." if parent else f"{label} is a rare disease."
+
+
 def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plinks) -> dict:
     g = ix.g
     dn, label = g.nodes[d], g.nodes[d]["label"]
@@ -509,8 +529,7 @@ def action_view(ix: Index, d: str, paths: list[dict], overlap: list[dict], plink
                "No approved treatment found yet")
     hl, _ = llm.rephrase("headline+plain_summary for a family's disease page", facts, Headline, lambda: Headline(
         headline=f"{tx_head}. {label[:1].upper() + label[1:]} is connected to {len(sim_comms)} related diseases",
-        plain_summary=dn.get("plain_summary") or dn.get("description") or
-        f"{label} is a rare disease in the lysosomal storage group."))
+        plain_summary=dn.get("plain_summary") or dn.get("description") or family_template(ix, d)))
     return {"disease": full(g, d), "headline": hl.headline, "plain_summary": hl.plain_summary,
             "treatment_status": {"has_approved_treatment": has_tx, "note": tx_note, "edge_ids": tx_eids},
             "exact_groups": exact, "related_communities": communities, "connections": connections,
