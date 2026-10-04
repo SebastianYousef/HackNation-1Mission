@@ -26,11 +26,13 @@ from .routes import client_ip, router
 log = logging.getLogger("atlas_api")
 _RID_OK = re.compile(r"^[A-Za-z0-9._:-]{1,128}$")
 _LOCAL_ORIGINS = r"https?://(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])(:\d+)?"
+# the team's public landing page on GitHub Pages (.github/workflows/pages.yml) is always allowed too
+_PAGES_ORIGIN = r"https://sebastianyousef\.github\.io"
 
 
 def cors_regex(origins: str) -> str:
-    """'https://*.example.org,https://x.com' -> one anchored regex (+ localhost dev ports)."""
-    parts = [_LOCAL_ORIGINS]
+    """'https://*.example.org,https://x.com' -> one anchored regex (+ localhost dev ports and the GitHub Pages site)."""
+    parts = [_LOCAL_ORIGINS, _PAGES_ORIGIN]
     for o in (o.strip().rstrip("/") for o in origins.split(",") if o.strip()):
         if o == "*":
             return ".*"

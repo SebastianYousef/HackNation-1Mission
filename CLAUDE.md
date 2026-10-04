@@ -122,6 +122,8 @@ That is the exact command that produced the current dataset. It deliberately pas
 2. On the server, set `FRONTEND_REPO=https://github.com/<owner>/<repo>.git`, `FRONTEND_REF=<branch>` (and `FRONTEND_SUBDIR` if the app isn't at the repo root) in `~/atlas/frontend.env`.
 3. Run `ssh laqueinux ~/atlas/redeploy.sh`. It runs `npm ci && npm run build` in a `node:22` container and serves `dist/`.
 
+**Fixed public address for the landing page:** https://sebastianyousef.github.io/HackNation-1Mission/ (GitHub Pages, `.github/workflows/pages.yml`). Every push to `main` that touches `frontend/landing.html` republishes it within a couple of minutes, for everyone, with no server step; the page reads live data from the team API (`LIVE_API` in the page), and the API always allows that origin (CORS). One-time setup by a repo admin: Settings > Pages > Source: GitHub Actions.
+
 To change the landing page, edit `frontend/landing.html` here and push to `main`. With the auto-deploy timer installed, the live site updates within about a minute; otherwise run `redeploy.sh`. Data changes still need a pipeline run (see Reloading data).
 
 ### Current state (2026-10-04)

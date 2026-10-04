@@ -1716,7 +1716,7 @@ const QS=new URLSearchParams(location.search);
    Fallback: if the page's own API answers with a network error or a 5xx, the page switches once
    to the public team API (LIVE_API) for the rest of the visit. The guide bubble uses the same base. */
 const LIVE_API='https://gtk-devon-cycles-euro.trycloudflare.com';
-const IS_PREVIEW=location.protocol==='file:'||/^(localhost|127\.\d+\.\d+\.\d+|0\.0\.0\.0|\[::1\])$/.test(location.hostname)||/(^|\.)(lovable\.app|lovableproject\.com)$/.test(location.hostname);
+const IS_PREVIEW=location.protocol==='file:'||/^(localhost|127\.\d+\.\d+\.\d+|0\.0\.0\.0|\[::1\])$/.test(location.hostname)||/(^|\.)(lovable\.app|lovableproject\.com|github\.io)$/.test(location.hostname);   // GitHub Pages has no /api: read the team API
 let API_OVERRIDE=null;
 let API_BASE=(()=>{
   if(!IS_PREVIEW) return '';

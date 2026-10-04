@@ -1,0 +1,35 @@
+# Publishes the landing page to GitHub Pages on every push to main, so the team has one fixed public address
+# (https://sebastianyousef.github.io/HackNation-1Mission/) that always shows the latest main.
+# One-time setup by a repo admin: Settings > Pages > Build and deployment > Source: GitHub Actions.
+name: Publish landing page
+on:
+  push:
+    branches: [main]
+    paths: [frontend/landing.html, .github/workflows/pages.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build site
+        run: |
+          mkdir -p site
+          cp frontend/landing.html site/index.html
+          touch site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4
