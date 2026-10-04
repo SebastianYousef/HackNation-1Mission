@@ -599,18 +599,34 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
 .og-talk.og-on{background:#B9C8FF;border-color:#B9C8FF;color:var(--night)}
 .og-talk[aria-disabled="true"]{opacity:.6;cursor:default}
 .og-foot p{font-size:12px;line-height:1.4;color:var(--night-ink-2)}
-.og-layer{position:absolute;top:0;left:0;width:0;height:0;z-index:30}
-.og-xp{position:absolute;z-index:30;top:0;left:0;display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 9px;border-radius:999px;font-family:var(--f-body);font-size:12.5px;font-weight:600;line-height:1.5;white-space:nowrap;-webkit-user-select:none;user-select:none;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);box-shadow:0 6px 16px -10px rgba(0,0,0,.35);transform:translate(-100%,3px);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease,border-color .15s ease,color .15s ease}
-.og-xp.og-n{border-color:var(--night-rule);background:var(--night-2);color:var(--night-ink)}
-.og-xp:hover{color:var(--ink);border-color:var(--ink-3)}
-.og-xp.og-n:hover{color:#fff;border-color:var(--night-ink-2)}
-.og-xp:focus-visible{outline:2px solid #9DB4FF;outline-offset:2px}
-.og-xp.og-on,.og-xp:focus-visible,.og-touch .og-xp{opacity:1;pointer-events:auto;transform:translate(-100%,0)}
-.og-touch .og-xp{opacity:.92}
-.og-xp[hidden]{display:none}
+/* inline Explain: a quiet text button in each section's header row, in normal document flow */
+.og-xrow{display:flex;flex-wrap:wrap;align-items:center;column-gap:22px;row-gap:6px}
+/* the pill's left padding hangs outside the text column (negative start margin), so a button that wraps onto its own line lines up with the eyebrow above it */
+.og-xb{position:relative;display:inline-flex;align-items:center;gap:6px;margin-block:-4px;margin-inline-start:-9px;padding:4px 10px 4px 8px;border:1px solid transparent;border-radius:999px;background:transparent;font-family:var(--f-body);font-size:13px;font-weight:500;line-height:1.4;letter-spacing:.005em;white-space:nowrap;color:var(--ink-2);-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .15s ease,background-color .15s ease,border-color .15s ease}
+.og-xb svg{flex:none;opacity:.8}
+.og-xb:focus-visible{color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,transparent);border-color:color-mix(in srgb,var(--accent) 22%,transparent);outline:2px solid var(--accent);outline-offset:2px}
+.night .og-xb{color:var(--night-ink-2)}
+.night .og-xb:focus-visible{color:#B9C8FF;background:rgba(157,180,255,.1);border-color:rgba(157,180,255,.28);outline-color:#9DB4FF}
+/* hover tint only where a real pointer hovers, so it never sticks after a tap on a phone */
+@media (hover:hover){
+  .og-xb:hover{color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,transparent);border-color:color-mix(in srgb,var(--accent) 22%,transparent)}
+  .night .og-xb:hover{color:#B9C8FF;background:rgba(157,180,255,.1);border-color:rgba(157,180,255,.28)}
+}
+.og-xb:active{transform:translateY(.5px)}
+/* touch: the pill stays 32px tall, the invisible hit area grows to about 44px without moving the layout */
+@media (hover:none){
+  .og-xb{min-height:32px;padding-inline:10px;margin-inline-start:-11px}
+  .og-xb::after{content:"";position:absolute;inset:-6px -4px}
+  .og-xrow{column-gap:24px}
+}
+/* in a journey step the button sits at the end of the step header, apart from the evidence chip */
+.og-xb[data-og-explain="jpanel"]{margin-inline-start:auto}
+.cta .wrap > .eyebrow,.cta .wrap > .og-xrow{margin-bottom:22px}
 .og-sel{position:fixed;z-index:72;display:inline-flex;align-items:center;gap:6px;padding:6px 12px 6px 10px;border-radius:999px;border:1px solid var(--night-rule);background:var(--night);color:var(--night-ink);font-size:13px;font-weight:600;box-shadow:0 12px 28px -12px rgba(0,0,0,.6);animation:og-in .15s ease}
 .og-sel[hidden]{display:none}
 .og-sel:hover{border-color:var(--night-ink-2)}
+.og-sel.og-sel-on-night{background:#B9C8FF;color:var(--night);border-color:#B9C8FF;box-shadow:0 12px 28px -10px rgba(0,0,0,.75)}
+.og-sel.og-sel-on-night:hover{background:#CAD6FF;border-color:#CAD6FF}
 @media (max-width:560px){
   .og-orb{width:52px;height:52px;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px))}
   .og-orb .og-core{width:52px;height:52px}
@@ -619,13 +635,13 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
   .og-panel::before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--night-rule);margin:8px auto 0}
   .og-iconbtn{width:40px;height:40px}
   .og-talk{min-height:40px;padding:8px 14px 8px 12px}
-  .og-xp{min-height:32px}
   html.og-open .og-orb,html.og-open .og-hint{display:none}
 }
 @media (prefers-reduced-motion: reduce){
   .og-orb .og-glow{opacity:.7;transform:none}
   .og-orb.og-voice .og-glow,.og-orb.og-voice .og-core,.og-status.og-live i{transform:none}
-  .og-xp{transition:none}
+  .og-xb{transition:none}
+  .og-xb:active{transform:none}
 }
 </style>
 
@@ -906,6 +922,7 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
 <!-- 10 CTA -->
 <section class="night band cta" id="about" aria-labelledby="ctaTitle">
   <div class="wrap">
+    <div class="eyebrow">Why this matters</div>
     <h2 id="ctaTitle">The goal is not to find more information. <span>It is to connect the right information, people and action.</span></h2>
     <div class="hero-ctas">
       <a class="btn btn-primary" href="#atlas" data-mode="reader">Explore the Atlas <span class="arr">→</span></a>
@@ -1145,10 +1162,15 @@ function other(e,id){return e.s===id?e.t:e.s}
 function sentence(ds,e){return `${ds.byId[e.s].label} ${e.rel} ${ds.byId[e.t].label}`}
 
 /* ---------- LIVE ATLAS: the Atlas section reads the live database (search, Reader, Researcher, evidence) ---------- */
-/* API base: ?api=<base> wins; else same origin (or the local dev API on the static preview). If that API is down
-   (network error or 5xx), switch once to the public team API so live data keeps working wherever the page is hosted. */
+/* API base: a ?api=<base> URL parameter wins (testing, hosting anywhere); otherwise local previews talk to the dev API and everything else is same origin.
+   If that API is down (network error or 5xx), apiGet switches once to the public team API. The guide bubble uses the same rule. */
 const API_FALLBACK='https://gtk-devon-cycles-euro.trycloudflare.com/api/v1';
-let API=(()=>{try{const q=new URLSearchParams(location.search).get('api'); if(q) return q.replace(/\/$/,'');}catch(e){} return ((location.hostname==='127.0.0.1'||location.hostname==='localhost')&&location.port!=='8077')?'http://127.0.0.1:8077/api/v1':'/api/v1';})();
+function omApiBase(){
+  try{const v=new URLSearchParams(location.search).get('api');if(v&&/^https?:\/\/[^\s]+$/i.test(v))return v.replace(/\/+$/,'')}catch(e){}
+  return((location.hostname==='127.0.0.1'||location.hostname==='localhost')&&location.port!=='8077')?'http://127.0.0.1:8077/api/v1':'/api/v1';
+}
+let API=omApiBase();
+try{window.OM_API_BASE=API}catch(e){}
 window.OM_API=()=>API;
 const enc=encodeURIComponent;
 const LIVE_DEFAULT={id:'MONDO:0009745',type:'disease',label:'neuronal ceroid lipofuscinosis 5'};
@@ -2210,7 +2232,6 @@ if(location.hash==='#researcher') setMode('researcher');
 </script>
 <!-- ONE MISSION GUIDE (og-) -->
 <div id="og-root">
-  <div class="og-layer" id="og-layer"></div>
   <button class="og-sel" id="og-sel" type="button" hidden aria-label="Explain the selected text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Explain</button>
   <div class="og-hint" id="og-hint" aria-hidden="true">Ask the guide</div>
   <button class="og-orb" id="og-orb" type="button" aria-label="Ask the One Mission guide" aria-expanded="false" aria-controls="og-panel">
@@ -2248,13 +2269,17 @@ const OG_AGENT_ID = 'agent_7801m41tw0vsfxabzwbe2dp8wh1r';
 const OG_SDK_URLS = ['https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm', 'https://esm.sh/@elevenlabs/client@1.26.0'];
 const OG_FALLBACK = 'https://gtk-devon-cycles-euro.trycloudflare.com/api/v1';
 let OG_API = (() => {
-  try { const q = new URLSearchParams(location.search).get('api'); if (q) return q.replace(/\/$/, ''); } catch (e) {}
+  /* same rule as the Atlas: ?api=<base> first, then an og-api meta tag, then local preview or same origin */
+  try {
+    const v = new URLSearchParams(location.search).get('api');
+    if (v && /^https?:\/\/[^\s]+$/i.test(v)) return v.replace(/\/+$/, '');
+  } catch (e) {}
   try {
     const m = document.querySelector('meta[name="og-api"]');
-    if (m && m.content) return m.content.replace(/\/$/, '');
+    if (m && m.content) return m.content.replace(/\/+$/, '');
   } catch (e) {}
-  /* the static preview server (port 8765) talks to the local dev API; everything else is same origin */
-  return ((location.hostname === '127.0.0.1' || location.hostname === 'localhost') && location.port === '8765')
+  try { if (window.OM_API_BASE) return window.OM_API_BASE; } catch (e) {}
+  return ((location.hostname === '127.0.0.1' || location.hostname === 'localhost') && location.port !== '8077')
     ? 'http://127.0.0.1:8077/api/v1' : '/api/v1';
 })();
 const OG_MAX = 12000;
@@ -2263,7 +2288,7 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = id => document.getElementById(id);
 const root = $('og-root'), orb = $('og-orb'), panel = $('og-panel'), log = $('og-log'), live = $('og-live');
 const form = $('og-form'), input = $('og-input'), talkBtn = $('og-talk'), statusEl = $('og-status'), statusText = $('og-status-text');
-const hint = $('og-hint'), selBtn = $('og-sel'), layer = $('og-layer'), talkLabel = $('og-talk-label'), talkSr = $('og-talk-sr');
+const hint = $('og-hint'), selBtn = $('og-sel'), talkLabel = $('og-talk-label'), talkSr = $('og-talk-sr');
 if (!root || !orb || !panel) return;
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -2797,7 +2822,7 @@ function openPanel(opener) {
   if (!panel.hidden) return;
   returnFocus = opener || document.activeElement || orb;
   panel.hidden = false; orb.setAttribute('aria-expanded', 'true'); document.documentElement.classList.add('og-open');
-  hideHint(); prefetch(); queuePlace();
+  hideHint(); prefetch(); hideSel();
   if (!welcomed) { welcomed = true; addMsg('guide', 'Hi, I’m the One Mission guide. Ask me anything about the project or the live Atlas. You can also select text on the page, or use an Explain button, and I will walk you through it.'); }
   setTimeout(() => { try { input.focus({ preventScroll: true }); } catch (e) {} }, 30);
   renderStatus();
@@ -2808,7 +2833,6 @@ function closePanel() {
   if (conv && convKind === 'voice') { carry = summary() || carry; endConv(); setTalk(false); }
   clearTimeout(idleTimer);
   idleTimer = setTimeout(() => { if (panel.hidden && conv) { carry = summary() || carry; endConv(); } }, 120000);
-  queuePlace();
   const f = returnFocus && document.contains(returnFocus) && returnFocus !== document.body ? returnFocus : orb;
   try { f.focus({ preventScroll: true }); } catch (e) {}
 }
@@ -2845,18 +2869,21 @@ if (!store.get('og-hinted') && !sheet.matches) {
 
 /* ---------- explain ---------- */
 const atlasView = () => { const rv = $('researcherView'); return rv && !rv.hidden ? rv : ($('readerView') || $('atlas')); };
+/* each target names the header element its inline Explain button sits beside (in normal flow, never positioned) */
+const eyebrowOf = sel => () => document.querySelector(sel);
 const TARGETS = [
-  { key: 'hero', el: () => document.querySelector('section.hero'), id: 'heroTitle', head: () => document.getElementById('heroTitle') },
-  { key: 'atlas', el: () => $('atlas'), id: 'atlas', head: () => { const v = atlasView(); return v && v.querySelector('h2'); } },
-  { key: 'journey', el: () => $('journey'), id: 'journey', head: () => $('journeyTitle') },
-  { key: 'jpanel', el: () => $('jpanel'), id: 'jpanel', head: () => $('jpanel') && $('jpanel').querySelector('h3'), sub: true },
-  { key: 'tenx', el: () => $('tenx'), id: 'tenx', head: () => $('tenxTitle') },
-  { key: 'vlist', el: () => $('vlist'), id: 'vlist', head: () => document.querySelector('#tenx .validate h3'), sub: true },
-  { key: 'communities', el: () => $('communities'), id: 'communities', head: () => $('commTitle') },
-  { key: 'plans', el: () => $('plans'), id: 'plans', head: () => $('plansTitle') },
-  { key: 'evidence', el: () => $('evidence'), id: 'evidence', head: () => $('evTitle') },
-  { key: 'sources', el: () => $('sources'), id: 'sources', head: () => $('srcTitle') },
-  { key: 'about', el: () => $('about'), id: 'about', head: () => $('ctaTitle') }
+  { key: 'hero', el: () => document.querySelector('section.hero'), id: 'heroTitle', head: () => document.getElementById('heroTitle'), at: eyebrowOf('section.hero .wrap > .eyebrow') },
+  { key: 'atlas', el: () => $('atlas'), id: 'atlas', head: () => { const v = atlasView(); return v && v.querySelector('h2'); }, at: eyebrowOf('#atlas .atlas-top > .eyebrow') },
+  { key: 'journey', el: () => $('journey'), id: 'journey', head: () => $('journeyTitle'), at: eyebrowOf('#journey .sec-head > .eyebrow') },
+  { key: 'jpanel', el: () => $('jpanel'), id: 'jpanel', head: () => $('jpanel') && $('jpanel').querySelector('h3'), sub: true, live: true,
+    at: () => { const e = $('jpanel') && $('jpanel').querySelector('.eyebrow'); return e && e.parentElement; }, mode: 'append' },
+  { key: 'tenx', el: () => $('tenx'), id: 'tenx', head: () => $('tenxTitle'), at: eyebrowOf('#tenx .sec-head > .eyebrow') },
+  { key: 'vlist', el: () => $('vlist'), id: 'vlist', head: () => document.querySelector('#tenx .validate h3'), sub: true, at: eyebrowOf('#tenx .validate .eyebrow') },
+  { key: 'communities', el: () => $('communities'), id: 'communities', head: () => $('commTitle'), at: eyebrowOf('#communities .sec-head > .eyebrow') },
+  { key: 'plans', el: () => $('plans'), id: 'plans', head: () => $('plansTitle'), at: eyebrowOf('#plans .sec-head > .eyebrow') },
+  { key: 'evidence', el: () => $('evidence'), id: 'evidence', head: () => $('evTitle'), at: eyebrowOf('#evidence .sec-head > .eyebrow') },
+  { key: 'sources', el: () => $('sources'), id: 'sources', head: () => $('srcTitle'), at: () => $('srcTitle') },
+  { key: 'about', el: () => $('about'), id: 'about', head: () => $('ctaTitle'), at: eyebrowOf('#about .wrap > .eyebrow') }
 ];
 const txt = el => clean(el ? (el.innerText || el.textContent) : '');
 function headingFor(t) {
@@ -2875,7 +2902,7 @@ function ledeFor(t) {
   if (t.sub) return txt(host);
   const scope = t.key === 'atlas' ? atlasView() : host;
   let l = scope && (scope.querySelector('.sec-head .lede') || (t.key === 'atlas' ? null : scope.querySelector('.lede')));
-  if (!l) { const h = t.head && t.head(); const n = h && h.nextElementSibling; if (n && n.tagName === 'P') l = n; }
+  if (!l) { const h = t.head && t.head(); let n = h && h.nextElementSibling; if (n && n.classList.contains('og-xb')) n = h.parentNode.nextElementSibling; if (n && n.tagName === 'P') l = n; }
   if (l) return txt(l);
   if (t.key === 'atlas' && scope) {
     const inp = scope.querySelector('input[type="search"]');
@@ -2883,9 +2910,23 @@ function ledeFor(t) {
   }
   return '';
 }
+function eyebrowFor(t) {
+  if (t.key === 'jpanel') { const jp = $('jpanel'), e = jp && jp.querySelector('.eyebrow'); return txt(e); }
+  /* once mounted, the eyebrow lives inside the button's own row */
+  const b = document.querySelector('.og-xb[data-og-explain="' + t.key + '"]');
+  const row = b && b.closest('.og-xrow');
+  const eb = (row && row.querySelector('.eyebrow')) || (t.at && t.at());
+  return eb && eb.classList && eb.classList.contains('eyebrow') ? txt(eb) : '';
+}
+const SAMPLE_RE = /\b(sample|illustrative|placeholder)\b/i;
 function sectionCtx(t, lead) {
-  const lede = quote(ledeFor(t)).slice(0, 600);
-  return (lead || 'the section') + ' #' + t.id + ' has the heading "' + quote(headingFor(t)) + '"' + (lede ? ' and currently reads: "' + lede + '"' : '');
+  const head = headingFor(t), lede = ledeFor(t), eb = eyebrowFor(t);
+  const ledeQ = quote(lede).slice(0, 600);
+  let out = (lead || 'the section') + ' #' + t.id + (eb ? ' (labelled "' + quote(eb) + '")' : '') + ' has the heading "' + quote(head) + '"' + (ledeQ ? ' and currently reads: "' + ledeQ + '"' : '');
+  /* honesty: sample data must never be presented as real organizations or results */
+  if (SAMPLE_RE.test(eb + ' ' + head + ' ' + lede)) out += '. This section shows sample placeholder data, not real organizations or results; say so plainly.';
+  else { const host = t.el(); if (host && SAMPLE_RE.test(txt(host).slice(0, 6000))) out += '. Parts of this section are labelled as sample or placeholder data; do not present those parts as real organizations or results.'; }
+  return out;
 }
 function explainSection(t, opener) {
   trace('explainSection', t.id);
@@ -2935,89 +2976,34 @@ function explainText(text, el, opener) {
   send(wire, 'Explain “' + short + '”', { kind: convKind || startingKind || 'text', ack: 'Happy to explain.', ctx: ctxs });
 }
 
-/* explain pills: each sits in the DOM next to the part it explains (so Tab order follows the page)
-   and is positioned in viewport terms, sticky within its section on pointer devices */
-const touch = matchMedia('(hover: none)');
-const applyTouch = () => document.documentElement.classList.toggle('og-touch', touch.matches);
-applyTouch(); try { touch.addEventListener('change', () => { applyTouch(); queuePlace(); }); } catch (e) {}
-const pills = [];
-TARGETS.forEach(t => {
-  const el = t.el(); if (!el) return;
+/* inline Explain buttons: one per section, placed in that section's own header row next to its eyebrow.
+   They are ordinary in-flow buttons (position static), so they scroll with the page and Tab order follows it. */
+const XB_ICON = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/></svg>';
+function makeXb(t) {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'og-xp' + (el.closest('.night') ? ' og-n' : '');
-  b.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/></svg>Explain';
+  b.type = 'button'; b.className = 'og-xb'; b.dataset.ogExplain = t.key;
+  b.innerHTML = XB_ICON + '<span>Explain</span>';
+  b.title = t.key === 'jpanel' ? 'Ask the guide to explain this step in plain words' : 'Ask the guide to explain this section in plain words';
+  const name = () => b.setAttribute('aria-label', t.key === 'jpanel' ? 'Ask the guide to explain this journey step in plain words' : 'Ask the guide to explain this section in plain words: ' + headingFor(t));
   b.addEventListener('click', () => explainSection(t, b));
-  const name = () => b.setAttribute('aria-label', t.key === 'jpanel' ? 'Explain this journey step' : 'Explain this section: ' + headingFor(t));
-  b.addEventListener('focus', name); name();
-  try { if (t.sub) el.parentNode.insertBefore(b, el); else el.insertBefore(b, el.firstChild); }
-  catch (e) { layer.appendChild(b); }
-  pills.push({ t, el, b, x: null, y: null });
+  b.addEventListener('focus', name); b.addEventListener('pointerenter', name); name();
+  return b;
+}
+function mountXb(t) {
+  const at = t.at && t.at(); if (!at || !at.parentNode) return;
+  if (t.mode === 'append') { if (!at.querySelector('.og-xb')) at.appendChild(makeXb(t)); return; }
+  const host = at.parentNode;
+  if (host.classList && host.classList.contains('og-xrow')) return; /* already mounted */
+  const row = document.createElement('div');
+  row.className = 'og-xrow';
+  host.insertBefore(row, at); row.appendChild(at); row.appendChild(makeXb(t));
+}
+TARGETS.forEach(t => { try { mountXb(t); } catch (e) {} });
+/* the journey panel re-renders its header on every step, so its button is put back after each render */
+TARGETS.filter(t => t.live).forEach(t => {
+  const host = t.el(); if (!host) return;
+  try { new MutationObserver(() => { try { mountXb(t); } catch (e) {} }).observe(host, { childList: true }); } catch (e) {}
 });
-function navBottom() { const n = document.querySelector('header.nav'); if (!n) return 0; const r = n.getBoundingClientRect(); return Math.max(0, r.bottom); }
-function anchorFor(p) {
-  const r = p.el.getBoundingClientRect();
-  if (!r.height) return null;
-  if (p.t.key === 'vlist') {
-    if (innerWidth <= 860) { const eb = document.querySelector('#tenx .validate .eyebrow'); if (eb) { const er = eb.getBoundingClientRect(); return { x: r.right, y: er.top + er.height / 2 - 13, bottom: r.bottom }; } }
-    return { x: r.right, y: r.top - 40, bottom: r.bottom };
-  }
-  if (p.t.key === 'jpanel') return { x: r.right, y: r.top - 38, bottom: r.bottom };
-  const w = p.el.querySelector('.wrap') || p.el;
-  const wr = w.getBoundingClientRect(), pr = parseFloat(getComputedStyle(w).paddingRight) || 0;
-  const pt = parseFloat(getComputedStyle(p.el).paddingTop) || 0;
-  const off = Math.max(12, Math.min(32, pt / 2 - 13));
-  return { x: wr.right - pr, y: r.top + off, bottom: r.bottom };
-}
-function cbOrigin(b) {
-  const op = b.offsetParent;
-  const body = document.body;
-  if (!op || op === document.documentElement || (op === body && getComputedStyle(body).position === 'static')) return { x: -scrollX, y: -scrollY };
-  const r = op.getBoundingClientRect();
-  return { x: r.left + op.clientLeft - op.scrollLeft, y: r.top + op.clientTop - op.scrollTop };
-}
-let placeQueued = false;
-function placePills() {
-  placeQueued = false;
-  const sticky = !touch.matches, nb = navBottom();
-  const pr = (!panel.hidden && innerWidth > 560) ? panel.getBoundingClientRect() : null;
-  pills.forEach(p => {
-    const a = anchorFor(p);
-    if (!a) { if (!p.b.hidden) p.b.hidden = true; return; }
-    if (p.b.hidden) p.b.hidden = false;
-    const bw = p.b.offsetWidth || 82, bh = p.b.offsetHeight || 29;
-    let x = a.x, y = a.y;
-    if (sticky) y = Math.max(a.y, Math.min(Math.max(a.y, nb + 8), a.bottom - 40 - bh));
-    if (pr && x > pr.left - 4 && x - bw < pr.right && y + 3 < pr.bottom && y + 3 + bh > pr.top) x = pr.left - 12;
-    const o = cbOrigin(p.b);
-    const L = Math.round(x - o.x), T = Math.round(y - o.y);
-    if (L !== p.x) { p.b.style.left = L + 'px'; p.x = L; }
-    if (T !== p.y) { p.b.style.top = T + 'px'; p.y = T; }
-  });
-}
-const queuePlace = () => { if (!placeQueued) { placeQueued = true; requestAnimationFrame(placePills); } };
-placePills();
-addEventListener('resize', queuePlace, { passive: true });
-addEventListener('scroll', () => { if (!touch.matches || !panel.hidden) queuePlace(); }, { passive: true });
-addEventListener('load', queuePlace);
-try { new ResizeObserver(queuePlace).observe(document.body); } catch (e) {}
-try { new MutationObserver(queuePlace).observe(document.querySelector('main') || document.body, { attributes: true, attributeFilter: ['hidden'], subtree: true }); } catch (e) {}
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(queuePlace).catch(() => {});
-function setHover(target) {
-  /* only the most specific pill shows, so a journey step pill never stacks on its section pill */
-  const hit = pills.filter(p => target && (p.el.contains(target) || p.b === target));
-  const on = hit.filter(p => !hit.some(q => q !== p && p.el !== q.el && p.el.contains(q.el)));
-  pills.forEach(p => p.b.classList.toggle('og-on', on.includes(p)));
-}
-document.addEventListener('pointerover', ev => {
-  if (ev.pointerType === 'touch') return;
-  const t = ev.target; if (!t || !t.closest) return;
-  const pill = t.closest('.og-xp');
-  if (pill) { const p = pills.find(x => x.b === pill); if (p) setHover(p.el); return; }
-  if (root.contains(t)) return;
-  setHover(t);
-}, { passive: true });
-document.addEventListener('focusin', ev => { const t = ev.target; if (t && !root.contains(t)) setHover(t); });
-document.documentElement.addEventListener('pointerleave', () => setHover(null));
 
 /* text selection and double-click */
 let selState = null;
@@ -3036,18 +3022,33 @@ function updateSel() {
     const rects = r.getClientRects(); const last = rects.length ? rects[rects.length - 1] : r.getBoundingClientRect();
     if (!last || (!last.width && !last.height)) { hideSel(); return; }
     selState = { txt, el };
+    /* never over the guide panel: on phones the panel is a modal sheet, so the button is not offered while it is open */
+    const pr = panel.hidden ? null : panel.getBoundingClientRect();
+    if (pr && sheet.matches) { hideSel(); return; }
+    const first = rects.length ? rects[0] : last;
+    const over = (x, y, w, h) => !!pr && x < pr.right + 8 && x + w > pr.left - 8 && y < pr.bottom + 8 && y + h > pr.top - 8;
+    if (pr && over(last.left, last.top, Math.max(1, last.width), Math.max(1, last.height))) { hideSel(); return; }
+    selBtn.classList.toggle('og-sel-on-night', !!el.closest('.night, .hero'));
     selBtn.hidden = false;
     const bw = selBtn.offsetWidth || 90, bh = selBtn.offsetHeight || 30;
-    let x = last.right - bw / 2, y = last.bottom + 8;
-    if (y + bh > innerHeight - 8) { const f = rects.length ? rects[0] : last; y = f.top - bh - 8; }
-    x = Math.max(8, Math.min(innerWidth - bw - 8, x)); y = Math.max(8, Math.min(innerHeight - bh - 8, y));
-    selBtn.style.left = Math.round(x) + 'px'; selBtn.style.top = Math.round(y) + 'px';
+    const clampX = x => Math.max(8, Math.min(innerWidth - bw - 8, x)), clampY = y => Math.max(8, Math.min(innerHeight - bh - 8, y));
+    const spots = [[last.right - bw / 2, last.bottom + 8], [first.left, first.top - bh - 8], [last.right - bw / 2, first.top - bh - 8]];
+    if (pr) spots.push([pr.left - bw - 12, last.bottom + 8], [pr.left - bw - 12, first.top - bh - 8]);
+    let pos = null;
+    for (const [sx, sy] of spots) {
+      if (sy + bh > innerHeight - 8 || sy < 8) continue;
+      const x = clampX(sx), y = clampY(sy);
+      if (!over(x, y, bw, bh)) { pos = [x, y]; break; }
+    }
+    if (!pos) { hideSel(); return; }
+    selBtn.style.left = Math.round(pos[0]) + 'px'; selBtn.style.top = Math.round(pos[1]) + 'px';
   } catch (e) { hideSel(); }
 }
 let selTimer = 0;
 document.addEventListener('selectionchange', () => { clearTimeout(selTimer); selTimer = setTimeout(updateSel, 220); });
 document.addEventListener('dblclick', ev => { if (root.contains(ev.target)) return; clearTimeout(selTimer); setTimeout(updateSel, 0); });
 addEventListener('scroll', () => { if (!selBtn.hidden) hideSel(); }, { passive: true });
+addEventListener('resize', () => { if (!selBtn.hidden) hideSel(); }, { passive: true });
 selBtn.addEventListener('pointerdown', ev => ev.preventDefault());
 selBtn.addEventListener('mousedown', ev => ev.preventDefault());
 selBtn.addEventListener('click', () => {
