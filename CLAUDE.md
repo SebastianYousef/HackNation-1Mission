@@ -140,7 +140,7 @@ To change the landing page, edit `frontend/landing.html` here and push to `main`
 - The team frontend app is not deployed yet (`FRONTEND_REPO` empty), so only the landing page and the API are public.
 
 ## Trigger word: `återgå`
-If a user message is exactly `återgå` (nothing else), read `docs/RESUME.md`. Status on 2026-10-04: the Atlas expansion (§2) is merged and its dataset is live. The landing polish (§1) is **not** on `main` yet: main's `landing.html` came from `frontend/landing-2-live`, so the polish is being redone on top of it (branch `polish/resume`, Daniel's session). The OpenAI section (§3) is blocked on #7. Check `git log origin/main` and the open issues before starting, and don't redo work that is already merged.
+If a user message is exactly `återgå` (nothing else), read `docs/RESUME.md`. Status on 2026-10-04: the Atlas expansion (§2) is merged and its dataset is live. The landing polish (§1) is merged on `main` (live hero line, disease map, researcher overview, Built with OpenAI, back to top, study submissions, plain trust language). Small follow-ups are tracked in #16. The OpenAI section (§3) is blocked on #7. Check `git log origin/main` and the open issues before starting, and don't redo work that is already merged.
 
 ## Demo-critical facts
 - Slice: lysosomal storage diseases, deep on the NCLs (Batten). The hero is an NCL subtype without approved therapy, picked at hour 1 (fixtures use CLN5). The counterexample is CLN2 enzyme replacement (soluble enzyme) vs. membrane-protein subtypes.
