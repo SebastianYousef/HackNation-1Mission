@@ -14,7 +14,7 @@ Read before non-trivial work: `docs/PLAN.md` (roles, timeline, scope decisions),
 | `backend/pipeline/` | Offline ETL: ingest → extract (OpenAI) → reconcile → analytics → views → load | B1 |
 | `backend/scripts/check_contract.py` | Verifies a running API against the contract | B2 |
 | `infra/` | Docker Compose stack: L4 HAProxy → L7 HAProxy ×2 → API ×N, worker, web (nginx), Redis, Postgres | B2 |
-| `frontend/` | Not app code: the frontend's half of the bridge (`FRONTEND_SPEC.md` and `CLAUDE.md` are synced into the frontend repo; `README.md` playbook, `PROTOTYPE_PROMPT.md`), plus `landing.html` (the public landing page, served at `/`) and `landing-2.html` (an older variant of it) | F1 + F2 |
+| `frontend/` | Not app code: the frontend's half of the bridge (`FRONTEND_SPEC.md` and `CLAUDE.md` are synced into the frontend repo; `README.md` playbook, `PROTOTYPE_PROMPT.md`), plus `landing.html` (the public landing page, served at `/`, on live API data) | F1 + F2 |
 | `scripts/sync-contract.sh` | Copies contract + fixtures + frontend spec into the frontend repo | anyone |
 | `docs/` | `brief.pdf` (the challenge), `PLAN.md` (roles, timeline), `ARCHITECTURE.md` | — |
 | `Makefile` | Root targets (`make help`): API dev/test, contract check, migrations, compose stack | — |
@@ -132,7 +132,7 @@ To change the landing page, edit `frontend/landing.html` here, push, and redeplo
 - The team frontend app is not deployed yet (`FRONTEND_REPO` empty), so only the landing page and the API are public.
 
 ## Trigger word: `återgå`
-If a user message is exactly `återgå` (nothing else), read `docs/RESUME.md` and carry out the paused work it describes, in order, without asking again. It lists the branches, the rules and the acceptance checks.
+If a user message is exactly `återgå` (nothing else), read `docs/RESUME.md`. The work it describes (landing polish, Atlas expansion) was finished and merged to `main` on 2026-10-04; only its OpenAI section (§3) is still open, blocked on #7. Report that instead of redoing merged work.
 
 ## Demo-critical facts
 - Slice: lysosomal storage diseases, deep on the NCLs (Batten). The hero is an NCL subtype without approved therapy, picked at hour 1 (fixtures use CLN5). The counterexample is CLN2 enzyme replacement (soluble enzyme) vs. membrane-protein subtypes.
