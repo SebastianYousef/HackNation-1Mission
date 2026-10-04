@@ -96,7 +96,7 @@ A missing fixture means throwing `ApiError(404, "not_found")`, exactly like the 
 
 ## 4. Screens and routes
 
-`/` on the deployed origin is the team's static landing page, **not** this app. The app's home route is **`/app`**; every home, logo or "back to start" link goes to `/app`. In Lovable preview and local dev, redirect `/` → `/app`.
+`/` on the deployed origin is the team's static landing page, **not** this app. The app's home route is **`/app`**; every home, logo or "back to start" link goes to `/app`. In local dev, redirect `/` → `/app`.
 
 | Route | Screen | Persona |
 |---|---|---|
