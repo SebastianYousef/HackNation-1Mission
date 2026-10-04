@@ -34,8 +34,9 @@ Relation = Literal[
     "intervention_treats_disease",    # subject therapy, object disease
 ]
 
-SYSTEM = """Extract evidence-backed claims from one biomedical abstract about rare lysosomal diseases
-(e.g. neuronal ceroid lipofuscinoses / Batten disease). Only claims the abstract itself states.
+SYSTEM = """Extract evidence-backed claims from one biomedical abstract about rare diseases (e.g. neuronal
+ceroid lipofuscinoses / Batten disease, primary mitochondrial diseases, developmental and epileptic
+encephalopathies). Only claims the abstract itself states.
 Each claim: subject, relation, object, stance, quote.
  relation (subject -> object):
   gene_associated_with_disease  gene -> disease

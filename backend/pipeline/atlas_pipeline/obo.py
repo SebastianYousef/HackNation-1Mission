@@ -28,7 +28,8 @@ def parse_obo(path: Path) -> Iterator[dict]:
                 if term is not None:
                     yield term
                 term = {"id": None, "name": None, "def": None, "def_refs": [], "synonyms": [], "xrefs": [],
-                        "is_a": [], "obsolete": False, "subsets": [], "replaced_by": None} \
+                        "is_a": [], "obsolete": False, "subsets": [], "replaced_by": None,
+                        "relationships": []} \
                     if line == "[Term]" else None
                 continue
             if term is None or ":" not in line:
@@ -51,7 +52,8 @@ def parse_obo(path: Path) -> Iterator[dict]:
                                              "type": m.group(3) or ""})
             elif tag == "xref":
                 srcs = _SRC.findall(val)
-                term["xrefs"].append({"id": _strip_trailing(val).split(" ")[0], "equivalent": "MONDO:equivalentTo" in srcs})
+                term["xrefs"].append({"id": _strip_trailing(val).split(" ")[0], "equivalent": "MONDO:equivalentTo" in srcs,
+                                      "obsolete_equivalent": "MONDO:obsoleteEquivalent" in srcs})
             elif tag == "is_a":
                 term["is_a"].append(_strip_trailing(val))
             elif tag == "is_obsolete":
@@ -60,6 +62,10 @@ def parse_obo(path: Path) -> Iterator[dict]:
                 term["subsets"].append(_strip_trailing(val))
             elif tag == "replaced_by":
                 term["replaced_by"] = val
+            elif tag == "relationship":
+                parts = _strip_trailing(val).split()
+                if len(parts) == 2:
+                    term["relationships"].append((parts[0], parts[1]))
     if term is not None:
         yield term
 

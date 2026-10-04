@@ -7,7 +7,7 @@ from ..config import slice_config
 from ..models import now_iso
 from ..store import read_json, read_jsonl, write_json
 
-GENERIC = {"disease", "syndrome", "disorder", "ncl", "lsd"}
+GENERIC = {"disease", "syndrome", "disorder", "ncl", "lsd", "dee", "epilepsy", "mito", "mitochondrial disease"}
 
 
 def query_diseases() -> list[dict]:
@@ -22,7 +22,10 @@ def query_diseases() -> list[dict]:
 # label words too unspecific to anchor an abbreviation query (see context_terms)
 _CONTEXT_STOP = GENERIC | {"neuronal", "infantile", "juvenile", "adult", "congenital", "late", "early", "type",
                            "variant", "subtype", "progressive", "deficiency", "protracted", "northern",
-                           "autosomal", "recessive", "dominant", "related", "associated", "form"}
+                           "autosomal", "recessive", "dominant", "related", "associated", "form",
+                           # words shared by whole families (mitochondrial, epileptic encephalopathies)
+                           "childhood", "neonatal", "onset", "classic", "atypical", "isolated", "complex",
+                           "nuclear", "encoded", "primary", "multisystem", "severe", "caused"}
 
 
 def is_abbrev(name: str) -> bool:

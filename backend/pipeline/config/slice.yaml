@@ -1,23 +1,80 @@
-# Slice definition for the Rare Disease Atlas demo build.
+# Slice definition for the Rare Disease Atlas build.
 # The slice = all MONDO descendants of `roots`, plus diseases reached by gene-hop
 # expansion from `seed_genes` and the genes of focus diseases.
-version: "2026-10-04a"
-name: "Lysosomal storage diseases (focus: neuronal ceroid lipofuscinoses / Batten disease)"
+# `families` adds more disease families: each family's roots / focus_roots / seed_genes are merged into the
+# top-level lists (slice.py), its label names the family in templates, and its umbrella_terms are words
+# sponsors use for the whole family (ClinicalTrials.gov never links them to one subtype).
+version: "2026-10-05a"
+name: "Rare disease atlas: lysosomal storage diseases (focus: NCL / Batten disease), primary mitochondrial diseases, developmental and epileptic encephalopathies"
 
-roots:
-  - MONDO:0002561   # lysosomal storage disease
-focus_roots:
-  - MONDO:0016295   # neuronal ceroid lipofuscinosis  (action views + paths precomputed here)
+roots: []
+focus_roots: []
 extra_diseases: []  # any other MONDO ids to force into the slice
+seed_genes: []
 
-# CLN1..CLN14 genes + close relatives
-seed_genes: [PPT1, TPP1, CLN3, CLN5, CLN6, MFSD8, CLN8, CTSD, DNAJC5, CTSF, ATP13A2, GRN, KCTD7]
+families:
+  - key: lysosomal
+    label: lysosomal storage
+    roots:
+      - MONDO:0002561   # lysosomal storage disease
+    focus_roots:
+      - MONDO:0016295   # neuronal ceroid lipofuscinosis  (action views + paths precomputed here)
+    # CLN1..CLN14 genes + close relatives
+    seed_genes: [PPT1, TPP1, CLN3, CLN5, CLN6, MFSD8, CLN8, CTSD, DNAJC5, CTSF, ATP13A2, GRN, KCTD7]
+    # sponsors use these as umbrella terms; MONDO files "batten disease" as a synonym of the juvenile form only
+    umbrella_terms: [batten disease, batten s disease, batten, ncl]
+
+  - key: mitochondrial
+    label: primary mitochondrial disease
+    roots:
+      - MONDO:0044970   # mitochondrial disease
+    focus_roots:
+      - MONDO:0009723   # Leigh syndrome
+      - MONDO:0970944   # Leigh syndrome, mitochondrial (OMIM:500017; not under the mitochondrial root)
+      - MONDO:0010789   # MELAS
+      - MONDO:0010790   # MERRF
+      - MONDO:0010788   # Leber hereditary optic neuropathy
+      - MONDO:0010787   # Kearns-Sayre syndrome
+      - MONDO:0010794   # NARP
+      - MONDO:0010797   # Pearson syndrome (not under the mitochondrial root)
+      - MONDO:0008758   # mitochondrial DNA depletion syndrome 4A (Alpers type, POLG)
+      - MONDO:0013350   # mitochondrial DNA depletion syndrome 4B (MNGIE type, POLG)
+      - MONDO:0010543   # Barth syndrome
+      - MONDO:0010717   # pyruvate dehydrogenase E1-alpha deficiency
+      - MONDO:0700250   # SURF1-related mitochondrial complex IV deficiency
+    seed_genes: [SURF1, NDUFS4, POLG]
+    query_by_gene: true   # web searches: "mitochondrial DNA depletion syndrome 4a" -> "POLG"
+    umbrella_terms: [mitochondrial disease, mitochondrial diseases, mitochondrial disorder, mitochondrial disorders,
+                     mitochondrial myopathy, mitochondrial myopathies, mitochondrial dysfunction]
+
+  - key: dee
+    label: developmental and epileptic encephalopathy
+    roots:
+      - MONDO:0100620   # developmental and epileptic encephalopathy
+    focus_roots:
+      - MONDO:0100135   # Dravet syndrome
+      - MONDO:0100079   # DEE6A (SCN1A)
+      - MONDO:0030268   # DEE6B
+      - MONDO:0100039   # CDKL5 disorder
+      - MONDO:0013388   # DEE11 (SCN2A)
+      - MONDO:0013801   # DEE13 (SCN8A)
+      - MONDO:0012812   # DEE4 (STXBP1)
+      - MONDO:0013387   # DEE7 (KCNQ2)
+      - MONDO:0010246   # DEE9 (PCDH19)
+      - MONDO:0014199   # DEE17 (GNAO1)
+      - MONDO:0016532   # Lennox-Gastaut syndrome
+      - MONDO:0010726   # Rett syndrome (not under the DEE root)
+    seed_genes: [SCN1A, CDKL5, STXBP1]
+    query_by_gene: true   # web searches: "developmental and epileptic encephalopathy, 11" -> "SCN2A"
+    umbrella_terms: [epilepsy, epilepsies, seizures, seizure, epileptic encephalopathy, epileptic encephalopathies,
+                     early infantile epileptic encephalopathy, childhood epilepsy, refractory epilepsy,
+                     drug resistant epilepsy, infantile spasms]
 
 expansion:
   gene_hop: true            # add other diseases associated with seed genes / focus-disease genes
-  max_extra_diseases: 200
+  max_extra_diseases: 400   # one cap shared by all families
 
-literature:                 # API-backed sources are queried for focus diseases only (keeps runs < 10 min)
+literature:                 # API-backed sources are queried for focus diseases only (keeps runs < 20 min)
   scope: focus              # focus | slice
   pubmed_per_disease: 20
   trials_per_disease: 50
