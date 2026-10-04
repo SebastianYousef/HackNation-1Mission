@@ -247,8 +247,10 @@ def check_edge(er: dict, path: str) -> list[str]:
     rows = er["supporting"] + er["contradicting"] + er["context"]
     if not rows:
         errs.append(f"{path}: edge has no evidence rows")
-    if e["status"] == "curated" and any(v["method"].startswith("llm:") for v in rows):
-        errs.append(f"{path}: curated edge has llm:* evidence (LLM output is never curated)")
+    # LLM output is never curated: the status must rest on a non-LLM supporting row (a database).
+    # Extracted literature rows may still corroborate a database fact (e.g. CLN5 gene -> CLN5 disease).
+    if e["status"] == "curated" and not any(not v["method"].startswith("llm:") for v in er["supporting"]):
+        errs.append(f"{path}: curated edge has no non-LLM supporting evidence (LLM output is never curated)")
     if e["status"] == "literature" and not any(v["quote"] for v in er["supporting"]):
         errs.append(f"{path}: literature edge has no supporting row with a quote")
     return errs
