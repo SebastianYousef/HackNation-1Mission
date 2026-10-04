@@ -10,7 +10,7 @@ from pathlib import Path
 from .analytics.paths import path_strength
 from .config import INTERIM, slice_config
 from .graph import Graph, has_quoted_support, load_graph
-from .llm import usage
+from .llm import EMBED_DIM, cached_embeddings, usage
 from .models import EDGE_STATUSES, EDGE_TYPES, NODE_TYPES, PATH_KINDS, SOURCE_TYPES, STANCES, now_iso
 from .store import read_json, read_jsonl
 
@@ -51,6 +51,17 @@ def node_names(g: Graph) -> list[tuple[str, str, str]]:
             for v in vs:
                 add(n["id"], v if ":" in v else f"{k}:{v}", "xref")
     return [(nid, name, kind) for (nid, name), kind in out.items()]
+
+
+def node_embeddings(g: Graph) -> dict[str, str]:
+    """id -> pgvector literal for the nodes reconcile embedded (embedded_nodes.json: id -> text), read from
+    the embedding cache (no API call). Every other node keeps embedding NULL."""
+    texts = {i: t for i, t in (read_json("embedded_nodes", {}) or {}).items() if i in g.nodes}
+    out = {}
+    for i, v in zip(texts, cached_embeddings(list(texts.values()))):
+        if v is not None and len(v) == EMBED_DIM:
+            out[i] = "[" + ",".join(f"{x:.7g}" for x in v) + "]"
+    return out
 
 
 def _stale_inputs() -> dict[str, tuple[str, list[Path]]]:
@@ -158,6 +169,8 @@ def run(database_url: str | None, dry_run: bool = False, force: bool = False) ->
     log.info("validated: %d nodes, %d names, %d edges (%s), %d clusters, %d paths, %d views",
              len(g.nodes), len(names), len(g.edges), dict(Counter(e["status"] for e in g.edges.values())),
              len(clusters), len(paths), len(views))
+    emb = node_embeddings(g)
+    log.info("node embeddings from cache: %d", len(emb))
     if dry_run:
         return
     if not database_url:
@@ -177,9 +190,10 @@ def run(database_url: str | None, dry_run: bool = False, force: bool = False) ->
                     cp.write_row(r)
 
         copy("nodes", ["id", "type", "subtype", "label", "description", "plain_summary", "synonyms", "xrefs",
-                       "attrs", "url"],
+                       "attrs", "url", "embedding"],
              ((n["id"], n["type"], n.get("subtype"), n["label"], n.get("description"), n.get("plain_summary"),
-               list(n.get("synonyms") or []), Jsonb(n.get("xrefs") or {}), Jsonb(n.get("attrs") or {}), n.get("url"))
+               list(n.get("synonyms") or []), Jsonb(n.get("xrefs") or {}), Jsonb(n.get("attrs") or {}), n.get("url"),
+               emb.get(n["id"]))
               for n in g.nodes.values()))
         copy("node_names", ["node_id", "name", "kind"], names)
         copy("edges", ["id", "src", "dst", "type", "status", "confidence", "score", "label", "attrs",
