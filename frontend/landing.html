@@ -2491,7 +2491,6 @@ function setMode(m,scroll){
   $$('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
   $$('.role').forEach(b=>b.setAttribute('aria-pressed',b.dataset.role===m));
   document.documentElement.dataset.mode=m;
-  try{localStorage.setItem('om-mode',m)}catch(e){}
   _modeSubs.forEach(fn=>safeCall(fn,m));
   if(scroll) $('#atlas').scrollIntoView({behavior:reduced?'auto':'smooth'});
 }
@@ -6637,7 +6636,10 @@ window.OM_APP={api,esc,select:(id,o)=>selectEntity(id,o),onDs,onMode,onLoading,i
 renderRace();
 updateDebug();
 api.meta().then(m=>{ cur.meta=m; updateDebug(); _metaSubs.forEach(fn=>safeCall(fn,m)); }).catch(err=>{ apiFail('The Atlas is not answering',err); updateDebug(); });
-try{ const m=localStorage.getItem('om-mode'); setMode(location.hash==='#researcher'?'researcher':m==='researcher'?'researcher':'reader'); }catch(e){ setMode('reader'); }
+/* Every visit starts in Reader, so families are not met by the technical view; Researcher is one click away.
+   Only an explicit #researcher link opens it directly. The choice is not remembered (older builds saved it). */
+try{ localStorage.removeItem('om-mode'); }catch(e){}
+setMode(location.hash==='#researcher'?'researcher':'reader');
 if(QS.get('d')) selectEntity(QS.get('d'),{push:true}); else omWelcome();
 if(QS.get('edge')) openEdge(QS.get('edge'));
 
