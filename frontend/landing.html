@@ -86,6 +86,8 @@ p{margin:0}
 .menu-btn[aria-expanded="true"] .bars i:last-child{transform:translateY(-2.25px) rotate(-45deg)}
 .nav-links{position:absolute;top:calc(100% + 12px);right:0;width:min(300px,calc(100vw - 32px));display:flex;flex-direction:column;background:var(--night-2);border:1px solid var(--night-rule);border-radius:var(--r);padding:8px;box-shadow:0 24px 50px -24px rgba(0,0,0,.6);animation:fadein .18s ease}
 .nav-links[hidden]{display:none}
+/* the hidden attribute always hides, even on elements whose class sets display (chips, rows, buttons) */
+[hidden]{display:none!important}
 .nav-links a{display:flex;justify-content:space-between;align-items:center;gap:12px;text-decoration:none;color:var(--night-ink);font-size:15px;padding:11px 12px;border-radius:4px}
 .nav-links a:hover,.nav-links a:focus-visible{background:var(--night-3)}
 .nav-links a small{font-family:var(--f-body);font-size:12px;letter-spacing:.005em;color:var(--night-ink-2);font-weight:500}
