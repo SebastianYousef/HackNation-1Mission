@@ -3794,105 +3794,20 @@ function rs_select(id,focus){
 }
 function rs_refocus(sel){ const b=$(sel); if(b) b.focus(); }
 
-/* ---------- overview: no disease chosen yet ----------
-   Draws the live disease families (/clusters) so the map is never empty. Lines join families whose top pathways
-   overlap: that is where links across disease boundaries hide. Picking a family lists its diseases (/clusters/{id});
-   picking a disease selects it for the whole page. */
-const ov_S={list:null,sel:null,members:{},busy:false};
-const ov_short=l=>{ const t=String(l||'').replace(/\s+cluster$/i,''); return t.charAt(0).toUpperCase()+t.slice(1); };
-/** Two families can share a pathway name; tell them apart by the first disease the summary names. */
-function ov_names(list){
-  const cnt={}; list.forEach(c=>{ const n=ov_short(c.label); cnt[n]=(cnt[n]||0)+1; });
-  list.forEach(c=>{ const n=ov_short(c.label), ex=(String(c.summary||'').match(/\(e\.g\. ([^,)]+)/)||[])[1];
-    c._name=cnt[n]>1&&ex?`${n}, around ${ex}`:n; });
-}
-function ov_links(list){
-  const out=[];
-  for(let i=0;i<list.length;i++) for(let j=i+1;j<list.length;j++){
-    const a=new Set((list[i].attrs&&list[i].attrs.top_mechanisms)||[]);
-    const n=((list[j].attrs&&list[j].attrs.top_mechanisms)||[]).filter(m=>a.has(m)).length;
-    if(n) out.push({a:list[i].id,b:list[j].id,n});
-  }
-  return out;
-}
-function ov_layout(list){
-  const P={}, placed=[], R=c=>9+Math.sqrt(c.size||1)*3.1;
-  [...list].sort((a,b)=>(b.size||0)-(a.size||0)).forEach((c,i)=>{
-    const r=R(c);
-    for(let t=0;t<4000;t++){
-      const ang=t*0.35, rad=i?14+t*1.1:0, x=400+Math.cos(ang)*rad*1.25, y=300+Math.sin(ang)*rad*.85;
-      if(x-r<12||x+r>788||y-r<12||y+r>578) continue;
-      if(placed.every(p=>Math.hypot(p.x-x,p.y-y)>p.r+r+22)){ P[c.id]={x,y,r}; placed.push({x,y,r}); break; }
-    }
-  });
-  // stretch the packed spiral to fill the frame (keeps the circle sizes, only spreads the centres)
-  const v=Object.values(P); if(v.length<2) return P;
-  const x0=Math.min(...v.map(p=>p.x-p.r)),x1=Math.max(...v.map(p=>p.x+p.r)),y0=Math.min(...v.map(p=>p.y-p.r)),y1=Math.max(...v.map(p=>p.y+p.r+16));
-  const k=Math.min(760/(x1-x0),560/(y1-y0),2.2);
-  v.forEach(p=>{ p.x=400+(p.x-(x0+x1)/2)*k; p.y=292+(p.y-(y0+y1)/2)*k; });
-  return P;
-}
-function ov_render(){
-  const list=ov_S.list, svg=$('#graph'); if(!svg||!list||cur.ds) return;
-  svg.classList.remove('rs-busy'); svg.removeAttribute('aria-busy');
-  ov_names(list); const P=ov_layout(list), links=ov_links(list), sel=ov_S.sel;
-  const nb=new Set(sel?[sel]:[]); links.forEach(l=>{ if(l.a===sel) nb.add(l.b); if(l.b===sel) nb.add(l.a); });
-  let h='<g class="edges">';
-  links.forEach(l=>{ const a=P[l.a],b=P[l.b]; if(!a||!b) return; const on=sel&&(l.a===sel||l.b===sel);
-    h+=`<line x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" stroke="${RS_EDGE_COL.H}" stroke-dasharray="${RS_EDGE_DASH.H}" stroke-linecap="round" stroke-width="${(.7+l.n*.5).toFixed(1)}" opacity="${sel?(on?.95:.15):.45}"/>`; });
-  h+='</g><g class="nodes">';
-  list.forEach(c=>{ const p=P[c.id]; if(!p) return; const on=!sel||nb.has(c.id), isSel=c.id===sel, x=p.x.toFixed(1), y=p.y.toFixed(1);
-    const name=c._name, big=(c.size||0)>=25||isSel||(sel&&on);
-    h+=`<g class="node ${on?'':'dim'} ${big?'':'lh'}" data-cluster="${esc(c.id)}" tabindex="0" role="button" aria-pressed="${isSel}" aria-label="${esc(name)}, ${c.size} diseases"><title>${esc(name)}, ${c.size} diseases</title>`
-      +(isSel?`<circle cx="${x}" cy="${y}" r="${(p.r+6).toFixed(1)}" fill="none" stroke="#9DB4FF" stroke-width="1.5"/>`:'')
-      +`<circle class="rs-c" cx="${x}" cy="${y}" r="${p.r.toFixed(1)}" fill="${rs_tcol('mechanism')}" fill-opacity="${on?.9:.35}" stroke="var(--night-2)" stroke-width="2"/>`
-      +`<text x="${x}" y="${(p.y+p.r+14).toFixed(1)}" text-anchor="middle">${esc(rs_short(ov_short(c.label),28))}</text></g>`; });
-  h+='</g>';
-  svg.innerHTML=h;
-  svg.setAttribute('aria-label',`Overview of ${list.length} disease families in the Atlas. ${sel?'Selected: '+(list.find(c=>c.id===sel)||{})._name+'.':'Pick a family to see its diseases.'}`);
-  const tf=$('#typeFilter'); if(tf) tf.innerHTML='';
-  const note=$('#rsNote'); if(note){ note.hidden=false; note.textContent=`${list.length} disease families, grouped by shared symptoms and pathways. Dashed lines join families that share pathways.`; }
-  const el=$('#rsList'); if(el) el.innerHTML=`<div class="rs-group"><div class="rs-gh">Disease families <span class="rs-n">(${list.length})</span></div><div class="rows">${rs_capList('ov:list',list.map(c=>`<button type="button" class="row" data-cluster="${esc(c.id)}"><span class="rn"><span style="min-width:0">${esc(c._name)}</span></span><span class="rm">${c.size} diseases</span></button>`),8)}</div></div>`;
-  ov_detail();
-}
-function ov_detail(){
-  const d=$('#detail'); if(!d||cur.ds) return;
-  const list=ov_S.list||[], c=list.find(x=>x.id===ov_S.sel);
-  if(!c){ d.innerHTML=`<div class="tt">Overview</div><div class="nm">Find connections across disease boundaries</div><p>Each circle is a family of rare diseases that share symptoms and biology. Lines join families that share pathways, which is where a finding in one disease can matter for another. Pick a family, or search above.</p>${omExButtons()}`; return; }
-  const links=ov_links(list).filter(l=>l.a===c.id||l.b===c.id).map(l=>({id:l.a===c.id?l.b:l.a,n:l.n})).sort((a,b)=>b.n-a.n);
-  const m=ov_S.members[c.id];
-  const mem=m==null?skel(4):m.error?`<p class="rs-muted">The diseases in this family could not be loaded. Please try again.</p>`
-    :rs_capList('ov:'+c.id,m.map(x=>`<button type="button" class="row" data-ov-d="${esc(x.id)}"><span class="rn"><span style="min-width:0">${esc(x.label||x.id)}</span></span></button>`),12);
-  d.innerHTML=`<div class="tt">Disease family</div><div class="nm">${esc(c._name)}</div><p>${esc(c.summary||'')}</p>`
-    +(isExpert()?`<p class="rs-mono">${esc(c.method||'')}${c.attrs&&c.attrs.cohesion!=null?`, cohesion ${esc(String(c.attrs.cohesion))}`:''}</p>`:'')
-    +(links.length?`<div class="rs-gh" style="margin-top:12px">Shares pathways with</div><div class="rows">${links.slice(0,6).map(l=>{ const o=list.find(x=>x.id===l.id); return `<button type="button" class="row" data-cluster="${esc(l.id)}"><span class="rn"><span style="min-width:0">${esc(o&&o._name)}</span></span><span class="rm">${l.n} shared ${l.n===1?'pathway':'pathways'}</span></button>`; }).join('')}</div>`:'')
-    +`<div class="rs-gh" style="margin-top:12px">Diseases in this family</div><div class="rows">${mem}</div>`;
-}
-async function ov_pick(id){
-  ov_S.sel=ov_S.sel===id?null:id; ov_render();
-  if(!ov_S.sel||ov_S.members[id]) return;
-  try{ const r=await api.cluster(id); ov_S.members[id]=(r&&r.members)||[]; }
-  catch(e){ ov_S.members[id]={error:true}; setTimeout(()=>{ if(ov_S.members[id]&&ov_S.members[id].error) delete ov_S.members[id]; },5000); }
-  if(ov_S.sel===id) ov_detail();
-}
-async function rs_overview(){
+/* ---------- no disease chosen yet ----------
+   The map only ever shows one disease's network, coloured by node type. Until a disease is chosen it says
+   how to start; the side panel offers the examples. */
+function rs_overview(){
   rs_ensure();
-  if(ov_S.list){ ov_render(); return; }
-  if(ov_S.busy) return; ov_S.busy=true;
-  try{ ov_S.list=(await api.clusters())||[]; }
-  catch(e){ ov_S.list=null; }
-  ov_S.busy=false;
   if(cur.ds) return;
-  if(ov_S.list&&ov_S.list.length) ov_render();
-  else $('#graph').innerHTML=`<text x="400" y="300" text-anchor="middle" fill="var(--night-ink-2)" font-size="15">Search a disease above to draw its map</text>`;
+  const svg=$('#graph'); if(!svg) return;
+  svg.classList.remove('rs-busy'); svg.removeAttribute('aria-busy');
+  svg.innerHTML=`<text x="400" y="300" text-anchor="middle" fill="var(--night-ink-2)" font-size="15">Search a disease above, or pick an example, to draw its map</text>`;
+  svg.setAttribute('aria-label','No disease chosen yet. Search a disease to draw its map.');
+  const tf=$('#typeFilter'); if(tf) tf.innerHTML='';
+  const note=$('#rsNote'); if(note) note.hidden=true;
+  const el=$('#rsList'); if(el) el.innerHTML='';
 }
-$('#researcherView').addEventListener('click',ev=>{
-  const o=ev.target.closest('[data-rs-open^="ov:"]');
-  if(o&&!cur.ds){ const k=o.dataset.rsOpen; rs_S.open.has(k)?rs_S.open.delete(k):rs_S.open.add(k); ov_render(); rs_refocus(`[data-rs-open="${CSS.escape(k)}"]`); return; }
-  const c=ev.target.closest('[data-cluster]'); if(c&&!cur.ds){ ov_pick(c.dataset.cluster); return; }
-  const d=ev.target.closest('[data-ov-d]'); if(d) selectEntity(d.dataset.ovD,{push:true});
-});
-$('#graph').addEventListener('keydown',ev=>{ const c=ev.target.closest('[data-cluster]'); if(c&&(ev.key==='Enter'||ev.key===' ')){ ev.preventDefault(); ov_pick(c.dataset.cluster).then(()=>{ const f=$(`#graph [data-cluster="${CSS.escape(c.dataset.cluster)}"]`); if(f) f.focus(); }); } });
 
 /* ---------- subscriptions ---------- */
 onDs(ds=>{ rs_S.last=ds; if(isExpert()) renderResearcher(ds); });
