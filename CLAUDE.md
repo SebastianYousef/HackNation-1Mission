@@ -18,6 +18,7 @@ Read before non-trivial work: `docs/PLAN.md` (roles, timeline, scope decisions),
 | `scripts/sync-contract.sh` | Copies contract + fixtures + frontend spec into the frontend repo | anyone |
 | `docs/` | `brief.pdf` (the challenge), `PLAN.md` (roles, timeline), `ARCHITECTURE.md` | — |
 | `Makefile` | Root targets (`make help`): API dev/test, contract check, migrations, compose stack | — |
+| `deploy/autodeploy/` | Auto-deploy for the live server: a `systemd --user` timer that runs `~/atlas/redeploy.sh` within a minute of every push to `main` (install once with `install.sh`) | B2 |
 | `deploy/gpu-server/` | Older Tailscale-Funnel deploy kit (needs root). **Superseded** by the live deployment below | — |
 
 ## Non-negotiable rules
@@ -81,6 +82,7 @@ Containers run in **rootless Docker** (`~/bin`, managed with `systemctl --user d
 | `~/atlas/nginx/site.conf` | nginx routing (landing, `/api` proxy, SPA fallback) |
 | `~/atlas/build-web.sh`, `~/atlas/frontend.env` | Builds the team SPA (if `FRONTEND_REPO` is set) + copies `landing.html` into `~/atlas/www/releases/<ts>`, then flips the `www/current` symlink |
 | `~/atlas/redeploy.sh` | Redeploy: pull, apply new migrations, rebuild, republish the site, health check |
+| `~/atlas/atlas-autodeploy.sh`, `~/.config/systemd/user/atlas-autodeploy.{service,timer}`, `~/atlas/autodeploy/` | Auto-deploy (from `deploy/autodeploy/`): checks `origin/main` every minute and runs `redeploy.sh` when it moved; log in `~/atlas/autodeploy/autodeploy.log` |
 | `~/atlas/backup.sh`, `~/atlas/backups/` | `pg_dump` backups (keeps 14). Runs daily at 04:00 via `atlas-backup.timer` |
 | `~/atlas/migrations.applied` | Migration files already applied. `redeploy.sh` applies any new `backend/db/migrations/*.sql` once. |
 | `~/atlas/pipeline-data/` | Pipeline `data/` dir (raw download cache, interim, snapshot) |
@@ -88,7 +90,9 @@ Containers run in **rootless Docker** (`~/bin`, managed with `systemctl --user d
 
 ### Day-to-day commands (run from a laptop)
 ```bash
-ssh laqueinux ~/atlas/redeploy.sh                         # deploy whatever is on origin/main
+ssh laqueinux ~/atlas/redeploy.sh                         # deploy whatever is on origin/main (the auto-deploy timer does this within a minute of a push)
+ssh laqueinux bash ~/app/deploy/autodeploy/install.sh     # one-time: install the auto-deploy timer (no sudo)
+ssh laqueinux 'systemctl --user list-timers atlas-autodeploy.timer; tail -20 ~/atlas/autodeploy/autodeploy.log'   # auto-deploy status
 ssh laqueinux '~/atlas/dc ps'                             # status
 ssh laqueinux '~/atlas/dc logs -f --tail 100 api worker'  # logs (also: db, redis, web)
 ssh laqueinux "journalctl --user -u atlas-tunnel -o cat | grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' | tail -1"   # current public URL
@@ -118,7 +122,7 @@ That is the exact command that produced the current dataset. It deliberately pas
 2. On the server, set `FRONTEND_REPO=https://github.com/<owner>/<repo>.git`, `FRONTEND_REF=<branch>` (and `FRONTEND_SUBDIR` if the app isn't at the repo root) in `~/atlas/frontend.env`.
 3. Run `ssh laqueinux ~/atlas/redeploy.sh`. It runs `npm ci && npm run build` in a `node:22` container and serves `dist/`.
 
-To change the landing page, edit `frontend/landing.html` here, push, and redeploy.
+To change the landing page, edit `frontend/landing.html` here and push to `main`. With the auto-deploy timer installed, the live site updates within about a minute; otherwise run `redeploy.sh`. Data changes still need a pipeline run (see Reloading data).
 
 ### Current state (2026-10-04)
 - Slice (`backend/pipeline/config/slice.yaml`): lysosomal storage diseases, deep on the NCLs, plus primary mitochondrial disease (incl. Leigh syndrome, `MONDO:0009723`) and developmental and epileptic encephalopathies (incl. Dravet syndrome). Static sources include MedlinePlus Genetics for curated plain summaries. Reconcile tier 3 matches names by embeddings (#12), Orphanet prevalence lands in disease `attrs.prevalence` (#11), and Orphanet gene evidence links to orpha.net with the cited PMIDs kept in `attrs.orphanet_pmids` (daf3cdc). After changing any of this, reload the server's data (below); `GET /api/v1/meta` shows which dataset version is live.
@@ -134,7 +138,7 @@ To change the landing page, edit `frontend/landing.html` here, push, and redeplo
 - The team frontend app is not deployed yet (`FRONTEND_REPO` empty), so only the landing page and the API are public.
 
 ## Trigger word: `återgå`
-If a user message is exactly `återgå` (nothing else), read `docs/RESUME.md`. The work it describes (landing polish, Atlas expansion) was finished and merged to `main` on 2026-10-04; only its OpenAI section (§3) is still open, blocked on #7. Report that instead of redoing merged work.
+If a user message is exactly `återgå` (nothing else), read `docs/RESUME.md`. Status on 2026-10-04: the Atlas expansion (§2) is merged and its dataset is live. The landing polish (§1) is **not** on `main` yet: main's `landing.html` came from `frontend/landing-2-live`, so the polish is being redone on top of it (branch `polish/resume`, Daniel's session). The OpenAI section (§3) is blocked on #7. Check `git log origin/main` and the open issues before starting, and don't redo work that is already merged.
 
 ## Demo-critical facts
 - Slice: lysosomal storage diseases, deep on the NCLs (Batten). The hero is an NCL subtype without approved therapy, picked at hour 1 (fixtures use CLN5). The counterexample is CLN2 enzyme replacement (soluble enzyme) vs. membrane-protein subtypes.

@@ -1,0 +1,12 @@
+[Unit]
+Description=One Mission: redeploy when origin/main moves
+After=network-online.target
+
+[Service]
+Type=oneshot
+# systemd --user starts without the login shell's environment: rootless Docker lives in ~/bin
+Environment=DOCKER_HOST=unix:///run/user/%U/docker.sock
+Environment=PATH=%h/bin:%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=%h/atlas/atlas-autodeploy.sh
+Nice=10
+TimeoutStartSec=1800
