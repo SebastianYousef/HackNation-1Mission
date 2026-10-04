@@ -8,7 +8,7 @@ This folder holds the frontend's half of the bridge:
 - `FRONTEND_SPEC.md` is the binding spec, copied to the web repo root.
 - `CLAUDE.md` is for Claude Code sessions inside the web repo.
 - `PROTOTYPE_PROMPT.md` is a one-message prompt that ports `landing-2.html` into the app on live data.
-- `landing.html` is the public landing page served at `/`; `landing-2.html` is currently an identical copy. Neither is synced into the web repo.
+- `landing.html` is the public landing page served at `/`; `landing-2.html` is an older variant of it. Neither is synced into the web repo.
 - This README covers setup and the prompt sequence.
 
 ## Setup (hour 0, ~20 min, one frontend person)

@@ -14,7 +14,7 @@ Read before non-trivial work: `docs/PLAN.md` (roles, timeline, scope decisions),
 | `backend/pipeline/` | Offline ETL: ingest → extract (OpenAI) → reconcile → analytics → views → load | B1 |
 | `backend/scripts/check_contract.py` | Verifies a running API against the contract | B2 |
 | `infra/` | Docker Compose stack: L4 HAProxy → L7 HAProxy ×2 → API ×N, worker, web (nginx), Redis, Postgres | B2 |
-| `frontend/` | Not app code: the frontend's half of the bridge (`FRONTEND_SPEC.md` and `CLAUDE.md` are synced into the frontend repo; `README.md` playbook, `PROTOTYPE_PROMPT.md`), plus `landing.html` (the public landing page, served at `/`) and `landing-2.html` (currently an identical copy) | F1 + F2 |
+| `frontend/` | Not app code: the frontend's half of the bridge (`FRONTEND_SPEC.md` and `CLAUDE.md` are synced into the frontend repo; `README.md` playbook, `PROTOTYPE_PROMPT.md`), plus `landing.html` (the public landing page, served at `/`) and `landing-2.html` (an older variant of it) | F1 + F2 |
 | `scripts/sync-contract.sh` | Copies contract + fixtures + frontend spec into the frontend repo | anyone |
 | `docs/` | `brief.pdf` (the challenge), `PLAN.md` (roles, timeline), `ARCHITECTURE.md` | — |
 | `Makefile` | Root targets (`make help`): API dev/test, contract check, migrations, compose stack | — |
