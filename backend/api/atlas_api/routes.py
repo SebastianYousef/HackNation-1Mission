@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 from redis.exceptions import RedisError
 
 from . import jobs
+from .cache import StoreUnavailable
 from .errors import ApiError, bad_request, not_found, unavailable
 
 router = APIRouter(prefix="/api/v1")
@@ -217,7 +218,10 @@ async def gap_search(request: Request, body: GapSearchRequest, response: Respons
     n = await st.data.node_obj(body.disease_id)
     if n is None:
         raise not_found(f"node {body.disease_id}")
-    await jobs.save(st.store, st.settings, jobs.status(job_id, "queued"))
+    try:
+        await jobs.save(st.store, st.settings, jobs.status(job_id, "queued"))
+    except StoreUnavailable as exc:  # no status = the client would poll a 404
+        raise unavailable("job queue unavailable") from exc
     payload = {"kind": "gap_search", "job_id": job_id, "disease_id": body.disease_id, "label": n["node"]["label"]}
     if st.store.redis is not None:
         try:
@@ -233,7 +237,12 @@ async def gap_search(request: Request, body: GapSearchRequest, response: Respons
 async def job(request: Request, job_id: str, response: Response) -> dict:
     st = request.app.state
     response.headers.update(NO_STORE)
-    found = await jobs.load(st.store, job_id)
+    try:
+        found = await jobs.load(st.store, job_id)
+    except StoreUnavailable as exc:
+        if st.settings.uses_db("gap_search"):  # a Redis error is not "no such job"
+            raise unavailable("job store unavailable") from exc
+        found = None  # fixtures mode: the canned job below
     if found is None and not st.settings.uses_db("gap_search"):
         fx = st.data.fx.load("gap-search-job.json")
         found = {**fx, "job_id": job_id} if fx else None

@@ -80,6 +80,20 @@ class Fixtures:
         return f"fx-{v}-{hashlib.sha1(str(stamp).encode()).hexdigest()[:8]}"
 
 
+# Dataset version + a token of the SQL the API runs: md5 over every function in the API's
+# schema (api_* and their _helpers, i.e. what the migrations define; extension functions
+# excluded). A migration that changes a function body changes the ETag and the response
+# cache key at once, without waiting for the next data load. ~2 ms; run at most every 15 s.
+VERSION_SQL = """
+select coalesce((select coalesce(value->>'version', md5(value::text)) from dataset_meta where key = 'dataset'), '0')
+  || '-s' || left(md5(coalesce((
+       select string_agg(p.oid::regprocedure::text || '=' || md5(p.prosrc), ',' order by p.oid::regprocedure::text)
+         from pg_proc p
+        where p.pronamespace = current_schema()::regnamespace
+          and not exists (select 1 from pg_depend d where d.classid = 'pg_proc'::regclass and d.objid = p.oid
+                                                      and d.deptype = 'e')), '')), 8)"""
+
+
 def _dump(obj: Any) -> str | None:
     return None if obj is None else json.dumps(obj, ensure_ascii=False, separators=(",", ":"))
 
@@ -98,16 +112,14 @@ class Data:
         return await self.db.scalar(sql, params)
 
     async def dataset_version(self) -> str:
-        """Cache-busting token; refreshed at most every 15 s."""
+        """Cache-busting token (dataset version + SQL schema token); refreshed at most every 15 s."""
         ts, v = self._version
         if time.monotonic() - ts < 15 and v:
             return v
         dbv = None
         if self.s.needs_db and self.db is not None:  # also mixed mode (DB_ENDPOINTS): a load must bust caches
             try:
-                dbv = "db-" + str(await self.db.scalar(
-                    "select coalesce(value->>'version', md5(value::text)) from dataset_meta where key = 'dataset'")
-                    or "0")
+                dbv = "db-" + str(await self.db.scalar(VERSION_SQL) or "0")
             except Exception as exc:
                 if self.s.data_mode == "db":
                     raise

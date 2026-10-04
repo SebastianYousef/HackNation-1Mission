@@ -12,7 +12,7 @@ from urllib.parse import quote_plus
 
 import httpx
 
-from .cache import Store
+from .cache import Store, StoreUnavailable
 from .config import Settings
 
 log = logging.getLogger("atlas_api.jobs")
@@ -36,12 +36,28 @@ def status(job_id: str, state: str, result: dict | None = None, error: str | Non
     return {"job_id": job_id, "state": state, "result": result, "error": error}
 
 
-async def save(store: Store, settings: Settings, st: dict, ttl: int | None = None) -> None:
-    await store.set(job_key(st["job_id"]), json.dumps(st).encode(), ttl or settings.job_ttl_seconds)
+# Waits before re-trying to store a finished job's status (a Redis blip must not lose a paid result).
+SAVE_RETRY_DELAYS = (1.0, 2.0, 4.0)
+
+
+async def save(store: Store, settings: Settings, st: dict, ttl: int | None = None, retry: bool = False) -> None:
+    """Store a job status. Raises StoreUnavailable when Redis fails (after the retries, if `retry`)."""
+    raw, key = json.dumps(st).encode(), job_key(st["job_id"])
+    for delay in (*(SAVE_RETRY_DELAYS if retry else ()), None):
+        try:
+            await store.set(key, raw, ttl or settings.job_ttl_seconds, strict=True)
+            return
+        except StoreUnavailable:
+            if delay is None:
+                raise
+            log.warning("job %s: status not stored, retrying in %.0fs", st["job_id"], delay)
+            await asyncio.sleep(delay)
 
 
 async def load(store: Store, job_id: str) -> dict | None:
-    raw = await store.get(job_key(job_id))
+    """Job status, None if unknown or expired. Raises StoreUnavailable when Redis fails:
+    a Redis blip must not look like a missing job (404)."""
+    raw = await store.get(job_key(job_id), strict=True)
     return json.loads(raw) if raw else None
 
 
@@ -127,7 +143,12 @@ def classify(lead: dict) -> str:
 
 
 async def run_gap_search(settings: Settings, store: Store, job_id: str, disease_id: str, label: str) -> None:
-    await save(store, settings, status(job_id, "running"), RUNNING_TTL_SECONDS)
+    """Run one search and store its final status (retried on a Redis blip; StoreUnavailable
+    if it still cannot be stored)."""
+    try:
+        await save(store, settings, status(job_id, "running"), RUNNING_TTL_SECONDS)
+    except StoreUnavailable as exc:  # keep going: the result is what matters
+        log.warning("gap-search %s: could not mark running: %s", job_id, exc)
     try:
         if not settings.brightdata_api_key:
             raise RuntimeError("web search is not configured (BRIGHTDATA_API_KEY missing)")
@@ -154,8 +175,9 @@ async def run_gap_search(settings: Settings, store: Store, job_id: str, disease_
                 continue
             seen.add(hit["url"])
             leads.append({**hit, "kind": classify(hit)})
-        await save(store, settings, status(job_id, "done", {"leads": leads[:25], "disclaimer": DISCLAIMER}))
+        final = status(job_id, "done", {"leads": leads[:25], "disclaimer": DISCLAIMER})
     except Exception as exc:
         log.warning("gap-search %s for %s failed: %s", job_id, disease_id, exc)
         msg = str(exc) if isinstance(exc, RuntimeError) and str(exc) else "web search failed"
-        await save(store, settings, status(job_id, "failed", error=msg[:300]))
+        final = status(job_id, "failed", error=msg[:300])
+    await save(store, settings, final, retry=True)

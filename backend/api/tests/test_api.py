@@ -342,12 +342,26 @@ def test_outreach_body_is_grounded(fixtures_dir, monkeypatch):
 def test_ground_body_citation_styles():
     from atlas_api.ai import ground_body
     # Marker after the full stop must not glue the next (invented) sentence onto a cited one.
-    assert ground_body("Fact A.[1] Invented B [2]. Ok.", {1}) == ("Fact A [1]. Ok.", {1})
+    assert ground_body("Fact A.[1] Invented B [2]. Ok?", {1}) == ("Fact A [1]. Ok?", {1})
     assert ground_body("Fact A. [1] Invented B [2].", {1}) == ("Fact A [1].", {1})
     # Grouped and ranged markers count as markers.
     assert ground_body("Fact A [1]. Invented B [2, 3].", {1}) == ("Fact A [1].", {1})
     assert ground_body("Fact A [1]. Invented B [2-3].", {1}) == ("Fact A [1].", {1})
     assert ground_body("Fact A [1, 4]. C [2\u20133].", {1, 3}) == ("Fact A [1]. C [3].", {1, 3})
+
+
+def test_ground_body_drops_uncited_statements():
+    from atlas_api.ai import ground_body
+    body = ("Dear Dr. Lee,\n\nCLN5 is linked to CLN5 [1]. Drug X cures CLN5 in most children. "
+            "Would you be open to a short call?\n\nThank you!\nKind regards,\nMaria")
+    assert ground_body(body, {1}) == ("Dear Dr. Lee,\n\nCLN5 is linked to CLN5 [1]. Would you be open to a "
+                                      "short call?\n\nKind regards,\nMaria", {1})
+    # A claim glued onto a question after an initial ("X.") is not a request to talk.
+    assert ground_body("Fact [1]. Made by firm X. Can we talk?", {1}) == ("Fact [1].", {1})
+    # A long unpunctuated line (e.g. a bullet) is not a greeting or sign-off.
+    assert ground_body("Hi,\n- drug X reverses CLN5 symptoms in nearly every treated child so far\nFact [1].",
+                       {1}) == ("Hi,\n\nFact [1].", {1})
+    assert ground_body("J. Doe et al. found it [1].\n  Invented.", {1}) == ("J. Doe et al. found it [1].", {1})
 
 
 async def _aret(v):
@@ -512,3 +526,87 @@ def test_trailing_slash_is_404_not_absolute_redirect(client):
     r = client.get(f"{V1}/meta/", headers={"X-Forwarded-Proto": "https"}, follow_redirects=False)
     assert r.status_code == 404 and "location" not in r.headers
     assert r.json()["error"]["code"] == "not_found"
+
+
+def test_worker_accepts_lowercase_log_level(monkeypatch):
+    import asyncio
+    import logging
+
+    from atlas_api import config, worker
+    monkeypatch.setattr(logging.root, "handlers", [])  # let basicConfig run (pytest installs handlers)
+    monkeypatch.setattr(logging.root, "level", logging.root.level)
+    monkeypatch.setattr(worker, "get_settings", lambda: config.Settings(_env_file=None, log_level="info",
+                                                                        redis_url=None))
+    with pytest.raises(SystemExit, match="REDIS_URL"):  # got past logging setup (was ValueError)
+        asyncio.run(worker.main())
+
+
+def test_store_circuit_breaker_on_hanging_redis(monkeypatch):
+    import asyncio
+    import time
+
+    from atlas_api import cache
+
+    async def run():
+        async def hang(reader, writer):
+            await asyncio.sleep(30)
+        srv = await asyncio.start_server(hang, "127.0.0.1", 0)
+        port = srv.sockets[0].getsockname()[1]
+        store = cache.Store.from_url(f"redis://127.0.0.1:{port}/0", timeout=0.2)
+        t0 = time.monotonic()
+        for _ in range(20):  # GET cache + set + rate limit: all fail open
+            assert await store.get("k") is None
+            await store.set("k", b"v", 10)
+            assert await store.incr_window("rl", 60) == 0
+        spent = time.monotonic() - t0
+        assert not await store.ping()
+        assert store._failures == cache.BREAKER_FAILURES  # only 2 ops waited; the rest skipped Redis
+        store._open_until = 0.0  # cooldown over: the next op probes Redis again and re-opens
+        assert await store.get("k") is None and store._open_until > time.monotonic()
+        srv.close()
+        await store.redis.aclose()
+        return spent
+    assert asyncio.run(run()) < 1.0  # 60 ops; without the breaker 60 x 0.2 s = 12 s
+
+
+def test_job_status_redis_error_is_503_not_404(fixtures_dir):
+    dead = "redis://127.0.0.1:1/0"
+    with _app(fixtures_dir, redis_url=dead, db_endpoints="gap_search") as c:
+        assert_error(c.get(f"{V1}/jobs/job_abc"), 503, "upstream_unavailable")
+    with _app(fixtures_dir, redis_url=dead) as c:  # fixtures mode still serves the canned job
+        assert c.get(f"{V1}/jobs/job_abc").json()["state"] == "done"
+
+
+def test_job_store_is_strict_and_final_status_is_retried(monkeypatch):
+    import asyncio
+
+    from atlas_api import cache, jobs
+    from atlas_api.config import Settings
+    s = Settings(_env_file=None, brightdata_api_key="k")
+
+    async def dead_store():
+        store = cache.Store.from_url("redis://127.0.0.1:1/0", timeout=0.2)
+        with pytest.raises(cache.StoreUnavailable):
+            await jobs.load(store, "job_x")
+        assert await store.get("k") is None  # the cache path still fails open
+        with pytest.raises(cache.StoreUnavailable):  # breaker open: strict ops fail fast
+            await jobs.save(store, s, jobs.status("job_x", "queued"))
+        await store.close()
+    asyncio.run(dead_store())
+
+    class Flaky(cache.Store):  # Redis blips for the first two writes of the final status
+        fails = 0
+
+        async def set(self, key, value, ttl, *, strict=False):
+            if b'"done"' in value and self.fails < 2:
+                self.fails += 1
+                raise cache.StoreUnavailable("blip")
+            await super().set(key, value, ttl, strict=strict)
+
+    async def serp(settings, query, client):
+        return [{"title": "CLN5 Foundation", "url": "https://x.org", "snippet": ""}]
+    monkeypatch.setattr(jobs, "brightdata_serp", serp)
+    monkeypatch.setattr(jobs, "SAVE_RETRY_DELAYS", (0, 0, 0))
+    store = Flaky(None)
+    asyncio.run(jobs.run_gap_search(s, store, "job_r", "MONDO:1", "CLN5 disease"))
+    assert asyncio.run(jobs.load(store, "job_r"))["state"] == "done" and store.fails == 2
