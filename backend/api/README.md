@@ -47,7 +47,7 @@ In mixed mode the ETag / cache key combines the fixture version and the DB `data
   - Without Redis the job runs in-process (dev only).
 - **Ops:** `GET /healthz` checks that the process is alive. `GET /readyz` returns 503 only when draining or when the DB (or, in fixtures mode, the fixtures dir) is unavailable. Redis is shared by every replica and the API fails open without it, so a Redis outage is reported as `degraded: {"redis": true}` with status 200 rather than pulling the whole pool out of the LB.
 - **Shutdown:** on SIGTERM, `/readyz` switches to 503 for `SHUTDOWN_GRACE_SECONDS`, so the LB marks the replica DOWN. Uvicorn then stops gracefully and finishes in-flight requests.
-- **CORS:** allowed origins are `CORS_ORIGINS` (a comma list where `https://*.lovable.app` style wildcards work) plus localhost on any port. `X-Request-Id`, `X-Served-By`, `X-Cache` and `ETag` are exposed to the browser.
+- **CORS:** allowed origins are `CORS_ORIGINS` (a comma list where `https://*.example.org` style wildcards work) plus localhost on any port. `X-Request-Id`, `X-Served-By`, `X-Cache` and `ETag` are exposed to the browser.
 - **OpenAPI docs:** `/api/docs`.
 
 ## Layout

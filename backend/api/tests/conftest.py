@@ -75,6 +75,6 @@ def fixtures_dir(tmp_path: Path) -> Path:
 def client(fixtures_dir: Path):
     settings = Settings(_env_file=None, data_mode="fixtures", fixtures_dir=fixtures_dir, instance_id="test-1",
                         redis_url=None, database_url=None, ai_rate_limit_per_minute=3,
-                        cors_origins="https://*.lovable.app")
+                        cors_origins="https://*.example.org")
     with TestClient(create_app(settings)) as c:
         yield c

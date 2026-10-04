@@ -50,6 +50,6 @@ The ops endpoints `GET /healthz` and `GET /readyz` are used by the load balancer
 2. **One person from each side approves.**
 3. Prefer **additive** changes: a new optional field `foo: X | null` or a new endpoint. Bump the minor version (`1.1.0`) in `atlas.ts` and in `api_meta()`.
 4. Breaking change = major bump. Avoid after hour 6.
-5. After merge, frontend copies `atlas.ts` + `fixtures/` into the Lovable repo: `scripts/sync-contract.sh <path-to-frontend-repo>`.
+5. After merge, frontend copies `atlas.ts` + `fixtures/` into the frontend repo: `scripts/sync-contract.sh <path-to-frontend-repo>`.
 
 Contract freeze: **v1 is frozen at hour 2**. Only additive changes after that.

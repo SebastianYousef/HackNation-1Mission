@@ -1,6 +1,6 @@
-# LOVABLE.md — project knowledge for the Rare Disease Atlas frontend
+# FRONTEND_SPEC.md — binding spec for the Rare Disease Atlas frontend
 
-> Paste this file into **Lovable → Project settings → Knowledge** and keep a copy at the repo root.
+> Synced to the frontend repo root by `scripts/sync-contract.sh`.
 > It is the frontend's half of the bridge. The other half is `src/contract/atlas.ts`.
 
 ## 1. Your role: frontend ONLY
@@ -10,7 +10,7 @@ You build the user interface of **"Atlas — AI map for the world's rare disease
 A separate backend team owns all data, AI and servers. They run a REST API behind a load balancer. **You consume that API and nothing else.**
 
 ### Never do these
-- ❌ Do **not** enable Lovable Cloud, the Supabase integration, auth, storage, or database tables. Do **not** write migrations or edge functions. There is no backend code in this repo.
+- ❌ Do **not** add Supabase, auth, storage, or database tables. Do **not** write migrations or edge functions. There is no backend code in this repo.
 - ❌ Do **not** call OpenAI, Bright Data, PubMed or any other external API from the browser. Do **not** put any API key in the code.
 - ❌ Do **not** edit `src/contract/**` or `src/mocks/fixtures/**`. They are synced from the backend repo.
 - ❌ Do **not** invent endpoints or fields. If a screen needs data that isn't in `src/contract/atlas.ts`, add an entry to `CONTRACT_REQUESTS.md` (what, why, proposed type) and render a placeholder.
@@ -36,7 +36,7 @@ export const DATA_MODE: "http" | "mock" =
   new URLSearchParams(location.search).get("mock") === "1" || import.meta.env.VITE_DATA_MODE === "mock" ? "mock" : "http";
 ```
 - Production: the site and the API share one origin. The L7 load balancer routes `/api/*` to the API servers, so `API_BASE = ""`.
-- Development and Lovable preview: `VITE_API_BASE` = the backend team's public dev URL (they will give it to you). If unset, use mock mode.
+- Development: `VITE_API_BASE` = the backend team's public dev URL (they will give it to you). If unset, use mock mode.
 - Appending `?mock=1` to any URL forces mock mode. That's useful when the backend is down.
 
 ### API layer (`src/api/`)

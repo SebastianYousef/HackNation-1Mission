@@ -29,7 +29,7 @@ _LOCAL_ORIGINS = r"https?://(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])(:\d+)?"
 
 
 def cors_regex(origins: str) -> str:
-    """'https://*.lovable.app,https://x.com' -> one anchored regex (+ localhost dev ports)."""
+    """'https://*.example.org,https://x.com' -> one anchored regex (+ localhost dev ports)."""
     parts = [_LOCAL_ORIGINS]
     for o in (o.strip().rstrip("/") for o in origins.split(",") if o.strip()):
         if o == "*":

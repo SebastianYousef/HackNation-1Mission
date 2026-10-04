@@ -10,7 +10,7 @@ Maria types her disease into one box and walks a **cited** path: shared mechanis
 - **Hero:** a CLN subtype **without** an approved therapy, chosen at hour 1 by the backend from real data density (candidates: CLN5, CLN6, CLN3, CLN7). Fixtures use CLN5.
 - **Honest-gap case:** a second disease with no exact patient group, used for Devon's story.
 - **Everything precomputed**; live LLM calls only for "explain", "draft message" and the optional web gap-search.
-- **OpenAI** for extract, reconcile and explain (prize eligibility). **Bright Data** for the patient-org layer and live gap-search. **Lovable** for the UI.
+- **OpenAI** for extract, reconcile and explain (prize eligibility). **Bright Data** for the patient-org layer and live gap-search.
 
 ## Roles
 
@@ -29,8 +29,8 @@ Hours are from the start. ⟂ marks an integration checkpoint: 10 minutes, all f
 
 | Hour | B1 Data & Graph | B2 Platform & Services | F1 Journey | F2 Graph & Data layer |
 |---|---|---|---|---|
-| **0–1** | **Everyone:** read this plan + `contract/README.md`, set up accounts (Supabase, OpenAI, Bright Data, Lovable, Oracle/Render), create `.env` files, agree on the hero disease candidate. | | | |
-| 1–2 | MONDO + HPO ingest for the slice; check data density for the hero candidates → **pick hero** | Supabase project, run migrations; API in `DATA_MODE=fixtures` running locally | Lovable project + Knowledge + Prompt 1 | sync contract, `src/api/` http + mock + hooks |
+| **0–1** | **Everyone:** read this plan + `contract/README.md`, set up accounts (Supabase, OpenAI, Bright Data, Oracle/Render), create `.env` files, agree on the hero disease candidate. | | | |
+| 1–2 | MONDO + HPO ingest for the slice; check data density for the hero candidates → **pick hero** | Supabase project, run migrations; API in `DATA_MODE=fixtures` running locally | frontend repo + `FRONTEND_SPEC.md` + Prompt 1 | sync contract, `src/api/` http + mock + hooks |
 | **2 ⟂** | **Contract v1 frozen.** Backend shares a public dev URL (cloudflared tunnel) serving fixtures. | | | |
 | 2–6 | HGNC, Orphanet, ClinVar, Reactome; IC + similarity; first `load` into Supabase | compose stack: L4 → L7×2 → API×3 + Redis; `lb-demo`; endpoints switched to `db` as data lands; `check_contract.py` | Home, Search, action-view sections 1–4 on mocks | encoding.ts + primitives, evidence drawer, graph canvas |
 | **6 ⟂** | Search + node + neighborhood + similar work on **real data** through the LB. Frontend points `VITE_API_BASE` at it. | | | |
@@ -76,7 +76,7 @@ Hours are from the start. ⟂ marks an integration checkpoint: 10 minutes, all f
 | Ambition & craft | Persona-specific views, Family/Expert mode, low-ink design, production-style LB architecture with horizontal scaling |
 
 ## Submission checklist
-- [ ] Production URL (behind LB) + Lovable backup URL + `?mock=1` snapshot works offline
+- [ ] Production URL (behind LB) + `?mock=1` snapshot works offline
 - [ ] README: architecture, how to run (`make up`), **how to reproduce the dataset** (`backend/pipeline` `make all`)
 - [ ] Team video + 1-minute walkthrough
 - [ ] `.env` secrets not in git (`git grep -i "sk-"` returns nothing)
@@ -87,7 +87,6 @@ Hours are from the start. ⟂ marks an integration checkpoint: 10 minutes, all f
 |---|---|
 | Real data is thin for the hero | Pick the hero at hour 1 from data density; fixtures keep the frontend unblocked |
 | OpenAI / Bright Data rate limits or outage | Everything precomputed + cached; deterministic fallbacks; snapshot mode |
-| Lovable credit cap | One paid seat; logic hand-written in the synced repo |
 | Cloud deploy eats hours | cloudflared tunnel from the laptop is the fallback public URL; `make up` locally satisfies "easy to run locally" |
 | LLM hallucinated edges | Quotes required; extraction validated against the source text; status `literature`/`hypothesis`, never `curated`; hand-check every edge on the demo path |
 | Contract churn | v1 frozen at hour 2; additive changes only; 5-minute PR protocol |

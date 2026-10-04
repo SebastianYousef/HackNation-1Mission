@@ -129,7 +129,7 @@ Keep that number below the limit of the Supabase **transaction pooler** (Supavis
 | `scripts/lb-native.sh` | `make lb-native`: 3 replicas + native HAProxy, round robin, then a graceful drain |
 | `scripts/check-configs.sh` | Offline checks: `haproxy -c` on all three configs (l7 with a throwaway cert), plus the client-IP trust rules above |
 
-**Frontend build for `web`:** run `npm run build` in the Lovable repo, then either copy `dist/` to `<repo>/frontend-dist/` or `export WEB_DIST=/abs/path/to/dist` before `make up`. If the frontend is hosted on Lovable instead, `web` is only needed for a single-origin demo. The API's CORS setting already allows `*.lovable.app`.
+**Frontend build for `web`:** run `npm run build` in the frontend repo, then either copy `dist/` to `<repo>/frontend-dist/` or `export WEB_DIST=/abs/path/to/dist` before `make up`.
 
 **Validating configs without Docker:** `infra/scripts/check-configs.sh`. It needs `haproxy` and `openssl` on PATH. Set `PYTHON=` to an interpreter with PyYAML to also check that the api port is not published. It runs `haproxy -c` on all three configs. `l7.cfg` is checked as a copy whose cert path points at a throwaway cert, because the real path only exists inside the container. The `resolvers docker` section (127.0.0.11) passes `-c` as is, because `init-addr none` delays resolution to runtime.
 

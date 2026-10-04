@@ -59,7 +59,7 @@ export DATABASE_URL="postgresql://atlas:<POSTGRES_PASSWORD>@100.87.219.50:5432/a
 cd backend/pipeline && make load          # the API serves the new dataset immediately (cache keyed on version)
 ```
 
-**Deploying the frontend:** build the Lovable repo (`npm run build`) and copy `dist/*` into `~/atlas-server/web-dist/`. It's served at `/` behind the same LB, same origin as `/api`. Set `VITE_API_BASE=""` for that build.
+**Deploying the frontend:** build the frontend repo (`npm run build`) and copy `dist/*` into `~/atlas-server/web-dist/`. It's served at `/` behind the same LB, same origin as `/api`. Set `VITE_API_BASE=""` for that build.
 
 **Operations:**
 
@@ -81,6 +81,6 @@ The laptop must be on the same tailnet:
 ## Risks
 | Risk | Mitigation |
 |---|---|
-| PC sleeps, reboots or is needed by its owner during judging | containers `restart: unless-stopped`; ask the owner to disable sleep for the judging window; keep the cloudflared / Lovable + `?mock=1` snapshot fallback from `docs/ARCHITECTURE.md` §8 |
+| PC sleeps, reboots or is needed by its owner during judging | containers `restart: unless-stopped`; ask the owner to disable sleep for the judging window; keep the cloudflared + `?mock=1` snapshot fallback from `docs/ARCHITECTURE.md` §8 |
 | Home upload bandwidth | static assets are tiny; API responses are cached; Funnel is fine for demo traffic |
 | Funnel not allowed in the tailnet policy | `cloudflared tunnel --url http://127.0.0.1:8081` gives an instant public HTTPS URL to the same edge port |

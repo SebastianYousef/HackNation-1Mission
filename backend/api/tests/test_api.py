@@ -139,9 +139,9 @@ def test_submissions(client):
 
 
 def test_cors(client):
-    ok = client.options(f"{V1}/meta", headers={"Origin": "https://my-app.lovable.app",
+    ok = client.options(f"{V1}/meta", headers={"Origin": "https://my-app.example.org",
                                                "Access-Control-Request-Method": "GET"})
-    assert ok.headers.get("access-control-allow-origin") == "https://my-app.lovable.app"
+    assert ok.headers.get("access-control-allow-origin") == "https://my-app.example.org"
     local = client.get(f"{V1}/meta", headers={"Origin": "http://localhost:5173"})
     assert local.headers.get("access-control-allow-origin") == "http://localhost:5173"
     assert "x-served-by" in local.headers.get("access-control-expose-headers", "").lower()
@@ -153,9 +153,9 @@ def test_cors_regex():
     import re
 
     from atlas_api.main import cors_regex
-    rx = re.compile(cors_regex("https://*.lovable.app,https://atlas.example.org"))
-    assert rx.match("https://a.b.lovable.app") and rx.match("https://atlas.example.org")
-    assert not rx.match("https://lovable.app.evil.com") and not rx.match("http://x.lovable.app")
+    rx = re.compile(cors_regex("https://*.example.org,https://atlas.example.com"))
+    assert rx.match("https://a.b.example.org") and rx.match("https://atlas.example.com")
+    assert not rx.match("https://example.org.evil.com") and not rx.match("http://x.example.org")
 
 
 def test_explain_llm_path_is_grounded(fixtures_dir, monkeypatch):
@@ -210,7 +210,7 @@ def _app(fixtures_dir, **kw):
     from atlas_api.config import Settings
     from atlas_api.main import create_app
     base = dict(_env_file=None, data_mode="fixtures", fixtures_dir=fixtures_dir, redis_url=None, database_url=None,
-                instance_id="test-1", cors_origins="https://*.lovable.app")
+                instance_id="test-1", cors_origins="https://*.example.org")
     return TestClient(create_app(Settings(**{**base, **kw})))
 
 
@@ -240,9 +240,9 @@ def test_client_ip_hops(fixtures_dir):
 def test_body_limit(fixtures_dir):
     with _app(fixtures_dir, max_body_bytes=1000) as c:
         big = {"edge_ids": ["E:1"], "audience": "family", "pad": "x" * 2000}
-        r = c.post(f"{V1}/explain", json=big, headers={"Origin": "https://a.lovable.app"})
+        r = c.post(f"{V1}/explain", json=big, headers={"Origin": "https://a.example.org"})
         assert_error(r, 413, "bad_request")
-        assert r.headers.get("access-control-allow-origin") == "https://a.lovable.app"
+        assert r.headers.get("access-control-allow-origin") == "https://a.example.org"
         chunked = c.post(f"{V1}/explain", content=(b"x" * 600 for _ in range(3)),
                          headers={"Content-Type": "application/json"})
         assert_error(chunked, 413, "bad_request")
@@ -263,13 +263,13 @@ def test_readyz_redis_down_is_degraded_not_unready(fixtures_dir):
 def test_500_carries_cors(client, monkeypatch):
     async def boom():
         raise RuntimeError("x")
-    with_origin = {"Origin": "https://a.lovable.app"}
+    with_origin = {"Origin": "https://a.example.org"}
     from fastapi.testclient import TestClient
     with TestClient(client.app, raise_server_exceptions=False) as c:
         monkeypatch.setattr(c.app.state.data, "meta", boom)
         r = c.get(f"{V1}/meta", headers=with_origin)
         assert_error(r, 500, "internal")
-        assert r.headers["access-control-allow-origin"] == "https://a.lovable.app"
+        assert r.headers["access-control-allow-origin"] == "https://a.example.org"
         assert "x-request-id" in r.headers["access-control-expose-headers"].lower()
         assert "access-control-allow-origin" not in c.get(f"{V1}/meta", headers={"Origin": "https://evil.example"}).headers
 

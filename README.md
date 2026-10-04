@@ -21,7 +21,7 @@ NIH RePORTER · Bright Data (patient orgs)                                      
 - **Graph:** 12 node types and 23 typed edges. Every edge carries a **status** (curated / literature / inferred / hypothesis), a confidence, and evidence rows with verbatim quotes and sources, including contradicting ones.
 - **AI (OpenAI):** extracts claims from abstracts with quotes, reconciles names to stable ids, and explains paths in plain language where every sentence cites an edge.
 - **Platform:** stateless API replicas behind a two-layer load balancer with health checks and draining. State lives in Postgres/Redis, so the system scales horizontally without sticky sessions.
-- **Frontend:** a React app built with Lovable, in a separate repo. It talks only to the REST contract in `contract/`.
+- **Frontend:** a React app in a separate repo. It talks only to the REST contract in `contract/`.
 
 Details: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · team plan: [`docs/PLAN.md`](docs/PLAN.md) · API contract: [`contract/README.md`](contract/README.md)
 
@@ -51,7 +51,11 @@ See [`backend/pipeline/README.md`](backend/pipeline/README.md) for sources, envi
 | `backend/api/` | FastAPI service and worker |
 | `backend/pipeline/` | Data pipeline |
 | `infra/` | Load balancers, compose stack, deployment notes |
-| `frontend/` | Lovable instructions (the frontend code lives in its own repo) |
+| `frontend/` | Frontend spec, playbook and landing page (the frontend code lives in its own repo) |
 | `docs/` | Brief, architecture, plan |
+
+## Open work
+
+We track all open work in [GitHub issues](https://github.com/SebastianYousef/HackNation-1Mission/issues), labelled `frontend`, `backend` or `submission`. Found something that needs doing? Open an issue rather than leaving a TODO in the code or docs. Reference it in your commits (`Fixes #N`).
 
 *Atlas organizes published research to help communities find each other. It is not medical advice.*

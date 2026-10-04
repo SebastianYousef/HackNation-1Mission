@@ -23,7 +23,7 @@ x-api-env: &api-env
   DATABASE_URL: ${DATABASE_URL:-postgresql://atlas:atlas@db:5432/atlas}
   DB_POOL_SIZE: ${DB_POOL_SIZE:-5}
   REDIS_URL: redis://redis:6379/0
-  CORS_ORIGINS: ${CORS_ORIGINS:-https://*.lovable.app,https://*.lovableproject.com}
+  CORS_ORIGINS: ${CORS_ORIGINS:-}
   OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
   LOG_LEVEL: ${LOG_LEVEL:-INFO}
   # Client IP = X-Forwarded-For entry this many hops from the right. The L7 replaces that
@@ -97,7 +97,7 @@ services:
       replicas: 2
     expose: ["8080"]
     volumes:
-      # The built frontend: `npm run build` in the Lovable repo, copy dist/ to ../frontend-dist
+      # The built frontend: `npm run build` in the frontend repo, copy dist/ to ../frontend-dist
       # (or set WEB_DIST=/abs/path/to/dist). Unknown paths fall back to index.html (SPA routing).
       - ${WEB_DIST:-../frontend-dist}:/usr/share/nginx/html:ro
       - ./nginx/web.conf:/etc/nginx/conf.d/default.conf:ro

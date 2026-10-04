@@ -1,11 +1,11 @@
 # Prototype prompt: `landing-2.html` → a working One Mission app on real data
 
-Paste everything inside the box below into **Lovable** (or **Claude Code** in the frontend repo) as one message.
+Paste everything inside the box below into **Claude Code** in the frontend repo as one message.
 
 It turns the design and sections of `frontend/landing-2.html` (One Mission) into a React app wired to the **live API with real data**. landing-2 runs on hand-written *sample* data (Leigh syndrome, Dravet). The live dataset is the **lysosomal / Batten (NCL) slice**, so the prompt keeps landing-2's look, copy and section structure and fills it with real NCL records.
 
 **Before pasting:**
-1. Attach or paste `frontend/landing-2.html` into the conversation (Lovable: upload it; Claude Code: copy it into the repo as `design/landing-2.html`).
+1. Attach or paste `frontend/landing-2.html` into the repo as `design/landing-2.html`.
 2. Make sure `src/contract/atlas.ts` + `src/mocks/fixtures/` are synced (`scripts/sync-contract.sh`).
 3. Replace `<LIVE_API_URL>` with the current backend URL: `ssh laqueinux "journalctl --user -u atlas-tunnel -o cat | grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' | tail -1"`, or ask the backend team. It changes when the tunnel restarts.
 
@@ -16,7 +16,7 @@ Build a WORKING PROTOTYPE of "One Mission" (the rare-disease atlas) as a React a
 
 DESIGN SOURCE: the attached landing-2.html. Port its look and structure faithfully: the :root tokens incl. dark mode (--paper, --ink, --accent, --night*, --ev/--hy/--un and their -n variants), fonts (Newsreader display, Hanken Grotesk body, IBM Plex Mono labels), "night" bands, the .st status chips, line styles, section rhythm, copy tone and the Reader/Researcher switch. Use its sections as components. REPLACE all of its sample DATA with live API calls; no hard-coded diseases, people or organizations may remain (remove every "(sample)" / "Sample data · demo" label once a section is live).
 
-DATA SOURCE: only the REST API typed in src/contract/atlas.ts (the source of truth: never invent fields or endpoints, never edit src/contract/** or src/mocks/fixtures/**). No Supabase, no Lovable Cloud, no auth, no API keys in the browser. Stack: React + Vite + TypeScript strict + Tailwind (theme mapped to landing-2's tokens) + react-router + @tanstack/react-query + lucide-react; cytoscape + fcose for the graph.
+DATA SOURCE: only the REST API typed in src/contract/atlas.ts (the source of truth: never invent fields or endpoints, never edit src/contract/** or src/mocks/fixtures/**). No Supabase, no auth, no API keys in the browser. Stack: React + Vite + TypeScript strict + Tailwind (theme mapped to landing-2's tokens) + react-router + @tanstack/react-query + lucide-react; cytoscape + fcose for the graph.
 
 GOAL OF THIS PASS: a user can go /app → search → a disease → see its real graph and connections → click any line → see the real evidence (quotes, sources) → get a cited plain-language explanation → build a "my first step" plan. Ship that end to end first; a working plain slice beats a beautiful half.
 
@@ -24,7 +24,7 @@ GOAL OF THIS PASS: a user can go /app → search → a disease → see its real 
 - src/config.ts:
     const LIVE = "<LIVE_API_URL>";
     export const API_BASE = import.meta.env.VITE_API_BASE
-      ?? (/lovable\.app$|lovableproject\.com$|^localhost$|^127\./.test(location.hostname) ? LIVE : "");  // "" = same origin on our server
+      ?? (/^localhost$|^127\./.test(location.hostname) ? LIVE : "");  // "" = same origin on our server
     export const DATA_MODE = new URLSearchParams(location.search).get("mock") === "1" || import.meta.env.VITE_DATA_MODE === "mock" ? "mock" : "http";
 - src/api/http.ts: HttpAtlasApi implements AtlasApi with fetch(`${API_BASE}/api/v1/...`). encodeURIComponent every id (CURIEs like "MONDO:0009745"); comma-separated list params; non-2xx → throw ApiError{status, code, message, requestId} from the body {error:{code,message,request_id}}; remember the last X-Served-By / X-Request-Id. src/api/mock.ts: MockAtlasApi over src/mocks/fixtures (import.meta.glob, ":" → "_" in file names). src/api/index.ts picks by DATA_MODE. src/api/hooks.ts: react-query hooks, staleTime 5 min, retry once on 5xx, never on 4xx, keepPreviousData for search.
 - 404 = landing-2's honest "Unknown" state, never a crash. Other errors: a toast with the request id.

@@ -1,6 +1,6 @@
 # Architecture: Rare Disease Atlas
 
-> One-line version: an **offline pipeline** builds an evidence-cited knowledge graph into Postgres. **Stateless API replicas behind an L4 → L7 load-balancer chain** serve it through a frozen REST contract to a **Lovable-built React frontend**. The two teams meet only at `contract/`.
+> One-line version: an **offline pipeline** builds an evidence-cited knowledge graph into Postgres. **Stateless API replicas behind an L4 → L7 load-balancer chain** serve it through a frozen REST contract to a **React frontend**. The two teams meet only at `contract/`.
 
 ## 1. System overview
 
@@ -11,8 +11,8 @@
                                    └───────────────────────────────────────────────────────────────────────────────────┼──┘
                                                                                                                         ▼
  Browser ──DNS──► 203.0.113.10 ──► [L4 LB] ──TCP+PROXY v2──► [L7 LB ×2] ──HTTP──► [API ×N] ──SQL──► Postgres (Supabase)
-  (React SPA,       public IP       TCP:443      10.0.0.0/24       TLS end,  /api/* ─► 10.0.1.x:8000  │      api_* functions
-   from Lovable)                    src-IP hash                    routing   /*     ─► [web] nginx     ├──► Redis (cache, rate
+  (React SPA)       public IP       TCP:443      10.0.0.0/24       TLS end,  /api/* ─► 10.0.1.x:8000  │      api_* functions
+                                    src-IP hash                    routing   /*     ─► [web] nginx     ├──► Redis (cache, rate
                                                                    health    (static dist/)            │     limits, job queue)
                                                                                                       └──► OpenAI (explain/draft)
                                                                                     [worker ×M] ◄── Redis queue ──► Bright Data SERP
@@ -20,7 +20,7 @@
 
 | Layer | Owner | Tech | State? |
 |---|---|---|---|
-| Frontend SPA | Frontend team | Lovable → React, Vite, TS, Tailwind, shadcn, react-query, cytoscape | none (browser) |
+| Frontend SPA | Frontend team | React, Vite, TS, Tailwind, shadcn, react-query, cytoscape | none (browser) |
 | L4 load balancer | Backend (B2) | HAProxy `mode tcp` (prod: cloud Network LB) | none |
 | L7 load balancer | Backend (B2) | HAProxy `mode http` ×2 (prod: cloud Flexible/Application LB) | none |
 | API replicas | Backend (B2) | FastAPI + uvicorn, psycopg3 pool | **none: stateless** |
@@ -154,7 +154,7 @@ The brief: *"If you want to win the challenge track prizes, you need to leverage
 - Frontend: `AtlasApi` has two implementations, `HttpAtlasApi` and `MockAtlasApi` (fixtures). `?mock=1` toggles. The frontend can therefore finish every screen without the backend.
 - Backend: `DATA_MODE=fixtures` serves the same fixtures over real HTTP behind the real LB from hour ~2. Endpoints are then switched to `db` one by one as data lands, and the frontend never notices.
 - `backend/scripts/check_contract.py --base-url …` checks a running API against the contract. `contract/scripts/validate-fixtures.mjs` checks the fixtures.
-- Separate repos: the frontend lives in the Lovable-owned repo; this repo holds backend + contract + docs. `scripts/sync-contract.sh` copies the bridge across.
+- Separate repos: the frontend lives in its own repo; this repo holds backend + contract + docs. `scripts/sync-contract.sh` copies the bridge across.
 
 ## 8. Deployment
 
@@ -171,7 +171,7 @@ The free-tier cloud options below are the fallback, and the reference for a mult
 | L7 LB | Oracle Cloud Always Free **Flexible Load Balancer** (10 Mbps), or HAProxy on a VM | Render / Cloud Run built-in L7 |
 | API + worker + web + Redis | Oracle Always Free VMs (Ampere A1) in a **private subnet**, running `infra/docker-compose.yml` | Render free web service / Cloud Run |
 | Postgres | Supabase free tier (via pooler) | same |
-| Public URL during the hackathon | `cloudflared tunnel --url http://localhost:80` (free, instant HTTPS) | Lovable publish (`*.lovable.app`) + public API |
+| Public URL during the hackathon | `cloudflared tunnel --url http://localhost:80` (free, instant HTTPS) | `?mock=1` snapshot mode |
 
 Verify the current Always Free limits when signing up; Oracle sign-up needs a card, so start that at hour 0. Supabase free projects pause after a week of inactivity, so keep the project active through judging. The brief also accepts "easy to run locally": `make up` starts the whole stack (L4 → L7 ×2 → API ×3 → Redis/Postgres → web) with Docker Compose.
 
