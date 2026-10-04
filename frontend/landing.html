@@ -1383,6 +1383,27 @@ footer .debug span{display:block;margin-top:6px;word-break:break-all}
 <div class="toasts" id="toasts" aria-live="assertive"></div>
 
 <script>
+/* Orphanet prevalence arrives as a list of objects ({type, class, mean, geographic, source, ...}).
+   omPrevalence(list, 'reader') gives one plain sentence; 'researcher' lists every estimate with its type, region and source. */
+window.omPrevalence=function(list,mode){
+  if(!Array.isArray(list)||!list.length) return typeof list==='string'?list:'';
+  const nf=n=>Number(n).toLocaleString('en-US');
+  const cls=c=>{ if(!c) return ''; const m=String(c).replace(/\s+/g,'').match(/^(<)?([\d.]+)(?:-([\d.]+))?\/([\d]+)$/);
+    if(!m) return String(c); const den=nf(m[4]); return m[1]?`fewer than ${m[2]} in ${den}`:(m[3]?`${m[2]} to ${m[3]} in ${den}`:`${m[2]} in ${den}`); };
+  const src=e=>{ const s=String(e.source||''); return /ORPHANET/i.test(s)?'Orphanet':(/EXPERT/i.test(s)?'expert estimate':(/PMID/i.test(s)?'published study':s)); };
+  const one=e=>{ const t=String(e.type||'').toLowerCase();
+    if(/cases|families/.test(t)&&e.mean!=null) return `about ${nf(e.mean)} cases or families reported${e.geographic?' ('+e.geographic+')':''}`;
+    const c=cls(e.class); if(c) return `${c} people${/birth/.test(t)?' at birth':''}${e.geographic&&e.geographic!=='Worldwide'?' in '+e.geographic:''}`;
+    if(e.mean!=null) return `${e.mean} in 100,000 (${t||'estimate'})`; return ''; };
+  if(mode==='researcher'){
+    return list.map(e=>[e.type,e.class||(e.mean!=null?String(e.mean):''),e.geographic,src(e)].filter(Boolean).join(', ')).filter(Boolean).join('; ');
+  }
+  const rank=e=>{ const t=String(e.type||'').toLowerCase(); return (/point prevalence/.test(t)?0:/birth/.test(t)?1:/cases|families/.test(t)?2:3)+(e.geographic==='Worldwide'?0:0.5); };
+  const best=[...list].sort((a,b)=>rank(a)-rank(b)).map(one).find(Boolean);
+  return best?best.charAt(0).toUpperCase()+best.slice(1):'';
+};
+</script>
+<script>
 (function(){
 'use strict';
 /* =====================================================================
@@ -1639,7 +1660,7 @@ async function _buildDs(id){
   ds.sci=node.description||'';
   ds.aliases=node.synonyms||[];
   const A=node.attrs||{}, arr=v=>Array.isArray(v)?v.join(', '):v;
-  ds.facts=[['Onset',arr(A.onset)],['Inheritance',arr(A.inheritance)],['Prevalence',arr(A.prevalence)],['Also called',arr(A.abbreviations)]].filter(f=>f[1]);
+  ds.facts=[['Onset',arr(A.onset)],['Inheritance',arr(A.inheritance)],['Prevalence',window.omPrevalence(A.prevalence,'reader')],['Also called',arr(A.abbreviations)]].filter(f=>f[1]);
   nb.nodes.forEach(n=>addNode(ds,n)); nb.edges.forEach(e=>addEdge(ds,e));
   (ds.paths||[]).forEach(p=>{ p.nodes.forEach(n=>addNode(ds,n)); p.edges.forEach(e=>addEdge(ds,e)); });
   const cardEdge=[];                                   // card edges we only know by id
@@ -2772,7 +2793,7 @@ function rs_descHtml(n,full){
   if(!plain&&!sci) h+=`<p class="rs-muted">No summary is recorded for this yet.</p>`;
   if(node){
     const kv=[];
-    (RS_ATTR_KEYS[node.type]||[]).forEach(([k,l])=>{ let v=rs_val(node.attrs&&node.attrs[k]); if(!v) return;
+    (RS_ATTR_KEYS[node.type]||[]).forEach(([k,l])=>{ let v=k==='prevalence'?window.omPrevalence(node.attrs&&node.attrs[k],'researcher'):rs_val(node.attrs&&node.attrs[k]); if(!v) return;
       if(k==='amount_usd') v='$'+fmtNum(node.attrs[k]); if(k==='overall_status') v=rs_human(v); if(k==='phase') v=rs_phase(v); if(k==='asset_kind'||k==='access') v=rs_human(v);
       if(k==='website'&&/^https?:/.test(v)) kv.push([l,`<a href="${esc(v)}" target="_blank" rel="noopener">${esc(v.replace(/^https?:\/\/(www\.)?/,''))} ↗</a>`]); else kv.push([l,esc(v)]); });
     if((node.synonyms||[]).length) kv.push(['Also called',esc(node.synonyms.slice(0,6).join(', '))+(node.synonyms.length>6?` <span class="rs-muted">+${node.synonyms.length-6} more</span>`:'')]);
