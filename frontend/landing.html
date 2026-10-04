@@ -112,6 +112,78 @@ p{margin:0}
 .role[aria-pressed="true"]{background:var(--night-3);box-shadow:inset 0 -2px 0 #9DB4FF}
 @media (max-width:560px){.role-grid{grid-template-columns:1fr}.role+.role{border-left:0;border-top:1px solid var(--night-rule)}}
 @media (max-width:720px){.hero-net{opacity:.45}}
+/* HERO: live line and the path (in front of a quiet background) */
+.hero-live{display:flex;align-items:center;gap:8px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,320px);gap:48px;align-items:center}
+.hero-path{position:relative;margin-top:28px}
+.hp-title{font-size:13px;color:var(--night-ink-2);font-weight:500;margin-bottom:16px}
+.hero-path ol{list-style:none;margin:0;padding:0}
+.hero-path li{position:relative;padding:0 0 12px}
+.hero-path li:last-child{padding-bottom:0}
+.hero-path li:not(:last-child)::after{content:"";position:absolute;left:10px;top:30px;bottom:2px;width:1.5px;background:#2E3E54;border-radius:1px}
+.hp-node{display:inline-grid;grid-template-columns:22px auto;column-gap:14px;align-items:center;text-decoration:none;color:var(--night-ink);padding:4px 12px 4px 0;border-radius:8px}
+.hp-dot{width:22px;height:22px;border-radius:50%;border:1.5px solid #5E77A6;background:var(--night-2);display:grid;place-items:center;transition:border-color .2s,box-shadow .2s,background .2s}
+.hp-dot::after{content:"";width:6px;height:6px;border-radius:50%;background:#9DB4FF;opacity:.75}
+.hp-txt{display:grid;line-height:1.25}
+.hp-name{font-size:17px;font-weight:500}
+.hp-count{font-size:13px;color:var(--night-ink-2);min-height:1.2em}
+.hp-node:hover .hp-dot,.hp-node.on .hp-dot,.hp-node:focus-visible .hp-dot{border-color:#C9D6FF;box-shadow:0 0 0 6px rgba(157,180,255,.12);background:var(--night-3)}
+.hp-node:hover .hp-name,.hp-node.on .hp-name{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.hero-path li:last-child .hp-dot{background:#C9D6FF;border-color:#C9D6FF}
+.hero-path li:last-child .hp-dot::after{background:var(--night);opacity:1}
+.hp-desc{margin-top:18px;font-size:14px;line-height:1.45;color:var(--night-ink-2);min-height:4.4em;max-width:34ch;border-left:2px solid var(--night-rule);padding-left:12px}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr;gap:0}
+  .hero-path{margin-top:36px}
+  .hp-title{margin-bottom:10px}
+  .hero-path ol{display:flex;flex-wrap:wrap;row-gap:8px}
+  .hero-path li,.hero-path li:last-child{padding:0;display:flex;align-items:center}
+  .hero-path li:not(:last-child)::after{position:static;display:block;width:10px;height:1.5px;margin:0 4px;background:#3B4D66}
+  .hp-node{grid-template-columns:10px auto;column-gap:7px;padding:5px 10px 5px 8px;border:1px solid var(--night-rule);border-radius:999px;background:color-mix(in srgb,var(--night-2) 85%,transparent)}
+  .hp-dot{width:10px;height:10px;border-width:1.5px}
+  .hp-dot::after{display:none}
+  .hp-name{font-size:14px}
+  .hp-count,.hp-desc{display:none}
+  .hp-node:hover .hp-dot,.hp-node.on .hp-dot,.hp-node:focus-visible .hp-dot{box-shadow:none}
+}
+/* JOURNEY meta row */
+.jmeta{margin-top:22px;display:flex;gap:18px;flex-wrap:wrap;align-items:center;color:var(--night-ink-2);font-size:13px}
+/* 10x: live references under each connected step */
+.flow li .fl-b small{display:block;font-size:13px;line-height:1.45;color:var(--night-ink-2);margin-top:4px}
+.ms-refs{display:block;margin-top:10px}
+.ms-refs[hidden],.vlive[hidden]{display:none}
+.ms-refs-h{display:block;font-size:12.5px;color:var(--night-ink-2);font-weight:500;margin-bottom:6px}
+.ms-refl{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.flow .ms-refl li{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;grid-template-columns:none;padding:0;border-top:0;font-size:13px;line-height:1.4}
+.ms-ref{background:none;border:0;padding:0;text-align:left;color:#B9C8FF;font:inherit;text-decoration:underline;text-decoration-color:rgba(185,200,255,.35);text-underline-offset:3px}
+.ms-ref:hover{text-decoration-color:currentColor}
+.ms-refl .st{font-size:12px;padding:0 7px 0 6px}
+.vlive{display:block;margin-top:6px;color:var(--night-ink)}
+/* TRUST: chain rows and route pickers */
+.chain-q{display:block;margin-top:6px;font-family:var(--f-display);font-size:14px;line-height:1.4;color:var(--ink-2)}
+.chain-c{display:grid;gap:4px;justify-items:end;text-align:right}
+.chain-c .conf{color:var(--ink-2);font-size:13px}
+.chain-how{font-size:12px;color:var(--ink-3)}
+.route-form .rf{display:grid;gap:6px;min-width:0}
+.route-form .rf > label{display:block}
+.rsearch{max-width:none}
+.search.rsearch input{font-size:15px;padding:10px 12px}
+#routePicks{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.route-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.route-title{font-size:14px;color:var(--ink-2);margin:-8px 0 14px}
+/* COMMUNITIES */
+.comm-why{font-size:14px;color:var(--ink-2);margin:14px 0 2px}
+.comm-why.cwarn{color:var(--hy);margin-top:4px}
+.comm-sub+.comm-sub{margin-top:14px}
+/* SOURCES */
+.src-col h4 .src-count{display:inline;font-weight:400;color:var(--ink-3);margin-left:4px;font-size:13px}
+.src-col .src-desc{display:block;font-size:13px;color:var(--ink-3);margin:-8px 0 14px}
+.src-col .src-n{display:block;font-size:14px;color:var(--ink-2);font-weight:500;overflow-wrap:anywhere}
+.src-col li a{font-size:14px;font-weight:500;color:var(--ink)}
+.src-more{margin-top:14px}
+.src-more summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:500}
+.src-more ul{margin-top:12px}
+
 
 /* ATLAS */
 .atlas{background:var(--paper)}
@@ -339,8 +411,8 @@ table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-body);font-s
 
 /* JOURNEY */
 .journey{position:relative}
-.jtrack{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:relative;margin-top:8px}
-.jline{position:absolute;left:calc(100%/12);right:calc(100%/12);top:27px;height:2px}
+.jtrack{--n:6;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));position:relative;margin-top:8px}
+.jline{position:absolute;left:calc(100% / (var(--n) * 2));right:calc(100% / (var(--n) * 2));top:27px;height:2px}
 .jline svg{width:100%;height:8px;overflow:visible;display:block}
 .jstep{position:relative;display:grid;justify-items:center;text-align:center;gap:10px;padding:0 8px 4px;border:0;background:none;color:var(--night-ink)}
 .jnode{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--night-2);border:1px solid var(--night-rule);position:relative;z-index:1;transition:transform .2s,border-color .2s,background .2s}
@@ -483,8 +555,8 @@ table.ev .num{font-variant-numeric:tabular-nums;font-family:var(--f-body);font-s
 .chain-head{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.1fr) 20px auto;gap:10px;padding:0 0 8px}
 .chain-head span{font-family:var(--f-body);font-size:12.5px;letter-spacing:.005em;color:var(--ink-3);font-weight:500}
 @media (max-width:560px){.chain-row,.chain-head{grid-template-columns:minmax(0,1fr) auto}.chain-row .ar,.chain-head .ar{display:none}.chain-row .src{grid-column:1/-1}.chain-head span:nth-child(3){display:none}}
-.route{border:1px solid var(--rule);border-radius:var(--r);background:var(--paper);overflow:hidden}
-.route-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:18px;border-bottom:1px solid var(--rule);background:var(--paper-2)}
+.route{border:1px solid var(--rule);border-radius:var(--r);background:var(--paper)}
+.route-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:18px;border-bottom:1px solid var(--rule);background:var(--paper-2);border-radius:var(--r) var(--r) 0 0}
 .route-form label{display:grid;gap:6px;font-family:var(--f-body);font-size:12.5px;letter-spacing:.005em;color:var(--ink-3);min-width:0;font-weight:500}
 .route-form select{font:inherit;font-size:15px;letter-spacing:0;text-transform:none;padding:10px;border:1px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
 .route-form .opts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;font-size:14px;color:var(--ink-2)}
@@ -675,12 +747,28 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
 <section class="hero night" aria-labelledby="heroTitle">
   <div class="hero-net" id="heroNet" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="eyebrow">Rare disease knowledge atlas</div>
-    <h1 id="heroTitle">From isolated disease to <em>shared action.</em></h1>
-    <p class="lede">Connect the knowledge, people and research already working toward a treatment, and discover the next step together.</p>
-    <div class="hero-ctas">
-      <a class="btn btn-primary" href="#atlas">Explore the Atlas <span class="arr">→</span></a>
-      <a class="btn btn-ghost" href="#tenx">See the 10× Journey</a>
+    <div class="eyebrow hero-live" id="heroLive">A free and open rare disease atlas</div>
+    <div class="hero-grid">
+      <div class="hero-main">
+        <h1 id="heroTitle">From isolated disease to <em>shared action.</em></h1>
+        <p class="lede">Connect the knowledge, people and research already working toward a treatment, and discover the next step together.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#atlas">Explore the Atlas <span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#tenx">See the 10× Journey</a>
+        </div>
+      </div>
+      <nav class="hero-path" aria-labelledby="heroPathTitle">
+        <p class="hp-title" id="heroPathTitle">The path One Mission follows</p>
+        <ol id="heroPath">
+          <li><a class="hp-node" href="#atlas" aria-describedby="hpd1"><span class="hp-dot" aria-hidden="true"></span><span class="hp-txt"><span class="hp-name">Disease</span><span class="hp-count" data-count="disease"></span></span></a><span class="vh" id="hpd1">Start from a diagnosis: what it is, where treatment stands and what it connects to. Opens the Atlas.</span></li>
+          <li><a class="hp-node" href="#journey" data-jstep="Mechanism" aria-describedby="hpd2"><span class="hp-dot" aria-hidden="true"></span><span class="hp-txt"><span class="hp-name">Mechanism</span><span class="hp-count" data-count="mechanism"></span></span></a><span class="vh" id="hpd2">The biology underneath, which often links diseases that look unrelated. Opens the worked example.</span></li>
+          <li><a class="hp-node" href="#communities" aria-describedby="hpd3"><span class="hp-dot" aria-hidden="true"></span><span class="hp-txt"><span class="hp-name">Community</span><span class="hp-count" data-count="community"></span></span></a><span class="vh" id="hpd3">Patient groups and families already working on the same disease or biology. Opens the communities.</span></li>
+          <li><a class="hp-node" href="#studies" data-alt="#journey" data-jstep="Existing asset" aria-describedby="hpd4"><span class="hp-dot" aria-hidden="true"></span><span class="hp-txt"><span class="hp-name">Asset</span><span class="hp-count" data-count="asset"></span></span></a><span class="vh" id="hpd4">Registries, studies and models that could be reused instead of rebuilt.</span></li>
+          <li><a class="hp-node" href="#journey" data-jstep="Collaborator" aria-describedby="hpd5"><span class="hp-dot" aria-hidden="true"></span><span class="hp-txt"><span class="hp-name">Collaborator</span><span class="hp-count" data-count="collaborator"></span></span></a><span class="vh" id="hpd5">The researchers and teams who hold those assets or publish on the disease. Opens the worked example.</span></li>
+          <li><a class="hp-node" href="#plans" aria-describedby="hpd6"><span class="hp-dot" aria-hidden="true"></span><span class="hp-txt"><span class="hp-name">Shared action</span><span class="hp-count">Your plan</span></span></a><span class="vh" id="hpd6">One concrete next step you can start on, built from the links above. Opens Plans.</span></li>
+        </ol>
+        <p class="hp-desc" id="heroPathDesc" aria-hidden="true">Each step is a link. Point at one, or move to it with the keyboard, to see where it leads.</p>
+      </nav>
     </div>
     <div class="roles">
       <div class="eyebrow">Continue as</div>
@@ -725,10 +813,6 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
           <button data-q="cerliponase">CLN2 enzyme therapy</button>
           <button data-q="Borderdale sheep">Borderdale sheep</button>
         </div>
-        <div class="tries tries-sample" id="readerSamples"><span class="sample-tag">Sample data</span><span>Sample examples:</span>
-          <button data-sample="leigh">Leigh syndrome</button>
-          <button data-sample="dravet">Dravet syndrome</button>
-        </div>
         <p class="live-line" id="readerLine" aria-live="polite"></p>
       </div>
       <div id="readerOut"></div>
@@ -749,10 +833,6 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
             <button data-q="CLN6">CLN6</button>
             <button data-q="SCMAS">Subunit c storage</button>
             <button data-q="DEM-CHILD">DEM-CHILD registry</button>
-          </div>
-          <div class="tries tries-sample" id="resSamples"><span class="sample-tag">Sample data</span><span>Sample examples:</span>
-            <button data-sample="leigh">Leigh syndrome</button>
-            <button data-sample="dravet">Dravet syndrome</button>
           </div>
           <p class="live-line" id="resLine" aria-live="polite"></p>
         </div>
@@ -779,9 +859,9 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
 <section class="night band journey" id="journey" aria-labelledby="journeyTitle">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow">Worked example: Leigh syndrome (sample data)</div>
+      <div class="eyebrow" id="journeyEyebrow">Worked example from the live Atlas</div>
       <h2 id="journeyTitle">One connected journey</h2>
-      <p class="lede">Six steps from a diagnosis to an experiment someone could run. Select a step to see why it connects to the one before it, what it rests on, and what could break it.</p>
+      <p class="lede">From a diagnosis to a next step someone could take, one sourced link at a time. Select a step to see why it connects to the one before it, what it rests on, and what could break it.</p>
     </div>
     <div class="jtrack" id="jtrack" role="tablist" aria-label="Journey steps">
       <div class="jline" aria-hidden="true"><svg id="jlineSvg" preserveAspectRatio="none" viewBox="0 0 1000 8"></svg></div>
@@ -798,7 +878,7 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
       <h2 id="tenxTitle">Can CLN5 and CLN6 families get to a shared natural history study 10 times faster?</h2>
       <p class="lede">In our illustrative model, a small family group spends about 3 years finding out what already exists, who to ask and whether another community&#x27;s study fits, before anyone decides to launch a shared study. The Atlas already lists the registries, studies, groups and researchers for CLN5 and CLN6 disease, each with its source, so we think that groundwork could take about 3 to 4 months. The speed-up comes from discovery and preparation, not from biology, ethics review or regulation.</p>
     </div>
-    <div class="ms-card" id="msMilestone"><div class="eyebrow">The milestone</div><h3>Agree to launch a shared natural history study for CLN5 and CLN6 families</h3><p>The milestone is reached when the partners agree to launch: who takes part, which existing registry or study it builds on, and what data it collects. Ethics review, contracts and enrolment come after and are not part of the 10× claim.</p><p class="ms-why">Before a therapy can be tested, researchers need to know how a disease unfolds without treatment. The two disease-specific natural history studies the Atlas lists have each followed one disease on its own: 37 people in the Neurogene CLN5 study and 30 in the Nationwide Children&#x27;s CLN6 study, as listed on ClinicalTrials.gov. A shared study built on registries that already exist could give future trials a clearer baseline and give families a way to take part now.</p></div>
+    <div class="ms-card" id="msMilestone"><div class="eyebrow">The milestone</div><h3>Agree to launch a shared natural history study for CLN5 and CLN6 families</h3><p>The milestone is reached when the partners agree to launch: who takes part, which existing registry or study it builds on, and what data it collects. Ethics review, contracts and enrolment come after and are not part of the 10× claim.</p><p class="ms-why">Before a therapy can be tested, researchers need to know how a disease unfolds without treatment. The two disease-specific natural history studies the Atlas lists have each followed one disease on its own<span id="msEnroll"></span>. A shared study built on registries that already exist could give future trials a clearer baseline and give families a way to take part now.</p></div>
     <div class="race">
       <div class="race-top">
         <button class="btn btn-ghost" id="playBtn" style="padding:8px 16px;font-size:14px">▶ Replay the timeline</button>
@@ -812,11 +892,11 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
       <div class="race-note"><span class="st H">Hypothesis</span>&nbsp; Illustrative model. Step lengths are assumptions for discussion, not measurements, and the 10× figure is the hypothesis this project sets out to test. The registries, studies, groups and mechanisms named here come from the live Atlas with their sources. A link in the Atlas is a reason to look closer, not clinical proof.</div>
     </div>
     <div class="flows">
-      <div class="flow"><h4>Today</h4><ol id="flowToday"></ol></div>
-      <div class="flow"><h4>One Mission</h4><ol id="flowOM"></ol></div>
+      <div class="flow"><h4>Today, with assumed step lengths</h4><ol id="flowToday"></ol></div>
+      <div class="flow"><h4>One Mission, with assumed step lengths</h4><ol id="flowOM"></ol></div>
     </div>
 
-    <div class="ms-assume" id="msAssumptions"><div class="eyebrow">Where the time goes</div><h3>The assumptions behind 10×</h3><ol><li><p class="ms-claim">Most of today&#x27;s 3 years goes into finding and judging, not into science.</p><p><b>Why we think so.</b> This is our working estimate, not a measurement. Our plan assumes related communities and assets are found by word of mouth and cold outreach, often over months to more than a year. The challenge brief describes groups rebuilding assets they cannot find, and says that judging diseases one at a time takes a scout months per mechanism.</p><p><b>How to test it.</b> Interview patient organisation leaders who have set up a study and time each phase they went through.</p></li><li><p class="ms-claim">The building blocks already exist and can be found in public sources.</p><p><b>Why we think so.</b> From public records alone the Atlas found a recruiting registry that lists both CLN5 and CLN6, a natural history study for each disease, a family register and sheep models for both, each with a source you can open. Coverage still depends on what public sources hold.</p><p><b>How to test it.</b> Ask NCL clinicians and patient groups what we missed, and measure how much of their list the Atlas already holds.</p></li><li><p class="ms-claim">Building on an existing registry is faster than designing a new study.</p><p><b>Why we think so.</b> DEM-CHILD is one registered natural history study for all NCL forms, including CLN5 and CLN6, run from the Hamburg NCL clinic, and a published paper has already used its records of 15 children with CLN5. Data fields and outcome measures may not need to be invented again.</p><p><b>How to test it.</b> Ask the DEM-CHILD team whether a shared CLN5 and CLN6 effort fits their current consent and data access, and how long joining would take.</p></li><li><p class="ms-claim">Similar symptoms and course are enough for a shared observational study, even though the mechanisms differ.</p><p><b>Why we think so.</b> Both diseases build up subunit c and share informative symptoms. A natural history study measures how symptoms change over time, not whether a drug works, so we expect the mechanism difference to matter less here than it would for a shared trial.</p><p><b>How to test it.</b> Have NCL clinicians review whether the same outcome measures and visit schedule work for both diseases.</p></li><li><p class="ms-claim">Expert time can be focused on a short checklist instead of open-ended reading.</p><p><b>Why we think so.</b> Every link in the Atlas carries a status and a source, and the Atlas lists the questions that need review, so an expert checks a handful of points rather than starting from a blank page.</p><p><b>How to test it.</b> Time an expert reviewing the Atlas checklist against the same review done from scratch, and record where they disagree with the Atlas.</p></li><li><p class="ms-claim">A sourced proposal gets answered sooner than a cold email.</p><p><b>Why we think so.</b> A message that names the shared registry, the shared biology and its limits gives the reader a concrete reason to reply. This is untested.</p><p><b>How to test it.</b> Run a pilot with one real patient organisation and track reply rates and time to a first meeting.</p></li><li><p class="ms-claim">The speed-up ends at the decision to launch.</p><p><b>Why we think so.</b> Ethics review, contracts, enrolment and the biology itself do not get faster because information is easier to find, so we leave them out of the 10× claim.</p><p><b>How to test it.</b> Track the time after the decision separately in any pilot, so the claim cannot quietly grow.</p></li></ol></div>
+    <div class="ms-assume" id="msAssumptions"><div class="eyebrow">Where the time goes</div><h3>The assumptions behind 10×</h3><ol><li><p class="ms-claim">Most of today&#x27;s 3 years goes into finding and judging, not into science.</p><p><b>Why we think so.</b> This is our working estimate, not a measurement. Our plan assumes related communities and assets are found by word of mouth and cold outreach, often over months to more than a year. The challenge brief describes groups rebuilding assets they cannot find, and says that judging diseases one at a time takes a scout months per mechanism.</p><p><b>How to test it.</b> Interview patient organisation leaders who have set up a study and time each phase they went through.</p></li><li><p class="ms-claim">The building blocks already exist and can be found in public sources.</p><p><b>Why we think so.</b> From public records alone the Atlas found a registry that lists both CLN5 and CLN6, a natural history study for each disease, a family register and animal models for both, each with a source you can open. Coverage still depends on what public sources hold.</p><p><b>How to test it.</b> Ask NCL clinicians and patient groups what we missed, and measure how much of their list the Atlas already holds.</p></li><li><p class="ms-claim">Building on an existing registry is faster than designing a new study.</p><p><b>Why we think so.</b> An international NCL registry already covers all NCL forms, including CLN5 and CLN6, and published work has already used its records. Data fields and outcome measures may not need to be invented again.</p><p><b>How to test it.</b> Ask the registry team whether a shared CLN5 and CLN6 effort fits their current consent and data access, and how long joining would take.</p></li><li><p class="ms-claim">Similar symptoms and course are enough for a shared observational study, even though the mechanisms differ.</p><p><b>Why we think so.</b> Both diseases build up subunit c and share informative symptoms. A natural history study measures how symptoms change over time, not whether a drug works, so we expect the mechanism difference to matter less here than it would for a shared trial.</p><p><b>How to test it.</b> Have NCL clinicians review whether the same outcome measures and visit schedule work for both diseases.</p></li><li><p class="ms-claim">Expert time can be focused on a short checklist instead of open-ended reading.</p><p><b>Why we think so.</b> Every link in the Atlas carries a status and a source, and the Atlas lists the questions that need review, so an expert checks a handful of points rather than starting from a blank page.</p><p><b>How to test it.</b> Time an expert reviewing the Atlas checklist against the same review done from scratch, and record where they disagree with the Atlas.</p></li><li><p class="ms-claim">A sourced proposal gets answered sooner than a cold email.</p><p><b>Why we think so.</b> A message that names the shared registry, the shared biology and its limits gives the reader a concrete reason to reply. This is untested.</p><p><b>How to test it.</b> Run a pilot with one real patient organisation and track reply rates and time to a first meeting.</p></li><li><p class="ms-claim">The speed-up ends at the decision to launch.</p><p><b>Why we think so.</b> Ethics review, contracts, enrolment and the biology itself do not get faster because information is easier to find, so we leave them out of the 10× claim.</p><p><b>How to test it.</b> Track the time after the decision separately in any pilot, so the claim cannot quietly grow.</p></li></ol></div>
 
     <div class="validate">
       <div>
@@ -838,12 +918,12 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
 <section class="band" id="communities" aria-labelledby="commTitle">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow">Communities (sample data)</div>
+      <div class="eyebrow">Communities</div>
       <h2 id="commTitle">The people already on the path.</h2>
       <p class="lede">Patient organizations and family communities hold knowledge no database has: lived experience, registries, samples and the trust to bring families into research. One Mission shows which communities connect to a disease, and why, including related communities that share a gene or mechanism.</p>
     </div>
-    <div class="comm-grid" id="commGrid"></div>
-    <p style="margin-top:28px;font-size:13px;color:var(--ink-3);max-width:70ch">All organizations shown are placeholders marked "(sample)". Select one to see why it is connected and how strong the evidence is.</p>
+    <div class="comm-grid" id="commGrid" aria-live="polite"></div>
+    <p id="commNote" style="margin-top:28px;font-size:13px;color:var(--ink-3);max-width:70ch">Groups are read from the live Atlas. Select one to see why it is connected and how strong the evidence is.</p>
   </div>
 </section>
 
@@ -893,13 +973,11 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
       </div>
       <div class="route">
         <form class="route-form" id="routeForm">
-          <label for="rFrom">From<select id="rFrom"></select></label>
-          <label for="rTo">To<select id="rTo"></select></label>
+          <div class="rf"><label for="rFrom">From</label><div class="search rsearch"><input id="rFrom" type="search" autocomplete="off" placeholder="A disease, gene, group or study"><div class="sugg" hidden></div></div></div>
+          <div class="rf"><label for="rTo">To</label><div class="search rsearch"><input id="rTo" type="search" autocomplete="off" placeholder="A disease, gene, group or study"><div class="sugg" hidden></div></div></div>
           <div class="opts">
-            <label for="rHyp"><input type="checkbox" id="rHyp"> Include hypotheses</label>
-            <button type="button" class="linkbtn" data-pair="leigh:leigh|leigh:d_narp">Leigh → NARP</button>
-            <button type="button" class="linkbtn" data-pair="dravet:dravet|dravet:d_scn2a">Dravet → SCN2A</button>
-            <button type="button" class="linkbtn" data-pair="leigh:leigh|dravet:dravet">Leigh → Dravet</button>
+            <label for="rHyp"><input type="checkbox" id="rHyp"> Include proposed links</label>
+            <span id="routePicks"></span>
           </div>
         </form>
         <div class="route-out" id="routeOut" aria-live="polite"></div>
@@ -913,7 +991,7 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
   <div class="wrap">
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:24px">
       <h3 id="srcTitle">Data sources</h3>
-      <p style="font-size:14px;color:var(--ink-3);max-width:60ch">The public infrastructure the Atlas is designed to draw on. This prototype shows sample records shaped like these sources.</p>
+      <p id="srcSub" style="font-size:14px;color:var(--ink-3);max-width:60ch">The sources the live Atlas holds right now, read from its database.</p>
     </div>
     <div class="src-grid" id="srcGrid"></div>
   </div>
@@ -935,7 +1013,7 @@ html:has(#drawerRoot .drawer) .og-orb{z-index:62}
 <footer>
   <div class="wrap">
     <span class="wordmark" style="color:var(--night-ink)">One Mission</span>
-    <p>About this prototype: every disease profile, organization, lab and study shown here is sample data for demonstration. Named diseases, genes and models are real; labs, groups and records marked "sample" or "example" are placeholders. Nothing here is medical advice.</p>
+    <p>About this prototype: every disease, group, study, researcher and number on this page is read from the live Atlas, and every link carries its source. The 10× timeline is an illustrative model whose step lengths are assumptions. Nothing here is medical advice.</p>
   </div>
 </footer>
 
@@ -958,206 +1036,11 @@ const TYPES={
 const STATUS={E:'Evidence',H:'Hypothesis',U:'Unknown'};
 const SRC_URL={'OMIM':'https://omim.org','HPO':'https://hpo.jax.org','MONDO':'https://mondo.monarchinitiative.org','ClinVar':'https://www.ncbi.nlm.nih.gov/clinvar/','PubMed':'https://pubmed.ncbi.nlm.nih.gov','PMC':'https://www.ncbi.nlm.nih.gov/pmc/','NIH RePORTER':'https://reporter.nih.gov','ClinicalTrials.gov':'https://clinicaltrials.gov','NORD':'https://rarediseases.org','Global Genes':'https://globalgenes.org','Orphanet':'https://www.orpha.net','EURORDIS':'https://www.eurordis.org'};
 
-/* ---------- SAMPLE DATA ----------
-   edges: [source, target, relationship, status, confidence, source label, date, evidence, plain-language, contradictory, share] */
-const DATA={
-leigh:{
-  name:'Leigh syndrome',
-  plain:'A rare, progressive brain disorder that usually begins in infancy or early childhood. It happens when mitochondria, the parts of the cell that make energy, cannot keep up. The brain and muscles, which need the most energy, are affected first.',
-  sci:'Subacute necrotizing encephalomyelopathy. A genetically heterogeneous primary mitochondrial disease with dozens of reported nuclear and mitochondrial DNA causes, characterized by symmetric lesions of the basal ganglia and/or brainstem.',
-  facts:[['Onset','Usually before age 2'],['Causes','Dozens of genes'],['Inheritance','Autosomal recessive, X-linked or maternal']],
-  aliases:['subacute necrotizing encephalomyelopathy','mitochondrial','MILS','maternally inherited Leigh syndrome'],
-  next:{title:'Run one shared biomarker study across the Leigh syndrome and NARP communities.',
-    plain:'Both conditions can come from the same MT-ATP6 change. A family group, a registry and a lab with matching cell models already exist. The next step is to ask them to measure one blood biomarker (GDF-15) together, in cells and in people.',
-    status:'H', checks:['Confirm the registry’s consent covers shared analysis','Check that heteroplasmy level is recorded for both groups','Agree one outcome measure before collecting samples']},
-  nodes:[
-    ['leigh','disease','Leigh syndrome','',''],
-    ['g_surf1','gene','SURF1','Helps assemble complex IV, one of the energy machines inside mitochondria.','Assembly factor for cytochrome c oxidase (complex IV). Biallelic loss-of-function variants are among the most frequently reported nuclear causes.'],
-    ['g_atp6','gene','MT-ATP6','Carried in the mitochondria’s own DNA. Codes part of the machine that makes ATP, the cell’s energy currency.','Encodes subunit a of mitochondrial ATP synthase (complex V). Variants are maternally inherited and heteroplasmic.'],
-    ['g_ndufs4','gene','NDUFS4','Codes part of complex I, the first step of the energy chain.','Accessory subunit of NADH:ubiquinone oxidoreductase (complex I).'],
-    ['v_8993','variant','m.8993T>G','A specific change in MT-ATP6. How severe it is depends on what share of mitochondria carry it.','Pathogenic MT-ATP6 variant; phenotype tracks heteroplasmy level (higher levels associated with MILS, lower with NARP).'],
-    ['m_oxphos','mechanism','OXPHOS deficiency','The cell’s energy production line runs short.','Impaired oxidative phosphorylation leading to energy failure, lactate accumulation and selective neuronal vulnerability.'],
-    ['m_c4','mechanism','Complex IV assembly defect','One energy machine is not built correctly.','Reduced cytochrome c oxidase activity due to defective assembly.'],
-    ['m_c5','mechanism','ATP synthase dysfunction','The final step that makes ATP works poorly.','Impaired proton translocation and ATP synthesis at complex V.'],
-    ['m_mtor','mechanism','mTOR signaling','A growth and nutrient signal. Turning it down helped mice with a Leigh-like disease in lab studies.','Mechanistic target of rapamycin pathway; rapamycin treatment extended survival in Ndufs4 knockout mice.'],
-    ['p_regress','phenotype','Developmental regression','Loss of skills a child had already learned.','HP:0002376'],
-    ['p_lactic','phenotype','Elevated lactate','A blood or spinal fluid sign that cells are short of energy.','HP:0003128 Lactic acidosis'],
-    ['p_hypo','phenotype','Hypotonia','Low muscle tone; a “floppy” feel.','HP:0001252'],
-    ['p_mri','phenotype','Basal ganglia lesions on MRI','Symmetric changes deep in the brain seen on scans.','Bilateral symmetric T2 hyperintensities of basal ganglia and/or brainstem.'],
-    ['d_narp','disease','NARP','Neuropathy, ataxia and retinitis pigmentosa. Caused by the same MT-ATP6 changes, usually in a smaller share of mitochondria.','Lies on a clinical spectrum with MILS determined largely by heteroplasmy.'],
-    ['d_melas','disease','MELAS','Another mitochondrial disease with stroke-like episodes. Different main gene, overlapping energy problem.','Most often m.3243A>G in MT-TL1.'],
-    ['o_found','org','Mitochondrial disease foundation (sample)','A patient organization supporting families across mitochondrial diseases.','Sample placeholder organization.','org'],
-    ['o_family','org','Leigh syndrome family network (sample)','A caregiver group sharing experience and supporting research.','Sample placeholder organization.','org'],
-    ['c_narp','org','MT-ATP6 / NARP family group (sample)','Families affected by MT-ATP6 changes, including NARP and Leigh syndrome.','Sample placeholder community.','community'],
-    ['c_melas','org','MELAS patient community (sample)','A community for a related mitochondrial disease.','Sample placeholder community.','community'],
-    ['r_bio','researcher','Lab A: Mitochondrial bioenergetics (sample)','Studies how cells make energy and what goes wrong.','Sample placeholder lab.','researcher'],
-    ['r_ipsc','researcher','Lab B: iPSC neuron models (sample)','Grows nerve cells from patients’ own cells to study disease in a dish.','Sample placeholder lab.','researcher'],
-    ['r_clinic','researcher','Clinic C: Pediatric mitochondrial medicine (sample)','Doctors who diagnose and care for children with mitochondrial disease.','Sample placeholder clinic.','clinician'],
-    ['pub_spec','publication','Review: MT-ATP6 spectrum from NARP to MILS (example record)','A paper summarizing how one gene causes a range of conditions.','Example record; not a real citation.'],
-    ['pub_mtor','publication','Model study: mTOR inhibition in Ndufs4 knockout mice (example record)','A lab study testing a drug in mice.','Example record; not a real citation.'],
-    ['s_nhs','study','Natural history study, primary mitochondrial disease (sample)','Follows people over time to learn how the disease changes.','Sample placeholder study.','nhs'],
-    ['s_trial','study','Interventional studies in mitochondrial disease','Clinical studies testing possible treatments.','Search of ClinicalTrials.gov for primary mitochondrial disease.','clinical'],
-    ['a_reg','asset','Mitochondrial disease patient registry (sample)','A shared, consented database of patient information.','Sample placeholder registry.','registry'],
-    ['a_gdf','asset','GDF-15 and FGF-21','Proteins in the blood that rise in many mitochondrial diseases.','Circulating biomarkers of mitochondrial dysfunction; best characterized in mitochondrial myopathy.','biomarker'],
-    ['a_mouse','asset','Ndufs4 knockout mouse','A widely used mouse model with a Leigh-like disease.','Develops progressive encephalopathy resembling Leigh syndrome.','model'],
-    ['a_ipsc','asset','MT-ATP6 patient iPSC neuron lines (sample)','Patient-derived nerve cells carrying the MT-ATP6 change.','Sample placeholder asset.','model']
-  ],
-  edges:[
-    ['leigh','g_surf1','is caused by variants in','E',.95,'OMIM, ClinVar','2024','Biallelic SURF1 variants are among the most frequently reported nuclear causes of Leigh syndrome.','Changes in this gene are a well-documented cause.','None found in the sample index.'],
-    ['leigh','g_atp6','is caused by variants in','E',.93,'OMIM, ClinVar','2024','Pathogenic MT-ATP6 variants cause maternally inherited Leigh syndrome (MILS).','Changes in this gene are a well-documented cause, passed down through the mother.','None found in the sample index.'],
-    ['leigh','g_ndufs4','is caused by variants in','E',.9,'OMIM, ClinVar','2023','Biallelic NDUFS4 variants cause complex I deficiency presenting as Leigh syndrome.','A less common but documented cause.','None found in the sample index.'],
-    ['g_atp6','v_8993','has pathogenic variant','E',.95,'ClinVar','2024','Classified pathogenic by multiple submitters.','This specific change is known to cause disease.','None found in the sample index.'],
-    ['v_8993','leigh','at high heteroplasmy is associated with','E',.88,'PubMed (review)','2023','High heteroplasmy levels are typically associated with MILS; lower levels with NARP.','When most mitochondria carry the change, it tends to cause Leigh syndrome.','Thresholds vary between tissues and individuals; blood levels may not reflect brain levels.'],
-    ['v_8993','d_narp','at lower heteroplasmy is associated with','E',.86,'PubMed (review)','2023','Lower heteroplasmy levels are typically associated with NARP.','When fewer mitochondria carry the change, it tends to cause NARP.','Overlap between groups is substantial; heteroplasmy alone does not predict outcome.'],
-    ['leigh','d_narp','shares causal variants with','E',.87,'OMIM, PubMed','2024','NARP and MILS form a clinical spectrum driven by the same MT-ATP6 variants.','Same gene change, different severity. Families can include both.','Clinical courses differ markedly; findings in one may not transfer to the other.','variant effect'],
-    ['leigh','d_melas','shares mechanism with','H',.52,'MONDO, HPO (inferred)','2025','Both involve OXPHOS deficiency and overlapping features such as lactic acidosis and brain lesions.','Both are energy-production diseases, but usually caused by different genes.','MELAS is mainly linked to MT-TL1; shared downstream biology does not imply shared treatment response.','mechanism'],
-    ['g_surf1','m_c4','is required for','E',.92,'PubMed','2022','SURF1 loss reduces assembled complex IV.','Without it, complex IV is not built properly.','Some residual complex IV activity remains in many patients.'],
-    ['g_atp6','m_c5','encodes subunit of','E',.95,'PubMed','2022','MT-ATP6 encodes subunit a of ATP synthase.','This gene is a building block of the ATP machine.','None found in the sample index.'],
-    ['g_ndufs4','m_oxphos','loss reduces','E',.9,'PubMed','2022','NDUFS4 loss destabilizes complex I.','Without it, the first step of the energy chain falters.','None found in the sample index.'],
-    ['m_c4','m_oxphos','contributes to','E',.9,'PubMed','2021','Complex IV deficiency impairs oxidative phosphorylation.','A faulty machine slows the whole line.','None found in the sample index.'],
-    ['m_c5','m_oxphos','contributes to','E',.9,'PubMed','2021','Complex V dysfunction reduces ATP output.','A faulty final step slows energy output.','None found in the sample index.'],
-    ['leigh','m_oxphos','has core mechanism','E',.94,'OMIM, PubMed','2024','Leigh syndrome is defined by primary defects in mitochondrial energy production.','At its core, this disease is about cells running short of energy.','None found in the sample index.'],
-    ['leigh','m_mtor','may be modulated through','H',.45,'PubMed (mouse model)','2023','Rapamycin extended survival and delayed neurological decline in Ndufs4 knockout mice.','Turning down this signal helped mice. Whether it helps people is not known.','Evidence is from an animal model only. Benefit in people with Leigh syndrome has not been established, and effects may differ by genetic cause.'],
-    ['m_mtor','a_mouse','was tested in','E',.8,'PubMed','2023','mTOR inhibition studied in Ndufs4 knockout mice.','This idea has been tried in the mouse model.','Results vary with dosing and timing across studies.'],
-    ['pub_mtor','a_mouse','reports results in','E',.9,'PubMed (example record)','2023','Example publication describing model outcomes.','This paper describes what happened in the mice.',''],
-    ['pub_mtor','leigh','is relevant to','E',.7,'PubMed (example record)','2023','Model study framed around Leigh syndrome.','This paper is about a Leigh-like disease in mice.','Model relevance to human disease is partial.'],
-    ['pub_spec','leigh','describes','E',.9,'PubMed (example record)','2023','Review covering MILS clinical features.','This paper explains Leigh syndrome caused by MT-ATP6.',''],
-    ['pub_spec','d_narp','describes','E',.9,'PubMed (example record)','2023','Review covering NARP clinical features.','The same paper explains NARP.',''],
-    ['leigh','p_regress','presents with','E',.9,'HPO, Orphanet','2024','Frequently annotated phenotype.','Many children lose skills they had learned.','Not all patients show regression; some present with slower development from the start.'],
-    ['leigh','p_lactic','presents with','E',.85,'HPO, Orphanet','2024','Frequently annotated phenotype.','Blood tests often show a sign of energy shortage.','Lactate can be normal in some patients, so a normal result does not rule out the condition.'],
-    ['leigh','p_hypo','presents with','E',.85,'HPO, Orphanet','2024','Frequently annotated phenotype.','Low muscle tone is common.','Non-specific; seen in many conditions.'],
-    ['leigh','p_mri','presents with','E',.92,'HPO, Orphanet','2024','Characteristic neuroimaging finding used in diagnostic criteria.','Brain scans usually show a typical pattern.','Lesions may be absent early in the disease.'],
-    ['o_found','leigh','supports families with','E',.8,'NORD, Global Genes (sample directory)','2025','Listed in patient organization directories.','This organization helps families living with Leigh syndrome.',''],
-    ['o_family','leigh','is a community for','E',.8,'Global Genes (sample directory)','2025','Listed in patient organization directories.','Families affected by Leigh syndrome meet here.',''],
-    ['c_narp','leigh','is a related community through shared MT-ATP6 variants','E',.72,'Orphanet, EURORDIS (sample)','2025','Group includes families with MILS and NARP.','Many of these families share the same gene change.','Membership overlap is estimated, not counted.'],
-    ['c_narp','d_narp','is a community for','E',.8,'EURORDIS (sample)','2025','Listed in patient organization directories.','Families affected by NARP meet here.',''],
-    ['c_melas','leigh','is a related community through shared mechanism','H',.48,'Inferred from MONDO','2025','Connected through shared OXPHOS biology.','A community for a related energy disease.','Different main gene; overlap of research questions is unconfirmed.'],
-    ['r_bio','m_oxphos','studies','E',.75,'NIH RePORTER, PubMed (sample)','2025','Funded projects on OXPHOS biology.','This lab studies the energy problem behind the disease.',''],
-    ['r_bio','leigh','publishes on','E',.7,'PubMed (sample)','2024','Publications mentioning Leigh syndrome.','This lab has written about Leigh syndrome.',''],
-    ['r_ipsc','a_ipsc','maintains','E',.8,'NIH RePORTER (sample)','2025','Asset listed in funded project.','This lab already has MT-ATP6 patient cells.',''],
-    ['r_ipsc','leigh','works on a related mechanism','H',.58,'Inferred from PubMed','2025','Lab works on MT-ATP6 models; no Leigh-specific project found in the sample index.','This lab works on the same gene, but not on Leigh syndrome directly.','No Leigh-specific funding or publications found.'],
-    ['r_clinic','leigh','treats patients with','E',.85,'Orphanet expert centre listing (sample)','2025','Listed expert centre.','These doctors see children with Leigh syndrome.',''],
-    ['r_clinic','s_nhs','is a site for','E',.8,'ClinicalTrials.gov (sample)','2025','Listed study site.','This clinic takes part in the natural history study.',''],
-    ['s_nhs','leigh','enrolls people with','E',.85,'ClinicalTrials.gov (sample)','2025','Eligibility includes Leigh syndrome.','This study follows people with Leigh syndrome over time.',''],
-    ['s_trial','leigh','includes participants with','E',.7,'ClinicalTrials.gov','2025','Registered interventional studies in primary mitochondrial disease include some participants with Leigh syndrome.','Some treatment studies include people with Leigh syndrome.','Eligibility varies; many studies focus on adults or myopathy.'],
-    ['a_reg','leigh','collects data on','E',.8,'Orphanet (sample)','2025','Registry scope includes Leigh syndrome.','This registry already holds information about Leigh syndrome.',''],
-    ['a_reg','d_narp','also collects data on','E',.75,'Orphanet (sample)','2025','Registry scope includes NARP.','The same registry also covers NARP.','Whether heteroplasmy is recorded is unknown.'],
-    ['a_gdf','leigh','is a candidate biomarker for','H',.5,'PubMed','2024','GDF-15 and FGF-21 are elevated in many primary mitochondrial diseases.','These blood markers might help track Leigh syndrome, but this has not been shown.','Sensitivity is lower in some genetic subtypes and in children. Not validated for tracking Leigh syndrome progression.'],
-    ['a_mouse','leigh','models','E',.85,'PubMed','2023','Ndufs4 knockout mice develop progressive neurological disease resembling Leigh syndrome.','This mouse develops a disease like Leigh syndrome.','Models a single genetic cause (complex I); may not represent MT-ATP6 or SURF1 disease.'],
-    ['a_ipsc','d_narp','models','E',.7,'PubMed (sample)','2024','Lines carry m.8993T>G at a range of heteroplasmy levels.','These cells carry the same change seen in NARP.',''],
-    ['a_ipsc','leigh','could model','H',.6,'PubMed','2024','Patient iPSC-derived neural cells carrying MT-ATP6 variants show bioenergetic defects in published work.','These cells might also be useful for Leigh syndrome research.','Neurons in a dish do not reproduce whole-brain disease or the timing of decline.']
-  ],
-  reuse:{a_reg:'Already covers NARP. Adding one shared biomarker field may be feasible.',a_ipsc:'Range of heteroplasmy levels could serve both MILS and NARP questions.',a_mouse:'Data from earlier studies could inform dose and timing.',a_gdf:'Assays are available; validation in children is needed.'}
-},
-dravet:{
-  name:'Dravet syndrome',
-  plain:'A rare, severe form of epilepsy that starts in the first year of life, often with long seizures brought on by fever or warmth. Most children also develop learning, movement and behavior challenges over time.',
-  sci:'A developmental and epileptic encephalopathy, most often caused by de novo heterozygous loss-of-function variants in SCN1A. Previously termed severe myoclonic epilepsy of infancy (SMEI).',
-  facts:[['Onset','First year of life'],['Main gene','SCN1A'],['Inheritance','Usually a new (de novo) change']],
-  aliases:['SMEI','severe myoclonic epilepsy of infancy','epilepsy','seizures','febrile seizures','fever seizures'],
-  next:{title:'Reuse the existing interneuron cell models and natural history study across the SCN1A spectrum.',
-    plain:'Dravet syndrome and GEFS+ share one gene. Cell models and a natural history study already exist. The next step is to check whether GEFS+ families could use the same outcome measures, so results from one group can inform the other.',
-    status:'H', checks:['Confirm the GEFS+ variants studied reduce channel function like Dravet variants','Check natural history study consent and eligibility','Agree outcome measures with both family communities']},
-  nodes:[
-    ['dravet','disease','Dravet syndrome','',''],
-    ['g_scn1a','gene','SCN1A','The instruction for a sodium channel (Nav1.1) that lets certain brain cells send signals.','Encodes the alpha subunit of voltage-gated sodium channel Nav1.1.'],
-    ['v_lof','variant','SCN1A loss-of-function variants','Changes that leave a cell with only one working copy of the gene.','Truncating and missense variants causing reduced Nav1.1 function.'],
-    ['m_hap','mechanism','Nav1.1 haploinsufficiency','Half the normal amount of a working channel.','Reduced Nav1.1 current from a single functional allele.'],
-    ['m_inter','mechanism','Reduced inhibitory interneuron firing','The brain’s “brake” cells fire less, so activity runs unchecked.','Impaired action potential firing of GABAergic interneurons, especially parvalbumin-positive cells.'],
-    ['m_5ht','mechanism','Serotonin (5-HT) signaling','A brain chemical system targeted by one approved medicine.','Serotonergic modulation; fenfluramine is a serotonin-releasing agent.'],
-    ['p_fever','phenotype','Fever-sensitive seizures','Seizures brought on by fever or warmth.','HP:0011171 Febrile seizures'],
-    ['p_status','phenotype','Prolonged seizures','Seizures that last a long time and need emergency treatment.','HP:0002133 Status epilepticus'],
-    ['p_dd','phenotype','Developmental delay','Learning and skills develop more slowly.','HP:0001263'],
-    ['p_gait','phenotype','Crouch gait','A bent-knee walking pattern that can appear later in childhood.','HP:0033741 (crouch gait), reported in adolescents and adults.'],
-    ['d_gefs','disease','GEFS+','Generalized epilepsy with febrile seizures plus. Usually milder, also linked to SCN1A.','Familial epilepsy syndrome; SCN1A missense variants common.'],
-    ['d_scn2a','disease','SCN2A-related epilepsy','A different sodium-channel epilepsy. Sounds similar, may work in the opposite way.','Early-onset forms often gain-of-function; later-onset often loss-of-function.'],
-    ['o_found','org','Dravet family foundation (sample)','A patient organization funding research and supporting families.','Sample placeholder organization.','org'],
-    ['o_net','org','Dravet caregiver network (sample)','A caregiver group sharing practical support.','Sample placeholder organization.','org'],
-    ['c_scn1a','org','SCN1A spectrum community (sample)','Families across conditions linked to SCN1A, including GEFS+.','Sample placeholder community.','community'],
-    ['c_scn2a','org','SCN2A family community (sample)','Families affected by SCN2A-related conditions.','Sample placeholder community.','community'],
-    ['r_ephys','researcher','Lab D: Interneuron electrophysiology (sample)','Measures how brain cells fire, to understand seizures.','Sample placeholder lab.','researcher'],
-    ['r_aso','researcher','Lab E: Antisense therapy development (sample)','Develops medicines that adjust how much of a protein a cell makes.','Sample placeholder lab.','researcher'],
-    ['r_clinic','researcher','Clinic F: Pediatric epilepsy center (sample)','Doctors who diagnose and treat children with severe epilepsy.','Sample placeholder clinic.','clinician'],
-    ['pub_inter','publication','Model study: interneuron dysfunction in Scn1a+/- mice (example record)','A lab study showing which brain cells are affected.','Example record; not a real citation.'],
-    ['pub_nh','publication','Cohort study: long-term outcomes in Dravet syndrome (example record)','A paper following people with Dravet syndrome into adulthood.','Example record; not a real citation.'],
-    ['s_nhs','study','Natural history study of SCN1A-related epilepsy (sample)','Follows people over time to learn how the condition changes.','Sample placeholder study.','nhs'],
-    ['s_aso','study','Clinical studies of SCN1A-upregulating antisense therapy','Studies testing a medicine designed to boost the working gene copy.','Registered on ClinicalTrials.gov.','clinical'],
-    ['a_reg','asset','Dravet syndrome patient registry (sample)','A shared, consented database of patient information.','Sample placeholder registry.','registry'],
-    ['a_bio','asset','Fluid biomarker of progression','A blood or spinal fluid test that tracks the disease. None is validated yet.','No validated fluid biomarker identified in sources searched.','biomarker'],
-    ['a_mouse','asset','Scn1a+/- mouse','A widely used mouse model of Dravet syndrome.','Heterozygous knockout reproducing seizures and premature death.','model'],
-    ['a_ipsc','asset','Patient iPSC-derived interneurons','Brain cells grown from patients’ own cells.','Reported in multiple laboratories.','model']
-  ],
-  edges:[
-    ['dravet','g_scn1a','is caused by variants in','E',.97,'OMIM, ClinVar','2024','De novo SCN1A variants are found in roughly 80% of people with Dravet syndrome.','Most people with Dravet syndrome have a change in this gene.','About 1 in 5 people with the clinical diagnosis have no SCN1A variant; other genes can cause similar pictures.'],
-    ['g_scn1a','v_lof','has variant class','E',.95,'ClinVar','2024','Truncating and missense loss-of-function variants are classified pathogenic.','These kinds of changes stop the gene working properly.','Some missense variants have uncertain significance.'],
-    ['v_lof','m_hap','results in','E',.9,'PubMed','2023','Loss of one allele reduces Nav1.1 current.','One broken copy means half the working channel.',''],
-    ['m_hap','m_inter','leads to','E',.85,'PubMed (mouse models)','2023','Reduced Nav1.1 impairs interneuron firing in Scn1a+/- mice.','Less channel makes the brain’s brake cells weaker.','Some studies report partial compensation with age in mice; human relevance is still being studied.'],
-    ['dravet','m_hap','has core mechanism','E',.92,'OMIM, PubMed','2024','Haploinsufficiency of SCN1A is the main disease mechanism.','The core problem is too little of one working channel.',''],
-    ['dravet','m_inter','involves','E',.82,'PubMed','2023','Interneuron dysfunction is a central model of seizure generation.','Weak brake cells help explain the seizures.','Other cell types also contribute.'],
-    ['dravet','m_5ht','has seizures reduced by targeting','E',.7,'ClinicalTrials.gov, PubMed','2024','Fenfluramine, which acts on serotonin signaling, reduced convulsive seizure frequency in randomized controlled trials.','A medicine acting on this system lowered seizures in clinical trials.','Fenfluramine may also act through sigma-1 receptors; how it helps is not fully resolved.'],
-    ['dravet','p_fever','presents with','E',.92,'HPO, Orphanet','2024','Hallmark early feature.','Seizures with fever are often the first sign.',''],
-    ['dravet','p_status','presents with','E',.88,'HPO, Orphanet','2024','Frequently annotated phenotype.','Long seizures are common, especially early.',''],
-    ['dravet','p_dd','presents with','E',.88,'HPO, Orphanet','2024','Frequently annotated phenotype.','Development usually slows after the first year.','Severity varies widely.'],
-    ['dravet','p_gait','presents with','E',.72,'HPO, PubMed','2023','Reported in adolescents and adults.','Some older children and adults develop a bent-knee walk.','Not universal; frequency estimates vary.'],
-    ['dravet','d_gefs','shares causal gene with','E',.85,'OMIM, PubMed','2024','SCN1A variants underlie both; GEFS+ variants are more often missense with milder effects.','Same gene, usually milder effect in GEFS+.','Severity differences mean results may not transfer directly.','variant effect'],
-    ['dravet','d_scn2a','shares pathway with','H',.35,'Inferred from MONDO, HPO','2025','Both are sodium-channel epilepsies with overlapping seizure types.','These conditions sound alike, but may work in opposite ways.','Early-onset SCN2A epilepsy is often gain-of-function, the opposite of SCN1A loss in Dravet. Sodium channel blockers help some SCN2A patients but can worsen Dravet seizures.','pathway'],
-    ['o_found','dravet','supports families with','E',.82,'NORD, Global Genes (sample directory)','2025','Listed in patient organization directories.','This organization helps families living with Dravet syndrome.',''],
-    ['o_net','dravet','is a community for','E',.8,'Global Genes (sample directory)','2025','Listed in patient organization directories.','Caregivers share support here.',''],
-    ['c_scn1a','dravet','is a related community through the shared gene','E',.78,'EURORDIS (sample)','2025','Group spans Dravet syndrome and GEFS+.','Families with different SCN1A conditions meet here.',''],
-    ['c_scn1a','d_gefs','is a community for','E',.8,'EURORDIS (sample)','2025','Listed in patient organization directories.','GEFS+ families are part of this group.',''],
-    ['c_scn2a','dravet','is a related community through sodium-channel biology','H',.35,'Inferred','2025','Connected through channel family only.','A community for a related channel condition.','Disease mechanisms may run in opposite directions.'],
-    ['r_ephys','m_inter','studies','E',.75,'NIH RePORTER (sample)','2025','Funded project on interneuron excitability.','This lab studies the brain’s brake cells.',''],
-    ['r_ephys','dravet','publishes on','E',.7,'PubMed (sample)','2024','Publications mentioning Dravet syndrome.','This lab has written about Dravet syndrome.',''],
-    ['r_aso','s_aso','develops approaches evaluated in','E',.7,'NIH RePORTER (sample)','2025','Funded project on antisense upregulation.','This lab works on the kind of medicine being tested.',''],
-    ['r_aso','dravet','works on','E',.72,'PubMed (sample)','2024','Publications on SCN1A upregulation.','This lab works on a possible treatment.',''],
-    ['r_clinic','dravet','treats patients with','E',.85,'Orphanet expert centre listing (sample)','2025','Listed expert centre.','These doctors see children with Dravet syndrome.',''],
-    ['r_clinic','s_nhs','is a site for','E',.8,'ClinicalTrials.gov (sample)','2025','Listed study site.','This clinic takes part in the natural history study.',''],
-    ['pub_inter','a_mouse','reports results in','E',.9,'PubMed (example record)','2023','Example publication describing model findings.','This paper describes what was found in the mice.',''],
-    ['pub_inter','dravet','is relevant to','E',.85,'PubMed (example record)','2023','Model study framed around Dravet syndrome.','This paper is about the disease mechanism.',''],
-    ['pub_nh','dravet','describes','E',.85,'PubMed (example record)','2024','Cohort study of long-term outcomes.','This paper follows people with Dravet syndrome over many years.',''],
-    ['s_nhs','dravet','enrolls people with','E',.85,'ClinicalTrials.gov (sample)','2025','Eligibility includes Dravet syndrome.','This study follows people with Dravet syndrome over time.',''],
-    ['s_aso','dravet','evaluates a therapy for','E',.82,'ClinicalTrials.gov','2025','Studies of SCN1A-upregulating antisense oligonucleotides are registered.','A possible treatment is being tested in people.','Efficacy has not yet been established in completed phase 3 trials (as of the sample index).'],
-    ['a_reg','dravet','collects data on','E',.8,'Orphanet (sample)','2025','Registry scope includes Dravet syndrome.','This registry holds information about Dravet syndrome.',''],
-    ['a_bio','dravet','is not yet validated for','U',.2,'PubMed, ClinicalTrials.gov (searched)','2025','No validated fluid biomarker that tracks progression was found. Seizure diaries and EEG remain the main measures.','There is no blood test yet that tracks the disease.',''],
-    ['a_mouse','dravet','models','E',.88,'PubMed','2023','Scn1a+/- mice reproduce temperature-sensitive seizures and premature death.','This mouse develops a disease like Dravet syndrome.','Strain background strongly affects severity.'],
-    ['a_mouse','m_inter','is used to study','E',.85,'PubMed','2023','Primary model for interneuron studies.','Scientists use this mouse to study brake cells.',''],
-    ['a_ipsc','dravet','models','E',.75,'PubMed','2023','Patient iPSC-derived interneurons show reduced excitability in several reports.','Cells from patients show the same weakness in a dish.','Findings vary between labs and differentiation protocols.'],
-    ['a_ipsc','d_scn2a','could be adapted to model','H',.4,'Inferred','2025','Same cell platform, different gene.','The same cell method might be used for SCN2A.','Only useful if the SCN2A variants studied act in the same direction.']
-  ],
-  reuse:{a_reg:'Could add GEFS+ participants with shared fields.',a_ipsc:'Adaptable to SCN2A only if variant direction is confirmed first.',a_mouse:'Established model with shared protocols.',a_bio:'Gap. No asset to reuse; a biomarker discovery effort would be needed.'}
-}
-};
-
-/* normalise */
-Object.entries(DATA).forEach(([k,ds])=>{
-  ds.key=k;
-  ds.nodes=ds.nodes.map(a=>({id:a[0],t:a[1],label:a[2],plain:a[3],sci:a[4],cat:a[5]||a[1]}));
-  ds.byId=Object.fromEntries(ds.nodes.map(n=>[n.id,n]));
-  ds.root=ds.nodes[0].id; ds.byId[ds.root].plain=ds.plain; ds.byId[ds.root].sci=ds.sci;
-  ds.edges=ds.edges.map((a,i)=>({i,s:a[0],t:a[1],rel:a[2],status:a[3],conf:a[4],src:a[5],date:a[6],ev:a[7],plain:a[8],contra:a[9],share:a[10]}));
-});
-const gid=(ds,id)=>ds.key+':'+id;
-const fromGid=g=>{const [k,id]=g.split(':');return {ds:DATA[k],n:DATA[k].byId[id]}};
-
-/* search index */
-const INDEX=[];
-Object.values(DATA).forEach(ds=>{
-  ds.nodes.forEach(n=>INDEX.push({ds:ds.key,id:n.id,label:n.label,kind:TYPES[n.t].label,t:n.t}));
-  ds.aliases.forEach(a=>INDEX.push({ds:ds.key,id:ds.root,label:a,kind:'Also known as '+ds.name,t:'disease',alias:true}));
-});
-function searchIdx(q){q=q.trim().toLowerCase(); if(!q) return [];
-  return INDEX.map(it=>{const l=it.label.toLowerCase(); const p=l.startsWith(q)?0:l.includes(q)?1:9; return [p,it]}).filter(x=>x[0]<9).sort((a,b)=>a[0]-b[0]||a[1].label.length-b[1].label.length).slice(0,8).map(x=>x[1]);}
-
 /* ---------- helpers ---------- */
 const stPill=s=>`<span class="st ${s}">${STATUS[s]}</span>`;
 const confHtml=c=>`<span class="conf"><span class="bar"><i style="width:${Math.round(c*100)}%"></i></span>${Math.round(c*100)}% (${c>=.8?'high':c>=.55?'moderate':'low'})</span>`;
 const dot=t=>`<span class="dot" style="background:${TYPES[t].c}"></span>`;
-function srcLinks(src){
-  const parts=[]; Object.keys(SRC_URL).forEach(k=>{ if(src.includes(k) && !(k==='PMC'&&!/\bPMC\b/.test(src))) parts.push(`<a href="${SRC_URL[k]}" target="_blank" rel="noopener">${k} ↗</a>`)});
-  return parts.join('&ensp;');
-}
 function edgesOf(ds,id){return ds.edges.filter(e=>e.s===id||e.t===id)}
-function rootEdge(ds,id){return ds.edges.find(e=>(e.s===id&&e.t===ds.root)||(e.t===id&&e.s===ds.root))||edgesOf(ds,id)[0]}
 function other(e,id){return e.s===id?e.t:e.s}
 function sentence(ds,e){return `${ds.byId[e.s].label} ${e.rel} ${ds.byId[e.t].label}`}
 
@@ -1329,16 +1212,12 @@ async function liveSearch(q,signal){
   const hits=arr(r).filter(h=>h&&h.id&&h.label&&(h.score==null||h.score>=MIN_SCORE));
   searchCache.set(k,hits); return hits;
 }
-function sampleItems(q){ return q.trim().length<2?[]:searchIdx(q).slice(0,3).map(it=>({sample:it})) }
 function bestPick(q,hits){
-  const lq=q.trim().toLowerCase(); if(!lq) return null;
-  const exactLive=hits.find(h=>h.label.toLowerCase()===lq||String(h.matched_name||'').toLowerCase()===lq);
-  const sm=searchIdx(q), exactSample=sm.find(it=>it.label.toLowerCase()===lq);
-  if(exactLive&&exactLive.type==='disease') return {live:exactLive};
-  if(exactSample&&!exactLive) return {sample:exactSample};
-  if(hits.length){ const top=hits[0].score||0; return {live:hits.slice(0,4).find(h=>h.type==='disease'&&(h.score||0)>=top-.15)||exactLive||hits[0]}; }
-  if(sm.length) return {sample:sm[0]};
-  return null;
+  const lq=q.trim().toLowerCase(); if(!lq||!hits.length) return null;
+  const exact=hits.find(h=>h.label.toLowerCase()===lq||String(h.matched_name||'').toLowerCase()===lq);
+  if(exact&&exact.type==='disease') return exact;
+  const top=hits[0].score||0;
+  return hits.slice(0,4).find(h=>h.type==='disease'&&(h.score||0)>=top-.15)||exact||hits[0];
 }
 const MATCH_TXT={synonym:'Matched synonym',abbreviation:'Matched abbreviation',xref:'Matched reference',id:'Matched id'};
 let sgN=0;
@@ -1348,7 +1227,6 @@ function wireSearch(input,h){
   box.id=bid; box.setAttribute('role','listbox'); box.setAttribute('aria-label','Suggestions');
   input.setAttribute('role','combobox'); input.setAttribute('aria-autocomplete','list'); input.setAttribute('aria-controls',bid); input.setAttribute('aria-expanded','false');
   const show=on=>{ box.hidden=!on; input.setAttribute('aria-expanded',on?'true':'false'); if(!on) input.removeAttribute('aria-activedescendant'); };
-  const nameOf=it=>it.live?it.live.label:(it.sample.alias?DATA[it.sample.ds].name:it.sample.label);
   const draw=()=>{
     const q=input.value.trim();
     if(!items.length){
@@ -1357,28 +1235,25 @@ function wireSearch(input,h){
       if(q.length>=2&&state==='done'){ box.innerHTML='<div class="note" role="status">No match in the live Atlas. Press Enter to see what was searched.</div>'; show(true); return; }
       show(false); return;
     }
-    box.innerHTML=items.map((it,i)=>{
-      const on=i===act;
-      if(it.live){ const x=it.live, mt=x.match_kind!=='label'&&x.matched_name&&x.matched_name.toLowerCase()!==x.label.toLowerCase()?`<span class="sm">${MATCH_TXT[x.match_kind]||'Matched'}: ${esc(x.matched_name)}</span>`:'';
-        return `<button type="button" role="option" tabindex="-1" id="${bid}-${i}" data-i="${i}" aria-selected="${on}" class="${on?'active':''}"><span class="sl">${ldot(x)}<span class="st2"><span class="lb">${esc(x.label)}</span>${mt}</span></span><span class="kind">${esc(kindOf(x))}</span></button>`; }
-      const s=it.sample;
-      return `<button type="button" role="option" tabindex="-1" id="${bid}-${i}" data-i="${i}" aria-selected="${on}" class="${on?'active':''}"><span class="sl">${dot(s.t)}<span class="st2"><span class="lb">${esc(s.label)}</span>${s.alias?`<span class="sm">${esc(s.kind)}</span>`:''}</span></span><span class="kind">Sample data</span></button>`;
+    box.innerHTML=items.map((x,i)=>{
+      const on=i===act, mt=x.match_kind!=='label'&&x.matched_name&&x.matched_name.toLowerCase()!==x.label.toLowerCase()?`<span class="sm">${MATCH_TXT[x.match_kind]||'Matched'}: ${esc(x.matched_name)}</span>`:'';
+      return `<button type="button" role="option" tabindex="-1" id="${bid}-${i}" data-i="${i}" aria-selected="${on}" class="${on?'active':''}"><span class="sl">${ldot(x)}<span class="st2"><span class="lb">${esc(x.label)}</span>${mt}</span></span><span class="kind">${esc(kindOf(x))}</span></button>`;
     }).join('');
     show(true);
     if(act>=0){ input.setAttribute('aria-activedescendant',bid+'-'+act); const a=box.querySelector('.active'); if(a&&a.scrollIntoView) a.scrollIntoView({block:'nearest'}); } else input.removeAttribute('aria-activedescendant');
   };
-  const pick=it=>{ show(false); clearTimeout(timer); if(ctl) ctl.abort(); seq++; input.value=nameOf(it); if(it.live) h.onLive(it.live); else h.onSample(it.sample); };
+  const pick=x=>{ show(false); clearTimeout(timer); if(ctl) ctl.abort(); seq++; input.value=x.label; h.onLive(x); };
   const run=async q=>{
     const my=++seq; if(ctl) ctl.abort(); ctl=new AbortController();
-    try{ const hits=await liveSearch(q,ctl.signal); if(my!==seq) return; items=[...hits.map(x=>({live:x})),...sampleItems(q)]; state='done'; }
-    catch(e){ if(my!==seq||e.message==='aborted') return; items=sampleItems(q); state='error'; }
+    try{ const hits=await liveSearch(q,ctl.signal); if(my!==seq) return; items=hits; state='done'; }
+    catch(e){ if(my!==seq||e.message==='aborted') return; items=[]; state='error'; }
     act=-1; if(document.activeElement===input) draw();
   };
   input.addEventListener('input',()=>{
     const q=input.value.trim(); clearTimeout(timer); if(ctl) ctl.abort(); seq++; act=-1;
-    if(q.length<2){ items=sampleItems(q); state='idle'; draw(); return; }
+    if(q.length<2){ items=[]; state='idle'; draw(); return; }
     const k=q.toLowerCase();
-    if(searchCache.has(k)){ items=[...searchCache.get(k).map(x=>({live:x})),...sampleItems(q)]; state='done'; draw(); return; }
+    if(searchCache.has(k)){ items=searchCache.get(k); state='done'; draw(); return; }
     state='loading'; if(!items.length) draw();
     timer=setTimeout(()=>run(q),200);
   });
@@ -1388,20 +1263,20 @@ function wireSearch(input,h){
     else if(e.key==='Enter'){ e.preventDefault(); if(act>=0&&items[act]) pick(items[act]); else { show(false); go(input.value); } }
     else if(e.key==='Escape'){ show(false); }
   });
-  box.addEventListener('mousedown',e=>{ const b=e.target.closest('button[data-i]'); if(!b) return; e.preventDefault(); const it=items[+b.dataset.i]; if(it) pick(it); });
+  box.addEventListener('mousedown',e=>{ const b=e.target.closest('button[data-i]'); if(!b) return; e.preventDefault(); const x=items[+b.dataset.i]; if(x) pick(x); });
   input.addEventListener('blur',()=>setTimeout(()=>show(false),120));
   async function go(q){
     q=String(q||'').trim(); if(!q) return;
     clearTimeout(timer); if(ctl) ctl.abort(); const my=++seq; show(false); input.value=q;
-    if(q.length<2){ const s=sampleItems(q)[0]; s?h.onSample(s.sample):h.onMiss(q); return; }
+    if(q.length<2){ h.onMiss(q); return; }
     if(h.onLoading) h.onLoading(q);
     let hits;
     try{ hits=await liveSearch(q); }
-    catch(e){ if(my!==seq) return; const s=bestPick(q,[]); if(s&&s.sample){ input.value=nameOf(s); h.onSample(s.sample); return; } h.onError(q,()=>go(q)); return; }
+    catch(e){ if(my!==seq) return; h.onError(q,()=>go(q)); return; }
     if(my!==seq) return;
     const b=bestPick(q,hits);
     if(!b){ h.onMiss(q); return; }
-    input.value=nameOf(b); b.live?h.onLive(b.live):h.onSample(b.sample);
+    input.value=b.label; h.onLive(b);
   }
   return go;
 }
@@ -1410,7 +1285,7 @@ function wireSearch(input,h){
 function metaTotals(m){ const n=(m&&m.counts&&m.counts.nodes)||{}; return {nodes:Object.values(n).reduce((a,v)=>a+(+v||0),0),n,edges:(m&&m.counts&&m.counts.edges)||0,evidence:(m&&m.counts&&m.counts.evidence)||0}; }
 const sliceText=m=>{const s=m&&m.dataset&&m.dataset.slice; return s?String(s).replace(/\s*\(focus:\s*/i,', with a focus on ').replace(/\s+\/\s+/g,' and ').replace(/\)\s*$/,''):''};
 function liveMetaLine(){
-  apiGet('/meta').then(m=>{ const t=metaTotals(m); const el=$('#readerLine'); if(el) el.innerHTML=`<span class="live-dot" aria-hidden="true"></span>Live Atlas: ${fmtN(t.nodes)} entries and ${fmtN(t.edges)} links, each with its source.${sliceText(m)?' Coverage today: '+esc(sliceText(m))+'.':''}`; }).catch(()=>{ const el=$('#readerLine'); if(el) el.textContent='The live Atlas is not reachable right now. The sample examples still work.'; });
+  apiGet('/meta').then(m=>{ const t=metaTotals(m); const el=$('#readerLine'); if(el) el.innerHTML=`<span class="live-dot" aria-hidden="true"></span>Live Atlas: ${fmtN(t.nodes)} entries and ${fmtN(t.edges)} links, each with its source.${sliceText(m)?' Coverage today: '+esc(sliceText(m))+'.':''}`; }).catch(()=>{ const el=$('#readerLine'); if(el) el.textContent='The live Atlas is not reachable right now. Please try again in a moment.'; });
 }
 
 /* ---------- READER (live) ---------- */
@@ -1418,7 +1293,6 @@ let readerTok=0, whyTok=0;
 function readerSkeleton(label){
   $('#readerOut').innerHTML=`<div class="rjourney" aria-busy="true"><p class="vh" role="status">Loading ${esc(label||'')} from the live Atlas</p>${[1,2,3].map(n=>`<div class="rstep ${n===1?'lead':''}"><div class="rnum">${n}</div><div class="rbody"><i class="skel-h"></i>${skelLines(n===1?4:3)}</div></div>`).join('')}</div>`;
 }
-function readerSample(key){ readerTok++; renderReader(key); $('#readerSearch').value=DATA[key].name; }
 async function readerOpen(hit,opts){
   opts=opts||{}; const tok=++readerTok, out=$('#readerOut');
   readerSkeleton(hit.label);
@@ -1513,6 +1387,7 @@ function renderLiveJourney(av,nb,sim,opts){
   out.innerHTML=h;
   hydrateChips(out);
   const ml=$('#readerLine'); if(ml&&!ml.querySelector('.live-dot')) liveMetaLine();
+  queueCommunities(av);
 }
 const NODE_GROUPS=[['disease','Diseases'],['gene','Genes'],['mechanism','Mechanisms'],['intervention','Treatments'],['organization','Organizations'],['asset','Research assets'],['trial','Clinical studies'],['person','People'],['publication','Publications'],['phenotype','Signs and symptoms'],['grant','Grants'],['variant','Variants']];
 function nodeFacts(n){
@@ -1570,14 +1445,14 @@ async function readerMissLive(q){
       <div><h4>What is currently unknown</h4><ul><li>Whether this condition is in the Atlas under another name</li><li>Whether it shares a gene or mechanism with diseases in the Atlas</li>${sl?`<li>Coverage today: ${esc(sl)}</li>`:''}</ul></div>
       <div><h4>What could change this</h4><ul><li>A confirmed gene or variant</li><li>A publication linking it to a known mechanism</li><li>A patient organization adding its knowledge</li></ul></div>
     </div>
-    <div class="tries" style="margin-top:0">Try instead: <button data-q="CLN5">CLN5</button><button data-q="Batten">Batten</button><span class="sample-tag">Sample data</span><button data-sample="leigh">Leigh syndrome</button><button data-sample="dravet">Dravet syndrome</button></div>
+    <div class="tries" style="margin-top:0">Try instead: <button data-q="CLN5">CLN5</button><button data-q="Batten">Batten</button></div>
   </div>`;
 }
 
 /* ---------- RESEARCHER (live) ---------- */
-let liveRes=null, resTok=0, usingSample=false, resWanted=null;
-const curDs=()=>liveRes?liveRes.ds:DATA[curRes.ds];
-const curSel=()=>liveRes?liveRes.ds.root:curRes.sel;
+let liveRes=null, resTok=0, resWanted=null;
+const curDs=()=>liveRes?liveRes.ds:null;
+const curSel=()=>liveRes?liveRes.ds.root:null;
 function toDs(nb,nr){
   const c=nb.center||nr.node.id, mk=n=>({id:n.id,t:LT(n.type),label:n.label,plain:n.summary||'',sci:'',raw:n});
   const nodes=arr(nb.nodes).map(mk); if(!nodes.some(n=>n.id===c)) nodes.unshift(mk(nr.node));
@@ -1589,15 +1464,14 @@ function resLine(){
   const el=$('#resLine'); if(!el) return;
   if(liveRes){ const total=Object.values(liveRes.node.degree||{}).reduce((s,v)=>s+(+v||0),0), shown=liveRes.ds.nodes.length-1;
     el.innerHTML=`<span class="live-dot" aria-hidden="true"></span>Live Atlas. ${liveRes.ds.truncated&&total>shown?`Showing the ${fmtN(shown)} closest of ${fmtN(total)} connections`:`Showing ${fmtN(shown)} connection${shown===1?'':'s'}`} around ${esc(cap(liveRes.ds.name))}.`;
-  } else if(usingSample){ el.innerHTML=`<span class="sample-tag">Sample data</span> An illustrative sample dataset for ${esc(DATA[curRes.ds].name)}, not the live Atlas.`; }
-  else el.textContent='';
+  } else el.textContent='';
 }
 function resLoadingState(on,label){
   const w=$('#researcherView .graph-wrap'); if(w) w.classList.toggle('is-loading',!!on);
   if(on) $('#detail').innerHTML=`<p class="vh" role="status">Loading ${esc(label||'')} from the live Atlas</p><i class="skel-h"></i>${skelLines(6)}`;
 }
 async function openLiveRes(id,o){
-  o=o||{}; const tok=++resTok; usingSample=false;
+  o=o||{}; const tok=++resTok;
   const prev=liveRes; resLoadingState(true,o.label);
   try{
     const [nb,nr]=await Promise.all([apiGet(nbPath(id)),apiGet('/nodes/'+enc(id))]);
@@ -1615,14 +1489,12 @@ async function openLiveRes(id,o){
     liveError($('#detail'),e.status===404?null:()=>openLiveRes(id,o),e.status===404?'This entry is not in the live Atlas.':null);
   }
 }
-function resSample(key,sel){ resTok++; liveRes=null; usingSample=true; $('#typeFilter').innerHTML=''; $('#dash').innerHTML=''; curRes.ds=null; renderResearcher(key,sel); resLine(); }
 function resShow(){
-  if(usingSample&&!resWanted){ renderResearcher(curRes.ds,curRes.sel); resLine(); return; }
   const want=resWanted||(liveRes&&liveRes.id)||LIVE_DEFAULT.id; resWanted=null;
   if(liveRes&&liveRes.id===want){ renderTypeFilter(); renderGraph(); renderDetail(); renderDash(); resLine(); }
   else openLiveRes(want);
 }
-function goResearcher(id){ resWanted=id; usingSample=false; setMode('researcher',true); }
+function goResearcher(id){ resWanted=id; setMode('researcher',true); }
 function resMiss(q){
   apiGet('/meta').then(m=>m,()=>null).then(m=>{
     const t=metaTotals(m);
@@ -1683,31 +1555,6 @@ function renderLiveDash(){
 
 /* ---------- Drawer ---------- */
 let lastFocus=null;
-function openDrawer(ds,e){
-  lastFocus=document.activeElement;
-  const a=ds.byId[e.s], b=ds.byId[e.t];
-  $('#drawerRoot').innerHTML=`<div class="scrim" data-close></div>
-  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle">
-    <div class="drawer-head"><span class="eyebrow" id="dTitle">Why this connection?</span><button data-close>Close ✕</button></div>
-    <div class="drawer-body">
-      <div class="dchain"><div class="a">${dot(a.t)}${esc(a.label)}</div><div class="r">${esc(e.rel)}</div><div class="b">${dot(b.t)}${esc(b.label)}</div></div>
-      <div>${stPill(e.status)}</div>
-      <p class="why-plain">${esc(e.plain)}</p>
-      <div class="kv">
-        <div class="k">Relationship</div><div>${esc(sentence(ds,e))}</div>
-        <div class="k">Type</div><div>${STATUS[e.status]}${e.share?`, shared ${esc(e.share)}`:''}</div>
-        <div class="k">Supporting evidence</div><div>${esc(e.ev)}</div>
-        <div class="k">Source</div><div>${esc(e.src)}</div>
-        <div class="k">Confidence</div><div>${confHtml(e.conf)}</div>
-        <div class="k">Date</div><div class="num">${esc(e.date)}</div>
-        <div class="k">Contradictory evidence</div><div class="${e.contra?'':'muted'}">${esc(e.contra?e.contra:'None recorded.')}</div>
-      </div>
-      <div style="font-size:13px"><span class="eyebrow" style="display:block;margin-bottom:6px">Inspect original evidence</span>${srcLinks(e.src)||'<span style="color:var(--ink-3)">Inferred link. No single original record.</span>'}</div>
-      ${e.status!=='E'?`<p style="font-size:13px;color:var(--ink-3)">This is ${e.status==='H'?'a hypothesis built from connected evidence':'an open question'}. It is not established clinical evidence.</p>`:''}
-    </div>
-  </aside>`;
-  const btn=$('#drawerRoot .drawer-head button'); btn.focus();
-}
 function closeDrawer(){ if(!$('#drawerRoot').innerHTML) return; $('#drawerRoot').innerHTML=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
 document.addEventListener('click',ev=>{ if(ev.target.closest('[data-close]')) closeDrawer(); });
 document.addEventListener('keydown',ev=>{ if(ev.key==='Escape') closeDrawer(); });
@@ -1735,89 +1582,14 @@ $$('#navLinks a:not([data-mode])').forEach(a=>a.addEventListener('click',closeMe
 /* ---------- READER ---------- */
 const R_STEPS=[
   {n:'1',title:'Your disease',q:''},
-  {n:'2',title:'What connects to it?',q:'Genes, mechanisms, signs and symptoms, related diseases and communities.',groups:[['Genes',n=>n.t==='gene'],['Mechanisms',n=>n.t==='mechanism'],['Signs & symptoms',n=>n.t==='phenotype'],['Related diseases',n=>n.t==='disease'],['Patient communities',n=>n.cat==='community']]},
-  {n:'3',title:'Who is already working on this?',q:'Patient organizations, researchers, clinicians and relevant studies.',groups:[['Patient organizations',n=>n.cat==='org'],['Researchers',n=>n.cat==='researcher'],['Clinicians',n=>n.cat==='clinician'],['Relevant studies',n=>n.t==='publication']]},
-  {n:'4',title:'What already exists?',q:'Resources that could be used instead of rebuilt.',groups:[['Registries',n=>n.cat==='registry'],['Natural history studies',n=>n.cat==='nhs'],['Biomarkers',n=>n.cat==='biomarker'],['Clinical studies',n=>n.cat==='clinical'],['Research models',n=>n.cat==='model']]},
+  {n:'2',title:'What connects to it?',q:'Genes, mechanisms, signs and symptoms, related diseases and communities.'},
+  {n:'3',title:'Who is already working on this?',q:'Patient organizations, researchers, clinicians and relevant studies.'},
+  {n:'4',title:'What already exists?',q:'Resources that could be used instead of rebuilt.'},
   {n:'5',title:'What could happen next?',q:'One concrete action, built from the connections above.'}
 ];
-let readerDs='leigh';
-function readerWhy(ds,n){
-  const e=rootEdge(ds,n.id);
-  return `<div class="why" data-why>
-    <div class="why-head"><span class="t">Why this connection?</span>${stPill(e.status)}</div>
-    <p class="why-plain">${esc(e.plain)}</p>
-    <div class="kv">
-      <div class="k">Relationship</div><div>${esc(sentence(ds,e))}</div>
-      <div class="k">Evidence</div><div>${esc(e.ev)}</div>
-      <div class="k">Source</div><div>${esc(e.src)}</div>
-      <div class="k">Confidence</div><div>${confHtml(e.conf)}</div>
-      <div class="k">Contradictory evidence</div><div class="${e.contra?'':'muted'}">${esc(e.contra?e.contra:'None recorded.')}</div>
-    </div>
-    <div class="why-foot">
-      <details class="sci" style="flex:1 1 100%"><summary>Scientific detail</summary><div><p><b>${esc(n.label)}</b> (${TYPES[n.t].label}). ${esc(n.sci)}</p><p style="margin-top:6px">Recorded ${esc(e.date)} from ${esc(e.src)}</p></div></details>
-      <button type="button" data-open-edge="${e.i}">Inspect original evidence</button>
-    </div>
-  </div>`;
-}
-function renderReader(key){
-  readerDs=key; const ds=DATA[key]; const out=$('#readerOut');
-  const root=ds.byId[ds.root];
-  const used=new Set([ds.root]);
-  let html='<p class="src-note"><span class="sample-tag">Sample data</span> An illustrative journey built from sample data, not from the live Atlas.</p><div class="rjourney">';
-  R_STEPS.forEach((st,si)=>{
-    html+=`<div class="rstep ${si===0?'lead':''}"><div class="rnum">${st.n}</div><div class="rbody"><h3>${st.title}</h3>${st.q?`<p class="q">${st.q}</p>`:''}`;
-    if(si===0){
-      html+=`<div class="disease-card"><div class="dn">${esc(root.label)}</div><p>${esc(ds.plain)}</p>
-        <div class="facts">${ds.facts.map(f=>`<span><b>${f[0]}</b>${esc(f[1])}</span>`).join('')}</div>
-        <details class="sci"><summary>Scientific detail</summary><div>${esc(ds.sci)}</div></details></div>`;
-    } else if(st.groups){
-      html+='<div class="groups">';
-      st.groups.forEach(([gl,fn])=>{
-        const ns=ds.nodes.filter(n=>n.id!==ds.root&&fn(n));
-        if(!ns.length) return;
-        html+=`<div class="group"><div class="gl">${gl}</div><div class="chips">${ns.map(n=>{const e=rootEdge(ds,n.id);return `<button type="button" class="chip" aria-expanded="false" data-node="${n.id}" title="${esc(n.plain)}"><span class="lnk ${e.status}" aria-hidden="true"></span>${esc(n.label)}<span class="sr" style="position:absolute;left:-9999px">${STATUS[e.status]}</span></button>`}).join('')}</div></div>`;
-      });
-      html+='</div><div class="why-slot"></div>';
-    } else {
-      const nx=ds.next;
-      html+=`<div class="next-box"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Suggested next action</span>${stPill(nx.status)}</div>
-        <div class="nt">${esc(nx.title)}</div><p style="color:var(--ink-2)">${esc(nx.plain)}</p>
-        <div><div class="eyebrow" style="margin-bottom:6px">Check before acting</div><ul>${nx.checks.map(c=>`<li>${esc(c)}</li>`).join('')}</ul></div>
-        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:4px"><a class="btn btn-primary on-paper" href="#journey" style="padding:10px 16px;font-size:14px">See this as a connected journey <span class="arr">→</span></a></div></div>`;
-    }
-    html+='</div></div>';
-  });
-  html+='</div><p style="margin-top:40px;font-size:13px;color:var(--ink-3);max-width:70ch">Line marks show how strong each connection is: <span class="lnk E" style="display:inline-block;width:16px;height:2px;vertical-align:middle"></span> evidence, <span class="lnk H" style="display:inline-block;width:16px;height:2px;vertical-align:middle"></span> hypothesis, <span class="lnk U" style="display:inline-block;width:16px;height:2px;vertical-align:middle"></span> unknown. Select any item to see why it is connected.</p>';
-  out.innerHTML=html;
-}
-$('#readerOut').addEventListener('click',ev=>{
-  const ob=ev.target.closest('[data-open-edge]'); if(ob){openDrawer(DATA[readerDs],DATA[readerDs].edges[+ob.dataset.openEdge]);return}
-  const c=ev.target.closest('.chip:not([data-live])'); if(!c) return;
-  const body=c.closest('.rbody'), slot=body.querySelector('.why-slot');
-  const was=c.getAttribute('aria-expanded')==='true';
-  $$('.chip',body).forEach(x=>x.setAttribute('aria-expanded','false'));
-  if(was){slot.innerHTML='';return}
-  c.setAttribute('aria-expanded','true');
-  slot.innerHTML=readerWhy(DATA[readerDs],DATA[readerDs].byId[c.dataset.node]);
-});
-function readerMiss(q){
-  const total=Object.values(DATA).reduce((a,d)=>a+d.edges.length,0);
-  $('#readerOut').innerHTML=`<div class="empty">
-    <span class="eyebrow">Searched: “${esc(q)}”</span>
-    <div class="big">No supported route found.</div>
-    <p style="color:var(--ink-2);max-width:62ch">We could not find this in the sample index. That does not mean no connection exists. It means the sources below do not yet support one we can show you.</p>
-    <div class="empty-grid">
-      <div><h4>What was searched</h4><ul><li>Disease names and synonyms (MONDO, Orphanet)</li><li>Genes and variants (OMIM, ClinVar)</li><li>Symptoms (HPO)</li><li>${total} relationships in the sample index</li></ul></div>
-      <div><h4>What is currently unknown</h4><ul><li>Whether this condition has a profile in the full Atlas</li><li>Whether it shares a gene or mechanism with indexed diseases</li></ul></div>
-      <div><h4>What could change this</h4><ul><li>A confirmed gene or variant</li><li>A publication linking it to a known mechanism</li><li>A patient organization adding its knowledge</li></ul></div>
-    </div>
-    <div class="tries" style="margin-top:0">Try instead: <button data-q="Leigh syndrome">Leigh syndrome</button><button data-q="Dravet syndrome">Dravet syndrome</button></div>
-  </div>`;
-}
-const readerGo=wireSearch($('#readerSearch'),{onLive:h=>readerOpen(h),onSample:it=>readerSample(it.ds),onMiss:q=>readerMissLive(q),onLoading:q=>{readerTok++;readerSkeleton(q)},onError:(q,retry)=>{readerTok++;liveError($('#readerOut'),retry)}});
+const readerGo=wireSearch($('#readerSearch'),{onLive:h=>readerOpen(h),onMiss:q=>readerMissLive(q),onLoading:q=>{readerTok++;readerSkeleton(q)},onError:(q,retry)=>{readerTok++;liveError($('#readerOut'),retry)}});
 $('#readerTries').addEventListener('click',e=>{const b=e.target.closest('[data-q]'); if(b) readerGo(b.dataset.q)});
-$('#readerSamples').addEventListener('click',e=>{const b=e.target.closest('[data-sample]'); if(b) readerSample(b.dataset.sample)});
-$('#readerOut').addEventListener('click',e=>{const b=e.target.closest('.empty [data-q]'); if(b) readerGo(b.dataset.q); const sb=e.target.closest('.empty [data-sample]'); if(sb) readerSample(sb.dataset.sample)});
+$('#readerOut').addEventListener('click',e=>{const b=e.target.closest('.empty [data-q]'); if(b) readerGo(b.dataset.q)});
 $('#readerOut').addEventListener('click',ev=>{
   const dr=ev.target.closest('[data-drawer-edge]'); if(dr){openLiveDrawer(dr.dataset.drawerEdge);return}
   const rs=ev.target.closest('[data-res-node]'); if(rs){goResearcher(rs.dataset.resNode);return}
@@ -1856,7 +1628,6 @@ function layout(ds){
   return ds._pos=P;
 }
 const hiddenTypes=new Set();
-let curRes={ds:'leigh',sel:'leigh'};
 const EDGE_COL={E:'var(--ev-n)',H:'var(--hy-n)',U:'var(--un-n)'};
 const EDGE_DASH={E:'',H:'5 4',U:'1.5 4'};
 function radius(ds,n){return n.id===ds.root?18:n.t==='disease'?13:(n.t==='gene'||n.t==='mechanism')?10:7.5}
@@ -1873,7 +1644,7 @@ function labelPos(ds,n,p,r,placed){
   return {x:x.toFixed(1),y:(b.y+hgt-3).toFixed(1),anc,hide};
 }
 function renderGraph(){
-  const ds=curDs(), P=layout(ds), svg=$('#graph'), sel=curSel();
+  const ds=curDs(); if(!ds) return; const P=layout(ds), svg=$('#graph'), sel=curSel();
   const vis=n=>n.id===ds.root||!hiddenTypes.has(n.t);
   const nb=new Set([sel]); edgesOf(ds,sel).forEach(e=>nb.add(other(e,sel)));
   let h='<g class="edges">';
@@ -1889,107 +1660,219 @@ function renderGraph(){
       <text x="${lb.x}" y="${lb.y}" text-anchor="${lb.anc}" style="${n.id===ds.root?'font-size:13px;font-weight:600':''}${lb.hide&&!on?';opacity:0':lb.hide&&!isSel?';opacity:0':''}">${esc(shortLabel(n.label))}</text></g>`; });
   h+='</g>';
   svg.innerHTML=h;
-  svg.setAttribute('aria-label',(ds.live?'Live knowledge graph around ':'Sample knowledge graph for ')+ds.name+'. Selected: '+ds.byId[sel].label);
+  svg.setAttribute('aria-label','Live knowledge graph around '+ds.name+'. Selected: '+ds.byId[sel].label);
 }
-function renderDetail(){
-  if(liveRes) return renderLiveDetail();
-  const ds=DATA[curRes.ds], n=ds.byId[curRes.sel], es=edgesOf(ds,n.id).sort((a,b)=>b.conf-a.conf);
-  $('#detail').innerHTML=`<div class="tt">${dot(n.t)}${TYPES[n.t].label}</div><div class="nm">${esc(n.label)}</div>
-    <p>${esc(n.plain)}</p>${n.sci?`<p style="font-size:13px">${esc(n.sci)}</p>`:''}
-    <div class="eyebrow" style="margin-top:6px">Connections (${es.length})</div>
-    <div class="conn-list">${es.map(e=>{const o=ds.byId[other(e,n.id)];return `<button class="conn" data-edge="${e.i}"><span class="cn">${dot(o.t)}<span style="min-width:0">${esc(o.label)}</span></span>${stPill(e.status)}<span class="cr">${esc(e.s===n.id?e.rel+' →':'← '+e.rel)} ${Math.round(e.conf*100)}%, ${esc(e.src)}</span></button>`}).join('')}</div>`;
-}
-function renderDash(){
-  if(liveRes) return renderLiveDash();
-  const ds=DATA[curRes.ds], root=ds.root;
-  const row=(e,n,meta)=>`<button class="row" data-edge="${e.i}"><span class="rn">${dot(n.t)}<span style="min-width:0">${esc(n.label)}</span></span>${stPill(e.status)}<span class="rm">${meta}</span></button>`;
-  const mech=ds.nodes.filter(n=>n.t==='mechanism').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,`${esc(e.rel)}&ensp;${confHtml(e.conf)}`)}).join('');
-  const overlap=ds.edges.filter(e=>e.share).map(e=>{const n=ds.byId[other(e,root)];
-    const tags=['pathway','variant effect','mechanism','phenotype'].map(t=>`<span class="${t===e.share?'on':''}">${t}</span>`).join('');
-    return row(e,n,`<span class="share-tags">${tags}</span><span style="display:block;margin-top:6px">${esc(e.ev)}</span>`)}).join('');
-  const research=ds.nodes.filter(n=>n.t==='publication'||n.t==='study'||n.cat==='registry'||n.cat==='model').map(n=>{const e=rootEdge(ds,n.id);
-    const lab={publication:'Publication',nhs:'Natural history study',clinical:'Clinical trials',registry:'Registry',model:'Research model'}[n.cat]||TYPES[n.t].label;return row(e,n,`${lab}, ${esc(e.src)}`)}).join('');
-  const people=ds.nodes.filter(n=>n.t==='researcher'||n.t==='org').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,`${esc(e.rel)}, ${esc(e.src)}`)}).join('');
-  const assets=ds.nodes.filter(n=>n.t==='asset').map(n=>{const e=rootEdge(ds,n.id);return row(e,n,esc(ds.reuse[n.id]||''))}).join('');
-  const all=[...ds.edges].sort((a,b)=>b.conf-a.conf);
-  const tr=e=>`<tr data-edge="${e.i}" tabindex="0"><td>${esc(ds.byId[e.s].label)} <span style="color:var(--night-ink-2)">→ ${esc(e.rel)} →</span> ${esc(ds.byId[e.t].label)}</td><td>${stPill(e.status)}</td><td>${esc(e.src)}</td><td class="num">${Math.round(e.conf*100)}%</td><td class="num">${esc(e.date)}</td><td>${esc(e.ev)}</td><td>${esc(e.contra&&e.contra!==''?e.contra:'None recorded')}</td></tr>`;
-  $('#dash').innerHTML=`
-    <div class="panel p4"><h4>Related mechanisms</h4><p class="sub">Mechanisms connected to ${esc(ds.name)}.</p><div class="rows">${mech}</div></div>
-    <div class="panel p8"><h4>Mechanistic overlap</h4><p class="sub">Diseases sharing a pathway, variant effect, biological mechanism or phenotype.</p><div class="rows">${overlap}</div></div>
-    <div class="panel p6"><h4>Existing research</h4><p class="sub">Publications, trials, registries, natural history studies and models.</p><div class="rows">${research}</div></div>
-    <div class="panel p6"><h4>Researchers &amp; collaborators</h4><p class="sub">People and organizations working on related mechanisms.</p><div class="rows">${people}</div></div>
-    <div class="panel p12"><h4>Reusable assets</h4><p class="sub">Assets that may be shared or adapted. Reuse is a hypothesis until the owner confirms.</p><div class="rows" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));column-gap:24px">${assets}</div></div>
-    <div class="panel p12"><h4>Evidence</h4><p class="sub">Every relationship with its source, type, confidence, date, supporting evidence and contradictory findings.</p>
-      <div class="tbl-wrap"><table class="ev"><thead><tr><th>Relationship</th><th>Type</th><th>Source</th><th>Conf.</th><th>Date</th><th>Supporting evidence</th><th>Contradictory findings</th></tr></thead><tbody id="evBody">${all.slice(0,8).map(tr).join('')}</tbody></table></div>
-      ${all.length>8?`<button class="btn btn-ghost" id="evMore" style="margin-top:14px;padding:8px 16px;font-size:13px">Show all ${all.length} relationships</button>`:''}</div>`;
-  const more=$('#evMore'); if(more) more.addEventListener('click',()=>{$('#evBody').innerHTML=all.map(tr).join('');more.remove()});
-}
+function renderDetail(){ if(liveRes) renderLiveDetail(); }
+function renderDash(){ if(liveRes) renderLiveDash(); }
 function renderTypeFilter(){
-  const ds=curDs(); const present=new Set(ds.nodes.map(n=>n.t));
-  $('#typeFilter').innerHTML=Object.entries(TYPES).filter(([t])=>present.has(t)).map(([t,v])=>`<button data-type="${t}" aria-pressed="${!hiddenTypes.has(t)}"><span class="dot" style="background:${v.c}"></span>${(ds.live&&LIVE_TYPE_LABEL[t])||v.label}</button>`).join('');
-}
-function renderResearcher(key,sel){
-  const changed=curRes.ds!==key; curRes={ds:key,sel:sel||DATA[key].root};
-  if(changed||!$('#typeFilter').children.length) renderTypeFilter();
-  renderGraph(); renderDetail(); if(changed||!$('#dash').children.length) renderDash();
+  const ds=curDs(); if(!ds){ $('#typeFilter').innerHTML=''; return; } const present=new Set(ds.nodes.map(n=>n.t));
+  $('#typeFilter').innerHTML=Object.entries(TYPES).filter(([t])=>present.has(t)).map(([t,v])=>`<button data-type="${t}" aria-pressed="${!hiddenTypes.has(t)}"><span class="dot" style="background:${v.c}"></span>${LIVE_TYPE_LABEL[t]||v.label}</button>`).join('');
 }
 $('#typeFilter').addEventListener('click',e=>{const b=e.target.closest('[data-type]'); if(!b) return; const t=b.dataset.type;
   hiddenTypes.has(t)?hiddenTypes.delete(t):hiddenTypes.add(t); b.setAttribute('aria-pressed',!hiddenTypes.has(t)); renderGraph()});
-$('#graph').addEventListener('click',e=>{const ds=curDs();
-  const n=e.target.closest('.node'); if(n){ if(ds.live){ if(n.dataset.node!==ds.root) openLiveRes(n.dataset.node,{label:ds.byId[n.dataset.node]&&ds.byId[n.dataset.node].label}); } else {curRes.sel=n.dataset.node;renderGraph();renderDetail();} return}
-  const ed=e.target.closest('.edge'); if(ed){ const x=ds.edges[+ed.dataset.edge]; if(x) ds.live?openLiveDrawer(x.id):openDrawer(ds,x); }});
-$('#graph').addEventListener('keydown',e=>{const n=e.target.closest('.node'); if(n&&(e.key==='Enter'||e.key===' ')){e.preventDefault(); const ds=curDs();
-  if(ds.live){ if(n.dataset.node!==ds.root) openLiveRes(n.dataset.node,{focus:true,label:ds.byId[n.dataset.node]&&ds.byId[n.dataset.node].label}); return }
-  curRes.sel=n.dataset.node;renderGraph();renderDetail();const f=$(`#graph .node[data-node="${curRes.sel}"]`); if(f) f.focus()}});
+$('#graph').addEventListener('click',e=>{const ds=curDs(); if(!ds) return;
+  const n=e.target.closest('.node'); if(n){ if(n.dataset.node!==ds.root) openLiveRes(n.dataset.node,{label:ds.byId[n.dataset.node]&&ds.byId[n.dataset.node].label}); return }
+  const ed=e.target.closest('.edge'); if(ed){ const x=ds.edges[+ed.dataset.edge]; if(x) openLiveDrawer(x.id); }});
+$('#graph').addEventListener('keydown',e=>{const n=e.target.closest('.node'); if(n&&(e.key==='Enter'||e.key===' ')){e.preventDefault(); const ds=curDs(); if(!ds) return;
+  if(n.dataset.node!==ds.root) openLiveRes(n.dataset.node,{focus:true,label:ds.byId[n.dataset.node]&&ds.byId[n.dataset.node].label}); }});
 ['#detail','#dash'].forEach(s=>$(s).addEventListener('click',e=>{
   const bk=e.target.closest('[data-back]'); if(bk&&liveRes){const h=liveRes.hist.slice(), p=h.pop(); if(p) openLiveRes(p.id,{back:true,hist:h,label:p.label}); return}
   const tr=e.target.closest('[data-to-reader]'); if(tr&&liveRes){const n=liveRes.node.node; setMode('reader',true); $('#readerSearch').value=n.label; readerOpen({id:n.id,type:n.type,label:n.label}); return}
   const ln=e.target.closest('[data-live-node]'); if(ln){openLiveRes(ln.dataset.liveNode);return}
-  const le=e.target.closest('[data-live-edge]'); if(le){openLiveDrawer(le.dataset.liveEdge);return}
-  const b=e.target.closest('[data-edge]'); if(b&&!liveRes) openDrawer(DATA[curRes.ds],DATA[curRes.ds].edges[+b.dataset.edge])}));
-$('#dash').addEventListener('keydown',e=>{ if(e.key!=='Enter') return; const lb=e.target.closest('tr[data-live-edge]'); if(lb){openLiveDrawer(lb.dataset.liveEdge);return} const b=e.target.closest('tr[data-edge]'); if(b&&!liveRes) openDrawer(DATA[curRes.ds],DATA[curRes.ds].edges[+b.dataset.edge])});
-const resGo=wireSearch($('#resSearch'),{onLive:h=>openLiveRes(h.id,{label:h.label}),onSample:it=>resSample(it.ds,it.id),onMiss:q=>{resTok++;resMiss(q)},onError:(q,retry)=>{resTok++;liveError($('#detail'),retry)}});
+  const le=e.target.closest('[data-live-edge]'); if(le){openLiveDrawer(le.dataset.liveEdge);return}}));
+$('#dash').addEventListener('keydown',e=>{ if(e.key!=='Enter') return; const lb=e.target.closest('tr[data-live-edge]'); if(lb) openLiveDrawer(lb.dataset.liveEdge); });
+const resGo=wireSearch($('#resSearch'),{onLive:h=>openLiveRes(h.id,{label:h.label}),onMiss:q=>{resTok++;resMiss(q)},onError:(q,retry)=>{resTok++;liveError($('#detail'),retry)}});
 $('#resTries').addEventListener('click',e=>{const b=e.target.closest('[data-q]'); if(b) resGo(b.dataset.q)});
-$('#resSamples').addEventListener('click',e=>{const b=e.target.closest('[data-sample]'); if(b){ $('#resSearch').value=DATA[b.dataset.sample].name; resSample(b.dataset.sample); }});
 
-/* ---------- JOURNEY ---------- */
-const J=[
-  {k:'Disease',t:'Leigh syndrome',s:'E',c:.94,lead:'The starting point: a diagnosis with dozens of possible genetic causes and no approved therapy that changes the course of the disease.',why:'Everything that follows is anchored to a confirmed diagnosis and, where known, its genetic cause.',rests:'Clinical diagnostic criteria and gene panels (OMIM, Orphanet).',breaks:'If the genetic cause is unknown, later steps narrow less precisely.',src:'OMIM, Orphanet'},
-  {k:'Mechanism',t:'ATP synthase dysfunction (MT-ATP6)',s:'E',c:.93,lead:'For families with an MT-ATP6 change, the disease runs through one specific failure: the final step that makes ATP.',why:'Naming the mechanism, not just the gene, is what lets us look across disease boundaries.',rests:'MT-ATP6 encodes subunit a of ATP synthase; pathogenic variants reduce ATP synthesis (ClinVar, PubMed).',breaks:'Only applies to the MT-ATP6 subgroup, not all Leigh syndrome.',src:'ClinVar, PubMed'},
-  {k:'Related community',t:'NARP and MT-ATP6 families',s:'E',c:.87,lead:'The same variant, m.8993T>G, causes NARP when fewer mitochondria carry it. A second community has been working on the same biology.',why:'Two groups who rarely meet share a cause. Their data, samples and questions can be pooled.',rests:'NARP and MILS form a clinical spectrum driven by heteroplasmy (OMIM, review literature).',breaks:'Clinical courses differ a lot. Findings in milder NARP may not transfer to Leigh syndrome.',src:'OMIM, PubMed'},
-  {k:'Existing asset',t:'Registry and MT-ATP6 iPSC neuron lines',s:'H',c:.6,lead:'A mitochondrial registry already covers both conditions, and a lab already holds patient-derived neurons across heteroplasmy levels.',why:'Reusing assets that exist skips the slowest part of a new study: building cohorts and models from scratch.',rests:'Registry scope and lab asset listings (sample records modeled on Orphanet and NIH RePORTER).',breaks:'Consent may not cover the new use. Heteroplasmy may not be recorded. Lines may not be shareable.',src:'Orphanet, NIH RePORTER (sample)'},
-  {k:'Collaborator',t:'Lab B with Clinic C',s:'U',c:.35,lead:'The lab holding the cell lines and the clinic running the natural history study are the people who could act.',why:'An asset is only useful if its owner can and wants to collaborate.',rests:'Both are linked to the same mechanism and study in the sample index.',breaks:'Willingness, capacity, funding and agreements are all unknown until someone asks.',src:'NIH RePORTER, ClinicalTrials.gov (sample)'},
-  {k:'Next experiment',t:'Test GDF-15 across MILS and NARP',s:'H',c:.5,lead:'Measure GDF-15 in matched iPSC neurons and in registry participants across both conditions, and see whether it tracks heteroplasmy and severity.',why:'A shared, validated biomarker is a milestone every future treatment trial in this group would need.',rests:'GDF-15 is elevated in many mitochondrial diseases (PubMed).',breaks:'GDF-15 is less sensitive in children and some subtypes. It may not track progression in brain-predominant disease.',src:'PubMed'}
-];
-let jSel=0;
+/* ---------- shared live helpers for the sections below ---------- */
+const nbBig=id=>'/nodes/'+enc(id)+'/neighborhood?depth=1&max_nodes=200';
+const edgeR=id=>id?apiGet('/edges/'+enc(id)).catch(()=>null):Promise.resolve(null);
+async function pool(items,n,fn){ let i=0; const w=async()=>{ while(i<items.length){ const x=items[i++]; try{ await fn(x); }catch(e){} } }; await Promise.all(Array.from({length:Math.min(n,items.length)},w)); }
+/* sections load their live data when they come near the viewport, so the first screen stays fast */
+function whenNear(el,fn){
+  if(!el) return; if(!('IntersectionObserver' in window)){ fn(); return; }
+  let done=false; const io=new IntersectionObserver(es=>{ if(done||!es.some(x=>x.isIntersecting)) return; done=true; io.disconnect(); fn(); },{rootMargin:'900px 0px'});
+  io.observe(el);
+}
+/* the worked example: one disease, read from the action view, its neighbourhood, /similar and /paths */
+let jdP=null;
+function journeyData(){
+  if(!jdP){ const id=LIVE_DEFAULT.id;
+    jdP=Promise.all([apiGet(avPath(id)),apiGet(nbBig(id)).catch(()=>null),apiGet(simPath(id)).catch(()=>null),apiGet('/paths?from='+enc(id)+'&limit=50').catch(()=>[])])
+      .then(([av,nb,sim,paths])=>({av,nb,sim,paths:arr(paths)}));
+    jdP.catch(()=>{ jdP=null; }); }
+  return jdP;
+}
+/* short name for a disease: an abbreviation-style synonym such as "CLN5 disease" when the data has one */
+function shortName(n){ const s=arr(n&&n.synonyms).filter(x=>/^[A-Z][A-Z0-9-]{1,7}( disease)?$/.test(x)).sort((a,b)=>b.length-a.length)[0]; return s||cap(n&&n.label||''); }
+
+/* ---------- JOURNEY (live) ---------- */
+const J_COPY={
+  disease:'Everything that follows is anchored to one diagnosis and, where known, its genetic cause.',
+  mechanism:'Naming the mechanism, not just the gene, is what lets the Atlas look across disease boundaries.',
+  related:'Two communities that rarely meet may share biology, so their questions, data and samples can be compared.',
+  group:'Patient groups hold lived experience, registries and the trust to bring families into research.',
+  asset:'Reusing what already exists skips the slowest part of a new study: building cohorts and models from scratch.',
+  collab:'An asset is only useful if the people who hold it can and want to work together.',
+  next:'A next step is only worth taking if it rests on the links above and someone can start on it.'
+};
+const ST_BREAK={curated:'Curated databases record that a link exists, not how much it matters for one family, and they can lag behind new findings.',literature:'It rests on what a published source states. A later study could qualify it.',inferred:'The Atlas computed this link from shared features. No source states it directly, so it is a reason to look closer, not proof.',hypothesis:'This is a hypothesis proposed by the Atlas. It needs testing before anyone acts on it.'};
+async function buildJourney(){
+  const {av,nb,sim,paths}=await journeyData();
+  const d=av.disease, c=d.id, N=new Map(arr(nb&&nb.nodes).map(n=>[n.id,n])), nbE=arr(nb&&nb.edges);
+  const inc=e=>e.src===c||e.dst===c, oth=e=>e.src===c?e.dst:e.src;
+  const simBy=new Map(arr(sim).map(s=>[s.disease.id,s]));
+  const steps=[], ts=av.treatment_status||{};
+  const subE=nbE.find(e=>e.type==='disease_subtype_of'&&e.src===c);
+  steps.push({k:'Disease',t:cap(d.label),node:d,edge:arr(ts.edge_ids)[0]||(subE&&subE.id)||null,lead:av.plain_summary||d.summary||'',why:J_COPY.disease+(ts.note?' '+ts.note:''),breaks:'If the diagnosis or its genetic cause is not confirmed, the later steps narrow less precisely.'});
+  /* the related community is chosen first, so the mechanism shown is the one the two diseases share */
+  const rcs=arr(av.related_communities).filter(rc=>{ const s=simBy.get(rc.disease.id); return s&&s.edge_id===rc.similarity_edge_id; });
+  const shMech=rc=>{ const s=simBy.get(rc.disease.id); return arr(s&&s.shared&&s.shared.mechanisms); };
+  const rc=rcs.filter(r=>arr(r.groups).length&&shMech(r).length).sort((a,b)=>b.similarity-a.similarity)[0]||rcs.find(r=>arr(r.groups).length)||rcs[0]||null;
+  const sh=rc?simBy.get(rc.disease.id):null, shared=new Set(rc?shMech(rc).map(m=>m.id):[]);
+  const mE=nbE.filter(e=>inc(e)&&e.type==='disease_involves_mechanism').sort((a,b)=>(shared.has(oth(b))-shared.has(oth(a)))||((b.confidence||0)-(a.confidence||0)))[0];
+  if(mE){ const m=N.get(oth(mE)); steps.push({k:'Mechanism',t:cap(m?m.label:relLabel(mE)),node:m||null,edge:mE.id,lead:(m&&m.summary)||'',why:J_COPY.mechanism+(rc&&shared.has(oth(mE))?` ${cap(rc.disease.label)} is linked to it too.`:''),breaks:''}); }
+  if(rc){ const cp=(sh&&sh.components)||{}, parts=[['symptoms',cp.phenotype],['mechanisms',cp.mechanism],['genes',cp.gene]].filter(x=>x[1]>0).map(x=>x[0]);
+    steps.push({k:'Related community',t:cap(rc.disease.label),node:rc.disease,edge:rc.similarity_edge_id,lead:cap(rc.why),why:J_COPY.related+(parts.length?` The Atlas compared shared ${andList(parts)}.`:''),breaks:[rc.caution?cap(rc.caution):'',arr(rc.differences).length?'What differs: '+andList(arr(rc.differences).slice(0,3))+'.':''].filter(Boolean).join(' ')}); }
+  let g=rc?arr(rc.groups).slice().sort((a,b)=>(b.has_registry===true)-(a.has_registry===true))[0]:null, gEdge=g&&g.edge_id, gFor=g&&g.for_disease;
+  if(!g){ const p=paths.find(x=>x.kind==='patient_group'); if(p&&arr(p.nodes).length>1){ g={node:p.nodes[p.nodes.length-1]}; gFor=p.nodes[p.nodes.length-2]; gEdge=arr(p.edge_ids).slice(-1)[0]; } }
+  if(g) steps.push({k:'Patient group',t:g.node.label,node:g.node,edge:gEdge,lead:`${g.node.label} serves families with ${gFor?gFor.label:d.label}${g.country?', based in '+g.country:''}.${g.has_registry===true?' It keeps a patient registry.':''}`,why:J_COPY.group,breaks:gFor&&gFor.id!==c?`The group serves ${gFor.label}, not ${d.label} itself. Whether it can include ${d.label} families has to be asked.`:''});
+  const aScore=x=>(x.owner?2:0)+(/registry|natural_history/.test(x.asset_kind||'')?1:0)+(x.reusability==='direct'?.5:0);
+  const asset=arr(av.assets).slice().sort((a,b)=>aScore(b)-aScore(a))[0];
+  if(asset){ const aid=asset.node.id, covers=arr(asset.covers);
+    const direct=nbE.find(e=>e.type==='asset_covers_disease'&&e.src===aid&&e.dst===c), viaPath=paths.find(p=>p.kind==='asset'&&p.to===aid);
+    steps.push({k:'Existing asset',t:asset.node.label,node:asset.node,edge:(direct&&direct.id)||(viaPath&&arr(viaPath.edge_ids).slice(-1)[0])||arr(asset.edge_ids)[0]||null,
+      lead:`${SUBTYPE_LABEL[asset.asset_kind]||cap(human(asset.asset_kind))||'A research resource'}${asset.owner?', maintained by '+asset.owner.label:''}.${covers.length>1?` It covers ${fmtN(covers.length)} diseases today.`:''}`,
+      why:J_COPY.asset+(REUSE[asset.reusability]?` The Atlas rates it as: ${REUSE[asset.reusability].toLowerCase()}.`:''),
+      breaks:arr(asset.needs_review).concat(arr(asset.what_differs)).slice(0,3).join(' ')||'Consent terms, data fields and access have not been checked with the owner.'}); }
+  let col=null;
+  if(asset&&asset.owner){ const anb=await apiGet('/nodes/'+enc(asset.node.id)+'/neighborhood?depth=1&max_nodes=100').catch(()=>null), o=asset.owner;
+    const oe=arr(anb&&anb.edges).find(e=>(e.src===o.id&&e.dst===asset.node.id)||(e.dst===o.id&&e.src===asset.node.id));
+    if(oe) col={node:o,edge:oe.id,lead:`${o.label} maintains ${asset.node.label}.`}; }
+  if(!col){ const p=paths.find(x=>x.kind==='researcher'); if(p&&arr(p.nodes).length>1){ const n=p.nodes[p.nodes.length-1], pc=arr(av.researchers).find(r=>r.node.id===n.id);
+    col={node:n,edge:arr(p.edge_ids).slice(-1)[0],lead:pc&&pc.affiliation?`${n.label}, ${clip(pc.affiliation,140)}.`:`${n.label} works on ${d.label}.`}; } }
+  if(col) steps.push({k:'Collaborator',t:col.node.label,node:col.node,edge:col.edge,lead:col.lead,why:J_COPY.collab,breaks:'Willingness, capacity, funding and agreements are unknown until someone asks.'});
+  const ids=new Set(steps.map(s=>s.node&&s.node.id).filter(Boolean)), ns=arr(av.next_steps);
+  const nx=ns.find(s=>s.target&&ids.has(s.target.id)&&arr(s.edge_ids).length)||ns.find(s=>s.kind==='validate_experiment')||ns.find(s=>arr(s.edge_ids).length)||ns[0];
+  if(nx) steps.push({k:'Next step',t:nx.title,edge:arr(nx.edge_ids)[0]||null,stepSt:STEP_ST[nx.status]||STEP_ST.unsupported,lead:cap(nx.rationale||''),why:J_COPY.next+(EFFORT[nx.effort]?` The Atlas sizes it as ${EFFORT[nx.effort].toLowerCase()}.`:''),breaks:arr(nx.validation_needed).length?'Check first: '+arr(nx.validation_needed).join('; ')+'.':''});
+  const rs=await Promise.all(steps.map(s=>edgeR(s.edge)));
+  steps.forEach((s,i)=>{ const r=rs[i];
+    if(r){ const e=r.edge, ev=arr(r.supporting).find(v=>v.quote)||arr(r.supporting)[0]||arr(r.context)[0], con=arr(r.contradicting).length, caution=e.attrs&&e.attrs.caution;
+      s.s=s.stepSt?s.stepSt[0]:LS(e.status); s.c=+e.confidence||0;
+      s.src=(ev&&ev.source_name)||arr(e.sources).join(', ')||'Not recorded';
+      s.rests=`${LS_HOW[e.status]||'Not recorded'}${ev?': '+ev.source_name+(ev.source_ref&&!String(ev.source_name).includes(ev.source_ref)?' ('+ev.source_ref+')':''):''}.${ev&&ev.quote?' “'+clip(ev.quote,240)+'”':''}`;
+      s.breaks=[s.breaks,caution&&!String(s.breaks).includes(caution)?cap(caution):'',con?`${fmtN(con)} contradicting record${con>1?'s are':' is'} stored for this link.`:'',ST_BREAK[e.status]||''].filter(Boolean).join(' ');
+    } else { s.s=s.stepSt?s.stepSt[0]:'U'; s.c=null; s.src='No single source record'; s.edge=null;
+      s.rests='No single source record is attached to this step yet. It follows from a gap the Atlas found.'; s.breaks=[s.breaks,ST_BREAK.hypothesis].filter(Boolean).join(' '); }
+  });
+  return {d,steps};
+}
+let J=[], jSel=0, jWant=null;
+function jSelect(kind){ const i=J.findIndex(s=>s.k===kind); if(i>=0){ jSel=i; renderJourney(); } else jWant=kind; }
+async function loadJourney(){
+  $('#jpanel').innerHTML=`<div role="status"><p class="vh">Loading the journey from the live Atlas</p><i class="skel-h"></i>${skelLines(4)}</div><div>${skelLines(5)}</div>`;
+  try{
+    const {d,steps}=await buildJourney(); J=steps;
+    const eb=$('#journeyEyebrow'); if(eb) eb.textContent='Worked example from the live Atlas: '+cap(d.label);
+    if(jWant){ const i=J.findIndex(s=>s.k===jWant); if(i>=0) jSel=i; jWant=null; }
+    renderJourney();
+  }catch(e){ liveError($('#jpanel'),loadJourney); }
+}
 function renderJourney(){
-  const tr=$('#jtrack'); const line=tr.querySelector('.jline');
-  tr.innerHTML=''; tr.appendChild(line);
+  const tr=$('#jtrack'), line=tr.querySelector('.jline'), n=J.length; if(!n) return;
+  if(jSel>=n) jSel=0;
+  tr.innerHTML=''; tr.appendChild(line); tr.style.setProperty('--n',n);
   const sColor={E:'var(--ev-n)',H:'var(--hy-n)',U:'var(--un-n)'};
-  J.forEach((s,i)=>{ const b=document.createElement('button'); b.className='jstep'; b.setAttribute('role','tab'); b.setAttribute('aria-selected',i===jSel); b.id='jtab'+i;
-    b.innerHTML=`<span class="jnode"><i style="background:${sColor[s.s]}"></i></span><span class="jlabel">${s.k}</span><span class="jtitle">${esc(s.t)}</span>`;
+  J.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='jstep'; b.setAttribute('role','tab'); b.setAttribute('aria-selected',i===jSel); b.setAttribute('aria-controls','jpanel'); b.tabIndex=i===jSel?0:-1; b.id='jtab'+i;
+    b.innerHTML=`<span class="jnode"><i style="background:${sColor[s.s]}"></i></span><span class="jlabel">${esc(s.k)}</span><span class="jtitle">${esc(clip(s.t,52))}</span>`;
     b.addEventListener('click',()=>{jSel=i;renderJourney()}); tr.appendChild(b); });
-  // connector: each segment styled by the status of the step it leads into
-  let l=''; const seg=1000/5;
-  for(let i=0;i<5;i++){const s=J[i+1].s; l+=`<line x1="${i*seg}" y1="4" x2="${(i+1)*seg}" y2="4" stroke="${sColor[s]}" stroke-width="2" stroke-dasharray="${s==='E'?'':s==='H'?'10 7':'2 7'}" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`}
+  /* connector: each segment styled by the status of the step it leads into */
+  let l=''; const seg=1000/Math.max(1,n-1);
+  for(let i=0;i<n-1;i++){const s=J[i+1].s; l+=`<line x1="${i*seg}" y1="4" x2="${(i+1)*seg}" y2="4" stroke="${sColor[s]}" stroke-width="2" stroke-dasharray="${s==='E'?'':s==='H'?'10 7':'2 7'}" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`}
   if(!reduced) l+=`<circle r="4" cy="4" fill="#E5EBF1"><animate attributeName="cx" from="0" to="${jSel*seg}" dur="${0.4+jSel*0.25}s" fill="freeze"/></circle>`;
   $('#jlineSvg').innerHTML=l;
-  const s=J[jSel];
+  const s=J[jSel], pill=s.stepSt?`<span class="st ${s.stepSt[0]}">${s.stepSt[1]}</span>`:stPill(s.s);
   $('#jpanel').setAttribute('aria-labelledby','jtab'+jSel);
-  $('#jpanel').innerHTML=`<div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Step ${jSel+1} of 6: ${s.k}</span>${stPill(s.s)}</div>
-    <h3 style="margin-top:14px">${esc(s.t)}</h3><p class="lead">${esc(s.lead)}</p>
-    <div style="margin-top:22px;display:flex;gap:18px;flex-wrap:wrap;align-items:center"><span style="color:var(--night-ink-2)">${confHtml(s.c)}</span><span class="mono" style="color:var(--night-ink-2);letter-spacing:.04em;text-transform:none">${esc(s.src)}</span></div>
+  $('#jpanel').innerHTML=`<div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Step ${jSel+1} of ${n}: ${esc(s.k)}</span>${pill}</div>
+    <h3 style="margin-top:14px">${esc(s.t)}</h3>${s.lead?`<p class="lead">${esc(clip(s.lead,340))}</p>`:''}
+    <div class="jmeta">${s.c!=null?`<span>${confHtml(s.c)}</span>`:''}<span>Source: ${esc(clip(s.src,90))}</span></div>
     <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
-      ${jSel>0?`<button class="btn btn-ghost" data-j="${jSel-1}" style="padding:8px 14px;font-size:13px">← ${J[jSel-1].k}</button>`:''}
-      ${jSel<5?`<button class="btn btn-ghost" data-j="${jSel+1}" style="padding:8px 14px;font-size:13px">${J[jSel+1].k} →</button>`:''}</div></div>
-    <div class="jcols"><div><h4>Why this step</h4><p>${esc(s.why)}</p></div><div><h4>What it rests on</h4><p>${esc(s.rests)}</p></div><div><h4>What could break it</h4><p>${esc(s.breaks)}</p></div></div>`;
+      ${s.edge?`<button type="button" class="btn btn-primary" data-jedge="${esc(s.edge)}" style="padding:8px 14px;font-size:13px">See the evidence</button>`:''}
+      ${jSel>0?`<button type="button" class="btn btn-ghost" data-j="${jSel-1}" style="padding:8px 14px;font-size:13px">← ${esc(J[jSel-1].k)}</button>`:''}
+      ${jSel<n-1?`<button type="button" class="btn btn-ghost" data-j="${jSel+1}" style="padding:8px 14px;font-size:13px">${esc(J[jSel+1].k)} →</button>`:''}</div></div>
+    <div class="jcols"><div><h4>Why this step</h4><p>${esc(s.why)}</p></div><div><h4>What it rests on</h4><p>${esc(s.rests)}</p></div><div><h4>What could break it</h4><p>${esc(s.breaks||ST_BREAK.literature)}</p></div></div>`;
 }
-$('#jpanel').addEventListener('click',e=>{const b=e.target.closest('[data-j]'); if(b){jSel=+b.dataset.j;renderJourney();$('#jtab'+jSel).focus()}});
-$('#jtrack').addEventListener('keydown',e=>{ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft'&&e.key!=='ArrowDown'&&e.key!=='ArrowUp') return; e.preventDefault(); jSel=(jSel+(e.key==='ArrowRight'||e.key==='ArrowDown'?1:5))%6; renderJourney(); $('#jtab'+jSel).focus(); });
+$('#jpanel').addEventListener('click',e=>{const ed=e.target.closest('[data-jedge]'); if(ed){openLiveDrawer(ed.dataset.jedge);return} const b=e.target.closest('[data-j]'); if(b){jSel=+b.dataset.j;renderJourney();$('#jtab'+jSel).focus()}});
+$('#jtrack').addEventListener('keydown',e=>{ const n=J.length; if(!n) return; let k=null;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') k=(jSel+1)%n; else if(e.key==='ArrowLeft'||e.key==='ArrowUp') k=(jSel+n-1)%n; else if(e.key==='Home') k=0; else if(e.key==='End') k=n-1;
+  if(k==null) return; e.preventDefault(); jSel=k; renderJourney(); $('#jtab'+jSel).focus(); });
 
 /* ---------- 10x ---------- */
 const TODAY=[["Finding out what already exists", 6, "Parents search by gene name, ask at conferences and wait for word of mouth. Registries and studies sit inside trial records and papers filed under other disease names, so many of them are easy to miss."], ["Judging what applies to both diseases", 8, "Someone has to read the biology and ask scarce experts whether CLN5 and CLN6 are alike enough to study together, and where they differ."], ["Finding the right partners", 6, "Cold emails go to clinics, companies and other family groups. Many go unanswered, and each reply leads to another name to chase."], ["Designing the study from scratch", 10, "Without knowing what others built, the group drafts its own data fields, outcome measures and consent, often repeating work an existing registry has already done."], ["Agreeing to work together", 6, "Rounds of meetings on scope, data sharing and who leads, ending in a decision to launch."]];
-const OM=[["Disease", 0.2, "Start from CLN5 disease: confirm the diagnosis, see that no treatment is approved yet and that it belongs to the NCL family. One search gives a stable disease id, the treatment status with its source and the family it belongs to, so nobody has to piece this together from scattered pages.", ["neuronal ceroid lipofuscinosis 5", "neuronal ceroid lipofuscinosis", "NGN-101 (AAV9 CLN5 gene therapy, Neurogene), investigational"]], ["Evidence", 0.8, "Read what CLN5 and CLN6 share and where they differ, and hand the open questions to an expert. Weeks of reading become a short, sourced list: both diseases build up subunit c of mitochondrial ATP synthase, while CLN5 is a soluble lysosomal protein and CLN6 works in ER-to-Golgi transport. One 2022 study also links CLN5 to that same transport step. The Atlas flags the difference as a caution, so the expert starts from the right question.", ["lysosomal storage of mitochondrial ATP synthase subunit c, CLN5", "lysosomal storage of mitochondrial ATP synthase subunit c, CLN6", "Soluble lysosomal protein/enzyme deficiency, CLN5", "ER-to-Golgi transfer of lysosomal enzymes (CLN6-CLN8 EGRESS complex), CLN6"]], ["Connection", 0.6, "Choose the partner community and the groups that already serve these families. The Atlas shows CLN6 as a related disease with overlapping symptoms and names the groups around it: BDSRA for the whole NCL family and the Gray Foundation for CLN6. It also says plainly that it found no group for exactly CLN5, which is a reason to partner.", ["CLN5 is similar to CLN6: shared informative symptoms (inferred link)", "Batten Disease Support, Research, and Advocacy Foundation (BDSRA)", "Charlotte & Gwenyth Gray Foundation to Cure Batten Disease"]], ["Existing asset", 0.8, "Find registries, studies and models to build on instead of starting from zero. Finding them takes minutes instead of months of emailing, because the Atlas already lists the DEM-CHILD international NCL registry with its source. It lists both CLN5 and CLN6 and is recruiting, according to ClinicalTrials.gov. Next to it are the two single-disease natural history studies, the BDSRA family register and two sheep models that one 2023 study already compared side by side. The rest of this step goes into checking whether each one fits.", ["DEM-CHILD NCL Patient Database (international NCL registry, NCT04613089), covers CLN5", "DEM-CHILD NCL Patient Database (international NCL registry, NCT04613089), covers CLN6", "Neurogene CLN5 natural history and outcome measure study (NCT03822650)", "CLN6 disease natural history study (NCT03285425)"]], ["Collaborator", 0.7, "Identify the teams who run these assets and the researchers who already work across both diseases. Each asset links to who maintains it, so the first email goes to the right team. Sara E Mole publishes on both CLN5 and CLN6, and Lincoln University has described keeping both sheep flocks, so they could help bridge the two communities.", ["University Medical Center Hamburg-Eppendorf (UKE), NCL Specialty Clinic", "Neurogene Inc.", "Nationwide Children's Hospital", "Sara E Mole, publishes on CLN5"]], ["Shared action", 0.5, "Send a sourced proposal and meet to decide whether to launch the shared study. The proposal is drafted from the cited links above, so partners can check every claim. It carries the open questions with it, starting with the one the Atlas marks as needing review: do findings from CLN5 transfer to CLN6?", ["Next step: explore reusing the CLN6 disease natural history study (NCT03285425)", "Next step: test whether CLN6 and CLN5 share the mechanism (needs review)"]]];
+/* The step lengths below are the model's assumptions (labelled as such on the page). Every name and status shown next to them is looked up live. */
+const OM=[["Disease", 0.2, "Start from CLN5 disease: confirm the diagnosis, see whether any treatment is approved and which disease family it belongs to. One search gives a stable disease id, the treatment status with its source and the family it belongs to, so nobody has to piece this together from scattered pages."], ["Evidence", 0.8, "Read what CLN5 and CLN6 share and where they differ, and hand the open questions to an expert. Weeks of reading become a short, sourced list of the mechanisms the two diseases share and the ones that set them apart. The Atlas flags a difference as a caution, so the expert starts from the right question."], ["Connection", 0.6, "Choose the partner community and the groups that already serve these families. The Atlas shows CLN6 as a related disease and names the groups around it, for the whole NCL family and for CLN6. It also says plainly when it finds no group for exactly CLN5, which is a reason to partner."], ["Existing asset", 0.8, "Find registries, studies and models to build on instead of starting from zero. Finding them takes minutes instead of months of emailing, because the Atlas already lists them with their sources, next to the single-disease natural history studies. The rest of this step goes into checking whether each one fits."], ["Collaborator", 0.7, "Identify the teams who run these assets and the researchers who already work across both diseases. Each asset links to who maintains it, so the first email goes to the right team."], ["Shared action", 0.5, "Send a sourced proposal and meet to decide whether to launch the shared study. The proposal is drafted from the cited links above, so partners can check every claim. It carries the open questions with it, starting with the ones the Atlas marks as needing review."]];
+/* entities the moonshot names, found by live search (type-filtered); a missing one is simply not shown */
+const TX_ENT={cln5:['neuronal ceroid lipofuscinosis 5','disease'],ncl:['neuronal ceroid lipofuscinosis','disease'],cln6:['CLN6','disease'],ngn:['NGN-101','intervention'],
+  subc:['subunit c','mechanism'],sol:['Soluble lysosomal protein','mechanism'],egress:['ER-to-Golgi transfer','mechanism'],bdsra:['BDSRA','organization'],gray:['Gray Foundation','organization'],
+  demchild:['DEM-CHILD','asset'],dcTrial:['NCT04613089','trial'],nhs5:['NCT03822650','trial'],nhs6:['NCT03285425','trial'],nhs5a:['Neurogene CLN5 natural history','asset'],nhs6a:['CLN6 disease natural history study','asset'],
+  neurogene:['Neurogene','organization'],nch:["Nationwide Children's Hospital",'organization'],mole:['Sara E Mole','person'],sheep5:['Borderdale sheep','asset'],lincoln:['Lincoln University','organization']};
+const TX_REFS=[
+  [{e:'cln5',rel:'ncl'},{e:'ngn',rel:'cln5',approval:1}],
+  [{e:'subc',rel:'cln5'},{e:'subc',rel:'cln6'},{e:'sol',rel:'cln5'},{e:'egress',rel:'cln6'}],
+  [{sim:['cln5','cln6']},{e:'bdsra',rel:'ncl'},{e:'gray',rel:'cln6'}],
+  [{e:'demchild',rel:'cln5'},{e:'demchild',rel:'cln6'},{trial:'dcTrial'},{trial:'nhs5'},{trial:'nhs6'}],
+  [{e:'demchild',owner:1},{e:'neurogene',rel:'nhs5a'},{e:'nch',rel:'nhs6a'},{e:'mole',rel:'cln5'},{e:'lincoln',rel:'sheep5'}],
+  [{step:'cln6',kind:'adapt_study_design',re:/natural history/i},{step:'cln6',kind:'validate_experiment',target:'cln5'}]
+];
+const txEnt=new Map();
+function txFind(k){
+  if(!txEnt.has(k)){ const [q,t]=TX_ENT[k]; txEnt.set(k,apiGet('/search?q='+enc(q)+'&types='+t+'&limit=3').then(h=>{ const x=arr(h).find(y=>y&&y.type===t&&(y.score||0)>=.6); return x?apiGet('/nodes/'+enc(x.id)).catch(()=>null):null; }).catch(()=>null)); }
+  return txEnt.get(k);
+}
+const txNb=id=>apiGet('/nodes/'+enc(id)+'/neighborhood?depth=1&max_nodes=300').catch(()=>null);
+async function txEdgeBetween(a,b){
+  for(const id of [a,b]){ const nb=await txNb(id); const e=arr(nb&&nb.edges).find(x=>(x.src===a&&x.dst===b)||(x.src===b&&x.dst===a)); if(e) return e; }
+  return null;
+}
+const trialTxt=n=>{ const a=(n&&n.attrs)||{}; return [a.nct_id||n.id,human(a.overall_status)].filter(Boolean).join(', '); };
+const apTxtX=a=>a==='approved'?'approved':a==='investigational'?'investigational, not approved':'';
+async function txRef(r){
+  if(r.trial){ const t=await txFind(r.trial); if(!t) return null; const n=t.node; return {text:`${cap(n.label)} (${trialTxt(n)}, on ClinicalTrials.gov)`,url:safeUrl(n.url)}; }
+  if(r.sim){ const [a,b]=await Promise.all(r.sim.map(txFind)); if(!a||!b) return null; const sim=await apiGet(simPath(a.node.id)).catch(()=>null); const s=arr(sim).find(x=>x.disease.id===b.node.id); if(!s) return null; const er=await edgeR(s.edge_id); return er?{edge:s.edge_id,status:er.edge.status,text:cap(relText(er))}:null; }
+  if(r.step){ const d=await txFind(r.step); if(!d) return null; const av=await apiGet(avPath(d.node.id)).catch(()=>null); const tg=r.target?await txFind(r.target):null;
+    const s=arr(av&&av.next_steps).find(x=>x.kind===r.kind&&(!r.re||r.re.test(x.title))&&(!r.target||(tg&&x.target&&x.target.id===tg.node.id))); if(!s) return null;
+    const st=STEP_ST[s.status]||STEP_ST.unsupported; return {edge:arr(s.edge_ids)[0]||null,text:'Next step: '+s.title,stepSt:st}; }
+  const n=await txFind(r.e); if(!n) return null;
+  if(r.owner){ const nb=await txNb(n.node.id); const e=arr(nb&&nb.edges).find(x=>x.type==='organization_maintains_asset'&&x.dst===n.node.id); if(!e) return null; const er=await edgeR(e.id); return er?{edge:e.id,status:er.edge.status,text:cap(relText(er))}:null; }
+  if(!r.rel) return {text:cap(n.node.label)};
+  const o=await txFind(r.rel); if(!o) return null;
+  const e=await txEdgeBetween(n.node.id,o.node.id); if(!e) return null;
+  const er=await edgeR(e.id); if(!er) return null;
+  const ap=r.approval&&e.attrs&&apTxtX(e.attrs.approval);
+  return {edge:e.id,status:er.edge.status,text:cap(relText(er))+(ap?' ('+ap+')':'')};
+}
+const txLine=x=>`<li>${x.edge?`<button type="button" class="ms-ref" data-drawer-edge="${esc(x.edge)}">${esc(x.text)}</button>`:x.url?`<a class="ms-ref" href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.text)} ↗</a>`:`<span>${esc(x.text)}</span>`} ${x.stepSt?`<span class="st ${x.stepSt[0]}">${x.stepSt[1]}</span>`:x.status?stPill(LS(x.status)):''}</li>`;
+async function loadTenxLive(){
+  /* references under each connected step */
+  TX_REFS.forEach(async(refs,i)=>{
+    const out=await Promise.all(refs.map(r=>txRef(r).catch(()=>null)));
+    const box=$(`#flowOM [data-tx-refs="${i}"]`); if(!box) return; const ok=out.filter(Boolean);
+    if(!ok.length){ box.hidden=true; return; }
+    box.innerHTML=`<span class="ms-refs-h">From the live Atlas</span><ul class="ms-refl">${ok.map(txLine).join('')}</ul>`; box.hidden=false;
+  });
+  /* milestone: enrolment from ClinicalTrials.gov records */
+  Promise.all([txFind('nhs5'),txFind('nhs6')]).then(([a,b])=>{ const el=$('#msEnroll'); if(!el||!a||!b) return; const ea=a.node.attrs||{}, eb=b.node.attrs||{};
+    if(ea.enrollment==null||eb.enrollment==null) return;
+    el.textContent=`: ${fmtN(ea.enrollment)} people in the CLN5 study (${ea.nct_id||a.node.id}) and ${fmtN(eb.enrollment)} in the CLN6 study (${eb.nct_id||b.node.id}), as listed on ClinicalTrials.gov`; });
+  /* validation list: live facts under the questions */
+  Promise.all([txFind('cln5'),txFind('cln6')]).then(async([a,b])=>{ if(!a||!b) return; const sim=await apiGet(simPath(a.node.id)).catch(()=>null), s=arr(sim).find(x=>x.disease.id===b.node.id), el=$('#vlist [data-val="0"]');
+    if(s&&el){ el.innerHTML=s.caution?`The Atlas notes: ${esc(cap(s.caution))}`:''; el.hidden=!s.caution; const p=$('#vlist [data-val-st="0"]'); if(p) p.outerHTML=stPill(LS(s.status)); } });
+  Promise.all(['dcTrial','nhs5','nhs6'].map(txFind)).then(ts=>{ const ok=ts.filter(Boolean), el=$('#vlist [data-val="1"]'); if(!el||!ok.length) return;
+    el.textContent='On ClinicalTrials.gov today: '+ok.map(t=>`${clip(cap(t.node.label),70)} (${trialTxt(t.node)})`).join('; ')+'.'; el.hidden=false; });
+  Promise.all([txOwnerLabel(),...['nch','neurogene','bdsra','gray'].map(k=>txFind(k).then(n=>n&&n.node.label))]).then(ls=>{ const ok=ls.filter(Boolean), el=$('#vlist [data-val="3"]'); if(!el||!ok.length) return;
+    el.textContent='Named in sources: '+andList(ok)+'.'; el.hidden=false; });
+}
+async function txOwnerLabel(){ const n=await txFind('demchild'); if(!n) return null; const nb=await txNb(n.node.id); const e=arr(nb&&nb.edges).find(x=>x.type==='organization_maintains_asset'&&x.dst===n.node.id); const o=e&&arr(nb.nodes).find(x=>x.id===e.src); return o?o.label:null; }
 const TOTAL=36, X0=24, X1=976, xs=m=>X0+(X1-X0)*m/TOTAL;
 const greys=['#2A3746','#334354','#3C4F63','#465B72','#506780'];
 const blues=['#5B8CFF','#6C98FF','#7FA5FF','#93B3FF','#A8C1FF','#BDD0FF'];
@@ -2016,7 +1899,7 @@ function renderRace(){
   $('#raceSvg').innerHTML=h;
   // flows
   $('#flowToday').innerHTML=TODAY.map(([l,d,w],i)=>`<li><i style="background:${greys[i]}"></i><span>${l}<small class="ms-w">${esc(w||'')}</small></span><span class="m">about ${d} months</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Decision to launch the shared study</span><span class="m">month ${TOTAL}</span></li>`;
-  $('#flowOM').innerHTML=OM.map(([l,d,w,refs],i)=>`<li><i style="background:${blues[i]}"></i><span>${l}<small class="ms-w">${esc(w||'')}</small>${(refs&&refs.length)?`<small class="ms-refs">From the live Atlas: ${refs.map(esc).join('; ')}</small>`:''}</span><span class="m">about ${Math.round(d*30)} days</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Decision to launch the shared study</span><span class="m">month ${cyc.toFixed(1)}</span></li>`;
+  $('#flowOM').innerHTML=OM.map(([l,d,w],i)=>`<li><i style="background:${blues[i]}"></i><div class="fl-b">${l}<small class="ms-w">${esc(w||'')}</small><div class="ms-refs" data-tx-refs="${i}" hidden></div></div><span class="m">about ${Math.round(d*30)} days</span></li>`).join('')+`<li><i style="background:#E5EBF1;transform:rotate(45deg) scale(.8)"></i><span>Decision to launch the shared study</span><span class="m">month ${cyc.toFixed(1)}</span></li>`;
 }
 let raf=0;
 function play(){
@@ -2031,73 +1914,138 @@ function play(){
 }
 $('#playBtn').addEventListener('click',play);
 
-const VAL=[["Is the link between CLN5 and CLN6 strong enough for a shared study?", "E", "Partly. Published sources document subunit c storage in both. Their mechanisms largely differ: CLN5 is a soluble lysosomal protein and CLN6 works in ER-to-Golgi transport, although one 2022 study links CLN5 to that step too. Whether the difference matters for an observational study needs expert review."], ["Can the existing registry and studies be reused?", "H", "DEM-CHILD lists CLN5 and CLN6 and is recruiting, according to ClinicalTrials.gov. The Neurogene CLN5 study is completed and the CLN6 study is active but not recruiting. Consent terms, data fields and access have not been checked."], ["Are CLN5 and CLN6 families comparable?", "U", "Age at onset, speed of decline and the mix of symptoms may differ. We have not compared them on patient data."], ["Will the groups and teams take part?", "U", "Nobody has been asked. UKE Hamburg, Nationwide Children's Hospital, Neurogene, BDSRA and the Gray Foundation are named in sources, but capacity, funding and willingness are unknown."], ["Does this route reach the decision to launch 10 times faster?", "H", "This is the central claim. It can only be answered by running the route with one real patient organisation and timing each step."]];
-$('#vlist').innerHTML=VAL.map((v,i)=>`<li><span class="n">${i+1}</span><span class="q">${v[0]}</span>${stPill(v[1])}<span class="d">${v[2]}</span></li>`).join('');
 
-/* ---------- TRUST ---------- */
-const CHAIN=[['leigh',6],['leigh',14],['dravet',12],['dravet',30]];
-$('#chain').innerHTML=CHAIN.map(([k,i])=>{const ds=DATA[k],e=ds.edges[i];return `<button class="chain-row" data-k="${k}" data-i="${i}"><span class="src">${esc(e.src)}</span><span class="ar">→</span><span class="rel">${esc(sentence(ds,e))}</span><span class="ar">→</span><span style="display:grid;gap:4px;justify-items:end">${stPill(e.status)}<span class="conf" style="color:var(--ink-2)">${Math.round(e.conf*100)}%</span></span></button>`}).join('');
-$('#chain').addEventListener('click',e=>{const b=e.target.closest('.chain-row'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+const VAL=[["Is the link between CLN5 and CLN6 strong enough for a shared study?", "", "Published sources document subunit c storage in both, while their mechanisms largely differ. Whether the difference matters for an observational study needs expert review."], ["Can the existing registry and studies be reused?", "H", "Consent terms, data fields and access have not been checked."], ["Are CLN5 and CLN6 families comparable?", "U", "Age at onset, speed of decline and the mix of symptoms may differ. We have not compared them on patient data."], ["Will the groups and teams take part?", "U", "Nobody has been asked. Capacity, funding and willingness are unknown."], ["Does this route reach the decision to launch 10 times faster?", "H", "This is the central claim. It can only be answered by running the route with one real patient organisation and timing each step."]];
+$('#vlist').innerHTML=VAL.map((v,i)=>`<li><span class="n">${i+1}</span><span class="q">${v[0]}</span>${v[1]?stPill(v[1]):`<span data-val-st="${i}"></span>`}<span class="d">${v[2]}<span class="vlive" data-val="${i}" hidden></span></span></li>`).join('');
+$('#flowOM').addEventListener('click',e=>{const b=e.target.closest('[data-drawer-edge]'); if(b) openLiveDrawer(b.dataset.drawerEdge)});
 
-const ALLN=[]; Object.values(DATA).forEach(ds=>ds.nodes.forEach(n=>{ if(['disease','gene','mechanism','asset','variant'].includes(n.t)) ALLN.push({g:gid(ds,n.id),label:n.label,ds:ds.name,t:n.t})}));
-const opt=ALLN.map(n=>`<option value="${n.g}">${esc(n.label)} (${esc(n.ds)})</option>`).join('');
-$('#rFrom').innerHTML=opt; $('#rTo').innerHTML=opt;
-function findRoute(a,b,withHyp){
-  const A=fromGid(a),B=fromGid(b); if(A.ds!==B.ds) return null;
-  const ds=A.ds, ok=e=>e.status==='E'||(withHyp&&e.status==='H');
-  const prev={[A.n.id]:null}, q=[A.n.id];
-  while(q.length){const cur=q.shift(); if(cur===B.n.id) break;
-    ds.edges.filter(e=>ok(e)&&(e.s===cur||e.t===cur)).forEach(e=>{const o=other(e,cur); if(!(o in prev)){prev[o]={from:cur,e};q.push(o)}});}
-  if(!(B.n.id in prev)) return null;
-  const path=[]; let c=B.n.id; while(prev[c]){path.unshift(prev[c]);c=prev[c].from}
-  return {ds,start:A.n.id,path};
+/* ---------- TRUST: real links around the worked example ---------- */
+const HOW_SHORT={curated:'Curated database',literature:'Quoted source',inferred:'Computed by the Atlas',hypothesis:'Proposed by the Atlas'};
+async function renderChain(){
+  const el=$('#chain'); el.innerHTML=`<div style="padding:16px 0">${skelLines(4)}</div>`;
+  try{
+    const {av,nb,sim}=await journeyData(), c=av.disease.id, cand=new Map(), add=e=>{ if(e&&e.id&&!cand.has(e.id)) cand.set(e.id,e); };
+    arr(nb&&nb.edges).filter(e=>e.src===c||e.dst===c).forEach(add);
+    arr(av.connections).forEach(p=>arr(p.edges).forEach(add));
+    arr(sim).forEach(s=>add({id:s.edge_id,status:s.status,confidence:s.confidence}));
+    const near=e=>e.src===c||e.dst===c?1:0, prose=q=>q&&!/^[A-Z_]{6,}:/.test(q)&&/\s\w+\s/.test(q);
+    const by=st=>[...cand.values()].filter(e=>e.status===st).sort((a,b)=>(near(b)-near(a))||((b.confidence||0)-(a.confidence||0)));
+    const picks=[];
+    for(const st of ['curated','literature','inferred','hypothesis']){
+      for(const e of by(st).slice(0,st==='literature'?8:3)){ const r=await edgeR(e.id); if(!r) continue; if(st==='literature'&&!arr(r.supporting).some(v=>prose(v.quote))) continue; picks.push(r); break; }
+    }
+    if(!picks.length){ el.innerHTML='<p class="muted" style="padding:16px 0">No links are recorded for this example yet.</p>'; return; }
+    el.innerHTML=picks.map(r=>{ const e=r.edge, ev=arr(r.supporting).find(v=>prose(v.quote))||arr(r.supporting)[0]||arr(r.context)[0];
+      return `<button type="button" class="chain-row" data-edge="${esc(e.id)}"><span class="src">${esc((ev&&ev.source_name)||arr(e.sources).join(', ')||'Not recorded')}</span><span class="ar">→</span><span class="rel">${esc(cap(relText(r)))}${e.status==='literature'&&ev&&ev.quote?`<q class="chain-q">${esc(clip(ev.quote,170))}</q>`:''}</span><span class="ar">→</span><span class="chain-c">${stPill(LS(e.status))}<span class="conf">${pct(e.confidence)}</span><span class="chain-how">${esc(HOW_SHORT[e.status]||'')}</span></span></button>`; }).join('');
+  }catch(e){ liveError(el,renderChain); }
 }
-function renderRoute(){
-  const a=$('#rFrom').value,b=$('#rTo').value,h=$('#rHyp').checked,out=$('#routeOut');
-  if(a===b){out.innerHTML='<p style="color:var(--ink-3)">Choose two different entities.</p>';return}
-  const r=findRoute(a,b,h);
-  if(r){ const ds=r.ds; const hasH=r.path.some(p=>p.e.status==='H');
-    let html=`<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"><span class="eyebrow">Route found: ${r.path.length} step${r.path.length>1?'s':''}</span>${stPill(hasH?'H':'E')}</div><ol class="hops">`;
-    let cur=r.start;
-    r.path.forEach(p=>{const n=ds.byId[cur]; html+=`<li class="hop ${p.e.status}"><span class="rail"><i style="background:${TYPES[n.t].c};box-shadow:0 0 0 1px var(--ink-3)"></i></span><div><div class="nlab">${esc(n.label)}</div><button class="elink" data-k="${ds.key}" data-i="${p.e.i}"><span class="mono" style="font-size:11px">${esc(p.e.src)}</span><span>→</span><span class="relx">${esc(p.e.rel)}</span><span>→</span>${confHtml(p.e.conf)}</button></div></li>`; cur=other(p.e,cur)});
-    const last=ds.byId[cur]; html+=`<li class="hop"><span class="rail"><i style="background:${TYPES[last.t].c};box-shadow:0 0 0 1px var(--ink-3)"></i></span><div><div class="nlab">${esc(last.label)}</div></div></li></ol>`;
-    if(hasH) html+=`<p style="margin-top:10px;font-size:13px;color:var(--ink-3)">This route passes through at least one hypothesis. It is a lead to test, not established evidence.</p>`;
-    out.innerHTML=html; return; }
-  const A=fromGid(a),B=fromGid(b); const cross=A.ds!==B.ds;
-  const examined=cross?A.ds.edges.length+B.ds.edges.length:A.ds.edges.length;
-  const hyp=cross?0:A.ds.edges.filter(e=>e.status==='H').length;
-  out.innerHTML=`<div style="display:grid;gap:16px">
-    <span class="eyebrow">${esc(A.n.label)} → ${esc(B.n.label)}</span>
-    <div style="font-family:var(--f-display);font-size:28px;line-height:1.15">No supported route found.</div>
-    <div class="empty-grid" style="grid-template-columns:1fr">
-      <div><h4>What was searched</h4><ul><li>${examined} relationships across genes, mechanisms, phenotypes, studies and assets</li><li>${h?'Evidence and hypothesis links':'Evidence links only'}${!h&&hyp?` (${hyp} hypothesis links excluded)`:''}</li><li>Shared symptoms alone (such as seizures) are not counted as a route</li></ul></div>
-      <div><h4>What is currently unknown</h4><ul>${cross?'<li>Whether these diseases share any downstream biology not yet in the index</li><li>Whether energy failure in interneurons plays a role in sodium-channel epilepsies</li>':'<li>Whether an unrecorded study or asset links these two</li>'}</ul></div>
-      <div><h4>What evidence could change the conclusion</h4><ul><li>A publication showing a shared mechanism or pathway</li><li>A variant or gene implicated in both conditions</li><li>A research asset validated in both diseases</li></ul></div>
-    </div>
-    ${!h&&!cross&&hyp?'<button type="button" class="linkbtn" id="tryHyp" style="justify-self:start">Search again including hypotheses</button>':''}
-  </div>`;
-  const th=$('#tryHyp'); if(th) th.addEventListener('click',()=>{$('#rHyp').checked=true;renderRoute()});
+$('#chain').addEventListener('click',e=>{const b=e.target.closest('.chain-row'); if(b) openLiveDrawer(b.dataset.edge)});
+
+/* ---------- ROUTE FINDER: /search pickers and precomputed /paths ---------- */
+const routeSel={from:null,to:null}; let routeTok=0;
+const ST_RANK={curated:0,literature:1,inferred:2,hypothesis:3};
+const routeMsg=t=>{ $('#routeOut').innerHTML=`<p style="color:var(--ink-3)">${esc(t)}</p>`; };
+function wireRoutePicker(sel,key){
+  const input=$(sel);
+  wireSearch(input,{onLive:h=>{ routeSel[key]=h; runRoute(); },onMiss:q=>{ routeSel[key]=null; routeMsg(`Nothing in the live Atlas matches “${q}”. Try another name, gene or group.`); },onError:(q,retry)=>liveError($('#routeOut'),retry)});
+  input.addEventListener('input',()=>{ if(routeSel[key]&&input.value.trim()!==routeSel[key].label) routeSel[key]=null; });
 }
-['#rFrom','#rTo','#rHyp'].forEach(s=>$(s).addEventListener('change',renderRoute));
+wireRoutePicker('#rFrom','from'); wireRoutePicker('#rTo','to');
+const pathsQ=(f,t)=>apiGet('/paths?from='+enc(f)+(t?'&to='+enc(t):'')+'&limit='+(t?10:50)).then(arr).catch(e=>{ if(e.status===404||e.status===400||e.status===422) return []; throw e; });
+function routeHtml(nodes,edges,status,title){
+  const hasH=edges.some(e=>LS(e.status)!=='E');
+  let h=`<div class="route-head"><span class="eyebrow">Route found: ${edges.length} step${edges.length>1?'s':''}</span>${stPill(LS(status))}</div>${title?`<p class="route-title">${esc(title)}</p>`:''}<ol class="hops">`;
+  nodes.forEach((n,i)=>{ const e=edges[i];
+    h+=`<li class="hop ${e?LS(e.status):''}"><span class="rail"><i style="background:${TYPES[LT(n.type)].c};box-shadow:0 0 0 1px var(--ink-3)"></i></span><div><div class="nlab">${esc(cap(n.label))} <span class="muted" style="font-weight:400;font-size:13px">${esc(kindOf(n))}</span></div>${e?`<button type="button" class="elink" data-edge="${esc(e.id)}"><span style="font-size:12px">${esc(arr(e.sources).join(', ')||'Source not recorded')}</span><span>→</span><span class="relx">${esc(relLabel(e))}</span><span>→</span>${confHtml(+e.confidence||0)}</button>`:''}</div></li>`; });
+  h+='</ol>';
+  if(hasH) h+=`<p style="margin-top:10px;font-size:13px;color:var(--ink-3)">This route passes through at least one computed or proposed link. It is a lead to test, not established evidence.</p>`;
+  return h;
+}
+async function runRoute(){
+  const A=routeSel.from,B=routeSel.to,inclH=$('#rHyp').checked,out=$('#routeOut');
+  if(!A||!B){ routeMsg('Choose a starting point and a destination from the suggestions.'); return; }
+  if(A.id===B.id){ routeMsg('Choose two different entries.'); return; }
+  const tok=++routeTok; out.innerHTML=`<p class="vh" role="status">Looking for a route</p>${skelLines(4)}`;
+  try{
+    const [ab,ba]=await Promise.all([pathsQ(A.id,B.id),pathsQ(B.id,A.id)]);
+    if(tok!==routeTok) return;
+    const all=ab.map(p=>({p,rev:false})).concat(ba.map(p=>({p,rev:true})));
+    const hypN=all.filter(x=>x.p.weakest_status==='hypothesis').length;
+    const ok=all.filter(x=>inclH||x.p.weakest_status!=='hypothesis').sort((a,b)=>(ST_RANK[a.p.weakest_status]-ST_RANK[b.p.weakest_status])||((b.p.score||0)-(a.p.score||0)));
+    if(ok.length){ const {p,rev}=ok[0], nodes=arr(p.nodes).slice(), edges=arr(p.edges).slice(); if(rev){ nodes.reverse(); edges.reverse(); }
+      out.innerHTML=routeHtml(nodes,edges,p.weakest_status,'')+(ok.length>1?`<p style="margin-top:8px;font-size:13px;color:var(--ink-3)">${ok.length-1} other precomputed route${ok.length>2?'s':''} connect these two.</p>`:''); return; }
+    /* no precomputed route: a single direct link still counts, and is shown as such */
+    const [nbA,fromA,fromB]=await Promise.all([apiGet('/nodes/'+enc(A.id)+'/neighborhood?depth=1&max_nodes=300').catch(()=>null),pathsQ(A.id).catch(()=>[]),pathsQ(B.id).catch(()=>[])]);
+    if(tok!==routeTok) return;
+    const direct=arr(nbA&&nbA.edges).filter(e=>((e.src===A.id&&e.dst===B.id)||(e.src===B.id&&e.dst===A.id))&&(inclH||e.status!=='hypothesis')).sort((a,b)=>ST_RANK[a.status]-ST_RANK[b.status])[0];
+    if(direct){ out.innerHTML=routeHtml([A,B],[direct],direct.status,'A direct link in the Atlas.'); return; }
+    const nA=arr(nbA&&nbA.edges).filter(e=>e.src===A.id||e.dst===A.id).length;
+    out.innerHTML=`<div style="display:grid;gap:16px">
+      <span class="eyebrow">${esc(cap(A.label))} → ${esc(cap(B.label))}</span>
+      <div style="font-family:var(--f-display);font-size:28px;line-height:1.15">No supported route found.</div>
+      <div class="empty-grid" style="grid-template-columns:1fr">
+        <div><h4>What was searched</h4><ul><li>${fmtN(fromA.length)} precomputed route${fromA.length===1?'':'s'} that start at ${esc(A.label)}, and ${fmtN(fromB.length)} that start at ${esc(B.label)}</li><li>${fmtN(nA)} direct link${nA===1?'':'s'} of ${esc(A.label)}${nbA&&nbA.truncated?' (the closest ones)':''}</li><li>${inclH?'Evidence, computed and proposed links':'Evidence and computed links only'}${!inclH&&hypN?` (${hypN} route${hypN>1?'s':''} through a proposed link left out)`:''}</li></ul></div>
+        <div><h4>What is currently unknown</h4><ul><li>Whether an unrecorded study, group or shared mechanism links these two</li><li>Whether a longer route exists that the Atlas has not computed yet</li></ul></div>
+        <div><h4>What evidence could change the conclusion</h4><ul><li>A publication showing a shared mechanism or pathway</li><li>A gene or variant implicated in both</li><li>A research asset or patient group that covers both</li></ul></div>
+      </div>
+      ${!inclH&&hypN?'<button type="button" class="linkbtn" id="tryHyp" style="justify-self:start">Search again including proposed links</button>':''}
+    </div>`;
+    const th=$('#tryHyp'); if(th) th.addEventListener('click',()=>{$('#rHyp').checked=true;runRoute()});
+  }catch(e){ if(tok!==routeTok) return; liveError(out,runRoute); }
+}
+$('#rHyp').addEventListener('change',runRoute);
 $('#routeForm').addEventListener('submit',e=>e.preventDefault());
-$$('[data-pair]').forEach(b=>b.addEventListener('click',()=>{const [a,c]=b.dataset.pair.split('|');$('#rFrom').value=a;$('#rTo').value=c;$('#rHyp').checked=false;renderRoute()}));
-$('#routeOut').addEventListener('click',e=>{const b=e.target.closest('.elink'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+$('#routeOut').addEventListener('click',e=>{const b=e.target.closest('.elink'); if(b) openLiveDrawer(b.dataset.edge)});
+async function initRoute(){
+  try{
+    const {av,paths}=await journeyData(), d=av.disease, A={id:d.id,type:'disease',subtype:d.subtype,label:d.label,summary:d.summary};
+    const picks=['asset','patient_group','researcher'].map(k=>paths.find(p=>p.kind===k)).filter(Boolean);
+    $('#routePicks').innerHTML=picks.length?`<span>Try from ${esc(shortName(d))}:</span>`+picks.map((p,i)=>`<button type="button" class="linkbtn" data-pick="${i}">${esc(clip(cap(p.nodes[p.nodes.length-1].label),40))}</button>`).join(''):'';
+    const setPair=p=>{ const B=p.nodes[p.nodes.length-1]; routeSel.from=A; routeSel.to=B; $('#rFrom').value=A.label; $('#rTo').value=B.label; $('#rHyp').checked=false; runRoute(); };
+    $('#routePicks').onclick=e=>{ const b=e.target.closest('[data-pick]'); if(b) setPair(picks[+b.dataset.pick]); };
+    if(picks[0]&&!routeSel.from&&!routeSel.to) setPair(picks[0]); else runRoute();
+  }catch(e){ liveError($('#routeOut'),initRoute); }
+}
 
-/* ---------- COMMUNITIES ---------- */
-$('#commGrid').innerHTML=Object.values(DATA).map(ds=>{
-  const orgs=ds.nodes.filter(n=>n.t==='org').sort((a,b)=>(a.cat==='org'?0:1)-(b.cat==='org'?0:1));
-  return `<div class="comm-col"><h3>${esc(ds.name)}<span>${orgs.length} communities</span></h3>${orgs.map(n=>{const e=rootEdge(ds,n.id);
-    return `<button class="comm" data-k="${ds.key}" data-i="${e.i}"><span class="cname">${esc(n.label.replace(' (sample)',''))}</span>${stPill(e.status)}<span class="ckind">${n.cat==='org'?'Patient organization':'Related community'} (sample)</span><span class="cdesc">${esc(n.plain)}</span><span class="cwhy">${esc(e.plain)}</span></button>`}).join('')}</div>`}).join('');
-$('#commGrid').addEventListener('click',e=>{const b=e.target.closest('.comm'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+/* ---------- COMMUNITIES (live): groups around the disease the Reader shows ---------- */
+let commAv=null, commSeen=false, commFor=null;
+function queueCommunities(av){ commAv=av; if(commSeen) renderCommunities(av); }
+async function renderCommunities(av){
+  const grid=$('#commGrid'); if(!grid||!av) return;
+  const d=av.disease; if(commFor===d.id) return; commFor=d.id;
+  const exact=arr(av.exact_groups), rcs=arr(av.related_communities), known=new Map(), subIds=new Set();
+  arr(av.connections).forEach(p=>arr(p.edges).forEach(e=>{ known.set(e.id,e.status); if(e.type==='disease_subtype_of') subIds.add(e.id); }));
+  const seen=new Set(exact.map(g=>g.node.id)), fam=[], rel=new Map();
+  rcs.forEach(rc=>arr(rc.groups).forEach(g=>{ if(seen.has(g.node.id)) return; seen.add(g.node.id);
+    if(subIds.has(rc.similarity_edge_id)) fam.push({g,rc}); else { if(!rel.has(rc.disease.id)) rel.set(rc.disease.id,{rc,gs:[]}); rel.get(rc.disease.id).gs.push(g); } }));
+  const ids=exact.map(g=>g.edge_id).concat(fam.map(x=>x.g.edge_id),...[...rel.values()].map(x=>x.gs.map(g=>g.edge_id)));
+  grid.innerHTML=`<div class="comm-col">${skelLines(5)}</div><div class="comm-col">${skelLines(5)}</div>`;
+  await pool(ids.filter(id=>!known.has(id)),4,async id=>{ const r=await edgeR(id); if(r) known.set(id,r.edge.status); });
+  if(commFor!==d.id) return;
+  const card=(g,why)=>{ const s=known.get(g.edge_id);
+    return `<button type="button" class="comm" data-edge="${esc(g.edge_id)}"><span class="cname">${esc(g.node.label)}</span>${s?stPill(LS(s)):''}<span class="ckind">${esc([kindOf(g.node),g.country].filter(Boolean).join(', '))}${g.has_registry===true?', keeps a patient registry':''}</span>${g.node.summary?`<span class="cdesc">${esc(clip(g.node.summary,180))}</span>`:''}<span class="cwhy">${esc(why)}</span></button>`; };
+  const famN=exact.length+fam.length, relN=[...rel.values()].reduce((a,x)=>a+x.gs.length,0);
+  const colA=`<div class="comm-col"><h3>For ${esc(shortName(d))} and its family<span>${fmtN(famN)} group${famN===1?'':'s'}</span></h3>
+    ${exact.length?'':`<p class="comm-why">We found no group for exactly ${esc(d.label)}.${fam.length?' These groups serve the wider disease family it belongs to.':''}</p>`}
+    ${exact.map(g=>card(g,'Lists '+d.label+' on its own site.')).join('')}${fam.map(({g})=>card(g,'Serves '+(g.for_disease?g.for_disease.label:'the wider family')+', which includes '+d.label+'.')).join('')}</div>`;
+  const colB=`<div class="comm-col"><h3>Through related diseases<span>${fmtN(relN)} group${relN===1?'':'s'}</span></h3>
+    ${relN?[...rel.values()].map(({rc,gs})=>`<div class="comm-sub"><p class="comm-why"><b>${esc(cap(rc.disease.label))}.</b> ${esc(cap(rc.why))}</p>${rc.caution?`<p class="comm-why cwarn">Caution: ${esc(clip(cap(rc.caution),220))}</p>`:''}${gs.map(g=>card(g,'Serves '+(g.for_disease?g.for_disease.label:rc.disease.label)+'.')).join('')}</div>`).join(''):'<p class="comm-why">No group found through related diseases yet.</p>'}</div>`;
+  grid.innerHTML=colA+colB;
+  const note=$('#commNote'); if(note) note.textContent=`Live from the Atlas for ${d.label}. Search the Atlas above for another disease and this list follows it. Select a group to see the source behind the link.`;
+}
+$('#commGrid').addEventListener('click',e=>{const b=e.target.closest('.comm[data-edge]'); if(b) openLiveDrawer(b.dataset.edge)});
 
 /* ---------- PLANS ---------- */
 const PLAN_KEY='om-plans';
 const loadPlans=()=>{try{return JSON.parse(localStorage.getItem(PLAN_KEY)||'[]')}catch(e){return []}};
 const savePlans=ps=>{try{localStorage.setItem(PLAN_KEY,JSON.stringify(ps))}catch(e){}};
-let plans=loadPlans(), curPlan=null;
-$('#planDiseaseList').innerHTML=['CLN5 disease','CLN3 disease','CLN2 disease','CLN6 disease','Batten disease'].concat(Object.values(DATA).map(d=>d.name+' (sample)')).map(n=>`<option value="${esc(n)}">`).join('');
+/* plans made from the earlier sample data are dropped; live plans are kept */
+let plans=loadPlans().filter(p=>p&&(p.snap||!p.ds)), curPlan=null;
+/* disease suggestions come from live search as the person types */
+let dlT=0;
+$('#planDisease').addEventListener('input',()=>{ const q=$('#planDisease').value.trim(); clearTimeout(dlT); if(q.length<2) return;
+  dlT=setTimeout(async()=>{ try{ const hits=await apiGet('/search?q='+enc(q)+'&types=disease&limit=8'); $('#planDiseaseList').innerHTML=arr(hits).map(h=>`<option value="${esc(cap(h.label))}">`).join(''); }catch(e){} },250); });
 const ctg=q=>'https://clinicaltrials.gov/search?cond='+encodeURIComponent(q);
-function matchDs(q){const r=searchIdx(q).find(it=>it.t==='disease'&&it.id===DATA[it.ds].root)||searchIdx(q)[0]; return r?DATA[r.ds]:null}
 const LIVE_NEXT={viable:'E',needs_review:'H'};
 function liveSteps(av,stage,q){
   const L=av.disease.label, firstE=x=>(x&&x.edge_ids&&x.edge_ids[0])||null;
@@ -2123,31 +2071,12 @@ function liveSteps(av,stage,q){
 }
 function buildSteps(plan){
   if(plan.snap) return plan.snap;
-  const ds=plan.ds?DATA[plan.ds]:null, S=[];
-  const ent=(n,e)=>({k:ds.key,i:e.i,label:n.label});
-  if(ds){
-    const pick=f=>ds.nodes.filter(f), first=f=>pick(f)[0];
-    const clinic=first(n=>n.cat==='clinician'), orgs=pick(n=>n.cat==='org'), comms=pick(n=>n.cat==='community'&&rootEdge(ds,n.id).status==='E');
-    const reg=first(n=>n.cat==='registry'), nhs=first(n=>n.cat==='nhs'), trial=first(n=>n.cat==='clinical'), labs=pick(n=>n.cat==='researcher');
-    const care={id:'care',kind:'Care',title:'Talk to a specialist about the genetic cause',body:`Knowing the exact gene and variant decides which research, studies and communities fit you. A specialist center can confirm it and explain what it means.`,status:'E',ents:clinic?[ent(clinic,rootEdge(ds,clinic.id))]:[],links:[['Find expert centres (Orphanet)','https://www.orpha.net']]};
-    const org={id:'org',kind:'Community',title:'Connect with a patient organization',body:'Other families have walked this path. Patient organizations share practical knowledge and often know about studies before they are public.',status:'E',ents:orgs.map(n=>ent(n,rootEdge(ds,n.id))),links:[]};
-    const comm={id:'comm',kind:'Community',title:'Meet a related community',body:'Some families with a different diagnosis share your gene or biology. Their questions and data can help yours.',status:comms.length?'E':'U',ents:comms.map(n=>ent(n,rootEdge(ds,n.id))),links:[]};
-    const r1={id:'reg',kind:'Research',title:'Join the patient registry',body:'Registries let researchers find and count people with the disease. Being counted is often the first thing a future trial needs.',status:'E',ents:reg?[ent(reg,rootEdge(ds,reg.id))]:[],links:[]};
-    const r2={id:'nhs',kind:'Research',title:'Ask about the natural history study',body:'These studies follow people over time so researchers learn how the disease changes. That knowledge is needed before any treatment can be tested.',status:'E',ents:nhs?[ent(nhs,rootEdge(ds,nhs.id))]:[],links:[]};
-    const r3={id:'trial',kind:'Research',title:'Look for clinical studies you could join',body:'Check which studies are recruiting and whether you match their criteria. Discuss any study with your doctor before joining.',status:'E',ents:trial?[ent(trial,rootEdge(ds,trial.id))]:[],links:[['Search ClinicalTrials.gov',ctg(ds.name)]]};
-    const lab={id:'lab',kind:'Collaboration',title:'Reach out to a research group',body:'These groups work on your disease or its mechanism. A patient group can offer them participants, samples or questions that matter to families.',status:labs.some(n=>rootEdge(ds,n.id).status==='E')?'E':'H',ents:labs.map(n=>ent(n,rootEdge(ds,n.id))),links:[]};
-    const nx={id:'next',kind:'Shared action',title:ds.next.title,body:ds.next.plain+' This is a hypothesis to test together, not an established result.',status:ds.next.status,ents:[],links:[],journey:true};
-    const order={new:[care,org,comm,r1,r2,r3],living:[r1,r2,r3,org,comm,care],leader:[nx,lab,r1,r2,comm,r3]}[plan.stage]||[care,org,comm,r1,r2,r3];
-    S.push(...order);
-  } else {
-    S.push(
-      {id:'care',kind:'Care',title:'Ask your doctor about genetic testing',body:'A confirmed gene or variant is the key that connects a diagnosis to research, communities and other diseases.',status:'E',ents:[],links:[['Find expert centres (Orphanet)','https://www.orpha.net']]},
-      {id:'org',kind:'Community',title:'Look for a patient organization',body:'Directories list groups for thousands of rare diseases, including umbrella groups when none exists yet for yours.',status:'E',ents:[],links:[['NORD','https://rarediseases.org'],['Global Genes','https://globalgenes.org'],['EURORDIS','https://www.eurordis.org']]},
-      {id:'trial',kind:'Research',title:'Search for studies and registries',body:'Studies and registries may exist even when information is hard to find.',status:'E',ents:[],links:[['Search ClinicalTrials.gov',ctg(plan.disease)],['Registries (Orphanet)','https://www.orpha.net']]},
-      {id:'gap',kind:'Unknown',title:'Help put your disease on the map',body:'One Mission has no supported connections for this disease yet. A confirmed gene, a publication or a patient group adding its knowledge would change that.',status:'U',ents:[],links:[]}
-    );
-  }
-  return S;
+  return [
+    {id:'care',kind:'Care',title:'Ask your doctor about genetic testing',body:'A confirmed gene or variant is the key that connects a diagnosis to research, communities and other diseases.',status:'E',ents:[],links:[['Find expert centres (Orphanet)','https://www.orpha.net']]},
+    {id:'org',kind:'Community',title:'Look for a patient organization',body:'Directories list groups for thousands of rare diseases, including umbrella groups when none exists yet for yours.',status:'E',ents:[],links:[['NORD','https://rarediseases.org'],['Global Genes','https://globalgenes.org'],['EURORDIS','https://www.eurordis.org']]},
+    {id:'trial',kind:'Research',title:'Search for studies and registries',body:'Studies and registries may exist even when information is hard to find.',status:'E',ents:[],links:[['Search ClinicalTrials.gov',ctg(plan.disease)],['Registries (Orphanet)','https://www.orpha.net']]},
+    {id:'gap',kind:'Unknown',title:'Help put your disease on the map',body:'One Mission has no supported connections for this disease yet. A confirmed gene, a publication or a patient group adding its knowledge would change that.',status:'U',ents:[],links:[]}
+  ];
 }
 function renderSaved(){
   $('#savedPlans').innerHTML=plans.length?`<div class="eyebrow">Your saved plans (on this device)</div>`+plans.map(p=>{const n=buildSteps(p).length,d=Object.values(p.done||{}).filter(Boolean).length;
@@ -2156,25 +2085,23 @@ function renderSaved(){
 const STAGE_LABEL={new:'Just diagnosed',living:'Living with it for a while',leader:'Leading a patient group'};
 function renderPlan(p){
   curPlan=p; const steps=buildSteps(p), done=p.done||{}, n=steps.length, d=steps.filter(s=>done[s.id]).length;
-  $('#planOut').innerHTML=`<div class="plan-head"><div><div class="eyebrow">${p.snap?'From the live Atlas: ':(p.ds?'Sample data: ':'')}${esc(STAGE_LABEL[p.stage])}${(p.ds||p.snap)?'':' (not in the Atlas yet)'}</div><div class="pd" style="margin-top:8px">${esc(p.ds?DATA[p.ds].name:p.disease)}</div></div>
+  $('#planOut').innerHTML=`<div class="plan-head"><div><div class="eyebrow">${p.snap?'From the live Atlas: ':''}${esc(STAGE_LABEL[p.stage])}${p.snap?'':' (not in the Atlas yet)'}</div><div class="pd" style="margin-top:8px">${esc(p.disease)}</div></div>
     <div class="pbar"><span class="track"><i style="width:${n?d/n*100:0}%"></i></span>${d} of ${n} started</div></div>
     <ol class="psteps">${steps.map((s,i)=>`<li class="pstep ${done[s.id]?'done':''}"><input type="checkbox" id="ps-${s.id}" data-step="${s.id}" ${done[s.id]?'checked':''}><div class="pt"><label for="ps-${s.id}">${esc(s.title)}</label>${stPill(s.status)}<span class="kind">${esc(s.kind)}</span></div>
       <p class="pb">${esc(s.body)}</p>
-      ${(s.ents.length||s.links.length||s.journey)?`<div class="pw">${s.ents.map(e=>e.edge!==undefined?(e.edge?`<button type="button" data-live-edge="${esc(e.edge)}">${esc(e.label)}</button>`:`<span class="ent">${esc(e.label)}</span>`):`<button type="button" data-k="${e.k}" data-i="${e.i}">${esc(e.label.replace(' (sample)',''))}${/\(sample\)/.test(e.label)?' (sample)':''}</button>`).join('')}${s.links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('')}${s.journey?'<a href="#journey">See it as a connected journey →</a>':''}</div>`:''}</li>`).join('')}</ol>
+      ${(s.ents.length||s.links.length||s.journey)?`<div class="pw">${s.ents.map(e=>e.edge?`<button type="button" data-live-edge="${esc(e.edge)}">${esc(e.label)}</button>`:`<span class="ent">${esc(e.label)}</span>`).join('')}${s.links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('')}${s.journey?'<a href="#journey">See it as a connected journey →</a>':''}</div>`:''}</li>`).join('')}</ol>
     <p class="plan-note">These are practical first steps built from connected information, not medical advice. Talk with your doctor before changing care or joining a study. ${p.snap?'Built from the live Atlas when you created it, with a source behind every linked item. ':''}Your plan is saved only in this browser.</p>`;
 }
 $('#planOut').addEventListener('change',e=>{const c=e.target.closest('[data-step]'); if(!c||!curPlan) return; curPlan.done=curPlan.done||{}; curPlan.done[c.dataset.step]=c.checked;
   savePlans(plans);renderSaved(); renderPlan(curPlan); const f=$('#ps-'+c.dataset.step); if(f) f.focus();});
-$('#planOut').addEventListener('click',e=>{const le=e.target.closest('button[data-live-edge]'); if(le){openLiveDrawer(le.dataset.liveEdge);return} const b=e.target.closest('button[data-k]'); if(b) openDrawer(DATA[b.dataset.k],DATA[b.dataset.k].edges[+b.dataset.i])});
+$('#planOut').addEventListener('click',e=>{const le=e.target.closest('button[data-live-edge]'); if(le) openLiveDrawer(le.dataset.liveEdge)});
 $('#savedPlans').addEventListener('click',e=>{const o=e.target.closest('[data-open]'),x=e.target.closest('[data-del]');
   if(o){const p=plans.find(q=>q.id===o.dataset.open); if(p) renderPlan(p)}
   if(x){plans=plans.filter(q=>q.id!==x.dataset.del); savePlans(plans); renderSaved(); if(curPlan&&curPlan.id===x.dataset.del){ if(plans[0]) renderPlan(plans[0]); else planEmpty(); }}});
 $('#planForm').addEventListener('submit',async e=>{e.preventDefault(); const raw=$('#planDisease').value.trim(); if(!raw) return;
-  const q=raw.replace(/\s*\(sample\)$/i,''), stage=($('input[name=stage]:checked')||{}).value||'new', btn=$('#planForm button[type=submit]');
-  const sample=/\(sample\)$/i.test(raw)||/^(leigh|dravet)/i.test(q)?matchDs(q):null;
+  const q=raw, stage=($('input[name=stage]:checked')||{}).value||'new', btn=$('#planForm button[type=submit]');
   let p=null;
-  if(sample){ p={id:'p'+Date.now().toString(36),disease:sample.name,ds:sample.key,stage,done:{}}; }
-  else {
+  {
     btn.disabled=true; $('#planOut').innerHTML='<p class="plan-note">Looking up '+esc(q)+' in the live Atlas.</p>';
     try{
       const hits=await apiGet('/search?q='+enc(q)+'&limit=8',{cache:false});
@@ -2191,29 +2118,63 @@ $('#planForm').addEventListener('submit',async e=>{e.preventDefault(); const raw
 function planEmpty(){curPlan=null; $('#planOut').innerHTML='<div class="plan-head"><div><div class="eyebrow">Your plan</div><div class="pd" style="margin-top:8px">Your first steps will appear here</div></div></div><p class="plan-note">Add your disease and where you are today. One Mission looks it up in the live Atlas and turns what is connected to it into a short list of things you can start on, each with its source.</p>';}
 renderSaved(); if(plans[0]) renderPlan(plans[0]); else planEmpty();
 
-/* ---------- SOURCES ---------- */
-const SOURCES=[
-  ['Biology',[['OMIM','Gene and disease relationships','https://omim.org'],['HPO','Standard terms for signs and symptoms','https://hpo.jax.org'],['MONDO','Unified disease identifiers and synonyms','https://mondo.monarchinitiative.org'],['ClinVar','Variant interpretations','https://www.ncbi.nlm.nih.gov/clinvar/']]],
-  ['Research',[['PubMed / PMC','Publications and full text','https://pubmed.ncbi.nlm.nih.gov'],['NIH RePORTER','Funded projects, labs and investigators','https://reporter.nih.gov']]],
-  ['Clinical',[['ClinicalTrials.gov','Registered trials and natural history studies','https://clinicaltrials.gov']]],
-  ['Patient communities',[['NORD','US patient organizations and disease reports','https://rarediseases.org'],['Global Genes','Patient advocacy directory','https://globalgenes.org'],['Orphanet','Expert centres, registries and nomenclature','https://www.orpha.net'],['EURORDIS','European patient alliance','https://www.eurordis.org']]]
+/* ---------- SOURCES: the sources the live database actually holds (from /meta) ---------- */
+const SRC_GROUPS=[
+  ['Biology databases','Disease, gene, symptom and pathway records',s=>/^(MONDO|HPO|Orphanet|Reactome|ClinVar|OMIM|UniProt|HGNC|NCBI Gene|Ensembl|GeneReviews|Monarch|Gene Ontology|DisGeNET|ChEMBL)\b|NCL Resource/i.test(s)],
+  ['Trials, grants and approvals','Registered studies, funded projects and regulator records',s=>/ClinicalTrials|RePORTER|CORDIS|\bFDA\b|European Medicines|\bEMA\b|DailyMed|pipeline page|\bgrants?\b/i.test(s)],
+  ['Patient organizations','Groups describing their own work on their own sites',s=>/Foundation|\bAssociation\b|\bSociety\b|Onlus|e\.V\.|\bBDSRA\b|\bBDFA\b|\bNORD\b|Stiftung|Gruppe|Heroes|Tale\b|official site|Family Register|Alliance|Hope|Battle/i.test(s)&&!/ et al/.test(s)],
+  ['Literature and reports','Papers, abstracts and other published records',()=>true]
 ];
-$('#srcGrid').innerHTML=SOURCES.map(([c,list])=>`<div class="src-col"><h4>${c}</h4><ul>${list.map(s=>`<li><a href="${s[2]}" target="_blank" rel="noopener">${s[0]}</a><span>${s[1]}</span></li>`).join('')}</ul></div>`).join('');
+const SRC_SHOW=6;
+const srcSort=(a,b)=>(SRC_URL[b]?1:0)-(SRC_URL[a]?1:0)||a.localeCompare(b);
+async function renderSources(){
+  const grid=$('#srcGrid'), sub=$('#srcSub');
+  grid.innerHTML=`<div class="src-col">${skelLines(4)}</div>`;
+  try{
+    const m=await apiGet('/meta'), all=arr(m.sources).filter(Boolean), t=metaTotals(m);
+    const computed=all.filter(s=>/^Atlas analytics$/i.test(s)), rest=all.filter(s=>!computed.includes(s));
+    const groups=SRC_GROUPS.map(([name,desc])=>({name,desc,items:[]}));
+    const ct=rest.filter(s=>/^ClinicalTrials\.gov NCT\d+$/.test(s));
+    rest.filter(s=>!ct.includes(s)).forEach(s=>{ const i=SRC_GROUPS.findIndex(g=>g[2](s)); groups[i].items.push(s); });
+    if(ct.length){ const g=groups[1], i=g.items.indexOf('ClinicalTrials.gov'); const lab=`ClinicalTrials.gov study records (${fmtN(ct.length)})`; if(i>=0) g.items[i]='ClinicalTrials.gov'; g.items.push(lab); }
+    const li=s=>{ const u=SRC_URL[s]; return `<li>${u?`<a href="${u}" target="_blank" rel="noopener">${esc(s)}</a>`:`<span class="src-n">${esc(s)}</span>`}</li>`; };
+    grid.innerHTML=groups.filter(g=>g.items.length).map(g=>{ const xs=g.items.slice().sort(srcSort);
+      return `<div class="src-col"><h4>${esc(g.name)} <span class="src-count">${fmtN(xs.length)}</span></h4><p class="src-desc">${esc(g.desc)}</p><ul>${xs.slice(0,xs.length<=SRC_SHOW+2?xs.length:SRC_SHOW).map(li).join('')}</ul>${xs.length>SRC_SHOW+2?`<details class="src-more"><summary>Show all ${fmtN(xs.length)}</summary><ul>${xs.slice(SRC_SHOW).map(li).join('')}</ul></details>`:''}</div>`; }).join('');
+    if(sub) sub.textContent=`Read from the live database: ${fmtN(all.length)} sources behind ${fmtN(t.evidence)} evidence records and ${fmtN(t.edges)} links.${computed.length?' Links the Atlas computes itself are labelled Atlas analytics and never shown as established evidence.':''}`;
+  }catch(e){ liveError(grid,renderSources); }
+}
 
-/* ---------- HERO NETWORK ---------- */
-(function hero(){
+/* ---------- HERO: live line and the path from disease to shared action ---------- */
+const HERO_COUNT={disease:['disease','diseases'],mechanism:['mechanism','mechanisms'],community:['organization','organizations'],asset:['asset','research assets'],collaborator:['person','people']};
+function heroLive(){
+  const el=$('#heroLive');
+  apiGet('/meta').then(m=>{ const t=metaTotals(m), n=t.n, b=m&&m.dataset&&m.dataset.built_at; let when='';
+    if(b){ const dt=new Date(b); if(!isNaN(dt)) when=', updated '+dt.toLocaleDateString('en-GB',{day:'numeric',month:'long'}); }
+    if(el&&n.disease) el.innerHTML=`<span class="live-dot" aria-hidden="true"></span><span>Live: ${fmtN(n.disease)} rare diseases, ${fmtN(t.edges)} sourced connections${when}</span>`;
+    $$('#heroPath [data-count]').forEach(c=>{ const k=HERO_COUNT[c.dataset.count]; if(k&&n[k[0]]) c.textContent=fmtN(n[k[0]])+' '+k[1]; });
+  }).catch(()=>{});
+}
+(function heroPath(){
+  const nav=$('#heroPath'), desc=$('#heroPathDesc'); if(!nav) return;
+  const def=desc?desc.textContent:'';
+  const say=a=>{ if(desc) desc.textContent=a?($('#'+a.getAttribute('aria-describedby'))||{}).textContent||def:def; $$('#heroPath .hp-node').forEach(x=>x.classList.toggle('on',x===a)); };
+  $$('#heroPath .hp-node').forEach(a=>{
+    if(a.dataset.alt&&!document.getElementById(a.getAttribute('href').slice(1))) a.setAttribute('href',a.dataset.alt);
+    a.addEventListener('mouseenter',()=>say(a)); a.addEventListener('focus',()=>say(a));
+    a.addEventListener('mouseleave',()=>{ if(document.activeElement!==a) say(null); }); a.addEventListener('blur',()=>say(null));
+    a.addEventListener('click',ev=>{ const id=a.getAttribute('href').slice(1), t=document.getElementById(id); if(!t) return; ev.preventDefault();
+      if(a.dataset.jstep&&id==='journey') jSelect(a.dataset.jstep);
+      t.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+      const h=t.querySelector('h2,h3'); if(h){ if(!h.hasAttribute('tabindex')) h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); } });
+  });
+})();
+(function heroNet(){
+  /* a quiet background of points; the readable path is the list in front of it */
   const W=900,H=640,r=rng(42),pts=[];
-  for(let i=0;i<46;i++) pts.push({x:40+r()*(W-80),y:30+r()*(H-60)});
-  const path=[{x:150,y:470,l:'disease'},{x:300,y:360,l:'mechanism'},{x:450,y:420,l:'community'},{x:590,y:290,l:'asset'},{x:720,y:350,l:'collaborator'},{x:830,y:210,l:'shared action'}];
+  for(let i=0;i<40;i++) pts.push({x:40+r()*(W-80),y:30+r()*(H-60)});
   let h=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">`;
-  const all=pts.concat(path);
-  all.forEach((p,i)=>{ const ds=all.map((q,j)=>[j,(q.x-p.x)**2+(q.y-p.y)**2]).filter(x=>x[0]!==i).sort((a,b)=>a[1]-b[1]).slice(0,2);
-    ds.forEach(([j])=>{ if(j>i) h+=`<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${all[j].x.toFixed(1)}" y2="${all[j].y.toFixed(1)}" stroke="#3A4B60" stroke-width="1" opacity=".55"/>`}); });
-  pts.forEach((p,i)=>{h+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${(1.6+r()*2.2).toFixed(1)}" fill="${['#5B8CFF','#A68BFF','#3FC1C9','#7FD18B','#E6CF55','#F2A65A','#8B98AA'][i%7]}" opacity=".55">${reduced?'':`<animate attributeName="opacity" values=".25;.7;.25" dur="${(4+r()*5).toFixed(1)}s" begin="${(r()*4).toFixed(1)}s" repeatCount="indefinite"/>`}</circle>`});
-  const d='M'+path.map(p=>p.x+' '+p.y).join(' L');
-  h+=`<path d="${d}" fill="none" stroke="#9DB4FF" stroke-width="1.6" opacity=".35"/>`;
-  h+=`<path d="${d}" fill="none" stroke="#C9D6FF" stroke-width="2" stroke-linecap="round" pathLength="100" stroke-dasharray="14 86">${reduced?'':'<animate attributeName="stroke-dashoffset" from="100" to="0" dur="5s" repeatCount="indefinite"/>'}</path>`;
-  path.forEach((p,i)=>{h+=`<circle cx="${p.x}" cy="${p.y}" r="${i===0||i===5?7:5}" fill="${i===5?'#C9D6FF':'#0F1720'}" stroke="#C9D6FF" stroke-width="1.5"/><text x="${p.x+12}" y="${p.y-10}" fill="#8F9DAE" font-size="12" style="font-family:'Hanken Grotesk',sans-serif;letter-spacing:.08em">${p.l}</text>`});
+  pts.forEach((p,i)=>{ pts.map((q,j)=>[j,(q.x-p.x)**2+(q.y-p.y)**2]).filter(x=>x[0]!==i).sort((a,b)=>a[1]-b[1]).slice(0,2).forEach(([j])=>{ if(j>i) h+=`<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${pts[j].x.toFixed(1)}" y2="${pts[j].y.toFixed(1)}" stroke="#3A4B60" stroke-width="1" opacity=".4"/>`; }); });
+  pts.forEach((p,i)=>{ h+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${(1.4+r()*1.8).toFixed(1)}" fill="${['#5B8CFF','#A68BFF','#3FC1C9','#7FD18B','#E6CF55','#F2A65A','#8B98AA'][i%7]}" opacity=".4"/>`; });
   h+='</svg>'; $('#heroNet').innerHTML=h;
 })();
 
@@ -2222,9 +2183,15 @@ $('#srcGrid').innerHTML=SOURCES.map(([c,list])=>`<div class="src-col"><h4>${c}</
 $$('a.wordmark[href="#top"]').forEach(a=>a.addEventListener('click',ev=>{ev.preventDefault(); window.scrollTo({top:0,behavior:reduced?'auto':'smooth'}); try{history.replaceState(null,'',location.pathname+location.search);}catch(e){} const h=$('#heroTitle'); if(h){h.setAttribute('tabindex','-1'); h.focus({preventScroll:true});}}));
 
 /* ---------- init ---------- */
-readerOpen(LIVE_DEFAULT,{example:true}); liveMetaLine();
-renderJourney(); renderRace();
-$('#rFrom').value='leigh:leigh'; $('#rTo').value='leigh:d_narp'; renderRoute();
+readerOpen(LIVE_DEFAULT,{example:true}); liveMetaLine(); heroLive();
+renderRace();
+whenNear($('#journey'),loadJourney);
+whenNear($('#tenx'),loadTenxLive);
+whenNear($('#communities'),()=>{ commSeen=true; const g=$('#commGrid');
+  if(commAv) renderCommunities(commAv);
+  else { g.innerHTML=`<div class="comm-col">${skelLines(5)}</div>`; journeyData().then(x=>{ if(!commFor) renderCommunities(commAv||x.av); }).catch(()=>{ if(!commFor) liveError(g,()=>journeyData().then(x=>renderCommunities(x.av)).catch(()=>{})); }); } });
+whenNear($('#evidence'),()=>{ renderChain(); initRoute(); });
+whenNear($('#sources'),renderSources);
 try{ const m=localStorage.getItem('om-mode'); if(m==='researcher') setMode('researcher'); }catch(e){}
 const _set=setMode; setMode=function(m,s){_set(m,s); try{localStorage.setItem('om-mode',m)}catch(e){}};
 if(location.hash==='#researcher') setMode('researcher');
