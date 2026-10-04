@@ -132,13 +132,30 @@ def _cache_path(ns: str, key: str, ext: str = "json") -> Path:
     return RAW / "http_cache" / ns / f"{hashlib.sha1(key.encode()).hexdigest()}.{ext}"
 
 
+# credentials / contact params that do not change the answer: left out of the cache key so keyed and
+# keyless runs (and different machines) share one cache. Without them the key is exactly as before.
+_UNKEYED_PARAMS = frozenset({"api_key", "email"})
+
+
+def _cache_key(url: str, params: dict | None) -> str:
+    return url + "?" + json.dumps({k: v for k, v in (params or {}).items() if k not in _UNKEYED_PARAMS},
+                                  sort_keys=True)
+
+
 def get_text(url: str, params: dict | None = None, ns: str = "misc", headers: dict | None = None,
              refresh: bool = False, validate: Callable[[str], object] | None = None) -> str:
-    """validate(body) runs before the body is cached; if it raises, nothing is cached (and it propagates)."""
-    key = url + "?" + json.dumps(params or {}, sort_keys=True)
-    p = _cache_path(ns, key, "txt")
+    """validate(body) runs before the body is cached; if it raises, nothing is cached (and it propagates).
+    It also runs on a cache hit: a cached body that fails it (one cached before the check existed) is
+    refetched instead of being served forever."""
+    p = _cache_path(ns, _cache_key(url, params), "txt")
     if p.exists() and not (refresh or REFRESH):
-        return p.read_text()
+        body = p.read_text()
+        try:
+            if validate is not None:
+                validate(body)
+            return body
+        except Exception as e:  # noqa: BLE001 - any validation failure means "not a usable cached body"
+            log.warning("cached %s response %s is invalid (%s); refetching", ns, p.name, type(e).__name__)
     r = request("GET", url, params=params, headers=headers)
     if validate is not None:
         validate(r.text)
@@ -148,8 +165,19 @@ def get_text(url: str, params: dict | None = None, ns: str = "misc", headers: di
 
 
 def get_json(url: str, params: dict | None = None, ns: str = "misc", headers: dict | None = None,
-             refresh: bool = False) -> Any:
-    return json.loads(get_text(url, params, ns, headers, refresh))
+             refresh: bool = False, validate: Callable[[Any], object] | None = None) -> Any:
+    """Only a body that parses as JSON (and passes validate(data), e.g. "no API error object") is cached,
+    so an HTML outage page or an error served with HTTP 200 is retried next run instead of kept for good."""
+    parsed: list[Any] = []
+
+    def check(body: str) -> None:
+        data = json.loads(body)
+        if validate is not None:
+            validate(data)
+        parsed.append(data)
+
+    get_text(url, params, ns, headers, refresh, validate=check)
+    return parsed[-1]
 
 
 def post_json(url: str, body: Any, ns: str = "misc", headers: dict | None = None,

@@ -23,9 +23,9 @@ analytics: venv ## mechanisms, IC, similarity, counterexamples, Leiden, overlap,
 views: venv ## ActionView / MechanismView payloads
 	$(CLI) views
 dry-run: venv ## validate everything without writing
-	$(CLI) load --dry-run
-load: venv ## load into Postgres (needs DATABASE_URL)
-	$(CLI) load
+	$(CLI) load --dry-run $(ARGS)
+load: venv ## load into Postgres (needs DATABASE_URL; refuses missing/stale views, paths, clusters unless ARGS=--force)
+	$(CLI) load $(ARGS)
 snapshot: venv ## real API responses -> data/snapshot (needs ATLAS_API_BASE)
 	$(CLI) export-fixtures
 all: ingest extract reconcile analytics views load ## full rebuild

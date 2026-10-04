@@ -74,7 +74,8 @@ def slug(s: str, maxlen: int = 60) -> str:
 
 def person_id(last: str, first: str | None) -> str:
     """Name-based person id shared by PubMed and NIH RePORTER so the same PI merges.
-    PERSON:<last>-<first token>. Collisions are possible; reconcile reports them."""
+    PERSON:<last>-<first token>. Collisions are possible; reconcile reports them
+    (reconcile.person_id_report: initial-only ids and ids with conflicting names, log only)."""
     first_tok = (first or "").replace(".", " ").split()
     return f"PERSON:{slug(last)}-{slug(first_tok[0]) if first_tok else 'x'}"
 

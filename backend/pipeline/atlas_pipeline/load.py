@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
+from pathlib import Path
 
 from .analytics.paths import path_strength
 from .config import INTERIM, slice_config
@@ -52,6 +53,39 @@ def node_names(g: Graph) -> list[tuple[str, str, str]]:
     return [(nid, name, kind) for (nid, name), kind in out.items()]
 
 
+def _stale_inputs() -> dict[str, tuple[str, list[Path]]]:
+    """derived file -> (stage that writes it, files it is built from). Graph stage files feed analytics;
+    views also read the analytics outputs, the slice and the coverage files."""
+    graph = [p for pat in ("*.nodes.jsonl", "*.edges.jsonl", "*.evidence.jsonl", "*.node_patches.jsonl")
+             for p in INTERIM.glob(pat)]
+    view_in = graph + [INTERIM / n for n in ("clusters.jsonl", "cluster_members.jsonl", "overlap.jsonl",
+                                             "paths.jsonl", "slice.json")] + list(INTERIM.glob("coverage_*.json"))
+    return {"clusters.jsonl": ("analytics", graph), "paths.jsonl": ("analytics", graph),
+            "views.jsonl": ("views", view_in)}
+
+
+def preflight(clusters: list[dict], paths: list[dict], views: list[dict]) -> list[str]:
+    """Problems the loader refuses without --force. load replaces every table, so loading without
+    views/paths/clusters wipes them (every ActionView / MechanismView 404s); and a file older than one of
+    its inputs (e.g. `ingest curated && load` with no `analytics views` in between) is stale, so the screens
+    would disagree with the graph loaded next to them."""
+    problems: list[str] = []
+    for name, rows, what in (("views.jsonl", views, "view"), ("paths.jsonl", paths, "path"),
+                             ("clusters.jsonl", clusters, "cluster")):
+        if not rows:
+            state = "empty" if (INTERIM / name).exists() else "missing"
+            problems.append(f"{name} is {state}: loading would delete every {what} in the database")
+    for name, (stage, inputs) in _stale_inputs().items():
+        f = INTERIM / name
+        if not f.exists():
+            continue
+        newest = max(((p.stat().st_mtime_ns, p.name) for p in inputs if p.exists()), default=(0, ""))
+        if newest[0] > f.stat().st_mtime_ns:
+            problems.append(f"{name} is older than {newest[1]}: stale, re-run `atlas-pipeline {stage}`"
+                            + (" and `views`" if stage == "analytics" else ""))
+    return problems
+
+
 def validate(g: Graph, clusters: list[dict], members: list[dict], paths: list[dict], views: list[dict]) -> list[str]:
     errs: list[str] = []
     for n in g.nodes.values():
@@ -90,13 +124,18 @@ def validate(g: Graph, clusters: list[dict], members: list[dict], paths: list[di
     return errs
 
 
-def run(database_url: str | None, dry_run: bool = False) -> None:
+def run(database_url: str | None, dry_run: bool = False, force: bool = False) -> None:
     import psycopg
     from psycopg.types.json import Jsonb
 
-    g = load_graph()
     clusters, members = _rows("clusters.jsonl"), _rows("cluster_members.jsonl")
     paths, views = _rows("paths.jsonl"), _rows("views.jsonl")
+    problems = preflight(clusters, paths, views)
+    for x in problems:
+        (log.warning if force else log.error)(x)
+    if problems and not force:
+        raise SystemExit(f"load refused: {len(problems)} problem(s) above; pass --force to load anyway")
+    g = load_graph()
     for e in g.edges.values():
         ev = g.evidence[e["id"]]
         e["support_count"] = sum(v["stance"] == "supports" for v in ev)

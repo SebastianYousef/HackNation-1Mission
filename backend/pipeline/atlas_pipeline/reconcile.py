@@ -23,7 +23,6 @@ from typing import Iterable
 
 import pandas as pd
 
-from .config import INTERIM
 from .ids import edge_id, mech_id, intervention_id, norm_name, person_id
 from .store import GraphWriter, read_json, read_jsonl, write_parquet
 
@@ -122,6 +121,41 @@ def normalise_claim(c: dict) -> dict | None:
     if c.get("stance") == "speculative":
         c = {**c, "speculative": True, "stance": "supports"}
     return c
+
+
+def _name_tokens(label: str) -> frozenset[str]:
+    return frozenset(norm_name(label).split())
+
+
+def person_id_report(nodes: Iterable[dict]) -> dict[str, list]:
+    """The collision report ids.person_id promises (log only; ids are unchanged). person ids are
+    PERSON:<last>-<first token>, so
+      initial_only : ids whose first token is a bare initial (or missing): 'J Smith' from PubMed lumps every
+                     J. Smith into PERSON:smith-j
+      conflicting  : ids whose stages name different people: neither name's tokens contain the other's
+                     ('John A Smith' vs 'John B Smith'; 'Erika F Augustine' vs 'Erika Augustine' is fine)
+    `nodes` are person rows from the stage files (one label per id per stage)."""
+    labels: dict[str, set[str]] = defaultdict(set)
+    for n in nodes:
+        if n.get("type") == "person" and n["id"].startswith("PERSON:"):
+            labels[n["id"]].add(n["label"])
+    initial_only = sorted(i for i in labels if len(i.rsplit("-", 1)[-1]) == 1)
+    conflicting = []
+    for pid in sorted(labels):
+        toks = sorted({_name_tokens(x) for x in labels[pid]}, key=sorted)
+        if any(not (a <= b or b <= a) for i, a in enumerate(toks) for b in toks[i + 1:]):
+            conflicting.append((pid, sorted(labels[pid])))
+    return {"ids": sorted(labels), "initial_only": initial_only, "conflicting": conflicting}
+
+
+def log_person_id_report(nodes: Iterable[dict]) -> dict[str, list]:
+    r = person_id_report(nodes)
+    log.info("person ids: %d, %d initial-only (may merge different people, e.g. %s)", len(r["ids"]),
+             len(r["initial_only"]), ", ".join(r["initial_only"][:5]) or "-")
+    if r["conflicting"]:
+        log.warning("person ids: %d carry names of different people (wrong merge?): %s", len(r["conflicting"]),
+                    "; ".join(f"{pid} = {' / '.join(ls)}" for pid, ls in r["conflicting"][:10]))
+    return r
 
 
 def _prior_edge_ids() -> set[str]:
@@ -230,6 +264,9 @@ def run() -> None:
                 g.edge(type_, src, dst, status="hypothesis", evidence=ev)
                 n_contra += 1
     g.close()
+    from .graph import STAGE_ORDER
+    stages = [st for st in STAGE_ORDER if st != "reconcile"]
+    log_person_id_report([*(n for st in stages for n in read_jsonl(f"{st}.nodes.jsonl")), *g.nodes.values()])
     df = pd.DataFrame(mapping, columns=["name", "type", "id", "method", "confidence", "pmid"])
     write_parquet("reconcile_mapping", df)
     log.info("reconcile: %d claims (%d unknown relation), %d contradictions attached of %d, %d names (%s)",

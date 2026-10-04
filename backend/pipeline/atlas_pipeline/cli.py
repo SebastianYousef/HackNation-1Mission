@@ -60,10 +60,12 @@ def views() -> None:
 
 @app.command()
 def load(dry_run: bool = typer.Option(False, help="validate only, do not write"),
+         force: bool = typer.Option(False, help="load even if views/paths/clusters are missing, empty or "
+                                                "older than their inputs (wipes or serves stale screens)"),
          database_url: Optional[str] = typer.Option(None, envvar="DATABASE_URL")) -> None:
     """Validate + load everything into Postgres in one transaction."""
     from . import load as ld
-    ld.run(database_url, dry_run=dry_run)
+    ld.run(database_url, dry_run=dry_run, force=force)
 
 
 @app.command("export-fixtures")

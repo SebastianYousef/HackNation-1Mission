@@ -44,7 +44,7 @@ def _params(**kw) -> dict:
 
 def esearch(term: str, retmax: int) -> tuple[list[str], int]:
     d = get_json(f"{EUTILS}/esearch.fcgi", _params(db="pubmed", term=term, retmax=retmax, sort="relevance",
-                                                     retmode="json"), ns="pubmed")
+                                                     retmode="json"), ns="pubmed", validate=_check_esearch)
     r = d.get("esearchresult", {})
     return r.get("idlist", []), int(r.get("count", 0))
 
@@ -59,6 +59,15 @@ def efetch(pmids: list[str]) -> list[dict]:
         for art in root.iter("PubmedArticle"):
             out.append(parse_article(art))
     return out
+
+
+def _check_esearch(d: object) -> None:
+    """Raise on an NCBI error object (served with HTTP 200: {"error": ...} or esearchresult.ERROR), so it is
+    never cached. A normal answer with a warninglist/errorlist (e.g. phrase not found) is kept."""
+    r = d.get("esearchresult") if isinstance(d, dict) else None
+    if not isinstance(r, dict) or "error" in d or "ERROR" in r:
+        err = (d.get("error") if isinstance(d, dict) else None) or (r or {}).get("ERROR") or "no esearchresult"
+        raise ValueError(f"esearch error: {str(err)[:200]}")
 
 
 def _check_efetch(xml: str) -> None:

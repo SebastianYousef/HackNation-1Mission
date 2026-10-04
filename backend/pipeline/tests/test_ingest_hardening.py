@@ -57,6 +57,59 @@ def test_efetch_error_body_is_not_cached(monkeypatch):
     assert not http._cache_path("test", key, "txt").exists()
 
 
+@pytest.mark.parametrize("body", ["<html>503 Service Temporarily Unavailable</html>",
+                                  '{"error":"API rate limit exceeded"}',
+                                  '{"esearchresult":{"ERROR":"Empty term and query_key - nothing todo"}}'])
+def test_esearch_non_json_or_error_body_is_not_cached(monkeypatch, body):
+    calls = []
+
+    def handler(req):
+        calls.append(req)
+        return httpx.Response(200, text=body if len(calls) == 1 else '{"esearchresult":{"idlist":["1"],"count":"1"}}')
+    monkeypatch.setattr(http, "_client", lambda: httpx.Client(transport=httpx.MockTransport(handler)))
+    url, params = f"https://example.org/esearch-{abs(hash(body))}.fcgi", {"term": "x"}
+    with pytest.raises(ValueError):
+        http.get_json(url, params, ns="test", validate=pubmed._check_esearch)
+    key = url + "?" + http.json.dumps(params, sort_keys=True)
+    assert not http._cache_path("test", key, "txt").exists()
+    # the next run fetches again and caches the good answer
+    assert http.get_json(url, params, ns="test", validate=pubmed._check_esearch)["esearchresult"]["idlist"] == ["1"]
+    assert http.get_json(url, params, ns="test", validate=pubmed._check_esearch)["esearchresult"]["count"] == "1"
+    assert len(calls) == 2
+
+
+def test_esearch_warning_body_is_cached():
+    pubmed._check_esearch({"esearchresult": {"idlist": [], "count": "0",
+                                             "errorlist": {"phrasesnotfound": ["xyz"]}, "warninglist": {}}})
+
+
+def test_invalid_cached_body_is_refetched(monkeypatch):
+    url, params = "https://example.org/poisoned.fcgi", {"term": "y"}
+    p = http._cache_path("test", url + "?" + http.json.dumps(params, sort_keys=True), "txt")
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text("<html>Bad Gateway</html>")  # cached by a version without the check
+    transport = httpx.MockTransport(lambda req: httpx.Response(200, json={"ok": True}))
+    monkeypatch.setattr(http, "_client", lambda: httpx.Client(transport=transport))
+    assert http.get_json(url, params, ns="test") == {"ok": True}
+    assert http.json.loads(p.read_text()) == {"ok": True}
+
+
+def test_cache_key_ignores_api_key_and_email(monkeypatch):
+    calls = []
+
+    def handler(req):
+        calls.append(str(req.url))
+        return httpx.Response(200, json={"n": len(calls)})
+    monkeypatch.setattr(http, "_client", lambda: httpx.Client(transport=httpx.MockTransport(handler)))
+    url, base = "https://example.org/shared.fcgi", {"db": "pubmed", "term": "CLN5"}
+    assert http.get_json(url, base, ns="test") == {"n": 1}
+    # a keyed run (another machine) reuses the keyless answer, and the cache key never holds the secret
+    assert http.get_json(url, base | {"api_key": "SECRET123", "email": "a@b.c"}, ns="test") == {"n": 1}
+    assert len(calls) == 1
+    assert http._cache_key(url, base | {"api_key": "SECRET123"}) == url + "?" + http.json.dumps(base, sort_keys=True)
+    assert http.get_json(url, base | {"term": "CLN6"}, ns="test") == {"n": 2}  # other params still key
+
+
 def test_ctgov_condition_statuses():
     idx = NameIndex()
     idx.add({"id": "MONDO:0019262", "type": "disease", "label": "juvenile neuronal ceroid lipofuscinosis",

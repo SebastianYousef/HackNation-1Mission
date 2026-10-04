@@ -15,7 +15,7 @@ import hashlib
 import json
 import logging
 import threading
-from typing import Any, Callable, Literal, TypeVar
+from typing import Any, Callable, TypeVar
 
 from pydantic import BaseModel
 

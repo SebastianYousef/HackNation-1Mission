@@ -4,7 +4,6 @@ Order matters: mondo -> hgnc -> slice -> everything else (see ingest.run)."""
 from __future__ import annotations
 
 import logging
-from typing import Callable
 
 log = logging.getLogger(__name__)
 

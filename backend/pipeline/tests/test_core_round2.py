@@ -176,6 +176,24 @@ def test_scraped_quote_does_not_satisfy_literature_guardrail(interim):
     assert any("literature without a quoted" in x for x in load.validate(g, [], [], [], []))
 
 
+def test_stage_warning_counts_scraped_quotes_as_unquoted(interim, caplog):
+    """GraphWriter.close warns about the same edges graph.load_graph downgrades (scrapes do not count)."""
+    g = GraphWriter("curated")
+    g.node(id="ORG:x", type="organization", label="X")
+    g.node(id=DIS["id"], type="disease", label=DIS["label"])
+    g.edge("organization_serves_disease", "ORG:x", DIS["id"], status="literature",
+           evidence=dict(source_type="patient_org_site", source_name="x.org", url="https://x.org/faq",
+                         quote="X supports families with CLN5 disease.", method="scrape:brightdata"))
+    g.node(id="ORG:y", type="organization", label="Y")
+    g.edge("organization_serves_disease", "ORG:y", DIS["id"], status="literature",
+           evidence=dict(source_type="patient_org_site", source_name="y.org", url="https://y.org",
+                         quote="Y supports families with CLN5 disease."))
+    with caplog.at_level("WARNING", logger="atlas_pipeline.store"):
+        g.close()
+    assert "[curated] 1 literature edges have no quoted supporting evidence" in caplog.text
+    assert load_graph().downgraded == 1
+
+
 # ---- round 2: the quote must be about the org itself -------------------------------------------------
 DIRECTORY = """<html><head><title>Family funds</title><meta property="og:site_name" content="All About Batten">
 </head><body><h1>Family-run funds</h1>
