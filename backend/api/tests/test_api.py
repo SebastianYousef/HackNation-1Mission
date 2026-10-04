@@ -156,6 +156,7 @@ def test_cors_regex():
     rx = re.compile(cors_regex("https://*.example.org,https://atlas.example.com"))
     assert rx.match("https://a.b.example.org") and rx.match("https://atlas.example.com")
     assert not rx.match("https://example.org.evil.com") and not rx.match("http://x.example.org")
+    assert rx.match("null") and not rx.match("nullx") and not rx.match("https://null")
 
 
 def test_explain_llm_path_is_grounded(fixtures_dir, monkeypatch):
