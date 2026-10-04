@@ -19,6 +19,10 @@ Fields (protocolSection.*):
       to diseases linked at literature level (role placeholders like "Medical Director" skipped)
   sponsorCollaboratorsModule.leadSponsor -> attrs.sponsor
   eligibilityModule.minimumAge/maximumAge -> attrs.eligibility
+  Study facts for the landing page's research opportunities (study_attrs): last_update, completion_date,
+      brief_summary, primary_purpose, patient_registry, keywords, collaborators, eligibility_criteria,
+      healthy_volunteers, locations [{facility, city, country, status}] and countries. Copied from the
+      registry record as is (capped), never interpreted.
 """
 from __future__ import annotations
 
@@ -97,6 +101,40 @@ def condition_match(idx: NameIndex, cond: str) -> tuple[str, str, str] | None:
     return mid, "hypothesis", kind
 
 
+def _cap(text: str | None, n: int) -> str | None:
+    text = (text or "").strip()
+    return None if not text else text if len(text) <= n else text[: n - 1].rstrip() + "\u2026"
+
+
+def study_attrs(ps: dict) -> dict:
+    """Registry facts a reader needs to judge a study: dates, plain summary, purpose, places, criteria."""
+    st, de = ps.get("statusModule", {}), ps.get("designModule", {})
+    el, cl = ps.get("eligibilityModule", {}), ps.get("contactsLocationsModule", {})
+    end = st.get("primaryCompletionDateStruct") or st.get("completionDateStruct") or {}
+    locs = [{k: v for k, v in (("facility", x.get("facility")), ("city", x.get("city")),
+                               ("country", x.get("country")), ("status", x.get("status"))) if v}
+            for x in (cl.get("locations") or [])]
+    locs = [x for x in locs if x.get("country") or x.get("city") or x.get("facility")]
+    out = {
+        "last_update": (st.get("lastUpdatePostDateStruct") or {}).get("date"),
+        "completion_date": end.get("date"),
+        "completion_date_type": end.get("type"),
+        "start_date_type": (st.get("startDateStruct") or {}).get("type"),
+        "brief_summary": _cap((ps.get("descriptionModule") or {}).get("briefSummary"), 1200),
+        "primary_purpose": (de.get("designInfo") or {}).get("primaryPurpose"),
+        "patient_registry": de.get("patientRegistry"),
+        "keywords": (ps.get("conditionsModule", {}).get("keywords") or [])[:10],
+        "collaborators": [c.get("name") for c in (ps.get("sponsorCollaboratorsModule", {})
+                                                   .get("collaborators") or []) if c.get("name")][:10],
+        "eligibility_criteria": _cap(el.get("eligibilityCriteria"), 4000),
+        "healthy_volunteers": el.get("healthyVolunteers"),
+        "locations": locs[:25],
+        "location_count": len(locs) or None,
+        "countries": sorted({x["country"] for x in locs if x.get("country")}),
+    }
+    return {k: v for k, v in out.items() if v not in (None, [], "")}
+
+
 def search(cond: str, n: int) -> tuple[list[dict], int | None]:
     d = get_json(API, {"query.cond": cond, "pageSize": min(n, 100), "countTotal": "true", "format": "json"},
                  ns="clinicaltrials")
@@ -148,7 +186,8 @@ def emit() -> None:
                       "study_type": de.get("studyType"), "conditions": conds,
                       "interventions": [i.get("name") for i in ints],
                       "sponsor": (ps.get("sponsorCollaboratorsModule", {}).get("leadSponsor") or {}).get("name"),
-                      "eligibility": {k: elig.get(k) for k in ("minimumAge", "maximumAge", "sex") if elig.get(k)}})
+                      "eligibility": {k: elig.get(k) for k in ("minimumAge", "maximumAge", "sex") if elig.get(k)},
+                      **study_attrs(ps)})
         ev = dict(source_type="trial_registry", source_name="ClinicalTrials.gov", source_ref=nct, url=url,
                   method="curated", published_at=(st.get("studyFirstPostDateStruct") or {}).get("date"))
 

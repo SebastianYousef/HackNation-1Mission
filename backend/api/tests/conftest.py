@@ -29,7 +29,7 @@ EVID = {"id": "V:1", "stance": "supports", "source_type": "database", "source_na
 CLUSTER = {"id": "CL:x", "label": "X", "summary": None, "method": "leiden", "size": 2, "attrs": {}}
 
 FILES: dict[str, object] = {
-    "meta.json": {"contract_version": "1.0.0", "dataset": {"version": "test-1"},
+    "meta.json": {"contract_version": "1.1.0", "dataset": {"version": "test-1"},
                   "counts": {"nodes": {"disease": 2, "gene": 1}, "edges": 2, "evidence": 1, "clusters": 1},
                   "sources": ["HPO"]},
     "search.json": {"cln5": [{**D1, "matched_name": "CLN5 disease", "match_kind": "label", "score": 1.0},

@@ -152,7 +152,7 @@ The UI is mostly whitespace and neutral greys. **Color only ever means something
 - Next steps with `status: "unsupported"` are shown greyed out with their `validation_needed` list, never as a recommendation.
 
 ## 7. Debug footer (small, bottom-right, collapsible)
-Show `mode: live|mock`, `contract 1.0.0 · dataset <version>`, and `served by: <X-Served-By>`. The last one shows which backend replica answered; we use it to demo load balancing. It is hidden behind a toggle in production.
+Show `mode: live|mock`, `contract 1.1.0 · dataset <version>`, and `served by: <X-Served-By>`. The last one shows which backend replica answered; we use it to demo load balancing. It is hidden behind a toggle in production.
 
 ## 8. Quality bar
 - Responsive down to 375 px. On mobile the graph collapses to a list, with the canvas behind a "Show map" button.

@@ -831,7 +831,7 @@ const nodeCounts = {};
 for (const n of nodes.values()) nodeCounts[n.type] = (nodeCounts[n.type] ?? 0) + 1;
 const allEv = [...evidence.values()].flat();
 put("meta.json", {
-  contract_version: "1.0.0",
+  contract_version: "1.1.0",
   dataset: { version: "mock-2026.10.03", slice: "MOCK: neuronal ceroid lipofuscinoses (Batten disease) within lysosomal storage diseases", built_at: "2026-10-03T12:00:00Z", mock: true },
   counts: { nodes: nodeCounts, edges: edges.size, evidence: allEv.length, clusters: clusters.length },
   sources: [...new Set(allEv.map((r) => r.source_name))].sort(),

@@ -173,3 +173,26 @@ def test_reporter_acronym_only_quote_needs_disease_context():
     assert nih_reporter._quote(cell_cycle, cln3, names) is None
     full = {"project_title": "x", "abstract_text": "Neuronal ceroid lipofuscinosis 3 is fatal."}
     assert nih_reporter._quote(full, cln3, names) == "Neuronal ceroid lipofuscinosis 3 is fatal."
+
+
+def test_ctgov_study_attrs_for_research_opportunities():
+    ps = {"statusModule": {"lastUpdatePostDateStruct": {"date": "2026-05-02"},
+                           "primaryCompletionDateStruct": {"date": "2028-12", "type": "ESTIMATED"},
+                           "startDateStruct": {"date": "2024-01", "type": "ACTUAL"}},
+          "descriptionModule": {"briefSummary": "x" * 2000},
+          "designModule": {"designInfo": {"primaryPurpose": "TREATMENT"}, "patientRegistry": False},
+          "eligibilityModule": {"eligibilityCriteria": "Inclusion Criteria:\n* CLN5 diagnosis", "healthyVolunteers": False},
+          "contactsLocationsModule": {"locations": [
+              {"facility": "UKE", "city": "Hamburg", "country": "Germany", "status": "RECRUITING"},
+              {"city": "Columbus", "country": "United States"}, {"zip": "123"}]},
+          "sponsorCollaboratorsModule": {"collaborators": [{"name": "BDSRA"}, {}]}}
+    a = ct.study_attrs(ps)
+    assert a["last_update"] == "2026-05-02" and a["completion_date"] == "2028-12"
+    assert a["completion_date_type"] == "ESTIMATED" and a["start_date_type"] == "ACTUAL"
+    assert len(a["brief_summary"]) == 1200 and a["brief_summary"].endswith("…")
+    assert a["primary_purpose"] == "TREATMENT" and a["patient_registry"] is False
+    assert a["countries"] == ["Germany", "United States"] and a["location_count"] == 2
+    assert a["locations"][0] == {"facility": "UKE", "city": "Hamburg", "country": "Germany", "status": "RECRUITING"}
+    assert a["collaborators"] == ["BDSRA"] and a["healthy_volunteers"] is False
+    assert "keywords" not in a  # empty values are left out, never stored as null
+    assert ct.study_attrs({}) == {}

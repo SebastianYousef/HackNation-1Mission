@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ipaddress
 import json
+import re
 import uuid
 from collections.abc import Awaitable, Callable
 from typing import Annotated, Literal
@@ -90,11 +91,11 @@ def client_ip(request: Request) -> str:
         return peer  # garbage never becomes a rate-limit key
 
 
-def rate_limit(bucket: str):
+def rate_limit(bucket: str, per_minute: int | None = None):
     async def dep(request: Request) -> None:
         st = request.app.state
         ip = client_ip(request)
-        limit = st.settings.ai_rate_limit_per_minute
+        limit = per_minute or st.settings.ai_rate_limit_per_minute
         if await st.store.incr_window(f"rl:{bucket}:{ip}", 60) > limit:
             raise ApiError(429, "rate_limited", f"too many requests: max {limit}/min for {bucket}",
                            {"Retry-After": "60"})
@@ -274,3 +275,80 @@ async def submit(request: Request, body: SubmissionRequest, response: Response) 
         "insert into submissions(node_id, kind, url, note, contact) values (%s,%s,%s,%s,%s) returning id::text",
         (node_id, body.kind, body.url, body.note, body.contact))
     return {"id": new_id}
+
+
+# ---- researcher-published studies (contract v1.1.0) ---------------------------------
+# No accounts: POST returns a private edit token once; updates and the team's own numbers
+# need it in the body (never in a URL). Reads are never cached across requests: a study
+# changes independently of the dataset version.
+from .studies import BadCondition, CreateRequest, EventRequest, TokenRequest, UpdateRequest  # noqa: E402
+
+FRESH = {"Cache-Control": "no-store", "Vary": "Origin"}
+RS_ID = r"^RS:[0-9a-f]{10}$"
+
+
+def _studies(request: Request):  # type: ignore[no-untyped-def]
+    return request.app.state.studies
+
+
+def _rs_id(study_id: str) -> str:
+    if not re.match(RS_ID, study_id):
+        raise not_found("study")
+    return study_id
+
+
+def _json(obj: object, status: int = 200) -> Response:
+    return Response(content=json.dumps(obj, ensure_ascii=False, separators=(",", ":")), media_type=JSON,
+                    status_code=status, headers=FRESH)
+
+
+@router.get("/researcher-studies")
+async def researcher_studies(request: Request, condition: str | None = Query(default=None, max_length=2000),
+                             q: Annotated[str | None, Query(max_length=200)] = None, limit: int = 50) -> Response:
+    ids = [c.strip() for c in (condition or "").split(",") if c.strip()][:20] or None
+    if ids and any(len(i) > MAX_ID for i in ids):
+        raise bad_request("condition id too long")
+    return _json(await _studies(request).list(ids, q, _clamp(limit, 1, 100)))
+
+
+@router.get("/researcher-studies/{study_id:path}")
+async def researcher_study(request: Request, study_id: str) -> Response:
+    s = await _studies(request).get(_rs_id(study_id))
+    if s is None:
+        raise not_found("study")
+    return _json(s)
+
+
+@router.post("/researcher-studies", status_code=201, dependencies=[rate_limit("submissions")])
+async def create_researcher_study(request: Request, body: CreateRequest) -> Response:
+    try:
+        token, study = await _studies(request).create(body.study)
+    except BadCondition as e:
+        raise bad_request(str(e)) from None
+    return _json({"id": study["id"], "edit_token": token, "study": study}, 201)
+
+
+@router.post("/researcher-studies/{study_id:path}/update", dependencies=[rate_limit("submissions")])
+async def update_researcher_study(request: Request, study_id: str, body: UpdateRequest) -> Response:
+    try:
+        s = await _studies(request).update(_rs_id(study_id), body.edit_token, body.study)
+    except BadCondition as e:
+        raise bad_request(str(e)) from None
+    if s is None:
+        raise not_found("study")  # unknown id and wrong token look the same
+    return _json(s)
+
+
+@router.post("/researcher-studies/{study_id:path}/manage", dependencies=[rate_limit("submissions")])
+async def manage_researcher_study(request: Request, study_id: str, body: TokenRequest) -> Response:
+    m = await _studies(request).manage(_rs_id(study_id), body.edit_token)
+    if m is None:
+        raise not_found("study")
+    return _json(m)
+
+
+@router.post("/researcher-studies/{study_id:path}/events", status_code=204, dependencies=[rate_limit("events", 120)])
+async def researcher_study_event(request: Request, study_id: str, body: EventRequest) -> Response:
+    if not await _studies(request).event(_rs_id(study_id), body.kind):
+        raise not_found("study")
+    return Response(status_code=204, headers=FRESH)

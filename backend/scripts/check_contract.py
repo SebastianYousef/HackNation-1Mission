@@ -370,8 +370,8 @@ def main() -> int:
     c = Checker(a.base_url, a.insecure, a.verbose, a.allow_missing)
 
     meta = c.get("/api/v1/meta", META)
-    if meta and meta.get("contract_version") != "1.0.0":
-        c.errors.append(f"meta.contract_version is {meta.get('contract_version')}, checker expects 1.0.0")
+    if meta and meta.get("contract_version") != "1.1.0":
+        c.errors.append(f"meta.contract_version is {meta.get('contract_version')}, checker expects 1.1.0")
 
     node_ids: list[str] = []
     seen_nodes: set[str] = set()
@@ -519,7 +519,7 @@ def main() -> int:
         for e in c.errors[:200]:
             print("  -", e)
         return 1
-    print("OK: responses match contract v1.0.0")
+    print("OK: responses match contract v1.1.0")
     return 0
 
 

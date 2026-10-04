@@ -30,6 +30,10 @@ Base URL is `{API_BASE}/api/v1`. In production `API_BASE` is the same origin as 
 | `POST /outreach-draft` | `OutreachDraft` | "Draft a message to this group" | |
 | `POST /gap-search` → `GET /jobs/{id}` | `JobAccepted` → `JobStatus` | "Search the web for missing groups" | poll every 2 s; results are UNVERIFIED |
 | `POST /submissions` | `SubmissionCreated` | "Contribute evidence" form | stored for review, never shown as fact |
+| `GET /researcher-studies?condition=&q=&limit=` · `GET /researcher-studies/{id}` | `ResearcherStudy[]` · `ResearcherStudy` | research opportunities | v1.1.0; published studies only, `Cache-Control: no-store` |
+| `POST /researcher-studies` {study} | `ResearcherStudyCreated` | "Publish a study" | v1.1.0; no account: returns a private `edit_token` once |
+| `POST /researcher-studies/{id}/update` {edit_token, study} · `POST …/manage` {edit_token} | `ResearcherStudy` · `ResearcherStudyManage` | the team's own study page | wrong token = 404 |
+| `POST /researcher-studies/{id}/events` {kind} | 204 | screening, contact clicks | anonymous counters only |
 
 The ops endpoints `GET /healthz` and `GET /readyz` are used by the load balancer only, not by the UI.
 

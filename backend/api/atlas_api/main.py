@@ -22,6 +22,7 @@ from .config import Settings, get_settings
 from .data import Data, Db
 from .errors import error_response, install_error_handlers
 from .routes import client_ip, router
+from .studies import Studies
 
 log = logging.getLogger("atlas_api")
 _RID_OK = re.compile(r"^[A-Za-z0-9._:-]{1,128}$")
@@ -112,6 +113,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.store = Store.from_url(s.redis_url)
         app.state.data = Data(s, db)
         app.state.ai = AI(s, app.state.data)
+        app.state.studies = Studies(app.state.data, db if s.uses_db("researcher_studies") else None)
         try:
             _install_drain_hook(app, s.shutdown_grace_seconds)
         except (ValueError, RuntimeError):  # not main thread (e.g. TestClient)
@@ -128,7 +130,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     # reads XFF itself), so request.url.scheme is "http" behind the TLS LB and Starlette's
     # trailing-slash 307 would send https browsers to an absolute http:// Location. No
     # contract path ends in "/", so "/meta/" is simply a 404 ApiError instead.
-    app = FastAPI(title="Rare Disease Atlas API", version="1.0.0", lifespan=lifespan, redirect_slashes=False,
+    app = FastAPI(title="Rare Disease Atlas API", version="1.1.0", lifespan=lifespan, redirect_slashes=False,
                   docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url=None)
     app.state.settings = s
     app.state.instance_id = s.instance_id

@@ -40,7 +40,7 @@ def test_cache_and_etag(client):
 
 
 def test_meta(client):
-    assert client.get(f"{V1}/meta").json()["contract_version"] == "1.0.0"
+    assert client.get(f"{V1}/meta").json()["contract_version"] == "1.1.0"
 
 
 def test_search(client):
