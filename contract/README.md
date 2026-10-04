@@ -8,7 +8,7 @@ This folder is the **only** thing the frontend and backend teams share. If both 
 | `fixtures/` | A valid example response for every endpoint (coherent MOCK dataset: Batten/NCL slice) | Backend (keeps them valid) |
 | `scripts/validate-fixtures.mjs` | Type-checks fixtures against `atlas.ts` + referential integrity | — |
 
-The SQL that produces the GET shapes lives in `backend/db/migrations/*_api_v1.sql`. The backend's `scripts/check_contract.py` verifies a running API against this contract.
+The SQL that produces the GET shapes is the `api_*` functions in `backend/db/migrations/`: first defined in `*_api_v1.sql`, with `api_search` replaced in `*_search_ranking_submissions.sql` and `api_paths` in `*_path_strength.sql` and `*_paths_arrays_never_null.sql` (the last file to define a function wins). The backend's `scripts/check_contract.py` verifies a running API against this contract.
 
 ## Endpoints
 
@@ -26,10 +26,14 @@ Base URL is `{API_BASE}/api/v1`. In production `API_BASE` is the same origin as 
 | `GET /clusters` · `GET /clusters/{id}` | `ClustersResponse` · `ClusterResponse` | cluster explorer | |
 | `GET /diseases/{id}/action-view` | `ActionView` | **Maria / Devon main screen** | 404 if not precomputed for that disease |
 | `GET /mechanisms/{id}/view` | `MechanismView` | **Priya / Dr. Osei screen** | id = mechanism or intervention |
-| `POST /explain` | `Explanation` | "Explain this path" | 2–15 s; cached; every sentence cites an edge |
+| `POST /explain` | `Explanation` | "Explain this path" | 2–15 s; cached until the next data load; every sentence cites an edge; 503 without an OpenAI key |
 | `POST /outreach-draft` | `OutreachDraft` | "Draft a message to this group" | |
 | `POST /gap-search` → `GET /jobs/{id}` | `JobAccepted` → `JobStatus` | "Search the web for missing groups" | poll every 2 s; results are UNVERIFIED |
 | `POST /submissions` | `SubmissionCreated` | "Contribute evidence" form | stored for review, never shown as fact |
+| `GET /researcher-studies?condition=&q=&limit=` · `GET /researcher-studies/{id}` | `ResearcherStudy[]` · `ResearcherStudy` | research opportunities | v1.1.0; published studies only, `Cache-Control: no-store` |
+| `POST /researcher-studies` {study} | `ResearcherStudyCreated` | "Publish a study" | v1.1.0; no account: returns a private `edit_token` once |
+| `POST /researcher-studies/{id}/update` {edit_token, study} · `POST …/manage` {edit_token} | `ResearcherStudy` · `ResearcherStudyManage` | the team's own study page | wrong token = 404 |
+| `POST /researcher-studies/{id}/events` {kind} | 204 | screening, contact clicks | anonymous counters only |
 
 The ops endpoints `GET /healthz` and `GET /readyz` are used by the load balancer only, not by the UI.
 
@@ -50,6 +54,6 @@ The ops endpoints `GET /healthz` and `GET /readyz` are used by the load balancer
 2. **One person from each side approves.**
 3. Prefer **additive** changes: a new optional field `foo: X | null` or a new endpoint. Bump the minor version (`1.1.0`) in `atlas.ts` and in `api_meta()`.
 4. Breaking change = major bump. Avoid after hour 6.
-5. After merge, frontend copies `atlas.ts` + `fixtures/` into the Lovable repo: `scripts/sync-contract.sh <path-to-frontend-repo>`.
+5. After merge, frontend copies `atlas.ts` + `fixtures/` into the frontend repo: `scripts/sync-contract.sh <path-to-frontend-repo>`.
 
 Contract freeze: **v1 is frozen at hour 2**. Only additive changes after that.

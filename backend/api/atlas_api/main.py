@@ -21,7 +21,8 @@ from .cache import Store
 from .config import Settings, get_settings
 from .data import Data, Db
 from .errors import error_response, install_error_handlers
-from .routes import router
+from .routes import client_ip, router
+from .studies import Studies
 
 log = logging.getLogger("atlas_api")
 _RID_OK = re.compile(r"^[A-Za-z0-9._:-]{1,128}$")
@@ -29,13 +30,51 @@ _LOCAL_ORIGINS = r"https?://(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])(:\d+)?"
 
 
 def cors_regex(origins: str) -> str:
-    """'https://*.lovable.app,https://x.com' -> one anchored regex (+ localhost dev ports)."""
+    """'https://*.example.org,https://x.com' -> one anchored regex (+ localhost dev ports)."""
     parts = [_LOCAL_ORIGINS]
     for o in (o.strip().rstrip("/") for o in origins.split(",") if o.strip()):
         if o == "*":
             return ".*"
         parts.append(re.escape(o).replace(r"\*", r"[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*"))
     return "^(" + "|".join(parts) + ")$"
+
+
+class BodyLimit:
+    """Reject request bodies over `limit` bytes with a 413 ApiError before FastAPI
+    buffers and parses them (pure ASGI, so it also stops chunked uploads)."""
+
+    def __init__(self, app, limit: int):  # type: ignore[no-untyped-def]
+        self.app, self.limit = app, limit
+
+    async def __call__(self, scope, receive, send):  # type: ignore[no-untyped-def]
+        if scope["type"] != "http" or scope["method"] in ("GET", "HEAD", "OPTIONS"):
+            return await self.app(scope, receive, send)
+        length = dict(scope["headers"]).get(b"content-length")
+        if length is not None:
+            if not length.isdigit() or int(length) > self.limit:
+                return await self._reject(scope, receive, send)
+            return await self.app(scope, receive, send)  # server enforces the declared length
+        chunks, total, more = [], 0, True  # no Content-Length: read up to the limit, then replay
+        while more:
+            msg = await receive()
+            if msg["type"] == "http.disconnect":
+                return
+            chunks.append(msg.get("body", b""))
+            total += len(chunks[-1])
+            if total > self.limit:
+                return await self._reject(scope, receive, send)
+            more = msg.get("more_body", False)
+        replay = [{"type": "http.request", "body": b"".join(chunks), "more_body": False}]
+
+        async def replay_receive():  # type: ignore[no-untyped-def]
+            return replay.pop() if replay else await receive()
+
+        return await self.app(scope, replay_receive, send)
+
+    async def _reject(self, scope, receive, send):  # type: ignore[no-untyped-def]
+        resp = error_response(Request(scope), 413, "bad_request", f"request body too large (max {self.limit} bytes)",
+                              {"Connection": "close"})
+        await resp(scope, receive, send)
 
 
 def _install_drain_hook(app: FastAPI, grace: float) -> None:
@@ -72,6 +111,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.store = Store.from_url(s.redis_url)
         app.state.data = Data(s, db)
         app.state.ai = AI(s, app.state.data)
+        app.state.studies = Studies(app.state.data, db if s.uses_db("researcher_studies") else None)
         try:
             _install_drain_hook(app, s.shutdown_grace_seconds)
         except (ValueError, RuntimeError):  # not main thread (e.g. TestClient)
@@ -84,7 +124,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             await db.close()
         await app.state.store.close()
 
-    app = FastAPI(title="Rare Disease Atlas API", version="1.0.0", lifespan=lifespan,
+    # redirect_slashes=False: the image runs uvicorn with --no-proxy-headers (client_ip()
+    # reads XFF itself), so request.url.scheme is "http" behind the TLS LB and Starlette's
+    # trailing-slash 307 would send https browsers to an absolute http:// Location. No
+    # contract path ends in "/", so "/meta/" is simply a 404 ApiError instead.
+    app = FastAPI(title="Rare Disease Atlas API", version="1.1.0", lifespan=lifespan, redirect_slashes=False,
                   docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url=None)
     app.state.settings = s
     app.state.instance_id = s.instance_id
@@ -95,8 +139,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         log.warning("database unavailable: %s", exc)
         return error_response(request, 503, "upstream_unavailable", "database unavailable")
 
+    async def _bad_value(request: Request, exc: Exception) -> JSONResponse:
+        # e.g. a NUL byte in an id/query: Postgres text cannot hold it.
+        return error_response(request, 400, "bad_request", "invalid characters in request")
+
     app.add_exception_handler(psycopg.OperationalError, _db_down)
     app.add_exception_handler(PoolTimeout, _db_down)
+    app.add_exception_handler(psycopg.DataError, _bad_value)
     app.include_router(router)
 
     @app.get("/healthz", include_in_schema=False)
@@ -111,11 +160,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             checks["db"] = st.data.db is not None and await st.data.db.ping()
         else:
             checks["fixtures"] = s.fixtures_dir.is_dir()
-        if s.redis_url:
-            checks["redis"] = await st.store.ping()
         ok = all(checks.values())
-        return JSONResponse({"ready": ok, "instance": s.instance_id, "checks": checks},
+        # Redis is shared by every replica and the app fails open without it (cache,
+        # rate limits): report it, but never take the whole pool out of the LB for it.
+        degraded = {"redis": not await st.store.ping()} if s.redis_url else {}
+        return JSONResponse({"ready": ok, "instance": s.instance_id, "checks": checks, "degraded": degraded},
                             status_code=200 if ok else 503, headers={"Cache-Control": "no-store"})
+
+    # Added before request_context and CORS, so it runs inside both: 413s get their headers.
+    app.add_middleware(BodyLimit, limit=s.max_body_bytes)
 
     @app.middleware("http")
     async def request_context(request: Request, call_next) -> Response:  # type: ignore[no-untyped-def]
@@ -128,9 +181,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         response.headers["X-Served-By"] = s.instance_id
         if request.url.path not in ("/healthz", "/readyz"):
             log.info("%s %s %s %.1fms rid=%s client=%s", request.method, request.url.path, response.status_code,
-                     (time.perf_counter() - t0) * 1000, rid, request.client.host if request.client else "-")
+                     (time.perf_counter() - t0) * 1000, rid, client_ip(request))
         return response
 
+    app.state.cors_re = re.compile(cors_regex(s.cors_origins))
     app.add_middleware(
         CORSMiddleware, allow_origin_regex=cors_regex(s.cors_origins), allow_methods=["GET", "POST", "OPTIONS"],
         allow_headers=["Content-Type", "X-Request-Id", "If-None-Match"],

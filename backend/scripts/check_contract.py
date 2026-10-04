@@ -18,6 +18,7 @@ Schema mini-language (mirrors atlas.ts by hand — keep in sync):
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import ssl
 import sys
@@ -142,7 +143,7 @@ def validate(value: Any, schema: Any, path: str = "$") -> list[str]:
               "num": isinstance(value, (int, float)) and not isinstance(value, bool)}[base]
         return [] if ok else [f"{path}: expected {base}, got {type(value).__name__} {str(value)[:40]!r}"]
     if isinstance(schema, frozenset):
-        return [] if value in schema else [f"{path}: {value!r} not in enum {sorted(schema)[:6]}..."]
+        return [] if isinstance(value, str) and value in schema else [f"{path}: {value!r} not in enum {sorted(schema)[:6]}..."]
     if isinstance(schema, list):
         if not isinstance(value, list):
             return [f"{path}: expected array, got {type(value).__name__}"]
@@ -169,10 +170,16 @@ def validate(value: Any, schema: Any, path: str = "$") -> list[str]:
 
 
 # ---------------------------------------------------------------------------- integrity
+# These run only on bodies that passed validate() (Checker.get returns None otherwise), so they may index freely.
+def check_edge_obj(e: dict, path: str) -> list[str]:
+    return [] if 0 <= e["confidence"] <= 1 else [f"{path}: edge {e['id']} confidence {e['confidence']} out of 0..1"]
+
+
 def check_neighborhood(nb: dict, path: str) -> list[str]:
     ids = {n["id"] for n in nb["nodes"]}
     errs = [] if nb["center"] in ids else [f"{path}: center {nb['center']} not in nodes"]
     for e in nb["edges"]:
+        errs += check_edge_obj(e, path)
         for end in ("src", "dst"):
             if e[end] not in ids:
                 errs.append(f"{path}: edge {e['id']} {end}={e[end]} not in nodes")
@@ -181,6 +188,10 @@ def check_neighborhood(nb: dict, path: str) -> list[str]:
 
 def check_path(p: dict, path: str) -> list[str]:
     errs = []
+    if len(p["node_ids"]) < 2:
+        errs.append(f"{path}: node_ids must have >= 2 entries")
+    if len(set(p["node_ids"])) != len(p["node_ids"]):
+        errs.append(f"{path}: node_ids repeat a node (must be a simple path)")
     if len(p["edge_ids"]) != len(p["node_ids"]) - 1:
         errs.append(f"{path}: len(edge_ids) != len(node_ids)-1")
     if [n["id"] for n in p["nodes"]] != p["node_ids"]:
@@ -192,9 +203,31 @@ def check_path(p: dict, path: str) -> list[str]:
     for i, e in enumerate(p["edges"][: len(p["node_ids"]) - 1]):
         if {e["src"], e["dst"]} != {p["node_ids"][i], p["node_ids"][i + 1]}:
             errs.append(f"{path}: edge {e['id']} does not connect {p['node_ids'][i]} and {p['node_ids'][i + 1]}")
+    # A path is never stronger than its weakest edge. It equals the edge minimum unless an honesty cap
+    # (attrs.status_cap / attrs.confidence_cap) lowers it; then it equals the cap.
     order = ["curated", "literature", "inferred", "hypothesis"]
-    if p["edges"] and p["weakest_status"] != max((e["status"] for e in p["edges"]), key=order.index):
-        errs.append(f"{path}: weakest_status is not the weakest edge status")
+    attrs = p.get("attrs") or {}
+    if p["edges"] and p["weakest_status"] in order:
+        edge_min = max((e["status"] for e in p["edges"]), key=order.index)
+        cap = attrs.get("status_cap")
+        want = max(edge_min, cap, key=order.index) if cap in order else edge_min
+        if order.index(p["weakest_status"]) < order.index(edge_min):
+            errs.append(f"{path}: weakest_status is stronger than the weakest edge status ({edge_min})")
+        elif p["weakest_status"] != want:
+            errs.append(f"{path}: weakest_status {p['weakest_status']} != {want}"
+                        f" ({'status_cap' if cap else 'weakest edge status'})")
+    # tolerance: the database stores confidence as float4
+    if p["edges"] and isinstance(p["min_confidence"], (int, float)):
+        edge_min = min(e["confidence"] for e in p["edges"])
+        cap = attrs.get("confidence_cap")
+        want = min(edge_min, cap) if isinstance(cap, (int, float)) else edge_min
+        if p["min_confidence"] > edge_min + 1e-6:
+            errs.append(f"{path}: min_confidence is above the minimum edge confidence ({edge_min})")
+        elif abs(p["min_confidence"] - want) > 1e-6:
+            errs.append(f"{path}: min_confidence {p['min_confidence']} != {want}"
+                        f" ({'confidence_cap' if cap is not None else 'minimum edge confidence'})")
+    for e in p["edges"]:
+        errs += check_edge_obj(e, path)
     return errs
 
 
@@ -205,12 +238,50 @@ def check_edge(er: dict, path: str) -> list[str]:
     for bucket, stance in (("supporting", "supports"), ("contradicting", "contradicts"), ("context", "context")):
         errs += [f"{path}.{bucket}: evidence {v['id']} has stance {v['stance']}" for v in er[bucket]
                  if v["stance"] != stance]
-    if not 0 <= e["confidence"] <= 1:
-        errs.append(f"{path}: confidence out of range")
+    errs += check_edge_obj(e, path)
+    if e["support_count"] != len(er["supporting"]):
+        errs.append(f"{path}: support_count {e['support_count']} != {len(er['supporting'])} supporting rows")
+    if e["contradict_count"] != len(er["contradicting"]):
+        errs.append(f"{path}: contradict_count {e['contradict_count']} != {len(er['contradicting'])} contradicting rows")
+    # honest statuses (root CLAUDE.md rule 2)
+    rows = er["supporting"] + er["contradicting"] + er["context"]
+    if not rows:
+        errs.append(f"{path}: edge has no evidence rows")
+    if e["status"] == "curated" and any(v["method"].startswith("llm:") for v in rows):
+        errs.append(f"{path}: curated edge has llm:* evidence (LLM output is never curated)")
+    if e["status"] == "literature" and not any(v["quote"] for v in er["supporting"]):
+        errs.append(f"{path}: literature edge has no supporting row with a quote")
     return errs
 
 
+def _num_eq(a: Any, b: Any) -> bool:
+    """Equal, allowing float4 rounding; None only equals None."""
+    if a is None or b is None:
+        return a is b
+    return abs(a - b) <= 1e-6
+
+
+def check_similar(s: dict, disease_id: str, e: dict, path: str) -> list[str]:
+    """A /similar row is its disease_similar_to edge between the two diseases, with the edge's numbers."""
+    errs = []
+    if e["type"] != "disease_similar_to" or {e["src"], e["dst"]} != {disease_id, s["disease"]["id"]}:
+        errs.append(f"{path}: {e['id']} is not a disease_similar_to edge between {disease_id} and {s['disease']['id']}")
+    if not (_num_eq(s["score"], e["score"]) and _num_eq(s["confidence"], e["confidence"]) and s["status"] == e["status"]):
+        errs.append(f"{path}: {e['id']} score/confidence/status differ from the edge")
+    return errs
+
+
+def check_org_card(card: dict, e: dict, path: str) -> list[str]:
+    """An OrgCard's edge_id is the organization_serves_disease edge from its org to its for_disease."""
+    if e["type"] == "organization_serves_disease" and e["src"] == card["node"]["id"] and e["dst"] == card["for_disease"]["id"]:
+        return []
+    return [f"{path}: OrgCard edge {e['id']} is not {card['node']['id']} serves {card['for_disease']['id']}"]
+
+
 # ---------------------------------------------------------------------------- runner
+MAX_CONN_ERRORS = 5  # consecutive connection failures before the remaining requests are not sent
+
+
 class Checker:
     def __init__(self, base: str, insecure: bool, verbose: bool, allow_missing: bool = False):
         self.base, self.verbose, self.allow_missing = base.rstrip("/"), verbose, allow_missing
@@ -219,18 +290,32 @@ class Checker:
         self.errors: list[str] = []
         self.calls = 0
         self.served_by: dict[str, int] = {}
+        self.consecutive_conn_errors = 0
+        self.not_sent = 0
 
     def request(self, method: str, path: str, body: Any = None) -> tuple[int, Any]:
         url = self.base + path
         data = json.dumps(body).encode() if body is not None else None
         req = urllib.request.Request(url, data=data, method=method, headers={"Content-Type": "application/json",
                                                                               "Accept": "application/json"})
+        if self.consecutive_conn_errors >= MAX_CONN_ERRORS:
+            self.not_sent += 1  # the API is unreachable: stop waiting on timeouts, report once in the summary
+            return 0, None
         self.calls += 1
         try:
-            with urllib.request.urlopen(req, context=self.ctx, timeout=60) as r:
-                status, raw, headers = r.status, r.read(), r.headers
-        except urllib.error.HTTPError as e:
-            status, raw, headers = e.code, e.read(), e.headers
+            try:
+                with urllib.request.urlopen(req, context=self.ctx, timeout=60) as r:
+                    status, raw, headers = r.status, r.read(), r.headers
+            except urllib.error.HTTPError as e:
+                status, raw, headers = e.code, e.read(), e.headers
+        except (urllib.error.URLError, OSError, http.client.HTTPException) as e:
+            # connection refused / reset / timeout / TLS: a collected failure, not a traceback that loses the report
+            self.consecutive_conn_errors += 1
+            self.errors.append(f"{method} {path}: request failed ({type(e).__name__}: {getattr(e, 'reason', e)})")
+            if self.verbose:
+                print(f"  ERR {method} {path}")
+            return 0, None
+        self.consecutive_conn_errors = 0
         for h in ("X-Request-Id", "X-Served-By"):
             if not headers.get(h):
                 self.errors.append(f"{method} {path}: missing header {h}")
@@ -246,6 +331,8 @@ class Checker:
 
     def get(self, path: str, schema: Any, expect: int = 200) -> Any:
         status, body = self.request("GET", path)
+        if status == 0:
+            return None  # connection error, already recorded
         if status == 404 and expect == 200 and self.allow_missing:
             self.skipped += 1  # partial fixture set: a 404 is fine as long as it has the ApiError shape
             self.errors += [f"GET {path} (404): {e}" for e in validate(body, API_ERROR)]
@@ -255,8 +342,9 @@ class Checker:
             return None
         if status >= 400:
             schema = API_ERROR
-        self.errors += [f"GET {path}: {e}" for e in validate(body, schema)]
-        return body
+        errs = validate(body, schema)
+        self.errors += [f"GET {path}: {e}" for e in errs]
+        return None if errs else body  # integrity checks only see schema-valid bodies (no crash, no lost report)
 
 
 def enc(i: str) -> str:
@@ -275,13 +363,15 @@ def main() -> int:
     ap.add_argument("--insecure", action="store_true", help="skip TLS verification (self-signed dev cert)")
     ap.add_argument("--allow-missing", action="store_true",
                     help="treat 404 on discovered ids as skipped (partial fixture sets); never use against db mode")
+    ap.add_argument("--allow-empty", action="store_true",
+                    help="do not fail when meta reports data but discovery found none (intentionally empty DB)")
     ap.add_argument("-v", "--verbose", action="store_true")
     a = ap.parse_args()
     c = Checker(a.base_url, a.insecure, a.verbose, a.allow_missing)
 
     meta = c.get("/api/v1/meta", META)
-    if meta and meta.get("contract_version") != "1.0.0":
-        c.errors.append(f"meta.contract_version is {meta.get('contract_version')}, checker expects 1.0.0")
+    if meta and meta.get("contract_version") != "1.1.0":
+        c.errors.append(f"meta.contract_version is {meta.get('contract_version')}, checker expects 1.1.0")
 
     node_ids: list[str] = []
     seen_nodes: set[str] = set()
@@ -308,6 +398,24 @@ def main() -> int:
 
     edge_ids: list[str] = []
     path_edges: list[str] = []
+    hits = {"nodes": 0, "edges": 0, "paths": 0, "action_views": 0, "mechanism_views": 0}
+    edge_cache: dict[str, Any] = {}
+    similar_refs: list[tuple[str, dict]] = []      # (disease id, SimilarDisease row)
+    org_refs: dict[tuple, tuple[str, dict]] = {}   # (edge_id, org, for_disease) -> (where, OrgCard)
+
+    def fetch_edge(eid: str) -> Any:
+        if eid not in edge_cache:
+            er = edge_cache[eid] = c.get(f"/api/v1/edges/{enc(eid)}", EDGE_RESP)
+            if er:
+                hits["edges"] += 1
+                c.errors += check_edge(er, f"edge({eid})")
+                if er["edge"]["id"] != eid:
+                    c.errors.append(f"GET /edges/{eid}: edge.id is {er['edge']['id']}")
+        return edge_cache[eid]
+
+    def add_org_cards(cards: list[dict], where: str) -> None:
+        for k, card in enumerate(cards):
+            org_refs.setdefault((card["edge_id"], card["node"]["id"], card["for_disease"]["id"]), (f"{where}[{k}]", card))
     i = 0
     while i < len(node_ids) and i < a.max_nodes:
         nid = node_ids[i]
@@ -315,6 +423,7 @@ def main() -> int:
         nr = c.get(f"/api/v1/nodes/{enc(nid)}", NODE_RESP)
         if not nr:
             continue
+        hits["nodes"] += 1
         if nr["node"]["id"] != nid:
             c.errors.append(f"GET /nodes/{nid}: node.id is {nr['node']['id']}")
         nb = c.get(f"/api/v1/nodes/{enc(nid)}/neighborhood?depth=1&max_nodes=30", NEIGHBORHOOD)
@@ -325,22 +434,47 @@ def main() -> int:
             edge_ids += [e["id"] for e in nb["edges"]]
             for n in nb["nodes"][:4]:
                 add_node(n["id"])
+        ntype = nr["node"]["type"]
         if nr["has_action_view"]:
-            c.get(f"/api/v1/diseases/{enc(nid)}/action-view", ACTION_VIEW)
+            av = c.get(f"/api/v1/diseases/{enc(nid)}/action-view", ACTION_VIEW)
+            if av:
+                hits["action_views"] += 1
+                for k, p in enumerate(av["connections"]):
+                    c.errors += check_path(p, f"action-view({nid}).connections[{k}]")
+                add_org_cards(av["exact_groups"], f"action-view({nid}).exact_groups")
+                for k, rc in enumerate(av["related_communities"]):
+                    add_org_cards(rc["groups"], f"action-view({nid}).related_communities[{k}].groups")
+        elif ntype == "disease":  # has_action_view=false must mean 404 (the UI hides the screen on this flag)
+            c.get(f"/api/v1/diseases/{enc(nid)}/action-view", API_ERROR, expect=404)
         if nr["has_mechanism_view"]:
-            c.get(f"/api/v1/mechanisms/{enc(nid)}/view", MECHANISM_VIEW)
-        if nr["node"]["type"] == "disease":
+            mv = c.get(f"/api/v1/mechanisms/{enc(nid)}/view", MECHANISM_VIEW)
+            if mv:
+                hits["mechanism_views"] += 1
+                for k, rd in enumerate(mv["diseases"]):
+                    add_org_cards(rd["groups"], f"mechanism-view({nid}).diseases[{k}].groups")
+        elif ntype in ("mechanism", "intervention"):
+            c.get(f"/api/v1/mechanisms/{enc(nid)}/view", API_ERROR, expect=404)
+        if ntype == "disease":
             for s in c.get(f"/api/v1/diseases/{enc(nid)}/similar?limit=5", SIMILAR) or []:
                 edge_ids.append(s["edge_id"])
+                similar_refs.append((nid, s))
             paths = c.get(f"/api/v1/paths?from={enc(nid)}&limit=10", [PATH]) or []
+            hits["paths"] += len(paths)
             for k, p in enumerate(paths):
                 c.errors += check_path(p, f"paths({nid})[{k}]")
                 path_edges = path_edges or p["edge_ids"]
 
     for eid in list(dict.fromkeys(edge_ids))[: a.max_edges]:
-        er = c.get(f"/api/v1/edges/{enc(eid)}", EDGE_RESP)
+        fetch_edge(eid)
+    # referenced edges are always checked against what references them (beyond --max-edges)
+    for nid, s in similar_refs:
+        er = fetch_edge(s["edge_id"])
         if er:
-            c.errors += check_edge(er, f"edge({eid})")
+            c.errors += check_similar(s, nid, er["edge"], f"similar({nid})")
+    for where, card in org_refs.values():
+        er = fetch_edge(card["edge_id"])
+        if er:
+            c.errors += check_org_card(card, er["edge"], where)
 
     # error shape
     c.get("/api/v1/nodes/ATLAS%3A__definitely_missing__", API_ERROR, expect=404)
@@ -349,28 +483,43 @@ def main() -> int:
     if a.with_ai and path_edges:
         st, body = c.request("POST", "/api/v1/explain", {"edge_ids": path_edges[:8], "audience": "family"})
         if st == 200:
-            c.errors += [f"POST /explain: {e}" for e in validate(body, EXPLANATION)]
-            bad = [s["edge_id"] for s in body["steps"] if s["edge_id"] not in path_edges]
+            errs = validate(body, EXPLANATION)
+            c.errors += [f"POST /explain: {e}" for e in errs]
+            bad = [] if errs else [s["edge_id"] for s in body["steps"] if s["edge_id"] not in path_edges]
             if bad:
                 c.errors.append(f"POST /explain cites edges not in the request: {bad}")
-        else:
+        elif st:  # st == 0: connection error, already recorded
             c.errors.append(f"POST /explain: status {st} {body}")
         st, body = c.request("POST", "/api/v1/gap-search", {"disease_id": node_ids[0]})
-        if st == 202:
+        if st == 202 and isinstance(body, dict) and isinstance(body.get("job_id"), str):
             job = c.get(f"/api/v1/jobs/{enc(body['job_id'])}", JOB_STATUS)
             if job and job["job_id"] != body["job_id"]:
                 c.errors.append("GET /jobs: job_id mismatch")
-        else:
+        elif st:
             c.errors.append(f"POST /gap-search: status {st}")
 
+    # coverage: an OK that checked nothing is not an OK (broken search/clusters, node_names not loaded, ...)
+    counts = (meta or {}).get("counts", {})
+    if not a.allow_empty and meta:
+        total_nodes = sum(counts["nodes"].values())
+        if total_nodes and not seen_nodes:
+            c.errors.append(f"discovery found 0 node ids but meta reports {total_nodes} nodes (search/clusters broken?)")
+        if counts["edges"] and not hits["edges"]:
+            c.errors.append(f"checked 0 edges but meta reports {counts['edges']} (neighborhoods/similar broken?)")
+        if counts["clusters"] and not clusters:
+            c.errors.append(f"/clusters returned [] but meta reports {counts['clusters']} clusters")
+
+    if c.not_sent:
+        c.errors.append(f"{c.not_sent} request(s) not sent after {MAX_CONN_ERRORS} consecutive connection errors")
     print(f"{c.calls} requests, {len(seen_nodes)} node ids discovered, {len(set(edge_ids))} edges, "
           f"{c.skipped} skipped (404), served by {c.served_by}")
+    print("checked: " + ", ".join(f"{k}={v}" for k, v in hits.items()))
     if c.errors:
         print(f"FAIL: {len(c.errors)} contract violation(s)")
         for e in c.errors[:200]:
             print("  -", e)
         return 1
-    print("OK: responses match contract v1.0.0")
+    print("OK: responses match contract v1.1.0")
     return 0
 
 

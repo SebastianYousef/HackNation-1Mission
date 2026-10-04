@@ -98,7 +98,11 @@ export interface NodeFull extends NodeBrief {
    *  phenotype:    ic (information content; higher = more specific/informative symptom)
    *  organization: website, country, contact_url, has_registry (bool), email_public
    *  person:       affiliation, orcid, roles (string[]), contact_url
-   *  trial:        nct_id, phase, overall_status, start_date, enrollment
+   *  trial:        nct_id, phase, overall_status, start_date, enrollment, study_type, sponsor, conditions,
+   *                interventions, eligibility {minimumAge,maximumAge,sex}; registry facts copied as is:
+   *                last_update, completion_date, completion_date_type, start_date_type, brief_summary,
+   *                primary_purpose, patient_registry, keywords, collaborators, eligibility_criteria,
+   *                healthy_volunteers, locations [{facility,city,country,status}], location_count, countries
    *  grant:        project_num, fiscal_year, amount_usd, agency
    *  asset:        asset_kind, access ("open"|"on_request"|"restricted"), owner_id
    *  publication:  pmid, year, journal, title
@@ -218,7 +222,7 @@ export interface Path {
   edge_ids: string[];
   nodes: NodeBrief[];             // same order as node_ids
   edges: Edge[];                  // same order as edge_ids
-  weakest_status: EdgeStatus;     // a path is only as strong as its weakest edge
+  weakest_status: EdgeStatus;     // a path is only as strong as its weakest edge (attrs.status_cap may lower it further)
   min_confidence: number;
   attrs: Record<string, unknown>;
 }
@@ -450,6 +454,62 @@ export interface SubmissionRequest {
 export interface SubmissionCreated { id: string }
 
 // ============================================================================
+// Researcher-published studies (v1.1.0). No accounts: creating a study returns a
+// private edit_token once; updates and the team's own numbers need it in the body.
+// Shown with verification "researcher_submitted" until checked against a registry.
+// ============================================================================
+export type StudyKind = "preclinical" | "phase1" | "phase1_2" | "phase2" | "phase2_3" | "phase3" | "phase4"
+  | "observational" | "natural_history" | "registry" | "diagnostic" | "biomarker" | "survey" | "other";
+export type RecruitmentStatus = "not_yet_recruiting" | "recruiting" | "enrolling_by_invitation" | "active_not_recruiting"
+  | "completed" | "suspended" | "terminated" | "withdrawn";
+/** A screening question the team defines. `required` questions decide the potential-match result
+ *  (answer within min..max, or among `accept`); the rest are only passed on with an application. */
+export interface ScreeningQuestion {
+  id: string;                      // ^[a-z0-9_-]{1,40}$, unique in the study
+  text: string;                    // 3..300
+  type: "yes_no" | "number" | "choice";
+  options: string[];               // choice: 2..12
+  accept: string[];                // yes_no: ["yes"] | ["no"] | []; choice: a subset of options
+  min: number | null;              // number
+  max: number | null;
+  unit: string | null;
+  required: boolean;
+}
+export interface StudyDraft {
+  title: string;                   // 3..200
+  summary: string;                 // plain language, 10..2000
+  research_focus: string;
+  condition_ids: string[];         // disease or phenotype ids from /search, max 10
+  condition_text: string | null;   // a condition the Atlas does not hold yet
+  kind: StudyKind;
+  status: RecruitmentStatus;
+  institution: string;
+  team: string | null;
+  locations: { facility: string | null; city: string | null; country: string }[];
+  start_date: string | null;       // YYYY-MM or YYYY-MM-DD
+  end_date: string | null;
+  eligibility: { min_age: number | null; max_age: number | null; sex: "all" | "female" | "male"; criteria: string };
+  screening: ScreeningQuestion[];  // max 15
+  contact: { name: string | null; email: string | null; url: string | null };   // email or url required
+  registry_id: string | null;      // NCT01234567
+  published: boolean;              // false hides it from every public read
+}
+export interface ResearcherStudy extends StudyDraft {
+  id: string;                      // "RS:<10 hex>"
+  source: "researcher";
+  verification: "researcher_submitted" | "verified" | "needs_review";
+  conditions: NodeBrief[];
+  created_at: string;
+  updated_at: string;
+  update_history: { at: string; fields: string[] }[];
+}
+export type StudyEventKind = "view" | "screening_started" | "screening_completed" | "potential_match" | "contact_clicked";
+/** POST /researcher-studies → 201 */
+export interface ResearcherStudyCreated { id: string; edit_token: string; study: ResearcherStudy }
+/** POST /researcher-studies/{id}/manage {edit_token}: anonymous totals, never answers or names. */
+export interface ResearcherStudyManage { study: ResearcherStudy; stats: Record<StudyEventKind, number> }
+
+// ============================================================================
 // Errors — every non-2xx response has this body
 // ============================================================================
 export interface ApiError {
@@ -483,4 +543,11 @@ export interface AtlasApi {
   startGapSearch(req: GapSearchRequest): Promise<JobAccepted>;
   job(jobId: string): Promise<JobStatus>;
   submit(req: SubmissionRequest): Promise<SubmissionCreated>;
+  // v1.1.0
+  researcherStudies(opts?: { condition?: string[]; q?: string; limit?: number }): Promise<ResearcherStudy[]>;
+  researcherStudy(id: string): Promise<ResearcherStudy>;
+  createResearcherStudy(study: StudyDraft): Promise<ResearcherStudyCreated>;
+  updateResearcherStudy(id: string, editToken: string, study: StudyDraft): Promise<ResearcherStudy>;
+  manageResearcherStudy(id: string, editToken: string): Promise<ResearcherStudyManage>;
+  studyEvent(id: string, kind: StudyEventKind): Promise<void>;
 }

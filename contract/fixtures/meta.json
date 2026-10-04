@@ -1,5 +1,5 @@
 {
-  "contract_version": "1.0.0",
+  "contract_version": "1.1.0",
   "dataset": {
     "version": "mock-2026.10.03",
     "slice": "MOCK: neuronal ceroid lipofuscinoses (Batten disease) within lysosomal storage diseases",
