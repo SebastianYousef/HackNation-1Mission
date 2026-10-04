@@ -327,7 +327,9 @@ def unlocker_texts(url: str) -> list[str]:
     if not key:
         raise RuntimeError("BRIGHTDATA_API_KEY not set")
     zone = env("BRIGHTDATA_UNLOCKER_ZONE") or env("BRIGHTDATA_SERP_ZONE") or "mcp_unlocker"
-    r = request("POST", "https://api.brightdata.com/request", retries=2, headers={"Authorization": f"Bearer {key}"},
+    from .brightdata_orgs import Budget
+    Budget().take("curated_verify", url)   # shared, persistent request budget (raises BudgetExhausted)
+    r = request("POST", "https://api.brightdata.com/request", retries=1, headers={"Authorization": f"Bearer {key}"},
                 json={"zone": zone, "url": _dspace_api(url) or url, "format": "raw"})
     err = r.headers.get("x-brd-error") or r.headers.get("x-brd-err-msg")
     if err or not r.text.strip():

@@ -1,7 +1,8 @@
 """Patient organisations & registries discovered on the web via Bright Data.
 
-Per focus disease:
-  1. Search Google. With BRIGHTDATA_API_KEY: POST https://api.brightdata.com/request (zone
+Per focus disease (diseases with no curated patient group for exactly that disease first):
+  1. Search Google: an organisation query ('"CLN5" disease foundation families support'), then, for diseases with
+     no exact group, a registry query ('"CLN5" patient registry'). Identical query strings are sent once (cache). With BRIGHTDATA_API_KEY: POST https://api.brightdata.com/request (zone
      BRIGHTDATA_SERP_ZONE, a SERP API or Web Unlocker zone such as `mcp_unlocker`), cached under
      data/raw/http_cache/brightdata. Without a key, or if that search fails, Google is opened in the
      Scraping Browser instead.
@@ -42,6 +43,22 @@ The zone's IP allowlist must contain the public IP of the machine running this (
 address). Install the extra for the browser: pip install -e '.[scrape]'.
 Limit a test run with ATLAS_BRIGHTDATA_DISEASES=<id,id> and ATLAS_BRIGHTDATA_PER_DISEASE=<n>.
 ATLAS_BRIGHTDATA_BROWSER_VISITS=1 lets the Scraping Browser re-visit pages the direct fetch failed on.
+ATLAS_BRIGHTDATA_UNLOCKER_PAGES=1 re-fetches pages the direct GET could not read through the Web Unlocker
+(zone BRIGHTDATA_UNLOCKER_ZONE, else BRIGHTDATA_SERP_ZONE), at most ATLAS_BRIGHTDATA_UNLOCKER_MAX (default 80).
+ATLAS_BRIGHTDATA_REGISTRY_MAX (default 80) caps the registry searches of one run.
+ATLAS_BRIGHTDATA_CACHE_ONLY=1 rebuilds the leads from cached searches without sending anything; a configuration
+error (IP not on the zone allowlist, unknown zone, bad key) switches a run to that mode after the first rejection.
+
+Budget: every billed Bright Data call (search, unlocker page, browser session; curated --verify --unlocker too) is
+counted BEFORE it is sent in DATA_DIR/brightdata_budget.json, which persists across runs. At
+ATLAS_BRIGHTDATA_MAX_REQUESTS (default 400) Budget.take raises BudgetExhausted and the stage stops sending, keeps
+what it found and records result_count null for diseases it could not search. Cache hits are free.
+
+Query names (search_query): a family with `query_by_gene: true` in config/slice.yaml (mitochondrial, epileptic
+encephalopathies) searches a numbered subtype ('developmental and epileptic encephalopathy, 11') by its single
+causal gene ('"SCN2A" foundation families support'), what families and foundations write, and rolls a
+'<X> caused by mutation in <gene>' subtype up to X (all MELAS subtypes share one search). Other families keep the
+original rule (a digit-bearing acronym such as CLN5, else the label), so earlier cached searches are reused.
 """
 from __future__ import annotations
 
@@ -55,10 +72,11 @@ from urllib.parse import quote_plus, urljoin, urlparse
 
 import httpx
 
-from ..config import curated_config, env
+from ..config import DATA_DIR, curated_config, env, slice_config
 from ..http import REFRESH, _cache_path, request
 from ..ids import asset_id, org_id
-from ..store import GraphWriter
+from ..models import now_iso
+from ..store import GraphWriter, read_json, read_jsonl
 from ._common import Coverage, is_abbrev, mentions, query_diseases, search_names
 
 log = logging.getLogger(__name__)
@@ -78,28 +96,113 @@ SKIP_DOMAINS = ("wikipedia.org", "ncbi.nlm.nih.gov", "pubmed", "medlineplus", "r
                 "europepmc.org", "genecards.org", "dokumen.pub", "ovid.com", "researchsquare.com", "nih.gov",
                 "nanbyodata.jp", "pedneur.com", "ardentapp.com", "citizen.health", "lunas.health", "genezen.com",
                 "semanticscholar.org", "scholar.", "academia.edu", "iris.", "pure.", "openresearch.", "elib.",
-                "eprints.", "repository.", "dspace.", "hal.science", "zenodo.org", "figshare.com")
+                "eprints.", "repository.", "dspace.", "hal.science", "zenodo.org", "figshare.com",
+                # disease encyclopedias, symptom checkers, health news and genetic-test vendors describe a disease,
+                # they do not serve its families
+                "rarediseases.org", "webmd.com", "healthline.com", "verywellhealth.com", "medicalnewstoday.com",
+                "drugs.com", "statpearls", "msdmanuals.com", "merckmanuals.com", "uptodate.com", "emedicine",
+                "sciencedaily.com", "invitae.com", "blueprintgenetics.com", "preventiongenetics.com", "genedx.com",
+                "fulgentgenetics.com", "centogene.com", "ambrygen.com", "3billion.io", "uniprot.org", "ebi.ac.uk",
+                "ensembl.org", "gene.vision", "simplywiki", "wikiwand.com", "britannica.com", "amazon.",
+                "epilepsydiagnosis.org", "neuromuscular.wustl.edu", "patient.info", "nhs.uk", "gov.uk")
 _BRD_ERROR_HEADERS = ("x-brd-error", "x-brd-err-code", "x-brd-err-msg")
 PER_DISEASE = 5
 
 
 class BrightDataError(RuntimeError):
-    """A Bright Data request failed; the message never contains the API key."""
+    """A Bright Data request failed; the message never contains the API key. `fatal` marks account / zone
+    configuration errors (IP not on the zone allowlist, unknown zone, bad key) that no retry can fix."""
+
+    def __init__(self, msg: str, fatal: bool = False):
+        super().__init__(msg)
+        self.fatal = fatal
 
 
-def search_query(d: dict) -> str:
-    """'"CLN5" disease foundation families support': the first digit-bearing acronym (what org sites
-    write), else the label. No OR operators: Google parses `a OR b OR c` loosely and drops the quoted
-    phrase ('"CLN5 disease" patient organization OR foundation' returned the UN Foundation)."""
+# x-brd-err-code values / messages that mean the zone or account is misconfigured for this machine
+FATAL_CODES = {"client_10030", "client_10000", "client_10010"}
+_FATAL_MSG = re.compile(r"not whitelisted|zone not found|invalid (?:api )?(?:key|token)|unauthori[sz]ed", re.I)
+# after a fatal error emit only reads cached searches (set per run by emit; cache hits are free)
+_CACHE_ONLY = False
+
+
+class BudgetExhausted(BrightDataError):
+    """The persistent Bright Data request budget is used up; nothing was sent."""
+
+
+class Budget:
+    """Persistent count of billed Bright Data requests (DATA_DIR/brightdata_budget.json). take() is called before
+    every billed call; it records the call and raises BudgetExhausted once `limit` calls have been made."""
+
+    def __init__(self, path=None, limit: int | None = None):
+        self.path = path or (DATA_DIR / "brightdata_budget.json")
+        self.limit = int(limit if limit is not None else env("ATLAS_BRIGHTDATA_MAX_REQUESTS", "400"))
+
+    def _read(self) -> dict:
+        try:
+            return json.loads(self.path.read_text())
+        except (OSError, ValueError):
+            return {"used": 0, "by_kind": {}, "log": []}
+
+    @property
+    def used(self) -> int:
+        return int(self._read().get("used", 0))
+
+    @property
+    def remaining(self) -> int:
+        return max(0, self.limit - self.used)
+
+    def take(self, kind: str, ref: str = "") -> None:
+        st = self._read()
+        if int(st.get("used", 0)) >= self.limit:
+            raise BudgetExhausted(f"Bright Data budget exhausted ({st.get('used', 0)}/{self.limit} requests used)")
+        st["used"] = int(st.get("used", 0)) + 1
+        st.setdefault("by_kind", {})[kind] = int(st.get("by_kind", {}).get(kind, 0)) + 1
+        st.setdefault("log", []).append({"at": now_iso(), "kind": kind, "ref": ref[:200]})
+        st["limit"] = self.limit
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = self.path.with_suffix(".tmp")
+        tmp.write_text(json.dumps(st, indent=1))
+        tmp.replace(self.path)
+
+
+_GENE_SUBTYPE = re.compile(r"^(.+?)\s+(?:caused by (?:a )?mutations? in|due to (?:a )?mutations? in)\s+\S+$", re.I)
+_NUMBERED = re.compile(r"(?:,|\s)\s*(?:type\s+)?\d+[a-z]?$", re.I)
+
+
+def query_name(d: dict, by_gene: bool = False, genes: list[str] | None = None,
+               rollup: str | None = None) -> tuple[str, bool]:
+    """(name to search for, whether it is an acronym that needs the word 'disease'). See search_query.
+    rollup: the label of a broader focus disease of the same family that speaks for d ('Leigh syndrome' for
+    'Leigh syndrome with cardiomyopathy'), used by query_by_gene families when no gene name fits."""
     names = search_names(d)
+    if by_gene:
+        label = d["label"]
+        if m := _GENE_SUBTYPE.match(label):     # 'MELAS syndrome caused by mutation in MTTL1' -> 'MELAS syndrome'
+            return m.group(1).strip(" ,"), False
+        if _NUMBERED.search(label) and genes and len(genes) == 1:
+            return genes[0], False               # 'developmental and epileptic encephalopathy, 11' -> 'SCN2A'
+        return rollup or label, False
     primary = next((n for n in names[1:] if is_abbrev(n) and any(c.isdigit() for c in n)), None)
-    return f'"{primary}" disease foundation families support' if primary else \
-        f'"{names[0]}" foundation families support'
+    return (primary, True) if primary else (names[0], False)
 
 
-def brightdata_request(query: str) -> list[dict]:
-    """One Google search via the Bright Data request API -> [{title, url, snippet}] (cached).
-    Raises BrightDataError / httpx.HTTPError; nothing is cached on failure."""
+def search_query(d: dict, by_gene: bool = False, genes: list[str] | None = None, rollup: str | None = None) -> str:
+    """'"CLN5" disease foundation families support': the first digit-bearing acronym (what org sites
+    write), else the label; with by_gene (families with query_by_gene) a numbered subtype's single causal gene,
+    and a gene-defined subtype rolled up to its syndrome. No OR operators: Google parses `a OR b OR c` loosely
+    and drops the quoted phrase ('"CLN5 disease" patient organization OR foundation' returned the UN Foundation)."""
+    name, acronym = query_name(d, by_gene, genes, rollup)
+    return f'"{name}" disease foundation families support' if acronym else f'"{name}" foundation families support'
+
+
+def registry_query(d: dict, by_gene: bool = False, genes: list[str] | None = None, rollup: str | None = None) -> str:
+    """'"CLN5" patient registry': registries and natural history studies run by families' organisations."""
+    return f'"{query_name(d, by_gene, genes, rollup)[0]}" patient registry'
+
+
+def brightdata_request(query: str, budget: Budget | None = None) -> list[dict]:
+    """One Google search via the Bright Data request API -> [{title, url, snippet}] (cached; a cache hit is free).
+    Raises BrightDataError / BudgetExhausted / httpx.HTTPError; nothing is cached on failure."""
     key = env("BRIGHTDATA_API_KEY")
     if not key:
         raise BrightDataError("BRIGHTDATA_API_KEY not set")
@@ -108,9 +211,12 @@ def brightdata_request(query: str) -> list[dict]:
     p = _cache_path("brightdata", API + "#" + json.dumps(body, sort_keys=True))
     if p.exists() and not REFRESH:
         data = json.loads(p.read_text())
+    elif _CACHE_ONLY:
+        raise BrightDataError("not cached; Bright Data disabled for this run after a configuration error")
     else:
         # retries=1: emit() owns the retry policy (2 attempts); http.request's default 5 retries with
         # backoff would multiply billed requests
+        (budget or Budget()).take("serp", query)
         r = request("POST", API, json=body, headers={"Authorization": f"Bearer {key}"}, retries=1)
         data = parse_response(r)
         p.parent.mkdir(parents=True, exist_ok=True)
@@ -127,7 +233,8 @@ def parse_response(r: httpx.Response) -> dict:
     if brd:
         code = brd.get("x-brd-err-code", "")
         msg = brd.get("x-brd-err-msg") or brd.get("x-brd-error", "")
-        raise BrightDataError(f"Bright Data error {code}: {msg}"[:300])
+        raise BrightDataError(f"Bright Data error {code}: {msg}"[:300],
+                              fatal=code in FATAL_CODES or bool(_FATAL_MSG.search(msg)))
     if r.headers.get("x-brd-serp-warn"):
         log.warning("brightdata serp warning: %s", r.headers["x-brd-serp-warn"][:200])
     if not r.content.strip():
@@ -300,6 +407,28 @@ def fetch_page(url: str) -> tuple[str, str]:
     return final, r.text
 
 
+def unlocker_fetch(url: str, budget: Budget | None = None) -> tuple[str, str]:
+    """(url, body) of a page fetched through the Bright Data Web Unlocker (one billed request, cached like
+    fetch_page). Raises BrightDataError / BudgetExhausted / httpx.HTTPError."""
+    p = _cache_path("brightdata_pages", "unlocker#" + url)
+    if p.exists() and not REFRESH:
+        d = json.loads(p.read_text())
+        return d["final_url"], d["body"]
+    key = env("BRIGHTDATA_API_KEY")
+    if not key:
+        raise BrightDataError("BRIGHTDATA_API_KEY not set")
+    zone = env("BRIGHTDATA_UNLOCKER_ZONE") or env("BRIGHTDATA_SERP_ZONE") or "mcp_unlocker"
+    (budget or Budget()).take("unlocker", url)
+    r = request("POST", API, json={"zone": zone, "url": url, "format": "raw"},
+                headers={"Authorization": f"Bearer {key}"}, retries=1)
+    brd = {h: r.headers[h].strip() for h in _BRD_ERROR_HEADERS if r.headers.get(h, "").strip()}
+    if brd or not r.text.strip():
+        raise BrightDataError(f"Bright Data unlocker: {brd.get('x-brd-err-msg') or brd.get('x-brd-error') or 'empty body'}"[:300])
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps({"final_url": url, "body": r.text}))
+    return url, r.text
+
+
 def _direct_visit(url: str, names: list[str]) -> dict:
     """Fetch and read a result page (cached); {} on failure."""
     try:
@@ -378,6 +507,11 @@ async def _browser_run(wss: str, jobs: list[dict], per_disease: int, visit: bool
     async def one(pw, job: dict) -> None:
         d = job["disease"]
         async with sem:
+            try:
+                Budget().take("browser", d["id"])
+            except BudgetExhausted as e:
+                log.warning("brightdata browser skipped for %s: %s", d["id"], e)
+                return
             try:
                 browser = await pw.chromium.connect_over_cdp(wss, timeout=PAGE_TIMEOUT_MS)
             except Exception as e:
@@ -489,6 +623,97 @@ def _run_browser(wss: str, jobs: list[dict], per_disease: int, visit: bool) -> N
         log.warning("brightdata browser unavailable: %s", type(e).__name__)
 
 
+class _Context:
+    """What emit needs to know about each disease from earlier stages (all optional: absent files -> empty):
+    its family (query_by_gene), its curated causal genes, whether a curated (non-hypothesis) group serves exactly
+    it, and its parents (MONDO is_a)."""
+
+    def __init__(self) -> None:
+        sl = read_json("slice", {}) or {}
+        fams = {f.key: f for f in slice_config().families}
+        self.by_gene = {d: bool(getattr(fams.get(k), "query_by_gene", False))
+                        for d, k in (sl.get("family_of") or {}).items()}
+        labels: dict[str, str] = {}
+        self.genes: dict[str, set[str]] = {}
+        self.parents: dict[str, set[str]] = {}
+        for st in ("mondo", "hgnc", "hpo", "orphanet"):
+            for n in read_jsonl(f"{st}.nodes.jsonl"):
+                if n.get("type") == "gene":
+                    labels.setdefault(n["id"], n["label"])
+        for st in ("mondo", "hpo", "orphanet"):
+            for e in read_jsonl(f"{st}.edges.jsonl"):
+                if e["type"] == "gene_associated_with_disease" and e["status"] == "curated" and e["src"] in labels:
+                    self.genes.setdefault(e["dst"], set()).add(labels[e["src"]])
+                elif e["type"] == "disease_subtype_of" and st == "mondo":
+                    self.parents.setdefault(e["src"], set()).add(e["dst"])
+        self.grouped = {e["dst"] for e in read_jsonl("curated.edges.jsonl")
+                        if e["type"] == "organization_serves_disease" and e["status"] != "hypothesis"}
+        self.family_of = sl.get("family_of") or {}
+        self.focus = set(sl.get("focus") or [])
+        self.labels = {n["id"]: n["label"] for n in read_jsonl("mondo.nodes.jsonl") if n["id"] in self.focus}
+
+    def rollup(self, d: str) -> str | None:
+        """Label of a shorter focus disease of d's family that d's label contains, else of a focus parent."""
+        fam, label = self.family_of.get(d), self.labels.get(d, "")
+        same = [x for x in sorted(self.focus) if x != d and self.family_of.get(x) == fam and x in self.labels]
+        inside = sorted((self.labels[x] for x in same if len(self.labels[x]) < len(label)
+                         and re.search(r"(?<!\w)" + re.escape(self.labels[x]) + r"(?!\w)", label, re.I)), key=len)
+        if inside:
+            return inside[0]
+        return next((self.labels[p] for p in sorted(self.parents.get(d, ())) if p in same), None)
+
+    def query_args(self, d: str) -> dict:
+        return {"by_gene": self.by_gene.get(d, False), "genes": sorted(self.genes.get(d, ())),
+                "rollup": self.rollup(d) if self.by_gene.get(d) else None}
+
+    def covered_by_parent(self, d: str, focus: set[str]) -> bool:
+        """A focus parent with the same (non-empty) causal genes speaks for d ('juvenile CLN5' -> CLN5 disease)."""
+        mine = self.genes.get(d)
+        return bool(mine) and any(p in focus and self.genes.get(p) == mine for p in self.parents.get(d, ()))
+
+
+def match_names(d: dict, ctx: _Context) -> list[str]:
+    """Names a result or page must contain to count as a lead for d: its label, synonyms and acronyms, plus the
+    causal gene when d is searched by that gene ('SCN2A' for DEE11: foundations write 'SCN2A', not 'DEE11').
+    A rolled-up broader name never counts (a 'Leigh syndrome' page is not about Leigh syndrome with cardiomyopathy)."""
+    names = search_names(d, k=8)
+    args = ctx.query_args(d["id"])
+    qn = query_name(d, **args)[0]
+    if args["by_gene"] and qn in args["genes"] and qn not in names:
+        names.append(qn)
+    return names
+
+
+def _search(j: dict, query: str, per_disease: int) -> bool:
+    """Run one search for job j (2 attempts) and merge its org-looking results, one per host, into j['leads'].
+    False if the budget is exhausted (the caller stops searching). A configuration error (fatal: IP not on the
+    zone allowlist, unknown zone, bad key; HTTP 400/401/403) switches the run to cached searches only."""
+    global _CACHE_ONLY
+    for attempt in (1, 2):  # x-brd errors such as 'redirect location was rejected' are often transient
+        try:
+            rows = candidates(brightdata_request(query), per_disease)
+        except BudgetExhausted as e:
+            log.warning("brightdata: %s; stopping searches", e)
+            return False
+        except (BrightDataError, httpx.HTTPError) as e:
+            status = getattr(getattr(e, "response", None), "status_code", None)
+            if getattr(e, "fatal", False) or status in (400, 401, 403):
+                log.error("brightdata: configuration error (%s); no more requests this run, cached searches only",
+                          str(e)[:200])
+                _CACHE_ONLY = True
+                break
+            if _CACHE_ONLY:   # not in the cache and nothing may be sent
+                break
+            log.warning("brightdata search failed for %s (attempt %d): %s", j["disease"]["id"], attempt, e)
+            continue
+        hosts = {host_of(r["url"]) for r in j["leads"] or []}
+        j["leads"] = (j["leads"] or []) + [dict(r, query=query) for r in rows if host_of(r["url"]) not in hosts]
+        j["searched"].append(query)
+        return True
+    j["failed"].append(query)
+    return True
+
+
 def emit(diseases: list[dict] | None = None, per_disease: int | None = None) -> None:
     g = GraphWriter("brightdata_orgs")
     wss, key = env("BRIGHTDATA_BROWSER_WSS"), env("BRIGHTDATA_API_KEY")
@@ -502,32 +727,77 @@ def emit(diseases: list[dict] | None = None, per_disease: int | None = None) -> 
         if only:
             diseases = [d for d in diseases if d["id"] in only]
     per_disease = per_disease or int(env("ATLAS_BRIGHTDATA_PER_DISEASE", str(PER_DISEASE)))
-    jobs = [{"disease": d, "query": search_query(d), "names": search_names(d, k=8), "leads": None}
-            for d in diseases]
+    global _CACHE_ONLY
+    _CACHE_ONLY = env("ATLAS_BRIGHTDATA_CACHE_ONLY") == "1"   # rebuild leads from cached searches, send nothing
+    ctx = _Context()
+    budget = Budget()
+    used0 = budget.used
+    # diseases without a curated group for exactly them first, so a budget stop hits the best-served ones
+    diseases = sorted(diseases, key=lambda d: d["id"] in ctx.grouped)
+    jobs = [{"disease": d, "query": search_query(d, **ctx.query_args(d["id"])), "names": match_names(d, ctx),
+             "leads": None, "searched": [], "failed": []} for d in diseases]
     if key:
-        for j in jobs:
-            for attempt in (1, 2):  # x-brd errors such as 'redirect location was rejected' are often transient
-                try:
-                    j["leads"] = candidates(brightdata_request(j["query"]), per_disease)
-                    break
-                except (BrightDataError, httpx.HTTPError) as e:
-                    log.warning("brightdata search failed for %s (attempt %d): %s", j["disease"]["id"], attempt, e)
+        ok = True
+        for j in jobs:                                   # 1. organisation search for every disease
+            if not (ok := _search(j, j["query"], per_disease)):
+                break
+        focus = {j["disease"]["id"] for j in jobs}
+        reg_max = int(env("ATLAS_BRIGHTDATA_REGISTRY_MAX", "80"))
+        n_reg = 0
+        for j in jobs if ok else []:                     # 2. registry search where no exact group is known
+            d = j["disease"]["id"]
+            if d in ctx.grouped or ctx.covered_by_parent(d, focus) or n_reg >= reg_max:
+                continue
+            q = registry_query(j["disease"], **ctx.query_args(d))
+            if q in j["searched"]:
+                continue
+            n_reg += 1
+            if not _search(j, q, per_disease):
+                break
     if wss and any(j["leads"] is None for j in jobs):  # search in the browser only where the API failed
         _run_browser(wss, [j for j in jobs if j["leads"] is None], per_disease, visit=False)
     for j in jobs:
         for r in j["leads"] or []:
             r["site"] = _direct_visit(r["url"], j["names"])
+    # pages the direct GET could not read: Web Unlocker (opt-in, billed, capped)
+    if key and env("ATLAS_BRIGHTDATA_UNLOCKER_PAGES") == "1" and not _CACHE_ONLY:
+        cap, n = int(env("ATLAS_BRIGHTDATA_UNLOCKER_MAX", "80")), 0
+        tried: dict[str, tuple[str, str] | None] = {}
+        for j in jobs:
+            for r in j["leads"] or []:
+                if r["site"] or n >= cap:
+                    continue
+                if r["url"] not in tried:
+                    n += 1
+                    try:
+                        tried[r["url"]] = unlocker_fetch(r["url"])
+                    except BudgetExhausted as e:
+                        log.warning("brightdata: %s; no more unlocker fetches", e)
+                        n = cap
+                        continue
+                    except (BrightDataError, httpx.HTTPError) as e:
+                        log.info("unlocker failed %s: %s", r["url"], str(e)[:120])
+                        tried[r["url"]] = None
+                        if getattr(e, "fatal", False):
+                            n = cap
+                if tried.get(r["url"]):
+                    final, body = tried[r["url"]]
+                    r["site"] = read_page(final, body, j["names"])
     # re-visiting failed pages in the browser is opt-in: it refuses most non-profit sites and is billed
     retry = [j for j in jobs if any(not r["site"] for r in j["leads"] or [])]
     if wss and retry and env("ATLAS_BRIGHTDATA_BROWSER_VISITS") == "1":
         _run_browser(wss, retry, per_disease, visit=True)
     cov, curated = Coverage("brightdata"), curated_sites()
     for j in jobs:
+        query = " | ".join(j["searched"] or [j["query"]])
         if j["leads"] is None:
-            cov.add(j["disease"]["id"], j["query"], None)
+            cov.add(j["disease"]["id"], query, None)
             continue
-        kept = sum(_emit_lead(g, j["disease"], r, j["names"], j["query"], curated) for r in j["leads"])
-        cov.add(j["disease"]["id"], j["query"], kept)
+        kept = sum(_emit_lead(g, j["disease"], r, j["names"], r.get("query") or j["query"], curated)
+                   for r in j["leads"])
+        cov.add(j["disease"]["id"], query, kept)
         log.info("brightdata %s: %d candidates, %d leads kept", j["disease"]["label"], len(j["leads"]), kept)
     cov.save()
+    log.info("brightdata: %d billed requests this run, %d of %d used in total", budget.used - used0, budget.used,
+             budget.limit)
     g.close()
