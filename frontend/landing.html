@@ -2195,6 +2195,10 @@ $('#srcGrid').innerHTML=SOURCES.map(([c,list])=>`<div class="src-col"><h4>${c}</
   h+='</svg>'; $('#heroNet').innerHTML=h;
 })();
 
+/* ---------- logo: back to the very top ---------- */
+/* #top is the sticky nav itself, so the plain anchor never moves the page */
+$$('a.wordmark[href="#top"]').forEach(a=>a.addEventListener('click',ev=>{ev.preventDefault(); window.scrollTo({top:0,behavior:reduced?'auto':'smooth'}); try{history.replaceState(null,'',location.pathname+location.search);}catch(e){} const h=$('#heroTitle'); if(h){h.setAttribute('tabindex','-1'); h.focus({preventScroll:true});}}));
+
 /* ---------- init ---------- */
 readerOpen(LIVE_DEFAULT,{example:true}); liveMetaLine();
 renderJourney(); renderRace();
