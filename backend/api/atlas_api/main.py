@@ -187,7 +187,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.cors_re = re.compile(cors_regex(s.cors_origins))
     app.add_middleware(
         CORSMiddleware, allow_origin_regex=cors_regex(s.cors_origins), allow_methods=["GET", "POST", "OPTIONS"],
-        allow_headers=["Content-Type", "X-Request-Id", "If-None-Match"],
+        allow_headers=["Content-Type", "X-Request-Id", "If-None-Match", "ngrok-skip-browser-warning"],
         expose_headers=["X-Request-Id", "X-Served-By", "X-Cache", "ETag"], max_age=600)
     return app
 

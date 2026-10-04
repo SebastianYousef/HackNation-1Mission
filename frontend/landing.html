@@ -1752,7 +1752,9 @@ async function http(method,path,{params,body,timeout=20000}={},retried=false){
   if(params){ const sp=new URLSearchParams(); Object.entries(params).forEach(([k,v])=>{ if(v==null||v==='') return; sp.set(k,Array.isArray(v)?v.join(','):String(v)) }); const s=sp.toString(); if(s) url+='?'+s; }
   const ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),timeout);
   let res;
-  try{ res=await fetch(url,{method,headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,signal:ctl.signal}); }
+  // ngrok's free tunnel answers browser requests with a warning page unless this header is sent
+  const hdrs=Object.assign({'ngrok-skip-browser-warning':'1'},body?{'Content-Type':'application/json'}:{});
+  try{ res=await fetch(url,{method,headers:hdrs,body:body?JSON.stringify(body):undefined,signal:ctl.signal}); }
   catch(err){
     clearTimeout(timer);
     if(!retried&&err.name!=='AbortError'&&(base!==API_BASE||apiFallback())) return http(method,path,{params,body,timeout},true);
@@ -5146,7 +5148,7 @@ async function apiGet(path, retried) {
   try {
     let r;
     const base = ogBase();
-    try { r = await fetch(base + path, { signal: ctl.signal, headers: { Accept: 'application/json' } }); }
+    try { r = await fetch(base + path, { signal: ctl.signal, headers: { Accept: 'application/json', 'ngrok-skip-browser-warning': '1' } }); }
     catch (e) {
       if (!retried && e.name !== 'AbortError' && ogFallback() !== base) return apiGet(path, true);
       throw new Error('live data unavailable');
